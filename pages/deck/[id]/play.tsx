@@ -6,8 +6,6 @@ import { DeckPlayer } from "../../../components/DeckPlayer";
 import { Header } from "../../../components/Header";
 import { useDeckListContext } from "../../../contexts/DeckListContext";
 
-type Props = {};
-
 const Component: NextPage = ({}) => {
   const router = useRouter();
   const { id } = router.query;
