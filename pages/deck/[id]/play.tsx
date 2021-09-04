@@ -23,8 +23,13 @@ const Component: NextPage = ({}) => {
   return (
     <Box minH="100vh">
       <Header />
-      <Text>名前: {deck.name}</Text>
-      <DeckPlayer deck={deck} />
+
+      <Center w="700px" mt={10} mx="auto">
+        <Text fontWeight="bold" fontSize="2xl" textAlign="center">
+          {deck.name}
+        </Text>
+      </Center>
+      <DeckPlayer mt={5} mx="auto" deck={deck} />
     </Box>
   );
 };

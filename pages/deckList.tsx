@@ -1,4 +1,4 @@
-import { Box, Button, Grid } from "@chakra-ui/react";
+import { Box, Button, Grid, Tooltip } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
@@ -30,22 +30,24 @@ const DeckListPage: NextPage = () => {
         })}
       </Grid>
       <Box h="120px">
-        <Button
-          zIndex="1"
-          position="fixed"
-          colorScheme="orange"
-          color="gray.700"
-          bottom="20px"
-          right="20px"
-          ml={5}
-          padding={0}
-          boxSize="70px"
-          rounded="full"
-          boxShadow="dark-lg"
-          onClick={handleAddDeck}
-        >
-          <MdAdd size="70%" />
-        </Button>
+        <Tooltip label="追加">
+          <Button
+            zIndex="1"
+            position="fixed"
+            colorScheme="orange"
+            color="gray.700"
+            bottom="20px"
+            right="20px"
+            ml={5}
+            padding={0}
+            boxSize="70px"
+            rounded="full"
+            boxShadow="dark-lg"
+            onClick={handleAddDeck}
+          >
+            <MdAdd size="70%" />
+          </Button>
+        </Tooltip>
       </Box>
     </Box>
   );

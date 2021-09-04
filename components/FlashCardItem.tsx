@@ -10,16 +10,19 @@ type Props = {
 const Component: React.FC<Props> = ({ card, front, ...styleProps }) => {
   return (
     <Flex
-      w="800px"
-      h="500px"
-      bgColor="gray.600"
+      bgColor="gray.700"
       justify="center"
       align="center"
       padding={7}
-      borderRadius="10px"
+      overflowY="auto"
       {...styleProps}
     >
-      <Text fontSize="4xl" fontWeight="bold">
+      <Text
+        fontSize="4xl"
+        fontWeight="bold"
+        wordBreak="break-all"
+        textAlign="center"
+      >
         {front === "question" ? card.question : card.answer}
       </Text>
     </Flex>

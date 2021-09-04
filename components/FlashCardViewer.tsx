@@ -7,17 +7,25 @@ type Props = { cards: FlashCard[]; front: "question" | "answer" };
 
 const Component: React.FC<Props> = ({ cards, front }) => {
   return (
-    <Box w="850px" h="550px" bgColor="gray.500" position="relative" m="0 auto">
+    <Box
+      bgColor="gray.700"
+      boxShadow="dark-lg"
+      position="relative"
+      w="800px"
+      h="500px"
+      borderRadius="10px"
+    >
       {cards.map((card, index) => (
         <FlashCardItem
           key={card.id}
           card={card}
+          borderRadius="10px"
           position="absolute"
           top={0}
           bottom={0}
           left={0}
           right={0}
-          m="auto"
+          margin="auto"
           // 最後のcard(一番全面にあるcard)のfrontのみを変化させる
           front={cards.length - 1 === index ? front : "question"}
         />
