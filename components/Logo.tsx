@@ -7,7 +7,7 @@ type Props = {};
 const Component: React.FC<Props> = ({}) => {
   return (
     <Flex padding={2} align="center">
-      <img alt="logo" src="/icon.png" width={96} height={44} />
+      <img alt="logo" src="/icon.png" width={43} height={22} />
       <Text ml={3} fontSize="4xl" fontWeight="bold">
         Qflasher
       </Text>

@@ -12,7 +12,7 @@ const Component: React.FC<Props> = ({ card, front, ...styleProps }) => {
     <Flex
       w="800px"
       h="500px"
-      bgColor="gray.200"
+      bgColor="gray.600"
       justify="center"
       align="center"
       padding={7}

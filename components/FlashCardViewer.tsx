@@ -7,7 +7,7 @@ type Props = { cards: FlashCard[]; front: "question" | "answer" };
 
 const Component: React.FC<Props> = ({ cards, front }) => {
   return (
-    <Box w="850px" h="550px" bgColor="gray.800" position="relative" m="0 auto">
+    <Box w="850px" h="550px" bgColor="gray.500" position="relative" m="0 auto">
       {cards.map((card, index) => (
         <FlashCardItem
           key={card.id}

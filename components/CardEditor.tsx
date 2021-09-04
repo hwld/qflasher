@@ -32,7 +32,7 @@ const Component: React.FC<Props> = ({
   };
 
   return (
-    <Box key={card.id} padding={10} bgColor="gray.50">
+    <Box key={card.id} padding={10} bgColor="gray.600">
       <Text>質問:</Text>
       <Input value={card.question} onChange={handleChangeQuestion} />
       <Text>答え:</Text>

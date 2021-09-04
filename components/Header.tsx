@@ -1,14 +1,26 @@
-import { Flex } from "@chakra-ui/react";
+import { Box, Flex, FlexProps } from "@chakra-ui/react";
 import React from "react";
 import { Logo } from "./Logo";
 
-type Props = {};
+type Props = FlexProps;
 
-const Component: React.FC<Props> = ({}) => {
+const Component: React.FC<Props> = ({ ...styleProps }) => {
+  const height = 60;
+
   return (
-    <Flex h="80px">
-      <Logo />
-    </Flex>
+    <>
+      <Flex
+        bgColor="green.400"
+        position="fixed"
+        w="100vw"
+        h={`${height}px`}
+        zIndex="1"
+        {...styleProps}
+      >
+        <Logo />
+      </Flex>
+      <Box h={`${height}px`} />
+    </>
   );
 };
 
