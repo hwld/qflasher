@@ -5,6 +5,7 @@ import React from "react";
 import { MdAdd } from "react-icons/md";
 import { DeckListItem } from "../../components/DeckListItem";
 import { Header } from "../../components/Header";
+import { PageTitle } from "../../components/PageTitle";
 import { useDeckListContext } from "../../contexts/DeckListContext";
 
 const DeckListPage: NextPage = () => {
@@ -18,8 +19,9 @@ const DeckListPage: NextPage = () => {
   return (
     <Box h="100vh">
       <Header />
+      <PageTitle mt={5}>デッキ一覧</PageTitle>
       <Grid
-        mt={3}
+        mt={5}
         templateColumns="repeat(auto-fill,500px)"
         gap={5}
         justifyContent="center"
@@ -33,11 +35,12 @@ const DeckListPage: NextPage = () => {
           <Button
             zIndex="1"
             position="fixed"
-            colorScheme="orange"
+            bgColor="orange.300"
+            _hover={{ bgColor: "orange.400" }}
+            _active={{ bgColor: "orange.500" }}
             color="gray.700"
             bottom="20px"
             right="20px"
-            ml={5}
             padding={0}
             boxSize="70px"
             rounded="full"

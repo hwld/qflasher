@@ -10,7 +10,7 @@ const Component: React.FC<Props> = ({ ...styleProps }) => {
   return (
     <>
       <Flex
-        bgColor="green.400"
+        bgGradient="linear(to-r, green.500 70%, green.400)"
         position="fixed"
         w="100vw"
         h={`${height}px`}

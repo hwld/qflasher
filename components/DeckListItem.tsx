@@ -64,7 +64,7 @@ const Component: React.FC<Props> = ({ className, deck, ...styleProps }) => {
             <Text
               flexGrow={1}
               fontWeight="bold"
-              fontSize="1.2rem"
+              fontSize="lg"
               minH={0}
               overflowY="auto"
               wordBreak="break-all"

@@ -1,4 +1,4 @@
-import { Box, BoxProps, Button, Flex, Input } from "@chakra-ui/react";
+import { Box, BoxProps, Button, Flex, Input, Tooltip } from "@chakra-ui/react";
 import React, {
   ChangeEventHandler,
   KeyboardEventHandler,
@@ -111,15 +111,18 @@ const Component = React.forwardRef<CardEditorHandler, Props>(
             onChange={handleChangeAnswer}
             onKeyDown={handleKeyDownAnswer}
           />
-          <Button
-            ml={5}
-            boxSize="40px"
-            colorScheme="red"
-            onClick={handleDelete}
-            padding={0}
-          >
-            <MdDelete size="50%" />
-          </Button>
+          <Tooltip label="削除">
+            <Button
+              ml={5}
+              boxSize="40px"
+              variant="outline"
+              colorScheme="red"
+              onClick={handleDelete}
+              padding={0}
+            >
+              <MdDelete size="60%" />
+            </Button>
+          </Tooltip>
         </Flex>
       </Box>
     );

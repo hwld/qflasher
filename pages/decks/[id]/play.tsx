@@ -4,6 +4,7 @@ import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { DeckPlayer } from "../../../components/DeckPlayer";
 import { Header } from "../../../components/Header";
+import { PageTitle } from "../../../components/PageTitle";
 import { useDeckListContext } from "../../../contexts/DeckListContext";
 
 const Component: NextPage = ({}) => {
@@ -23,8 +24,8 @@ const Component: NextPage = ({}) => {
   return (
     <Box minH="100vh">
       <Header />
-
-      <Center w="700px" mt={10} mx="auto">
+      <PageTitle mt={5}>暗記</PageTitle>
+      <Center w="700px" mt={5} mx="auto">
         <Text fontWeight="bold" fontSize="2xl" textAlign="center">
           {deck.name}
         </Text>

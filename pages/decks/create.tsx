@@ -5,6 +5,7 @@ import React from "react";
 import { MdSave } from "react-icons/md";
 import { DeckForm } from "../../components/DeckForm";
 import { Header } from "../../components/Header";
+import { PageTitle } from "../../components/PageTitle";
 import { useDeckListContext } from "../../contexts/DeckListContext";
 import { Deck } from "../../types";
 
@@ -25,7 +26,8 @@ const DeckEditPage: NextPage = () => {
   return (
     <Box minH="100vh">
       <Header />
-      <Box mt={10} maxW="800px" marginX="auto">
+      <PageTitle mt={5}>デッキ作成</PageTitle>
+      <Box mt={5} maxW="800px" marginX="auto">
         <DeckForm formId={formId} onSubmit={handleSubmit} />
       </Box>
       <Tooltip label="作成">
@@ -34,7 +36,9 @@ const DeckEditPage: NextPage = () => {
           form={formId}
           zIndex="1"
           position="fixed"
-          colorScheme="green"
+          bgColor="orange.300"
+          _hover={{ bgColor: "orange.400" }}
+          _active={{ bgColor: "orange.500" }}
           color="gray.700"
           bottom="20px"
           right="20px"

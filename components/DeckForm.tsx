@@ -122,18 +122,19 @@ const Component: React.FC<Props> = ({
       <form id={formId} onSubmit={handleSubmit}></form>
       <Box
         bgColor="gray.700"
-        paddingX={5}
-        paddingY={3}
+        padding={5}
         borderTopRadius="3xl"
+        borderBottomRadius="md"
         boxShadow="dark-lg"
       >
         <Text fontWeight="bold" fontSize="xl">
-          暗記帳の名前
+          名前
         </Text>
         <Input
           ref={nameInputRef}
-          mt={2}
+          mt={3}
           value={name}
+          colorScheme="green"
           onChange={handleChangeName}
           onKeyDown={handleKeyDownName}
         />
@@ -143,6 +144,7 @@ const Component: React.FC<Props> = ({
           <CardEditor
             ref={cardMap.current.get(card.id)}
             mt={2}
+            borderRadius="md"
             boxShadow="dark-lg"
             key={card.id}
             card={card}
@@ -158,7 +160,8 @@ const Component: React.FC<Props> = ({
         mt={2}
         w="100%"
         h="50px"
-        rounded="none"
+        borderTopRadius="md"
+        borderBottomRadius="3xl"
         boxShadow="dark-lg"
         onClick={handleAddCard}
       >
