@@ -14,6 +14,7 @@ import { CardEditor } from "./CardEditor";
 type Props = {
   defaultDeck?: Deck;
   formId: string;
+  // ctrl+EnterでもSubmitされるようにする
   onSubmit: (deck: Deck) => void;
 };
 
@@ -26,6 +27,12 @@ const Component: React.FC<Props> = ({
   const [cards, setCards] = useState(defaultDeck.cards);
 
   const nameInputRef = useRef<HTMLInputElement>(null);
+
+  const handleKeyDown: KeyboardEventHandler = ({ key, ctrlKey }) => {
+    if (ctrlKey && key === "Enter") {
+      onSubmit({ id: defaultDeck.id, name, cards });
+    }
+  };
 
   const handleSubmit: FormEventHandler = () => {
     onSubmit({ id: defaultDeck.id, name, cards });
@@ -72,7 +79,7 @@ const Component: React.FC<Props> = ({
   const handleNextFocus = (id: string) => {};
 
   return (
-    <Box>
+    <Box onKeyDown={handleKeyDown}>
       {/* Enterが入力されてもsubmitが発生しないように独立させる。 */}
       <form id={formId} onSubmit={handleSubmit} />
       <Box
