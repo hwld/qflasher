@@ -41,7 +41,8 @@ const Component: React.FC<Props> = ({
     }
   };
 
-  const handleSubmit: FormEventHandler = () => {
+  const handleSubmit: FormEventHandler = (e) => {
+    e.preventDefault();
     onSubmit({ id: defaultDeck.id, name, cards });
   };
 
@@ -118,7 +119,7 @@ const Component: React.FC<Props> = ({
   return (
     <Box onKeyDown={handleKeyDown}>
       {/* Enterが入力されてもsubmitが発生しないように独立させる。 */}
-      <form id={formId} onSubmit={handleSubmit} />
+      <form id={formId} onSubmit={handleSubmit}></form>
       <Box
         bgColor="gray.700"
         paddingX={5}
