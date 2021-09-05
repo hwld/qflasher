@@ -16,6 +16,10 @@ const Component: React.FC<Props> = ({ className, deck, ...styleProps }) => {
     router.push(`/decks/${deck.id}/play`);
   };
 
+  const handleUpdateDeck = () => {
+    router.push(`/decks/${deck.id}/update`);
+  };
+
   const handleDelete = () => {
     setDeckList((decks) => decks.filter((d) => d.id !== deck.id));
   };
@@ -104,6 +108,7 @@ const Component: React.FC<Props> = ({ className, deck, ...styleProps }) => {
                 boxSize="40px"
                 rounded="full"
                 padding={0}
+                onClick={handleUpdateDeck}
               >
                 <MdEdit size="60%" />
               </Button>
