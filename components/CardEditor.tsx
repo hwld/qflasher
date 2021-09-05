@@ -2,6 +2,7 @@ import { Box, BoxProps, Button, Flex, Input } from "@chakra-ui/react";
 import React, {
   ChangeEventHandler,
   KeyboardEventHandler,
+  useEffect,
   useImperativeHandle,
   useRef,
 } from "react";
@@ -84,6 +85,10 @@ const Component = React.forwardRef<CardEditorHandler, Props>(
     const handleDelete = () => {
       onDelete(card.id);
     };
+
+    useEffect(() => {
+      questionInputRef.current?.focus();
+    }, []);
 
     return (
       <Box key={card.id} padding={5} bgColor="gray.700" {...styleProps}>

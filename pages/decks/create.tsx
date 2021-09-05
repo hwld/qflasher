@@ -12,7 +12,7 @@ const DeckEditPage: NextPage = () => {
   const router = useRouter();
   const { setDeckList } = useDeckListContext();
 
-  const formId = "deckForm";
+  const formId = "createDeckForm";
 
   const handleSubmit = (deck: Deck) => {
     setDeckList((decks) => [

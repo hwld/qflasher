@@ -2,14 +2,16 @@ import { Box, Text } from "@chakra-ui/layout";
 import { Button, Input } from "@chakra-ui/react";
 import React, {
   ChangeEventHandler,
+  createRef,
   FormEventHandler,
   KeyboardEventHandler,
+  useEffect,
   useRef,
   useState,
 } from "react";
 import { MdAdd } from "react-icons/md";
 import { Deck } from "../types";
-import { CardEditor } from "./CardEditor";
+import { CardEditor, CardEditorHandler } from "./CardEditor";
 
 type Props = {
   defaultDeck?: Deck;
@@ -27,6 +29,11 @@ const Component: React.FC<Props> = ({
   const [cards, setCards] = useState(defaultDeck.cards);
 
   const nameInputRef = useRef<HTMLInputElement>(null);
+  const cardMap = useRef(
+    new Map(
+      defaultDeck.cards.map((card) => [card.id, createRef<CardEditorHandler>()])
+    )
+  );
 
   const handleKeyDown: KeyboardEventHandler = ({ key, ctrlKey }) => {
     if (ctrlKey && key === "Enter") {
@@ -64,19 +71,49 @@ const Component: React.FC<Props> = ({
     );
   };
 
+  const addCard = () => {
+    const id = Math.random().toString();
+    setCards((cards) => [...cards, { id, question: "", answer: "" }]);
+    cardMap.current.set(id, createRef());
+    return id;
+  };
   const handleAddCard = () => {
-    setCards((cards) => [
-      ...cards,
-      { id: Math.random().toString(), question: "", answer: "" },
-    ]);
+    addCard();
   };
   const handleDeleteCard = (id: string) => {
     setCards((cards) => cards.filter((c) => c.id !== id));
+    cardMap.current.delete(id);
   };
 
-  const handleKeyDownName: KeyboardEventHandler = () => {};
-  const handlePrevFocus = (id: string) => {};
-  const handleNextFocus = (id: string) => {};
+  const handleKeyDownName: KeyboardEventHandler = ({ key }) => {
+    if (key === "Enter") {
+      if (cards.length === 0) {
+        addCard();
+      } else {
+        cardMap.current.get(cards[0].id)?.current?.focusFirst();
+      }
+    }
+  };
+  const handlePrevFocus = (id: string) => {
+    const cardIndex = cards.findIndex((c) => c.id === id);
+    if (cardIndex === 0) {
+      nameInputRef.current?.focus();
+    } else {
+      cardMap.current.get(cards[cardIndex - 1].id)?.current?.focusLast();
+    }
+  };
+  const handleNextFocus = (id: string) => {
+    const cardIndex = cards.findIndex((c) => c.id === id);
+    if (cardIndex === cards.length - 1) {
+      addCard();
+    } else {
+      cardMap.current.get(cards[cardIndex + 1].id)?.current?.focusFirst();
+    }
+  };
+
+  useEffect(() => {
+    nameInputRef.current?.focus();
+  }, []);
 
   return (
     <Box onKeyDown={handleKeyDown}>
@@ -103,6 +140,7 @@ const Component: React.FC<Props> = ({
       {cards.map((card) => {
         return (
           <CardEditor
+            ref={cardMap.current.get(card.id)}
             mt={2}
             boxShadow="dark-lg"
             key={card.id}
