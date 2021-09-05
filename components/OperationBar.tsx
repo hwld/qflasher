@@ -45,7 +45,7 @@ const Component: React.FC<Props> = ({
   };
 
   const handleBack = () => {
-    router.push("/deckList");
+    router.push("/decks");
   };
 
   return (

@@ -13,13 +13,13 @@ const Component: React.FC<Props> = ({ cards, front }) => {
       position="relative"
       w="800px"
       h="500px"
-      borderRadius="10px"
+      rounded="3xl"
     >
       {cards.map((card, index) => (
         <FlashCardItem
           key={card.id}
           card={card}
-          borderRadius="10px"
+          rounded="3xl"
           position="absolute"
           top={0}
           bottom={0}

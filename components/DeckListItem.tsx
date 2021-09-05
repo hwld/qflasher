@@ -13,7 +13,7 @@ const Component: React.FC<Props> = ({ className, deck, ...styleProps }) => {
   const router = useRouter();
   const { setDeckList } = useDeckListContext();
   const handlePlayDeck = () => {
-    router.push(`/deck/${deck.id}/play`);
+    router.push(`/decks/${deck.id}/play`);
   };
 
   const handleDelete = () => {
@@ -46,7 +46,7 @@ const Component: React.FC<Props> = ({ className, deck, ...styleProps }) => {
         w={`${rightWidth}px`}
         h={`${height}px`}
         bgColor="gray.700"
-        borderRadius="20px"
+        rounded="2xl"
         direction="column"
         justify="space-between"
         paddingTop={5}
@@ -102,7 +102,6 @@ const Component: React.FC<Props> = ({ className, deck, ...styleProps }) => {
                 ml={2}
                 colorScheme="gray"
                 boxSize="40px"
-                minW="none"
                 rounded="full"
                 padding={0}
               >
@@ -114,7 +113,7 @@ const Component: React.FC<Props> = ({ className, deck, ...styleProps }) => {
             <Tooltip label="暗記">
               <Button
                 boxSize="60px"
-                borderRadius="50%"
+                rounded="full"
                 colorScheme="green"
                 bgColor="green.300"
                 _hover={{ bgColor: "green.400" }}

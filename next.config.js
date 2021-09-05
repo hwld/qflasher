@@ -3,7 +3,7 @@ module.exports = {
   reactStrictMode: true,
   exportPathMap: async function(){
     return {
-      '/': {page: '/deckList'}
+      '/': {page: '/decks'}
     }
   }
 }

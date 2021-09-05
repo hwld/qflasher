@@ -3,17 +3,16 @@ import type { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdAdd } from "react-icons/md";
-import { DeckListItem } from "../components/DeckListItem";
-import { Header } from "../components/Header";
-import { useDeckListContext } from "../contexts/DeckListContext";
+import { DeckListItem } from "../../components/DeckListItem";
+import { Header } from "../../components/Header";
+import { useDeckListContext } from "../../contexts/DeckListContext";
 
 const DeckListPage: NextPage = () => {
   const router = useRouter();
   const { deckList } = useDeckListContext();
-  console.log(deckList.length);
 
   const handleAddDeck = () => {
-    router.push("/deckEdit");
+    router.push("/decks/create");
   };
 
   return (
