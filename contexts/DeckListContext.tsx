@@ -13,26 +13,7 @@ const deckListContext = createContext<{
 }>({ deckList: [], setDeckList: () => {} });
 
 const useDeckList = () => {
-  const [deckList, setDeckList] = useState<Deck[]>([
-    // {
-    //   id: "100",
-    //   name: "あああああああああああああああああああああああああああああああああああああああああああああああああああ",
-    //   cards: [
-    //     {
-    //       id: Math.random().toString(),
-    //       question: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    //       answer: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-    //     },
-    //     {
-    //       id: Math.random().toString(),
-    //       question:
-    //         "ああああああああああああああああああああああああああああああああああああ",
-    //       answer:
-    //         "いいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいいい",
-    //     },
-    //   ],
-    // },
-  ]);
+  const [deckList, setDeckList] = useState<Deck[]>([]);
   return { deckList, setDeckList };
 };
 
