@@ -3,20 +3,19 @@ import type { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdSave } from "react-icons/md";
-import { DeckForm } from "../../../components/DeckForm";
-import { Header } from "../../../components/Header";
-import { PageTitle } from "../../../components/PageTitle";
-import { useDeckListContext } from "../../../contexts/DeckListContext";
-import { Deck } from "../../../types";
+import { DeckForm } from "../../components/DeckForm";
+import { Header } from "../../components/Header";
+import { PageTitle } from "../../components/PageTitle";
+import { useDeckListContext } from "../../contexts/DeckListContext";
+import { Deck } from "../../types";
 
 const DeckEditPage: NextPage = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const id = router.query.id;
   const { deckList, setDeckList } = useDeckListContext();
   const deck = deckList.find((deck) => deck.id === id);
 
   const formId = "updateDeckForm";
-
   if (!deck) {
     return <Center>存在しません</Center>;
   }

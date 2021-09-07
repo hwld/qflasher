@@ -13,11 +13,11 @@ const Component: React.FC<Props> = ({ className, deck, ...styleProps }) => {
   const router = useRouter();
   const { setDeckList } = useDeckListContext();
   const handlePlayDeck = () => {
-    router.push(`/decks/${deck.id}/play`);
+    router.push({ pathname: "/decks/play", query: { id: deck.id } });
   };
 
   const handleUpdateDeck = () => {
-    router.push(`/decks/${deck.id}/update`);
+    router.push({ pathname: "/decks/update", query: { id: deck.id } });
   };
 
   const handleDelete = () => {
