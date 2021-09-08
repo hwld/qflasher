@@ -5,15 +5,26 @@ import { DeckListContextProvider } from "../contexts/DeckListContext";
 import { FirebaseProvider } from "../firebase/provider";
 import { theme } from "../theme/theme";
 
+// SSRを使用せずにstatic html exportを使用するので、next devでSSRされないようにする
+const NoSSR: React.FC = ({ children }) => {
+  return (
+    <div suppressHydrationWarning>
+      {typeof window === "undefined" ? null : children}
+    </div>
+  );
+};
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <FirebaseProvider>
-      <ChakraProvider theme={theme}>
-        <DeckListContextProvider>
-          <Component {...pageProps} />
-        </DeckListContextProvider>
-      </ChakraProvider>
-    </FirebaseProvider>
+    <NoSSR>
+      <FirebaseProvider>
+        <ChakraProvider theme={theme}>
+          <DeckListContextProvider>
+            <Component {...pageProps} />
+          </DeckListContextProvider>
+        </ChakraProvider>
+      </FirebaseProvider>
+    </NoSSR>
   );
 }
 export default MyApp;
