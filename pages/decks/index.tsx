@@ -7,11 +7,11 @@ import { AuthRequiredPage } from "../../components/AuthRequiredPage";
 import { DeckListItem } from "../../components/DeckListItem";
 import { Header } from "../../components/Header";
 import { PageTitle } from "../../components/PageTitle";
-import { useDeckListContext } from "../../contexts/DeckListContext";
+import { useDeckList } from "../../contexts/DeckListContext";
 
 const DeckListPage: NextPage = () => {
   const router = useRouter();
-  const { deckList } = useDeckListContext();
+  const { deckList } = useDeckList();
 
   const handleAddDeck = () => {
     router.push("/decks/create");

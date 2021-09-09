@@ -5,12 +5,12 @@ import React from "react";
 import { DeckPlayer } from "../../components/DeckPlayer";
 import { Header } from "../../components/Header";
 import { PageTitle } from "../../components/PageTitle";
-import { useDeckListContext } from "../../contexts/DeckListContext";
+import { useDeckList } from "../../contexts/DeckListContext";
 
 const Component: NextPage = ({}) => {
   const router = useRouter();
   const id = router.query.id;
-  const { deckList } = useDeckListContext();
+  const { deckList } = useDeckList();
   const deck = deckList.find((deck) => deck.id === id);
 
   if (!deck) {

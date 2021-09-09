@@ -7,13 +7,13 @@ import { AuthRequiredPage } from "../../components/AuthRequiredPage";
 import { DeckForm } from "../../components/DeckForm";
 import { Header } from "../../components/Header";
 import { PageTitle } from "../../components/PageTitle";
-import { useDeckListContext } from "../../contexts/DeckListContext";
+import { useDeckList } from "../../contexts/DeckListContext";
 import { Deck } from "../../types";
 
 const DeckEditPage: NextPage = () => {
   const router = useRouter();
   const id = router.query.id;
-  const { deckList, setDeckList } = useDeckListContext();
+  const { deckList, updateDeck } = useDeckList();
   const deck = deckList.find((deck) => deck.id === id);
 
   const formId = "updateDeckForm";
@@ -23,14 +23,7 @@ const DeckEditPage: NextPage = () => {
   }
 
   const handleUpdateDeck = (deck: Deck) => {
-    setDeckList((decks) =>
-      decks.map((d) => {
-        if (d.id === deck.id) {
-          return deck;
-        }
-        return d;
-      })
-    );
+    updateDeck(deck);
     router.push("/decks");
   };
 

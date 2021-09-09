@@ -1,29 +1,45 @@
-import {
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 import { Deck } from "../types";
 
-const deckListContext = createContext<{
-  deckList: Deck[];
-  setDeckList: Dispatch<SetStateAction<Deck[]>>;
-}>({ deckList: [], setDeckList: () => {} });
-
-const useDeckList = () => {
+const useDeckListData = () => {
   const [deckList, setDeckList] = useState<Deck[]>([]);
-  return { deckList, setDeckList };
+
+  const addDeck = useCallback((deck: Deck) => {
+    setDeckList((decks) => [...decks, deck]);
+  }, []);
+
+  const deleteDeck = useCallback((id: string) => {
+    setDeckList((decks) => decks.filter((d) => d.id !== id));
+  }, []);
+
+  const updateDeck = useCallback((deck: Deck) => {
+    setDeckList((decks) =>
+      decks.map((d) => {
+        if (d.id === deck.id) {
+          return deck;
+        }
+        return d;
+      })
+    );
+  }, []);
+
+  return { deckList, addDeck, deleteDeck, updateDeck };
 };
 
+const deckListContext = createContext<ReturnType<typeof useDeckListData>>({
+  deckList: [],
+  addDeck: () => {},
+  deleteDeck: () => {},
+  updateDeck: () => {},
+});
+
 export const DeckListContextProvider: React.FC = ({ children }) => {
-  const { deckList, setDeckList } = useDeckList();
+  const useDeckListDataResult = useDeckListData();
   return (
-    <deckListContext.Provider value={{ deckList, setDeckList }}>
+    <deckListContext.Provider value={useDeckListDataResult}>
       {children}
     </deckListContext.Provider>
   );
 };
 
-export const useDeckListContext = () => useContext(deckListContext);
+export const useDeckList = () => useContext(deckListContext);

@@ -7,20 +7,17 @@ import { AuthRequiredPage } from "../../components/AuthRequiredPage";
 import { DeckForm } from "../../components/DeckForm";
 import { Header } from "../../components/Header";
 import { PageTitle } from "../../components/PageTitle";
-import { useDeckListContext } from "../../contexts/DeckListContext";
+import { useDeckList } from "../../contexts/DeckListContext";
 import { Deck } from "../../types";
 
 const DeckEditPage: NextPage = () => {
   const router = useRouter();
-  const { setDeckList } = useDeckListContext();
+  const { addDeck } = useDeckList();
 
   const formId = "createDeckForm";
 
   const handleSubmit = (deck: Deck) => {
-    setDeckList((decks) => [
-      ...decks,
-      { ...deck, id: Math.random().toString() },
-    ]);
+    addDeck({ ...deck, id: Math.random().toString() });
     router.push("/decks");
   };
 

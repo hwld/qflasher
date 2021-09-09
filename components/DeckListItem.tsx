@@ -3,7 +3,7 @@ import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdEdit, MdPlayArrow } from "react-icons/md";
 import { RiPushpin2Fill } from "react-icons/ri";
-import { useDeckListContext } from "../contexts/DeckListContext";
+import { useDeckList } from "../contexts/DeckListContext";
 import { Deck } from "../types";
 import { DeleteDeckButton } from "./DeleteDeckButton";
 
@@ -11,7 +11,7 @@ type Props = { className?: string; deck: Deck } & BoxProps;
 
 const Component: React.FC<Props> = ({ className, deck, ...styleProps }) => {
   const router = useRouter();
-  const { setDeckList } = useDeckListContext();
+  const { deleteDeck } = useDeckList();
   const handlePlayDeck = () => {
     router.push({ pathname: "/decks/play", query: { id: deck.id } });
   };
@@ -21,7 +21,7 @@ const Component: React.FC<Props> = ({ className, deck, ...styleProps }) => {
   };
 
   const handleDelete = () => {
-    setDeckList((decks) => decks.filter((d) => d.id !== deck.id));
+    deleteDeck(deck.id);
   };
 
   const leftWidth = 50;
