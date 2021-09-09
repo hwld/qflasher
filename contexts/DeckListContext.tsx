@@ -1,27 +1,45 @@
-import { createContext, useCallback, useContext, useState } from "react";
+import { collection, deleteDoc, doc } from "@firebase/firestore";
+import { setDoc } from "firebase/firestore";
+import { createContext, useCallback, useContext, useMemo } from "react";
+import { useFirestore, useFirestoreCollectionData, useUser } from "reactfire";
 import { Deck } from "../types";
 
 const useDeckListData = () => {
-  const [deckList, setDeckList] = useState<Deck[]>([]);
+  const firestore = useFirestore();
+  const { data: user } = useUser();
+  const decksRef = collection(firestore, "users", `${user?.uid}`, "decks");
+  const { data } = useFirestoreCollectionData(decksRef, { idField: "id" });
 
-  const addDeck = useCallback((deck: Deck) => {
-    setDeckList((decks) => [...decks, deck]);
-  }, []);
+  const deckList = useMemo(() => {
+    if (!data) {
+      return [];
+    }
+    return data.map((d): Deck => {
+      return { id: d.id, name: d.name, cards: d.cards };
+    });
+  }, [data]);
 
-  const deleteDeck = useCallback((id: string) => {
-    setDeckList((decks) => decks.filter((d) => d.id !== id));
-  }, []);
+  const addDeck = useCallback(
+    (deck: Deck) => {
+      const deckDoc = doc(decksRef);
+      setDoc(deckDoc, { name: deck.name, cards: deck.cards });
+    },
+    [decksRef]
+  );
 
-  const updateDeck = useCallback((deck: Deck) => {
-    setDeckList((decks) =>
-      decks.map((d) => {
-        if (d.id === deck.id) {
-          return deck;
-        }
-        return d;
-      })
-    );
-  }, []);
+  const deleteDeck = useCallback(
+    (id: string) => {
+      deleteDoc(doc(decksRef, id));
+    },
+    [decksRef]
+  );
+
+  const updateDeck = useCallback(
+    (deck: Deck) => {
+      setDoc(doc(decksRef, deck.id), { name: deck.name, cards: deck.cards });
+    },
+    [decksRef]
+  );
 
   return { deckList, addDeck, deleteDeck, updateDeck };
 };

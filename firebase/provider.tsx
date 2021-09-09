@@ -1,7 +1,9 @@
 import { getAuth } from "@firebase/auth";
+import { getFirestore } from "@firebase/firestore";
 import {
   AuthProvider as FirebaseAuthProvider,
   FirebaseAppProvider,
+  FirestoreProvider,
   useFirebaseApp,
 } from "reactfire";
 import { firebaseConfig } from "./config";
@@ -17,7 +19,12 @@ const AppProvider: React.FC = ({ children }) => {
 const Provider: React.FC = ({ children }) => {
   const app = useFirebaseApp();
   const auth = getAuth(app);
-  return <FirebaseAuthProvider sdk={auth}>{children}</FirebaseAuthProvider>;
+  const fireStore = getFirestore(app);
+  return (
+    <FirebaseAuthProvider sdk={auth}>
+      <FirestoreProvider sdk={fireStore}>{children}</FirestoreProvider>
+    </FirebaseAuthProvider>
+  );
 };
 
 export const FirebaseProvider: React.FC = ({ children }) => {
