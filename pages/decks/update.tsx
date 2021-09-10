@@ -1,4 +1,4 @@
-import { Box, Button, Center, Tooltip } from "@chakra-ui/react";
+import { Box, Button, Center, Tooltip, useToast } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
@@ -12,6 +12,7 @@ import { Deck } from "../../types";
 
 const DeckEditPage: NextPage = () => {
   const router = useRouter();
+  const toast = useToast();
   const id = router.query.id;
   const { deckList, updateDeck } = useDeckList();
   const deck = deckList.find((deck) => deck.id === id);
@@ -22,9 +23,17 @@ const DeckEditPage: NextPage = () => {
     return <Center>存在しません</Center>;
   }
 
-  const handleUpdateDeck = (deck: Deck) => {
-    updateDeck(deck);
-    router.push("/decks");
+  const handleUpdateDeck = async (deck: Deck) => {
+    try {
+      await updateDeck(deck);
+      router.push("/decks");
+    } catch (e) {
+      toast({
+        title: "エラー",
+        description: "エラーが発生しました",
+        status: "error",
+      });
+    }
   };
 
   return (

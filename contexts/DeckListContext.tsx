@@ -7,36 +7,44 @@ import { Deck } from "../types";
 const useDeckListData = () => {
   const firestore = useFirestore();
   const { data: user } = useUser();
-  const decksRef = collection(firestore, "users", `${user?.uid}`, "decks");
-  const { data } = useFirestoreCollectionData(decksRef, { idField: "id" });
 
+  const decksRef = collection(firestore, "users", `${user?.uid}`, "decks");
+  const { data: deckListData } = useFirestoreCollectionData(decksRef, {
+    idField: "id",
+  });
   const deckList = useMemo(() => {
-    if (!data) {
+    if (!deckListData) {
       return [];
     }
-    return data.map((d): Deck => {
+    return deckListData.map((d): Deck => {
       return { id: d.id, name: d.name, cards: d.cards };
     });
-  }, [data]);
+  }, [deckListData]);
 
   const addDeck = useCallback(
-    (deck: Deck) => {
+    async (deck: Deck) => {
       const deckDoc = doc(decksRef);
-      setDoc(deckDoc, { name: deck.name, cards: deck.cards });
+      await setDoc(deckDoc, {
+        name: deck.name,
+        cards: deck.cards,
+      });
     },
     [decksRef]
   );
 
   const deleteDeck = useCallback(
-    (id: string) => {
-      deleteDoc(doc(decksRef, id));
+    async (id: string) => {
+      await deleteDoc(doc(decksRef, id));
     },
     [decksRef]
   );
 
   const updateDeck = useCallback(
-    (deck: Deck) => {
-      setDoc(doc(decksRef, deck.id), { name: deck.name, cards: deck.cards });
+    async (deck: Deck) => {
+      await setDoc(doc(decksRef, deck.id), {
+        name: deck.name,
+        cards: deck.cards,
+      });
     },
     [decksRef]
   );
@@ -46,9 +54,9 @@ const useDeckListData = () => {
 
 const deckListContext = createContext<ReturnType<typeof useDeckListData>>({
   deckList: [],
-  addDeck: () => {},
-  deleteDeck: () => {},
-  updateDeck: () => {},
+  addDeck: () => Promise.resolve(),
+  deleteDeck: () => Promise.resolve(),
+  updateDeck: () => Promise.resolve(),
 });
 
 export const DeckListContextProvider: React.FC = ({ children }) => {

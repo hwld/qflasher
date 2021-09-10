@@ -1,4 +1,12 @@
-import { Box, BoxProps, Button, Flex, Text, Tooltip } from "@chakra-ui/react";
+import {
+  Box,
+  BoxProps,
+  Button,
+  Flex,
+  Text,
+  Tooltip,
+  useToast,
+} from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdEdit, MdPlayArrow } from "react-icons/md";
@@ -11,6 +19,7 @@ type Props = { className?: string; deck: Deck } & BoxProps;
 
 const Component: React.FC<Props> = ({ className, deck, ...styleProps }) => {
   const router = useRouter();
+  const toast = useToast();
   const { deleteDeck } = useDeckList();
   const handlePlayDeck = () => {
     router.push({ pathname: "/decks/play", query: { id: deck.id } });
@@ -20,8 +29,16 @@ const Component: React.FC<Props> = ({ className, deck, ...styleProps }) => {
     router.push({ pathname: "/decks/update", query: { id: deck.id } });
   };
 
-  const handleDelete = () => {
-    deleteDeck(deck.id);
+  const handleDelete = async () => {
+    try {
+      await deleteDeck(deck.id);
+    } catch (e) {
+      toast({
+        title: "エラー",
+        description: "エラーが発生しました",
+        status: "error",
+      });
+    }
   };
 
   const leftWidth = 50;

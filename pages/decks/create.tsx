@@ -1,4 +1,4 @@
-import { Box, Button, Tooltip } from "@chakra-ui/react";
+import { Box, Button, Tooltip, useToast } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
@@ -12,13 +12,22 @@ import { Deck } from "../../types";
 
 const DeckEditPage: NextPage = () => {
   const router = useRouter();
+  const toast = useToast();
   const { addDeck } = useDeckList();
 
   const formId = "createDeckForm";
 
-  const handleSubmit = (deck: Deck) => {
-    addDeck({ ...deck, id: Math.random().toString() });
-    router.push("/decks");
+  const handleSubmit = async (deck: Deck) => {
+    try {
+      await addDeck({ ...deck, id: Math.random().toString() });
+      router.push("/decks");
+    } catch (e) {
+      toast({
+        title: "エラー",
+        description: "エラーが発生しました",
+        status: "error",
+      });
+    }
   };
 
   return (
