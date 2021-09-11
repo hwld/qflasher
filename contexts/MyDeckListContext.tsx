@@ -9,9 +9,12 @@ const useMyDeckListData = () => {
   const { data: user } = useUser();
 
   const myDecksRef = collection(firestore, "users", `${user?.uid}`, "decks");
-  const { data: myDeckListData = [] } = useFirestoreCollectionData(myDecksRef, {
-    idField: "id",
-  });
+  const { data: myDeckListData = [], status } = useFirestoreCollectionData(
+    myDecksRef,
+    {
+      idField: "id",
+    }
+  );
   const myDeckList = useMemo(() => {
     return myDeckListData.map((d): Deck => {
       return { id: d.id, name: d.name, cards: d.cards };
@@ -46,14 +49,15 @@ const useMyDeckListData = () => {
     [myDecksRef]
   );
 
-  return { myDeckList, addDeck, deleteDeck, updateDeck };
+  return { status, myDeckList, addDeck, deleteDeck, updateDeck };
 };
 
 const MyDeckListContext = createContext<ReturnType<typeof useMyDeckListData>>({
+  status: "error",
   myDeckList: [],
-  addDeck: () => Promise.resolve(),
-  deleteDeck: () => Promise.resolve(),
-  updateDeck: () => Promise.resolve(),
+  addDeck: () => Promise.reject(),
+  deleteDeck: () => Promise.reject(),
+  updateDeck: () => Promise.reject(),
 });
 
 export const MyDeckListContextProvider: React.FC = ({ children }) => {

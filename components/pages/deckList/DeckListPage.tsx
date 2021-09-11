@@ -1,4 +1,11 @@
-import { Box, Button, Grid, Tooltip } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Center,
+  CircularProgress,
+  Grid,
+  Tooltip,
+} from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdAdd } from "react-icons/md";
@@ -9,7 +16,7 @@ import { PageTitle } from "../../PageTitle";
 
 export const DeckListPage: React.FC = () => {
   const router = useRouter();
-  const { myDeckList } = useMyDeckList();
+  const { myDeckList, status } = useMyDeckList();
 
   const handleAddDeck = () => {
     router.push("/decks/create");
@@ -18,17 +25,24 @@ export const DeckListPage: React.FC = () => {
   return (
     <Box h="100vh">
       <Header />
-      <PageTitle mt={5}>デッキ一覧</PageTitle>
-      <Grid
-        mt={5}
-        templateColumns="repeat(auto-fill,500px)"
-        gap={5}
-        justifyContent="center"
-      >
-        {myDeckList.map((deck) => {
-          return <DeckListItem key={deck.id} deck={deck} />;
-        })}
-      </Grid>
+      <PageTitle mt={5} mb={5}>
+        デッキ一覧
+      </PageTitle>
+      {status === "loading" ? (
+        <Center>
+          <CircularProgress isIndeterminate />
+        </Center>
+      ) : (
+        <Grid
+          templateColumns="repeat(auto-fill,500px)"
+          gap={5}
+          justifyContent="center"
+        >
+          {myDeckList.map((deck) => {
+            return <DeckListItem key={deck.id} deck={deck} />;
+          })}
+        </Grid>
+      )}
       <Box h="120px">
         <Tooltip label="追加">
           <Button

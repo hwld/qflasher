@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  Center,
-  CircularProgress,
-  Flex,
-  FlexProps,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, FlexProps } from "@chakra-ui/react";
 import React from "react";
 import { useAuth, useSigninCheck } from "reactfire";
 import { Logo } from "./Logo";
@@ -13,17 +6,9 @@ import { Logo } from "./Logo";
 type Props = FlexProps;
 
 const Component: React.FC<Props> = ({ ...styleProps }) => {
-  const { status, data: signInCheckResult } = useSigninCheck();
+  const { data: signInCheckResult } = useSigninCheck();
   const auth = useAuth();
   const height = 60;
-
-  if (status === "loading") {
-    return (
-      <Center>
-        <CircularProgress />
-      </Center>
-    );
-  }
 
   const handleSignOut = async () => {
     try {
@@ -44,7 +29,7 @@ const Component: React.FC<Props> = ({ ...styleProps }) => {
         align="center"
       >
         <Logo />
-        {signInCheckResult.signedIn && (
+        {signInCheckResult?.signedIn && (
           <Button onClick={handleSignOut} mr={5} colorScheme="red">
             ログアウト
           </Button>

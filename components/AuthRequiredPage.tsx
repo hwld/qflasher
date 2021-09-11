@@ -11,8 +11,8 @@ const Component: React.FC<Props> = ({ children }) => {
 
   if (status === "loading") {
     return (
-      <Center>
-        <CircularProgress />
+      <Center minH="100vh">
+        <CircularProgress isIndeterminate />
       </Center>
     );
   }
