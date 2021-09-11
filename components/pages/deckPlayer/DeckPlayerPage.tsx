@@ -1,7 +1,7 @@
 import { Box, Center, CircularProgress, Text } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
-import { useDeckList } from "../../../contexts/DeckListContext";
+import { useMyDeckList } from "../../../contexts/MyDeckListContext";
 import { DeckPlayer } from "../../DeckPlayer";
 import { Header } from "../../Header";
 import { PageTitle } from "../../PageTitle";
@@ -9,8 +9,8 @@ import { PageTitle } from "../../PageTitle";
 export const DeckPlayerPage: React.FC = ({}) => {
   const router = useRouter();
   const id = router.query.id;
-  const { deckList } = useDeckList();
-  const deck = deckList.find((deck) => deck.id === id);
+  const { myDeckList } = useMyDeckList();
+  const deck = myDeckList.find((deck) => deck.id === id);
 
   if (!deck) {
     return (

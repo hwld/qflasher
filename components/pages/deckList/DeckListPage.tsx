@@ -2,14 +2,14 @@ import { Box, Button, Grid, Tooltip } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdAdd } from "react-icons/md";
-import { useDeckList } from "../../../contexts/DeckListContext";
+import { useMyDeckList } from "../../../contexts/MyDeckListContext";
 import { DeckListItem } from "../../DeckListItem";
 import { Header } from "../../Header";
 import { PageTitle } from "../../PageTitle";
 
 export const DeckListPage: React.FC = () => {
   const router = useRouter();
-  const { deckList } = useDeckList();
+  const { myDeckList } = useMyDeckList();
 
   const handleAddDeck = () => {
     router.push("/decks/create");
@@ -25,7 +25,7 @@ export const DeckListPage: React.FC = () => {
         gap={5}
         justifyContent="center"
       >
-        {deckList.map((deck) => {
+        {myDeckList.map((deck) => {
           return <DeckListItem key={deck.id} deck={deck} />;
         })}
       </Grid>

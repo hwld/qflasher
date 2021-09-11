@@ -11,7 +11,7 @@ import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdEdit, MdPlayArrow } from "react-icons/md";
 import { RiPushpin2Fill } from "react-icons/ri";
-import { useDeckList } from "../contexts/DeckListContext";
+import { useMyDeckList } from "../contexts/MyDeckListContext";
 import { Deck } from "../types";
 import { DeleteDeckButton } from "./DeleteDeckButton";
 
@@ -20,7 +20,7 @@ type Props = { className?: string; deck: Deck } & BoxProps;
 const Component: React.FC<Props> = ({ className, deck, ...styleProps }) => {
   const router = useRouter();
   const toast = useToast();
-  const { deleteDeck } = useDeckList();
+  const { deleteDeck } = useMyDeckList();
   const handlePlayDeck = () => {
     router.push({ pathname: "/decks/play", query: { id: deck.id } });
   };

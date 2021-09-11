@@ -2,7 +2,7 @@ import { Box, Button, Tooltip, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdSave } from "react-icons/md";
-import { useDeckList } from "../../../contexts/DeckListContext";
+import { useMyDeckList } from "../../../contexts/MyDeckListContext";
 import { Deck } from "../../../types";
 import { DeckForm } from "../../DeckForm";
 import { Header } from "../../Header";
@@ -11,7 +11,7 @@ import { PageTitle } from "../../PageTitle";
 export const DeckCreatorPage: React.FC = () => {
   const router = useRouter();
   const toast = useToast();
-  const { addDeck } = useDeckList();
+  const { addDeck } = useMyDeckList();
 
   const formId = "createDeckForm";
 

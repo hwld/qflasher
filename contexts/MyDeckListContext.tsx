@@ -4,68 +4,65 @@ import { createContext, useCallback, useContext, useMemo } from "react";
 import { useFirestore, useFirestoreCollectionData, useUser } from "reactfire";
 import { Deck } from "../types";
 
-const useDeckListData = () => {
+const useMyDeckListData = () => {
   const firestore = useFirestore();
   const { data: user } = useUser();
 
-  const decksRef = collection(firestore, "users", `${user?.uid}`, "decks");
-  const { data: deckListData } = useFirestoreCollectionData(decksRef, {
+  const myDecksRef = collection(firestore, "users", `${user?.uid}`, "decks");
+  const { data: myDeckListData = [] } = useFirestoreCollectionData(myDecksRef, {
     idField: "id",
   });
-  const deckList = useMemo(() => {
-    if (!deckListData) {
-      return [];
-    }
-    return deckListData.map((d): Deck => {
+  const myDeckList = useMemo(() => {
+    return myDeckListData.map((d): Deck => {
       return { id: d.id, name: d.name, cards: d.cards };
     });
-  }, [deckListData]);
+  }, [myDeckListData]);
 
   const addDeck = useCallback(
     async (deck: Deck) => {
-      const deckDoc = doc(decksRef);
+      const deckDoc = doc(myDecksRef);
       await setDoc(deckDoc, {
         name: deck.name,
         cards: deck.cards,
       });
     },
-    [decksRef]
+    [myDecksRef]
   );
 
   const deleteDeck = useCallback(
     async (id: string) => {
-      await deleteDoc(doc(decksRef, id));
+      await deleteDoc(doc(myDecksRef, id));
     },
-    [decksRef]
+    [myDecksRef]
   );
 
   const updateDeck = useCallback(
     async (deck: Deck) => {
-      await setDoc(doc(decksRef, deck.id), {
+      await setDoc(doc(myDecksRef, deck.id), {
         name: deck.name,
         cards: deck.cards,
       });
     },
-    [decksRef]
+    [myDecksRef]
   );
 
-  return { deckList, addDeck, deleteDeck, updateDeck };
+  return { myDeckList, addDeck, deleteDeck, updateDeck };
 };
 
-const deckListContext = createContext<ReturnType<typeof useDeckListData>>({
-  deckList: [],
+const MyDeckListContext = createContext<ReturnType<typeof useMyDeckListData>>({
+  myDeckList: [],
   addDeck: () => Promise.resolve(),
   deleteDeck: () => Promise.resolve(),
   updateDeck: () => Promise.resolve(),
 });
 
-export const DeckListContextProvider: React.FC = ({ children }) => {
-  const useDeckListDataResult = useDeckListData();
+export const MyDeckListContextProvider: React.FC = ({ children }) => {
+  const useDeckListDataResult = useMyDeckListData();
   return (
-    <deckListContext.Provider value={useDeckListDataResult}>
+    <MyDeckListContext.Provider value={useDeckListDataResult}>
       {children}
-    </deckListContext.Provider>
+    </MyDeckListContext.Provider>
   );
 };
 
-export const useDeckList = () => useContext(deckListContext);
+export const useMyDeckList = () => useContext(MyDeckListContext);
