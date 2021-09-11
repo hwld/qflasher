@@ -1,5 +1,6 @@
-import { getAuth } from "@firebase/auth";
-import { getFirestore } from "@firebase/firestore";
+import { connectAuthEmulator, getAuth } from "firebase/auth";
+import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
+import React, { useState } from "react";
 import {
   AuthProvider as FirebaseAuthProvider,
   FirebaseAppProvider,
@@ -17,9 +18,20 @@ const AppProvider: React.FC = ({ children }) => {
 };
 
 const Provider: React.FC = ({ children }) => {
+  const [isEmulatorConnected, setIsEmulatorConnected] = useState(false);
+
   const app = useFirebaseApp();
   const auth = getAuth(app);
   const fireStore = getFirestore(app);
+
+  if (!isEmulatorConnected && process.env.NODE_ENV !== "production") {
+    connectFirestoreEmulator(fireStore, "localhost", 8080);
+    connectAuthEmulator(auth, "http://localhost:9099", {
+      disableWarnings: true,
+    });
+    setIsEmulatorConnected(true);
+  }
+
   return (
     <FirebaseAuthProvider sdk={auth}>
       <FirestoreProvider sdk={fireStore}>{children}</FirestoreProvider>
