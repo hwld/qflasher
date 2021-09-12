@@ -1,10 +1,11 @@
-import { Box, Button, Tooltip, useToast } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdSave } from "react-icons/md";
 import { useMyDeckList } from "../../../contexts/MyDeckListContext";
 import { Deck } from "../../../types";
 import { DeckForm } from "../../DeckForm";
+import { Fab } from "../../Fab";
 import { Header } from "../../Header";
 import { PageTitle } from "../../PageTitle";
 
@@ -20,6 +21,7 @@ export const DeckCreatorPage: React.FC = () => {
       await addDeck({ ...deck, id: Math.random().toString() });
       router.push("/decks");
     } catch (e) {
+      console.error(e);
       toast({
         title: "エラー",
         description: "エラーが発生しました",
@@ -35,26 +37,9 @@ export const DeckCreatorPage: React.FC = () => {
       <Box mt={5} maxW="800px" marginX="auto">
         <DeckForm formId={formId} onSubmit={handleSubmit} />
       </Box>
-      <Tooltip label="作成">
-        <Button
-          type="submit"
-          form={formId}
-          zIndex="1"
-          position="fixed"
-          bgColor="orange.300"
-          _hover={{ bgColor: "orange.400" }}
-          _active={{ bgColor: "orange.500" }}
-          color="gray.700"
-          bottom="20px"
-          right="20px"
-          padding={0}
-          boxSize="70px"
-          rounded="full"
-          boxShadow="dark-lg"
-        >
-          <MdSave size="60%" />
-        </Button>
-      </Tooltip>
+      <Fab tooltipLabel="作成" type="submit" form={formId}>
+        <MdSave size="60%" />
+      </Fab>
     </Box>
   );
 };

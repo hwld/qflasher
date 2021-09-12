@@ -14,7 +14,9 @@ const Component: React.FC<Props> = ({}) => {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
-    } catch (e) {}
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (

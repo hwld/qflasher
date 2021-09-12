@@ -33,6 +33,7 @@ const Component: React.FC<Props> = ({ className, deck, ...styleProps }) => {
     try {
       await deleteDeck(deck.id);
     } catch (e) {
+      console.error(e);
       toast({
         title: "エラー",
         description: "エラーが発生しました",

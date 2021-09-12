@@ -13,7 +13,9 @@ const Component: React.FC<Props> = ({ ...styleProps }) => {
   const handleSignOut = async () => {
     try {
       await auth.signOut();
-    } catch (e) {}
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
