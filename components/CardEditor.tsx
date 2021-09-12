@@ -1,6 +1,7 @@
 import { Box, BoxProps, Button, Flex, Input, Tooltip } from "@chakra-ui/react";
 import React, {
   ChangeEventHandler,
+  KeyboardEvent,
   KeyboardEventHandler,
   useEffect,
   useImperativeHandle,
@@ -10,16 +11,16 @@ import { MdDelete } from "react-icons/md";
 import { FlashCard } from "../types";
 
 export type CardEditorHandler = {
-  focusFirst: () => void;
-  focusLast: () => void;
+  focusQuestion: () => void;
+  focusAnswer: () => void;
 };
 
 type Props = {
   card: FlashCard;
   onChangeQuestion: (id: string, value: string) => void;
   onChangeAnswer: (id: string, value: string) => void;
-  onPrevFocus: (id: string) => void;
-  onNextFocus: (id: string) => void;
+  onKeyDownQuestion: (id: string, event: KeyboardEvent<Element>) => void;
+  onKeyDownAnswer: (id: string, event: KeyboardEvent<Element>) => void;
   onDelete: (id: string) => void;
 } & BoxProps;
 
@@ -29,8 +30,8 @@ const Component = React.forwardRef<CardEditorHandler, Props>(
       card,
       onChangeQuestion,
       onChangeAnswer,
-      onPrevFocus,
-      onNextFocus,
+      onKeyDownQuestion,
+      onKeyDownAnswer,
       onDelete,
       ...styleProps
     },
@@ -41,33 +42,21 @@ const Component = React.forwardRef<CardEditorHandler, Props>(
 
     useImperativeHandle(ref, () => {
       return {
-        focusFirst() {
+        focusQuestion() {
           questionInputRef.current?.focus();
         },
-        focusLast() {
+        focusAnswer() {
           answerInputRef.current?.focus();
         },
       };
     });
 
     const handleKeyDownQuestion: KeyboardEventHandler = (e) => {
-      if (e.key === "Enter") {
-        if (e.shiftKey) {
-          onPrevFocus(card.id);
-        } else {
-          answerInputRef.current?.focus();
-        }
-      }
+      onKeyDownQuestion(card.id, e);
     };
 
     const handleKeyDownAnswer: KeyboardEventHandler = (e) => {
-      if (e.key === "Enter") {
-        if (e.shiftKey) {
-          questionInputRef.current?.focus();
-        } else {
-          onNextFocus(card.id);
-        }
-      }
+      onKeyDownAnswer(card.id, e);
     };
 
     const handleChangeQuestion: ChangeEventHandler<HTMLInputElement> = ({
