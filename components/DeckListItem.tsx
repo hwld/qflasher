@@ -26,7 +26,7 @@ const Component: React.FC<Props> = ({ className, deck, ...styleProps }) => {
   };
 
   const handleUpdateDeck = () => {
-    router.push({ pathname: "/decks/update", query: { id: deck.id } });
+    router.push({ pathname: "/decks/edit", query: { id: deck.id } });
   };
 
   const handleDelete = async () => {

@@ -7,7 +7,7 @@ module.exports = {
       "/": { page: "/decks" },
       "/decks": { page: "/decks" },
       "/decks/create": { page: "/decks/create" },
-      "/decks/update": { page: "/decks/update" },
+      "/decks/edit": { page: "/decks/edit" },
       "/decks/play": { page: "/decks/play" },
     };
   },
