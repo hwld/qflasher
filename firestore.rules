@@ -1,12 +1,49 @@
 rules_version = '2';
 service cloud.firestore {
-  match /databases/{database}/documents {
-    match /users/{userId}{
-      match /decks/{deckId}{
-        allow read, write: if request.auth != null && request.auth.uid == userId
+  function isValidCard(card){
+    return card.size() == 2
+    && 'question' in card
+    && card.question is string
+    && card.question.size() <= 100
+    && 'answer' in card
+    && card.answer is string
+    && card.answer.size() <= 100
+  }
 
-        match /cards/{cardId}{
-          allow read, write: if request.auth != null && request.auth.uid == userId
+  function isValidDeck(deck){
+    return deck.size() == 2
+    && 'name' in deck 
+    && deck.name is string
+    && deck.name.size() <= 50
+    && 'cardLength' in deck
+    && deck.cardLength is int
+    && deck.cardLength >= 0 && deck.cardLength <= 100
+  }
+
+  function isAuth(userId){
+    return request.auth != null && request.auth.uid == userId
+  }
+
+  match /databases/{database}/documents {
+    match /users/undefined/{document=**} {
+      allow read, write: if false;
+    }
+    match /users/{userId} {
+      match /decks/{deckId} {
+        allow create: if isAuth(userId) && isValidDeck(request.resource.data);
+        allow update: if isAuth(userId) && isValidDeck(request.resource.data);
+        allow delete: if isAuth(userId);
+
+        allow get: if isAuth(userId) 
+          && exists(/databases/$(database)/documents/users/$(userId)/decks/$(deckId));
+        allow list: if isAuth(userId);
+
+        match /cards/{cardId} {
+          allow create: if isAuth(userId) && isValidCard(request.resource.data);
+          allow update: if isAuth(userId) && isValidCard(request.resource.data);
+          allow delete: if isAuth(userId);
+
+          allow read: if isAuth(userId);
         }
       }
     }

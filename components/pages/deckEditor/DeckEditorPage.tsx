@@ -1,30 +1,51 @@
-import { Box, Center, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  CircularProgress,
+  Heading,
+  useToast,
+} from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdSave } from "react-icons/md";
 import { useMyDeckList } from "../../../contexts/MyDeckListContext";
-import { Deck } from "../../../types";
-import { DeckForm } from "../../DeckForm";
+import { useMyDeck } from "../../../hooks/useMyDeck";
+import { DeckWithoutCards } from "../../../types";
+import { DeckForm, FormFlashCard } from "../../DeckForm";
 import { Fab } from "../../Fab";
 import { Header } from "../../Header";
 import { PageTitle } from "../../PageTitle";
 
-export const DeckEditPage: React.FC = () => {
+type DeckEditPageProps = { deckId: string };
+
+export const DeckEditPage: React.FC<DeckEditPageProps> = ({ deckId }) => {
   const router = useRouter();
   const toast = useToast();
-  const id = router.query.id;
-  const { myDeckList, updateDeck } = useMyDeckList();
-  const deck = myDeckList.find((deck) => deck.id === id);
-
+  const { updateDeck } = useMyDeckList();
+  const useMyDeckResult = useMyDeck(deckId);
   const formId = "updateDeckForm";
 
-  if (!deck) {
-    return <Center>存在しません</Center>;
+  if (useMyDeckResult.status === "loading") {
+    return (
+      <Center minH="100vh">
+        <CircularProgress isIndeterminate />
+      </Center>
+    );
+  }
+  if (useMyDeckResult.status === "error") {
+    return (
+      <Center minH="100vh">
+        <Heading>デッキの読み込みに失敗しました</Heading>
+      </Center>
+    );
   }
 
-  const handleUpdateDeck = async (deck: Deck) => {
+  const handleUpdateDeck = async (
+    deckWithoutCards: DeckWithoutCards,
+    formCards: FormFlashCard[]
+  ) => {
     try {
-      await updateDeck(deck);
+      await updateDeck(deckWithoutCards, formCards);
       router.push("/decks");
     } catch (e) {
       console.error(e);
@@ -42,7 +63,7 @@ export const DeckEditPage: React.FC = () => {
       <PageTitle mt={5}>デッキ更新</PageTitle>
       <Box mt={5} maxW="800px" marginX="auto">
         <DeckForm
-          defaultDeck={deck}
+          defaultDeck={useMyDeckResult.deck}
           formId={formId}
           onSubmit={handleUpdateDeck}
         />

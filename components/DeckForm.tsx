@@ -7,18 +7,25 @@ import React, {
   KeyboardEvent,
   KeyboardEventHandler,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
 import { MdAdd } from "react-icons/md";
-import { Deck } from "../types";
+import { v4 as uuidv4 } from "uuid";
+import { Deck, DeckWithoutCards, FlashCard } from "../types";
 import { CardEditor, CardEditorHandler } from "./CardEditor";
+
+export type FormFlashCard = FlashCard & { deleted: boolean };
 
 type Props = {
   defaultDeck?: Deck;
   formId: string;
   // ctrl+EnterでもSubmitされるようにする
-  onSubmit: (deck: Deck) => void;
+  onSubmit: (
+    deckWithoutCards: DeckWithoutCards,
+    cards: FormFlashCard[]
+  ) => void;
 };
 
 export const DeckForm: React.FC<Props> = ({
@@ -27,7 +34,13 @@ export const DeckForm: React.FC<Props> = ({
   onSubmit,
 }) => {
   const [name, setName] = useState(defaultDeck.name);
-  const [cards, setCards] = useState(defaultDeck.cards);
+  const [cards, setCards] = useState<FormFlashCard[]>(
+    defaultDeck.cards.map((c) => ({ ...c, deleted: false }))
+  );
+
+  const existsCards = useMemo(() => {
+    return cards.filter((c) => !c.deleted);
+  }, [cards]);
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const cardMap = useRef(
@@ -36,9 +49,19 @@ export const DeckForm: React.FC<Props> = ({
     )
   );
 
+  const submit = () => {
+    onSubmit(
+      {
+        id: defaultDeck.id,
+        name,
+        cardLength: cards.filter((c) => !c.deleted).length,
+      },
+      cards
+    );
+  };
   const handleSubmit: FormEventHandler = (e) => {
     e.preventDefault();
-    onSubmit({ id: defaultDeck.id, name, cards });
+    submit();
   };
 
   const handleChangeName: ChangeEventHandler<HTMLInputElement> = ({
@@ -68,16 +91,27 @@ export const DeckForm: React.FC<Props> = ({
   };
 
   const addCard = () => {
-    const id = Math.random().toString();
-    setCards((cards) => [...cards, { id, question: "", answer: "" }]);
+    const id = uuidv4();
+    setCards((cards) => [
+      ...cards,
+      { id, question: "", answer: "", deleted: false },
+    ]);
     cardMap.current.set(id, createRef());
     return id;
   };
+
   const handleAddCard = () => {
     addCard();
   };
   const handleDeleteCard = (id: string) => {
-    setCards((cards) => cards.filter((c) => c.id !== id));
+    setCards((cards) =>
+      cards.map((c) => {
+        if (c.id === id) {
+          return { ...c, deleted: true };
+        }
+        return c;
+      })
+    );
     cardMap.current.delete(id);
   };
 
@@ -87,14 +121,14 @@ export const DeckForm: React.FC<Props> = ({
     }
 
     if (event.ctrlKey) {
-      onSubmit({ id: defaultDeck.id, name, cards });
+      submit();
       return;
     }
 
-    if (cards.length === 0) {
+    if (existsCards.length === 0) {
       addCard();
     } else {
-      cardMap.current.get(cards[0].id)?.current?.focusQuestion();
+      cardMap.current.get(existsCards[0].id)?.current?.focusQuestion();
     }
   };
 
@@ -108,11 +142,11 @@ export const DeckForm: React.FC<Props> = ({
 
     // ctrl + Enter　で Deckを作成する
     if (event.ctrlKey) {
-      onSubmit({ id: defaultDeck.id, name, cards });
+      submit();
       return;
     }
 
-    const cardIndex = cards.findIndex((c) => c.id === cardId);
+    const cardIndex = existsCards.findIndex((c) => c.id === cardId);
     // shift + Enter で 前にフォーカスを移動する
     if (event.shiftKey) {
       if (cardIndex === 0) {
@@ -120,11 +154,13 @@ export const DeckForm: React.FC<Props> = ({
         nameInputRef.current?.focus();
       } else {
         // それ以外は前のcardにフォーカスを当てる
-        cardMap.current.get(cards[cardIndex - 1].id)?.current?.focusAnswer();
+        cardMap.current
+          .get(existsCards[cardIndex - 1].id)
+          ?.current?.focusAnswer();
       }
     } else {
       // Enter のみで 同一cardのAnswerにフォーカスを当てる
-      cardMap.current.get(cards[cardIndex].id)?.current?.focusAnswer();
+      cardMap.current.get(existsCards[cardIndex].id)?.current?.focusAnswer();
     }
   };
 
@@ -138,22 +174,24 @@ export const DeckForm: React.FC<Props> = ({
 
     // ctrl + Enter　で Deckを作成する
     if (event.ctrlKey) {
-      onSubmit({ id: defaultDeck.id, name, cards });
+      submit();
       return;
     }
 
-    const cardIndex = cards.findIndex((c) => c.id === cardId);
+    const cardIndex = existsCards.findIndex((c) => c.id === cardId);
     // shift + Enter で 前にフォーカスを移動する
     if (event.shiftKey) {
       // 同一cardのQuestionにフォーカスを当てる
-      cardMap.current.get(cards[cardIndex].id)?.current?.focusQuestion();
+      cardMap.current.get(existsCards[cardIndex].id)?.current?.focusQuestion();
     } else {
       // 最後のcardだった場合、新たにcardを追加する
-      if (cardIndex === cards.length - 1) {
+      if (cardIndex === existsCards.length - 1) {
         addCard();
       } else {
         // 次のcardのQuestionにフォーカスを当てる
-        cardMap.current.get(cards[cardIndex + 1].id)?.current?.focusQuestion();
+        cardMap.current
+          .get(existsCards[cardIndex + 1].id)
+          ?.current?.focusQuestion();
       }
     }
   };
@@ -162,7 +200,9 @@ export const DeckForm: React.FC<Props> = ({
     if (cardMap.current.size === 0) {
       nameInputRef.current?.focus();
     } else {
-      cardMap.current.get(cards[cards.length - 1].id)?.current?.focusAnswer();
+      cardMap.current
+        .get(existsCards[existsCards.length - 1].id)
+        ?.current?.focusAnswer();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -190,9 +230,10 @@ export const DeckForm: React.FC<Props> = ({
           onKeyDown={handleKeyDownName}
         />
       </Box>
-      {cards.map((card) => {
+      {existsCards.map((card, i) => {
         return (
           <CardEditor
+            index={i + 1}
             ref={cardMap.current.get(card.id)}
             mt={2}
             borderRadius="md"

@@ -12,10 +12,10 @@ import React from "react";
 import { MdEdit, MdPlayArrow } from "react-icons/md";
 import { RiPushpin2Fill } from "react-icons/ri";
 import { useMyDeckList } from "../contexts/MyDeckListContext";
-import { Deck } from "../types";
+import { DeckWithoutCards } from "../types";
 import { DeleteDeckButton } from "./DeleteDeckButton";
 
-type Props = { className?: string; deck: Deck } & BoxProps;
+type Props = { className?: string; deck: DeckWithoutCards } & BoxProps;
 
 const Component: React.FC<Props> = ({ className, deck, ...styleProps }) => {
   const router = useRouter();
@@ -98,7 +98,7 @@ const Component: React.FC<Props> = ({ className, deck, ...styleProps }) => {
               textOverflow="ellipsis"
               wordBreak="break-all"
             >
-              枚数: {deck.cards.length}
+              枚数: {deck.cardLength}
             </Text>
           </Flex>
           <Tooltip label="固定">

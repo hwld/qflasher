@@ -1,21 +1,26 @@
-import { Box, Center, CircularProgress, Text } from "@chakra-ui/react";
-import { useRouter } from "next/dist/client/router";
+import { Box, Center, CircularProgress, Heading, Text } from "@chakra-ui/react";
 import React from "react";
-import { useMyDeckList } from "../../../contexts/MyDeckListContext";
+import { useMyDeck } from "../../../hooks/useMyDeck";
 import { DeckPlayer } from "../../DeckPlayer";
 import { Header } from "../../Header";
 import { PageTitle } from "../../PageTitle";
 
-export const DeckPlayerPage: React.FC = ({}) => {
-  const router = useRouter();
-  const id = router.query.id;
-  const { myDeckList } = useMyDeckList();
-  const deck = myDeckList.find((deck) => deck.id === id);
+type DeckPlayerPageProps = { deckId: string };
 
-  if (!deck) {
+export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({ deckId }) => {
+  const useMyDeckResult = useMyDeck(deckId);
+
+  if (useMyDeckResult.status === "loading") {
     return (
       <Center minH="100vh">
         <CircularProgress isIndeterminate />
+      </Center>
+    );
+  }
+  if (useMyDeckResult.status === "error") {
+    return (
+      <Center minH="100vh">
+        <Heading>デッキの読み込みに失敗しました</Heading>
       </Center>
     );
   }
@@ -26,10 +31,10 @@ export const DeckPlayerPage: React.FC = ({}) => {
       <PageTitle mt={5}>暗記</PageTitle>
       <Center w="700px" mt={5} mx="auto">
         <Text fontWeight="bold" fontSize="2xl" textAlign="center">
-          {deck.name}
+          {useMyDeckResult.deck.name}
         </Text>
       </Center>
-      <DeckPlayer mt={5} mx="auto" deck={deck} />
+      <DeckPlayer mt={5} mx="auto" deck={useMyDeckResult.deck} />
     </Box>
   );
 };

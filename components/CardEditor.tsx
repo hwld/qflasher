@@ -1,4 +1,12 @@
-import { Box, BoxProps, Button, Flex, Input, Tooltip } from "@chakra-ui/react";
+import {
+  Box,
+  BoxProps,
+  Button,
+  Flex,
+  Input,
+  Text,
+  Tooltip,
+} from "@chakra-ui/react";
 import React, {
   ChangeEventHandler,
   KeyboardEvent,
@@ -16,6 +24,7 @@ export type CardEditorHandler = {
 };
 
 type Props = {
+  index: number;
   card: FlashCard;
   onChangeQuestion: (id: string, value: string) => void;
   onChangeAnswer: (id: string, value: string) => void;
@@ -27,6 +36,7 @@ type Props = {
 const Component = React.forwardRef<CardEditorHandler, Props>(
   function CardEditor(
     {
+      index,
       card,
       onChangeQuestion,
       onChangeAnswer,
@@ -82,6 +92,9 @@ const Component = React.forwardRef<CardEditorHandler, Props>(
     return (
       <Box key={card.id} padding={5} bgColor="gray.700" {...styleProps}>
         <Flex align="center">
+          <Text fontWeight="bold" mr={2}>
+            {index}.
+          </Text>
           <Input
             ref={questionInputRef}
             placeholder="質問"

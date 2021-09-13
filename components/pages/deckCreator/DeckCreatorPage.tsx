@@ -3,8 +3,8 @@ import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdSave } from "react-icons/md";
 import { useMyDeckList } from "../../../contexts/MyDeckListContext";
-import { Deck } from "../../../types";
-import { DeckForm } from "../../DeckForm";
+import { DeckWithoutCards } from "../../../types";
+import { DeckForm, FormFlashCard } from "../../DeckForm";
 import { Fab } from "../../Fab";
 import { Header } from "../../Header";
 import { PageTitle } from "../../PageTitle";
@@ -16,9 +16,17 @@ export const DeckCreatorPage: React.FC = () => {
 
   const formId = "createDeckForm";
 
-  const handleSubmit = async (deck: Deck) => {
+  const handleSubmit = async (
+    deckWithoutCards: DeckWithoutCards,
+    formCards: FormFlashCard[]
+  ) => {
     try {
-      await addDeck({ ...deck, id: Math.random().toString() });
+      //仮のid
+      await addDeck({
+        ...deckWithoutCards,
+        // 削除されているcardsは除外する
+        cards: formCards.filter((c) => !c.deleted),
+      });
       router.push("/decks");
     } catch (e) {
       console.error(e);
