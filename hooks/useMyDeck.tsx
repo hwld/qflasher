@@ -61,23 +61,20 @@ export const useMyDeck = (deckId: string): UseMyDeckResult => {
     }
 
     // どっちも成功
-    setDeck(() => {
-      const cards = myDeckCardsData.map(
-        (c): FlashCard => ({
-          id: c.id,
-          question: c.question,
-          answer: c.answer,
-        })
-      );
-      const deck: Deck = {
-        id: myDeckData.id,
-        name: myDeckData.name,
-        cardLength: myDeckData.cardLength,
-        cards,
-      };
-
-      return deck;
-    });
+    const cards = myDeckCardsData.map(
+      (c): FlashCard => ({
+        id: c.id,
+        question: c.question,
+        answer: c.answer,
+      })
+    );
+    const deck: Deck = {
+      id: myDeckData.id,
+      name: myDeckData.name,
+      cardLength: myDeckData.cardLength,
+      cards,
+    };
+    setDeck(deck);
     setStatus("success");
   }, [
     cardsError,

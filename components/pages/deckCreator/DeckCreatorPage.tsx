@@ -2,7 +2,7 @@ import { Box, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdSave } from "react-icons/md";
-import { useMyDeckList } from "../../../contexts/MyDeckListContext";
+import { useMyDeckListOperations } from "../../../contexts/MyDeckListContext";
 import { DeckWithoutCards } from "../../../types";
 import { DeckForm, FormFlashCard } from "../../DeckForm";
 import { Fab } from "../../Fab";
@@ -12,7 +12,7 @@ import { PageTitle } from "../../PageTitle";
 export const DeckCreatorPage: React.FC = () => {
   const router = useRouter();
   const toast = useToast();
-  const { addDeck } = useMyDeckList();
+  const { addDeck } = useMyDeckListOperations();
 
   const formId = "createDeckForm";
 

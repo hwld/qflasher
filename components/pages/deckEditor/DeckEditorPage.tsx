@@ -8,7 +8,7 @@ import {
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdSave } from "react-icons/md";
-import { useMyDeckList } from "../../../contexts/MyDeckListContext";
+import { useMyDeckListOperations } from "../../../contexts/MyDeckListContext";
 import { useMyDeck } from "../../../hooks/useMyDeck";
 import { DeckWithoutCards } from "../../../types";
 import { DeckForm, FormFlashCard } from "../../DeckForm";
@@ -21,7 +21,7 @@ type DeckEditPageProps = { deckId: string };
 export const DeckEditPage: React.FC<DeckEditPageProps> = ({ deckId }) => {
   const router = useRouter();
   const toast = useToast();
-  const { updateDeck } = useMyDeckList();
+  const { updateDeck } = useMyDeckListOperations();
   const useMyDeckResult = useMyDeck(deckId);
   const formId = "updateDeckForm";
 

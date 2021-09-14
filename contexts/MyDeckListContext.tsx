@@ -5,24 +5,36 @@ import { useFirestore, useFirestoreCollectionData, useUser } from "reactfire";
 import { FormFlashCard } from "../components/DeckForm";
 import { Deck, DeckWithoutCards } from "../types";
 
-const useMyDeckListData = () => {
+type DeckListData = {
+  status: "loading" | "success" | "error";
+  myDeckList: DeckWithoutCards[];
+};
+type DeckListOperation = {
+  addDeck: (deck: Deck) => Promise<void>;
+  updateDeck: (deck: DeckWithoutCards, cards: FormFlashCard[]) => Promise<void>;
+  deleteDeck: (id: string) => Promise<void>;
+};
+
+type useMyDeckListResult = [DeckListData, DeckListOperation];
+
+const useMyDeckList = (): useMyDeckListResult => {
   const firestore = useFirestore();
   const { data: user } = useUser();
 
   const myDecksRef = useMemo(
-    // userがundefinedの場合、users/undefinedにアクセスするrefが作成される。
     () => collection(firestore, "users", `${user?.uid}`, "decks"),
     [firestore, user?.uid]
   );
 
-  const { data: myDeckListData, status } = useFirestoreCollectionData(
-    myDecksRef,
-    {
-      idField: "id",
-    }
-  );
+  const {
+    data: myDeckListData,
+    status,
+    error,
+  } = useFirestoreCollectionData(myDecksRef, {
+    idField: "id",
+  });
 
-  const myDeckList: DeckWithoutCards[] = useMemo(() => {
+  const myDeckList = useMemo(() => {
     if (!myDeckListData) {
       return [];
     }
@@ -100,30 +112,42 @@ const useMyDeckListData = () => {
     [firestore, myDecksRef]
   );
 
-  return {
-    status,
-    myDeckList,
-    addDeck,
-    deleteDeck,
-    updateDeck,
-  };
+  const data: DeckListData = useMemo(() => {
+    return {
+      status: error ? "error" : status,
+      myDeckList,
+    };
+  }, [error, myDeckList, status]);
+
+  const operations: DeckListOperation = useMemo(() => {
+    return { addDeck, deleteDeck, updateDeck };
+  }, [addDeck, deleteDeck, updateDeck]);
+
+  return [data, operations];
 };
 
-const MyDeckListContext = createContext<ReturnType<typeof useMyDeckListData>>({
+const MyDeckListDataContext = createContext<DeckListData>({
   status: "error",
   myDeckList: [],
+});
+const MyDeckListOperationContext = createContext<DeckListOperation>({
   addDeck: () => Promise.reject(),
-  deleteDeck: () => Promise.reject(),
   updateDeck: () => Promise.reject(),
+  deleteDeck: () => Promise.reject(),
 });
 
 export const MyDeckListContextProvider: React.FC = ({ children }) => {
-  const useDeckListDataResult = useMyDeckListData();
+  const [data, operations] = useMyDeckList();
+
   return (
-    <MyDeckListContext.Provider value={useDeckListDataResult}>
-      {children}
-    </MyDeckListContext.Provider>
+    <MyDeckListDataContext.Provider value={data}>
+      <MyDeckListOperationContext.Provider value={operations}>
+        {children}
+      </MyDeckListOperationContext.Provider>
+    </MyDeckListDataContext.Provider>
   );
 };
 
-export const useMyDeckList = () => useContext(MyDeckListContext);
+export const useMyDeckListData = () => useContext(MyDeckListDataContext);
+export const useMyDeckListOperations = () =>
+  useContext(MyDeckListOperationContext);
