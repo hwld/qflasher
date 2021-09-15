@@ -1,13 +1,16 @@
 rules_version = '2';
 service cloud.firestore {
   function isValidCard(card){
-    return card.size() == 2
+    return card.size() == 3
     && 'question' in card
     && card.question is string
     && card.question.size() <= 100
     && 'answer' in card
     && card.answer is string
     && card.answer.size() <= 100
+    && 'index' in card
+    && card.index is int
+    && card.index >= 0 && card.index < 100
   }
 
   function isValidDeck(deck){

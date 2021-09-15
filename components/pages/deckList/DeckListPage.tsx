@@ -10,7 +10,7 @@ import { PageTitle } from "../../PageTitle";
 
 export const DeckListPage: React.FC = () => {
   const router = useRouter();
-  const { myDeckList, status } = useMyDeckListData();
+  const { deckList: myDeckList, status } = useMyDeckListData();
 
   const handleAddDeck = () => {
     router.push("/decks/create");

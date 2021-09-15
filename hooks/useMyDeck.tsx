@@ -1,4 +1,5 @@
-import { collection, doc } from "@firebase/firestore";
+import { collection, doc, orderBy } from "@firebase/firestore";
+import { query } from "firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
 import {
   useFirestore,
@@ -6,6 +7,7 @@ import {
   useFirestoreDocData,
   useUser,
 } from "reactfire";
+import { cardConverter, deckConverter } from "../firebase/firestoreConverters";
 import { Deck, FlashCard } from "../types";
 
 type UseMyDeckResult =
@@ -22,23 +24,27 @@ export const useMyDeck = (deckId: string): UseMyDeckResult => {
   );
 
   const deckRef = useMemo(
-    () => doc(firestore, "users", `${user?.uid}`, "/decks", deckId),
+    () =>
+      doc(firestore, "users", `${user?.uid}`, "/decks", deckId).withConverter(
+        deckConverter
+      ),
     [deckId, firestore, user?.uid]
   );
-  const cardsRef = useMemo(() => collection(deckRef, "cards"), [deckRef]);
+
+  const cardsRef = useMemo(() => {
+    return collection(deckRef, "cards").withConverter(cardConverter);
+  }, [deckRef]);
 
   const {
+    data: myDeckData,
     status: deckStatus,
     error: deckError,
-    data: myDeckData,
-  } = useFirestoreDocData(deckRef, {
-    idField: "id",
-  });
+  } = useFirestoreDocData(deckRef);
   const {
+    data: myDeckCardsData,
     status: cardsStatus,
     error: cardsError,
-    data: myDeckCardsData,
-  } = useFirestoreCollectionData(cardsRef, { idField: "id" });
+  } = useFirestoreCollectionData(query(cardsRef, orderBy("index", "asc")));
 
   // deckDocとcardDoc[]からDeckを作成する
   useEffect(() => {
