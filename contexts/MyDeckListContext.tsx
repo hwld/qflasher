@@ -7,7 +7,7 @@ import {
 
 const MyDeckListDataContext = createContext<DeckListData>({
   status: "error",
-  deckList: [],
+  deckList: undefined,
 });
 const MyDeckListOperationContext = createContext<DeckListOperation>({
   addDeck: () => Promise.reject(),

@@ -6,10 +6,10 @@ import { FormFlashCard } from "../components/DeckForm";
 import { cardConverter, deckConverter } from "../firebase/firestoreConverters";
 import { Deck, DeckWithoutCards } from "../types";
 
-export type DeckListData = {
-  status: "loading" | "success" | "error";
-  deckList: DeckWithoutCards[];
-};
+export type DeckListData =
+  | { status: "loading"; deckList: undefined }
+  | { status: "error"; deckList: undefined }
+  | { status: "success"; deckList: DeckWithoutCards[] };
 export type DeckListOperation = {
   addDeck: (deck: Deck) => Promise<void>;
   updateDeck: (deck: DeckWithoutCards, cards: FormFlashCard[]) => Promise<void>;
@@ -116,10 +116,20 @@ export const useMyDeckList = (): useMyDeckListResult => {
   );
 
   const data: DeckListData = useMemo(() => {
-    return {
-      status: error ? "error" : status,
-      deckList: myDeckListData,
-    };
+    // errorが設定されているのにstatusがsuccessになることがあるので
+    const dataStatus = error ? "error" : status;
+
+    switch (dataStatus) {
+      case "loading": {
+        return { status: dataStatus, deckList: undefined };
+      }
+      case "error": {
+        return { status: dataStatus, deckList: undefined };
+      }
+      case "success": {
+        return { status: dataStatus, deckList: myDeckListData };
+      }
+    }
   }, [error, myDeckListData, status]);
 
   const operations: DeckListOperation = useMemo(() => {

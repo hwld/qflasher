@@ -37,8 +37,7 @@ service cloud.firestore {
         allow update: if isAuth(userId) && isValidDeck(request.resource.data);
         allow delete: if isAuth(userId);
 
-        allow get: if isAuth(userId) 
-          && exists(/databases/$(database)/documents/users/$(userId)/decks/$(deckId));
+        allow get: if isAuth(userId) && exists(request.path);
         allow list: if isAuth(userId);
 
         match /cards/{cardId} {
@@ -46,7 +45,8 @@ service cloud.firestore {
           allow update: if isAuth(userId) && isValidCard(request.resource.data);
           allow delete: if isAuth(userId);
 
-          allow read: if isAuth(userId);
+          allow get: if isAuth(userId) && exists(request.path);
+          allow list: if isAuth(userId);
         }
       }
     }
