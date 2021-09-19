@@ -49,6 +49,8 @@ export const DeckForm: React.FC<Props> = ({
     )
   );
 
+  const keyDownTimer = useRef<NodeJS.Timeout>();
+
   const submit = () => {
     onSubmit(
       {
@@ -92,11 +94,13 @@ export const DeckForm: React.FC<Props> = ({
 
   const addCard = () => {
     const id = uuidv4();
+    // addCardを非同期関数内でawaitのあとに呼び出すと、setCardsが呼び出されたあとにすぐrender関数が呼ばれ、
+    // 更新前のcardMapを参照してしまうので必ずcardMapを更新したあとに呼び出す
+    cardMap.current.set(id, createRef());
     setCards((cards) => [
       ...cards,
       { id, question: "", answer: "", deleted: false },
     ]);
-    cardMap.current.set(id, createRef());
     return id;
   };
 
@@ -104,6 +108,7 @@ export const DeckForm: React.FC<Props> = ({
     addCard();
   };
   const handleDeleteCard = (id: string) => {
+    cardMap.current.delete(id);
     setCards((cards) =>
       cards.map((c) => {
         if (c.id === id) {
@@ -112,88 +117,82 @@ export const DeckForm: React.FC<Props> = ({
         return c;
       })
     );
-    cardMap.current.delete(id);
   };
 
-  const handleKeyDownName: KeyboardEventHandler = (event) => {
-    if (event.key !== "Enter") {
-      return;
+  const handleKeyDownTemplate = (event: KeyboardEvent, handler: () => void) => {
+    if (keyDownTimer.current) {
+      clearTimeout(keyDownTimer.current);
     }
-
-    if (event.ctrlKey) {
-      submit();
-      return;
-    }
-
-    if (existsCards.length === 0) {
-      addCard();
-    } else {
-      cardMap.current.get(existsCards[0].id)?.current?.focusQuestion();
-    }
-  };
-
-  const handleKeyDownQuestion = (
-    cardId: string,
-    event: KeyboardEvent<Element>
-  ) => {
-    if (event.key !== "Enter") {
-      return;
-    }
-
-    // ctrl + Enter　で Deckを作成する
-    if (event.ctrlKey) {
-      submit();
-      return;
-    }
-
-    const cardIndex = existsCards.findIndex((c) => c.id === cardId);
-    // shift + Enter で 前にフォーカスを移動する
-    if (event.shiftKey) {
-      if (cardIndex === 0) {
-        // 一番最初のcardだった場合、nameInputにフォーカスを当てる
-        nameInputRef.current?.focus();
-      } else {
-        // それ以外は前のcardにフォーカスを当てる
-        cardMap.current
-          .get(existsCards[cardIndex - 1].id)
-          ?.current?.focusAnswer();
+    keyDownTimer.current = setTimeout(() => {
+      if (event.key !== "Enter") {
+        return;
       }
-    } else {
-      // Enter のみで 同一cardのAnswerにフォーカスを当てる
-      cardMap.current.get(existsCards[cardIndex].id)?.current?.focusAnswer();
-    }
+      if (event.ctrlKey) {
+        submit();
+        return;
+      }
+      handler();
+    }, 50);
   };
 
-  const handleKeyDownAnswer = (
-    cardId: string,
-    event: KeyboardEvent<Element>
-  ) => {
-    if (event.key !== "Enter") {
-      return;
-    }
-
-    // ctrl + Enter　で Deckを作成する
-    if (event.ctrlKey) {
-      submit();
-      return;
-    }
-
-    const cardIndex = existsCards.findIndex((c) => c.id === cardId);
-    // shift + Enter で 前にフォーカスを移動する
-    if (event.shiftKey) {
-      // 同一cardのQuestionにフォーカスを当てる
-      cardMap.current.get(existsCards[cardIndex].id)?.current?.focusQuestion();
-    } else {
-      // 最後のcardだった場合、新たにcardを追加する
-      if (cardIndex === existsCards.length - 1) {
+  const handleKeyDownInName: KeyboardEventHandler = (event) => {
+    handleKeyDownTemplate(event, () => {
+      if (existsCards.length === 0) {
         addCard();
       } else {
-        // 次のcardのQuestionにフォーカスを当てる
-        cardMap.current
-          .get(existsCards[cardIndex + 1].id)
-          ?.current?.focusQuestion();
+        cardMap.current.get(existsCards[0].id)?.current?.focusQuestion();
       }
-    }
+    });
+  };
+
+  const handleKeyDownInQuestion = (
+    cardId: string,
+    event: KeyboardEvent<Element>
+  ) => {
+    handleKeyDownTemplate(event, () => {
+      const cardIndex = existsCards.findIndex((c) => c.id === cardId);
+      // shift + Enter で 前にフォーカスを移動する
+      if (event.shiftKey) {
+        if (cardIndex === 0) {
+          // 一番最初のcardだった場合、nameInputにフォーカスを当てる
+          nameInputRef.current?.focus();
+        } else {
+          // それ以外は前のcardにフォーカスを当てる
+          cardMap.current
+            .get(existsCards[cardIndex - 1].id)
+            ?.current?.focusAnswer();
+        }
+      } else {
+        // Enter のみで 同一cardのAnswerにフォーカスを当てる
+        cardMap.current.get(existsCards[cardIndex].id)?.current?.focusAnswer();
+      }
+    });
+  };
+
+  const handleKeyDownInAnswer = (
+    cardId: string,
+    event: KeyboardEvent<Element>
+  ) => {
+    handleKeyDownTemplate(event, () => {
+      const cardIndex = existsCards.findIndex((c) => c.id === cardId);
+      // shift + Enter で 前にフォーカスを移動する
+      if (event.shiftKey) {
+        // 同一cardのQuestionにフォーカスを当てる
+        cardMap.current
+          .get(existsCards[cardIndex].id)
+          ?.current?.focusQuestion();
+      } else {
+        // 最後のcardだった場合、新たにcardを追加する
+        if (cardIndex === existsCards.length - 1) {
+          addCard();
+        } else {
+          // 次のcardのQuestionにフォーカスを当てる
+          cardMap.current
+            .get(existsCards[cardIndex + 1].id)
+            ?.current?.focusQuestion();
+        }
+      }
+    });
   };
 
   useEffect(() => {
@@ -227,7 +226,7 @@ export const DeckForm: React.FC<Props> = ({
           value={name}
           colorScheme="green"
           onChange={handleChangeName}
-          onKeyDown={handleKeyDownName}
+          onKeyDown={handleKeyDownInName}
         />
       </Box>
       {existsCards.map((card, i) => {
@@ -242,8 +241,8 @@ export const DeckForm: React.FC<Props> = ({
             card={card}
             onChangeQuestion={handleChangeQuestion}
             onChangeAnswer={handleChangeAnswer}
-            onKeyDownQuestion={handleKeyDownQuestion}
-            onKeyDownAnswer={handleKeyDownAnswer}
+            onKeyDownInQuestion={handleKeyDownInQuestion}
+            onKeyDownInAnswer={handleKeyDownInAnswer}
             onDelete={handleDeleteCard}
           />
         );

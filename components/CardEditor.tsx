@@ -28,8 +28,8 @@ type Props = {
   card: FlashCard;
   onChangeQuestion: (id: string, value: string) => void;
   onChangeAnswer: (id: string, value: string) => void;
-  onKeyDownQuestion: (id: string, event: KeyboardEvent<Element>) => void;
-  onKeyDownAnswer: (id: string, event: KeyboardEvent<Element>) => void;
+  onKeyDownInQuestion: (id: string, event: KeyboardEvent<Element>) => void;
+  onKeyDownInAnswer: (id: string, event: KeyboardEvent<Element>) => void;
   onDelete: (id: string) => void;
 } & BoxProps;
 
@@ -40,8 +40,8 @@ const Component = React.forwardRef<CardEditorHandler, Props>(
       card,
       onChangeQuestion,
       onChangeAnswer,
-      onKeyDownQuestion,
-      onKeyDownAnswer,
+      onKeyDownInQuestion,
+      onKeyDownInAnswer,
       onDelete,
       ...styleProps
     },
@@ -62,11 +62,11 @@ const Component = React.forwardRef<CardEditorHandler, Props>(
     });
 
     const handleKeyDownQuestion: KeyboardEventHandler = (e) => {
-      onKeyDownQuestion(card.id, e);
+      onKeyDownInQuestion(card.id, e);
     };
 
     const handleKeyDownAnswer: KeyboardEventHandler = (e) => {
-      onKeyDownAnswer(card.id, e);
+      onKeyDownInAnswer(card.id, e);
     };
 
     const handleChangeQuestion: ChangeEventHandler<HTMLInputElement> = ({
