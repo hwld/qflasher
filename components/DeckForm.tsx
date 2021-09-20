@@ -3,7 +3,6 @@ import { Button, Input } from "@chakra-ui/react";
 import React, {
   ChangeEventHandler,
   createRef,
-  FormEventHandler,
   KeyboardEvent,
   KeyboardEventHandler,
   useEffect,
@@ -51,6 +50,38 @@ export const DeckForm: React.FC<Props> = ({
 
   const addCardTimer = useRef<NodeJS.Timeout>();
 
+  const isFirstCard = (cardId: string) => {
+    const cardIndex = existsCards.findIndex((c) => c.id === cardId);
+    return cardIndex === 0;
+  };
+
+  const isLastCard = (cardId: string) => {
+    const cardIndex = existsCards.findIndex((c) => c.id === cardId);
+    return cardIndex === existsCards.length - 1;
+  };
+
+  const cardHandler = (cardId: string) => {
+    return cardMap.current.get(cardId)?.current;
+  };
+
+  const firstCardHandler = () => {
+    return cardMap.current.get(existsCards[0].id)?.current;
+  };
+
+  const prevCardHandler = (cardId: string) => {
+    const cardIndex = existsCards.findIndex((c) => c.id === cardId);
+    return cardMap.current.get(existsCards[cardIndex - 1].id)?.current;
+  };
+
+  const nextCardHandler = (cardId: string) => {
+    const cardIndex = existsCards.findIndex((c) => c.id === cardId);
+    return cardMap.current.get(existsCards[cardIndex + 1].id)?.current;
+  };
+
+  const lastCardHandler = () => {
+    return cardMap.current.get(existsCards[existsCards.length - 1].id)?.current;
+  };
+
   const submit = () => {
     onSubmit(
       {
@@ -61,31 +92,22 @@ export const DeckForm: React.FC<Props> = ({
       cards
     );
   };
-  const handleSubmit: FormEventHandler = (e) => {
-    e.preventDefault();
-    submit();
-  };
 
   const handleChangeName: ChangeEventHandler<HTMLInputElement> = ({
     target: { value },
   }) => {
     setName(value);
   };
-  const handleChangeQuestion = (id: string, question: string) => {
+
+  const handleChangeCardField = (
+    field: Extract<keyof FlashCard, "answer" | "question">,
+    id: string,
+    value: string
+  ) => {
     setCards((cards) =>
-      cards.map((c) => {
+      cards.map((c): FormFlashCard => {
         if (c.id === id) {
-          return { ...c, question };
-        }
-        return c;
-      })
-    );
-  };
-  const handleChangeAnswer = (id: string, answer: string) => {
-    setCards((cards) =>
-      cards.map((c) => {
-        if (c.id === id) {
-          return { ...c, answer };
+          return { ...c, [field]: value };
         }
         return c;
       })
@@ -104,9 +126,6 @@ export const DeckForm: React.FC<Props> = ({
     return id;
   };
 
-  const handleAddCard = () => {
-    addCard();
-  };
   const handleDeleteCard = (id: string) => {
     cardMap.current.delete(id);
     setCards((cards) =>
@@ -120,10 +139,7 @@ export const DeckForm: React.FC<Props> = ({
   };
 
   const handleKeyDownTemplate = (event: KeyboardEvent, handler: () => void) => {
-    if (event.key !== "Enter") {
-      return;
-    }
-    if (event.ctrlKey) {
+    if (event.key === "Enter" && event.ctrlKey) {
       submit();
       return;
     }
@@ -132,10 +148,13 @@ export const DeckForm: React.FC<Props> = ({
 
   const handleKeyDownInName: KeyboardEventHandler = (event) => {
     handleKeyDownTemplate(event, () => {
-      if (existsCards.length === 0) {
-        addCard();
-      } else {
-        cardMap.current.get(existsCards[0].id)?.current?.focusQuestion();
+      if (event.key === "Enter") {
+        if (existsCards.length === 0) {
+          addCard();
+        } else {
+          firstCardHandler()?.focusQuestion();
+        }
+        return;
       }
     });
   };
@@ -145,21 +164,18 @@ export const DeckForm: React.FC<Props> = ({
     event: KeyboardEvent<Element>
   ) => {
     handleKeyDownTemplate(event, () => {
-      const cardIndex = existsCards.findIndex((c) => c.id === cardId);
-      // shift + Enter で 前にフォーカスを移動する
-      if (event.shiftKey) {
-        if (cardIndex === 0) {
-          // 一番最初のcardだった場合、nameInputにフォーカスを当てる
+      if (event.key === "Enter" && event.shiftKey) {
+        if (isFirstCard(cardId)) {
           nameInputRef.current?.focus();
         } else {
-          // それ以外は前のcardにフォーカスを当てる
-          cardMap.current
-            .get(existsCards[cardIndex - 1].id)
-            ?.current?.focusAnswer();
+          prevCardHandler(cardId)?.focusAnswer();
         }
-      } else {
-        // Enter のみで 同一cardのAnswerにフォーカスを当てる
-        cardMap.current.get(existsCards[cardIndex].id)?.current?.focusAnswer();
+        return;
+      }
+
+      if (event.key === "Enter") {
+        cardHandler(cardId)?.focusAnswer();
+        return;
       }
     });
   };
@@ -169,17 +185,13 @@ export const DeckForm: React.FC<Props> = ({
     event: KeyboardEvent<Element>
   ) => {
     handleKeyDownTemplate(event, () => {
-      const cardIndex = existsCards.findIndex((c) => c.id === cardId);
-      // shift + Enter で 前にフォーカスを移動する
-      if (event.shiftKey) {
-        // 同一cardのQuestionにフォーカスを当てる
-        cardMap.current
-          .get(existsCards[cardIndex].id)
-          ?.current?.focusQuestion();
-      } else {
-        // 最後のcardだった場合、新たにcardを追加する
-        if (cardIndex === existsCards.length - 1) {
-          // カードの追加だけデバウンスを使用する
+      if (event.key === "Enter" && event.shiftKey) {
+        cardHandler(cardId)?.focusQuestion();
+        return;
+      }
+
+      if (event.key === "Enter") {
+        if (isLastCard(cardId)) {
           if (addCardTimer.current) {
             clearTimeout(addCardTimer.current);
           }
@@ -187,11 +199,9 @@ export const DeckForm: React.FC<Props> = ({
             addCard();
           }, 50);
         } else {
-          // 次のcardのQuestionにフォーカスを当てる
-          cardMap.current
-            .get(existsCards[cardIndex + 1].id)
-            ?.current?.focusQuestion();
+          nextCardHandler(cardId)?.focusQuestion();
         }
+        return;
       }
     });
   };
@@ -200,9 +210,7 @@ export const DeckForm: React.FC<Props> = ({
     if (cardMap.current.size === 0) {
       nameInputRef.current?.focus();
     } else {
-      cardMap.current
-        .get(existsCards[existsCards.length - 1].id)
-        ?.current?.focusAnswer();
+      lastCardHandler()?.focusQuestion();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -210,7 +218,7 @@ export const DeckForm: React.FC<Props> = ({
   return (
     <Box>
       {/* Enterが入力されてもsubmitが発生しないように独立させる。 */}
-      <form id={formId} onSubmit={handleSubmit}></form>
+      <form id={formId} onSubmit={submit}></form>
       <Box
         bgColor="gray.700"
         padding={5}
@@ -240,8 +248,7 @@ export const DeckForm: React.FC<Props> = ({
             boxShadow="dark-lg"
             key={card.id}
             card={card}
-            onChangeQuestion={handleChangeQuestion}
-            onChangeAnswer={handleChangeAnswer}
+            onChangeField={handleChangeCardField}
             onKeyDownInQuestion={handleKeyDownInQuestion}
             onKeyDownInAnswer={handleKeyDownInAnswer}
             onDelete={handleDeleteCard}
@@ -255,7 +262,7 @@ export const DeckForm: React.FC<Props> = ({
         borderTopRadius="md"
         borderBottomRadius="3xl"
         boxShadow="dark-lg"
-        onClick={handleAddCard}
+        onClick={addCard}
       >
         <MdAdd size="100%" />
       </Button>

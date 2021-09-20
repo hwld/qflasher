@@ -26,8 +26,11 @@ export type CardEditorHandler = {
 type Props = {
   index: number;
   card: FlashCard;
-  onChangeQuestion: (id: string, value: string) => void;
-  onChangeAnswer: (id: string, value: string) => void;
+  onChangeField: (
+    fields: Extract<keyof FlashCard, "answer" | "question">,
+    id: string,
+    value: string
+  ) => void;
   onKeyDownInQuestion: (id: string, event: KeyboardEvent<Element>) => void;
   onKeyDownInAnswer: (id: string, event: KeyboardEvent<Element>) => void;
   onDelete: (id: string) => void;
@@ -38,8 +41,7 @@ const Component = React.forwardRef<CardEditorHandler, Props>(
     {
       index,
       card,
-      onChangeQuestion,
-      onChangeAnswer,
+      onChangeField,
       onKeyDownInQuestion,
       onKeyDownInAnswer,
       onDelete,
@@ -72,13 +74,13 @@ const Component = React.forwardRef<CardEditorHandler, Props>(
     const handleChangeQuestion: ChangeEventHandler<HTMLInputElement> = ({
       target: { value },
     }) => {
-      onChangeQuestion(card.id, value);
+      onChangeField("question", card.id, value);
     };
 
     const handleChangeAnswer: ChangeEventHandler<HTMLInputElement> = ({
       target: { value },
     }) => {
-      onChangeAnswer(card.id, value);
+      onChangeField("answer", card.id, value);
     };
 
     const handleDelete = () => {
