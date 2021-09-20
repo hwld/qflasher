@@ -49,7 +49,7 @@ export const DeckForm: React.FC<Props> = ({
     )
   );
 
-  const keyDownTimer = useRef<NodeJS.Timeout>();
+  const addCardTimer = useRef<NodeJS.Timeout>();
 
   const submit = () => {
     onSubmit(
@@ -120,19 +120,14 @@ export const DeckForm: React.FC<Props> = ({
   };
 
   const handleKeyDownTemplate = (event: KeyboardEvent, handler: () => void) => {
-    if (keyDownTimer.current) {
-      clearTimeout(keyDownTimer.current);
+    if (event.key !== "Enter") {
+      return;
     }
-    keyDownTimer.current = setTimeout(() => {
-      if (event.key !== "Enter") {
-        return;
-      }
-      if (event.ctrlKey) {
-        submit();
-        return;
-      }
-      handler();
-    }, 50);
+    if (event.ctrlKey) {
+      submit();
+      return;
+    }
+    handler();
   };
 
   const handleKeyDownInName: KeyboardEventHandler = (event) => {
@@ -184,7 +179,13 @@ export const DeckForm: React.FC<Props> = ({
       } else {
         // 最後のcardだった場合、新たにcardを追加する
         if (cardIndex === existsCards.length - 1) {
-          addCard();
+          // カードの追加だけデバウンスを使用する
+          if (addCardTimer.current) {
+            clearTimeout(addCardTimer.current);
+          }
+          addCardTimer.current = setTimeout(() => {
+            addCard();
+          }, 50);
         } else {
           // 次のcardのQuestionにフォーカスを当てる
           cardMap.current
