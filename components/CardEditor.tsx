@@ -4,6 +4,7 @@ import {
   Button,
   Flex,
   Input,
+  Stack,
   Text,
   Tooltip,
 } from "@chakra-ui/react";
@@ -92,11 +93,26 @@ const Component = React.forwardRef<CardEditorHandler, Props>(
     }, []);
 
     return (
-      <Box key={card.id} padding={5} bgColor="gray.700" {...styleProps}>
-        <Flex align="center">
-          <Text fontWeight="bold" mr={2}>
-            {index}.
-          </Text>
+      <Box key={card.id} padding={5} pt={3} bgColor="gray.700" {...styleProps}>
+        <Stack>
+          <Flex justify="space-between">
+            <Text fontWeight="bold" mr={2}>
+              {index}.
+            </Text>
+            <Tooltip label="削除">
+              <Button
+                ml={5}
+                boxSize="40px"
+                rounded="full"
+                minW="unset"
+                variant="solid"
+                onClick={handleDelete}
+                p={0}
+              >
+                <MdDelete size="60%" />
+              </Button>
+            </Tooltip>
+          </Flex>
           <Input
             ref={questionInputRef}
             placeholder="質問"
@@ -108,26 +124,13 @@ const Component = React.forwardRef<CardEditorHandler, Props>(
 
           <Input
             ref={answerInputRef}
-            ml={3}
             placeholder="答え"
             _placeholder={{ color: "gray.300" }}
             value={card.answer}
             onChange={handleChangeAnswer}
             onKeyDown={handleKeyDownAnswer}
           />
-          <Tooltip label="削除">
-            <Button
-              ml={5}
-              boxSize="40px"
-              variant="outline"
-              colorScheme="red"
-              onClick={handleDelete}
-              padding={0}
-            >
-              <MdDelete size="60%" />
-            </Button>
-          </Tooltip>
-        </Flex>
+        </Stack>
       </Box>
     );
   }
