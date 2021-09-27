@@ -8,16 +8,11 @@ import {
   Text,
   Tooltip,
 } from "@chakra-ui/react";
-import React, {
-  ChangeEventHandler,
-  KeyboardEvent,
-  KeyboardEventHandler,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-} from "react";
+import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
+import { Control, Controller } from "react-hook-form";
 import { MdDelete } from "react-icons/md";
 import { FlashCard } from "../types";
+import { DeckFormFields } from "./DeckForm";
 
 export type CardEditorHandler = {
   focusQuestion: () => void;
@@ -26,114 +21,96 @@ export type CardEditorHandler = {
 
 type Props = {
   index: number;
-  card: FlashCard;
-  onChangeField: (
-    fields: Extract<keyof FlashCard, "answer" | "question">,
-    id: string,
-    value: string
-  ) => void;
+  id: string;
+  formControl: Control<DeckFormFields, object>;
+  defaultValue?: FlashCard;
+  onFocusQuestion: (id: string) => void;
   onKeyDownInQuestion: (id: string, event: KeyboardEvent<Element>) => void;
   onKeyDownInAnswer: (id: string, event: KeyboardEvent<Element>) => void;
   onDelete: (id: string) => void;
-} & BoxProps;
+} & Omit<BoxProps, "defaultValue">;
 
-const Component = React.forwardRef<CardEditorHandler, Props>(
-  function CardEditor(
-    {
-      index,
-      card,
-      onChangeField,
-      onKeyDownInQuestion,
-      onKeyDownInAnswer,
-      onDelete,
-      ...styleProps
-    },
-    ref
-  ) {
-    const questionInputRef = useRef<HTMLInputElement>(null);
-    const answerInputRef = useRef<HTMLInputElement>(null);
+const Component: React.FC<Props> = ({
+  index,
+  id,
+  formControl,
+  defaultValue = { id: "", question: "", answer: "" },
+  onFocusQuestion,
+  onKeyDownInQuestion,
+  onKeyDownInAnswer,
+  onDelete,
+  ...styleProps
+}) => {
+  const handleKeyDownQuestion: KeyboardEventHandler = (e) => {
+    onKeyDownInQuestion(id, e);
+  };
 
-    useImperativeHandle(ref, () => {
-      return {
-        focusQuestion() {
-          questionInputRef.current?.focus();
-        },
-        focusAnswer() {
-          answerInputRef.current?.focus();
-        },
-      };
-    });
+  const handleKeyDownAnswer: KeyboardEventHandler = (e) => {
+    onKeyDownInAnswer(id, e);
+  };
 
-    const handleKeyDownQuestion: KeyboardEventHandler = (e) => {
-      onKeyDownInQuestion(card.id, e);
-    };
+  const handleDelete = () => {
+    onDelete(id);
+  };
 
-    const handleKeyDownAnswer: KeyboardEventHandler = (e) => {
-      onKeyDownInAnswer(card.id, e);
-    };
+  useEffect(() => {
+    onFocusQuestion(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    const handleChangeQuestion: ChangeEventHandler<HTMLInputElement> = ({
-      target: { value },
-    }) => {
-      onChangeField("question", card.id, value);
-    };
+  return (
+    <Box key={id} padding={5} pt={3} bgColor="gray.700" {...styleProps}>
+      <Stack>
+        <Flex justify="space-between">
+          <Text fontWeight="bold" mr={2}>
+            {index + 1}.
+          </Text>
+          <Tooltip label="削除">
+            <Button
+              ml={5}
+              boxSize="40px"
+              rounded="full"
+              minW="unset"
+              variant="solid"
+              onClick={handleDelete}
+              p={0}
+            >
+              <MdDelete size="60%" />
+            </Button>
+          </Tooltip>
+        </Flex>
+        <Controller
+          control={formControl}
+          name={`cards.${index}.question`}
+          defaultValue={defaultValue.question}
+          shouldUnregister={true}
+          render={({ field }) => (
+            <Input
+              placeholder="質問"
+              _placeholder={{ color: "gray.300" }}
+              onKeyDown={handleKeyDownQuestion}
+              {...field}
+            />
+          )}
+        />
 
-    const handleChangeAnswer: ChangeEventHandler<HTMLInputElement> = ({
-      target: { value },
-    }) => {
-      onChangeField("answer", card.id, value);
-    };
-
-    const handleDelete = () => {
-      onDelete(card.id);
-    };
-
-    useEffect(() => {
-      questionInputRef.current?.focus();
-    }, []);
-
-    return (
-      <Box key={card.id} padding={5} pt={3} bgColor="gray.700" {...styleProps}>
-        <Stack>
-          <Flex justify="space-between">
-            <Text fontWeight="bold" mr={2}>
-              {index}.
-            </Text>
-            <Tooltip label="削除">
-              <Button
-                ml={5}
-                boxSize="40px"
-                rounded="full"
-                minW="unset"
-                variant="solid"
-                onClick={handleDelete}
-                p={0}
-              >
-                <MdDelete size="60%" />
-              </Button>
-            </Tooltip>
-          </Flex>
-          <Input
-            ref={questionInputRef}
-            placeholder="質問"
-            _placeholder={{ color: "gray.300" }}
-            value={card.question}
-            onChange={handleChangeQuestion}
-            onKeyDown={handleKeyDownQuestion}
-          />
-
-          <Input
-            ref={answerInputRef}
-            placeholder="答え"
-            _placeholder={{ color: "gray.300" }}
-            value={card.answer}
-            onChange={handleChangeAnswer}
-            onKeyDown={handleKeyDownAnswer}
-          />
-        </Stack>
-      </Box>
-    );
-  }
-);
+        <Controller
+          control={formControl}
+          name={`cards.${index}.answer`}
+          defaultValue={defaultValue.answer}
+          shouldUnregister={true}
+          render={({ field }) => (
+            <Input
+              placeholder="答え"
+              _placeholder={{ color: "gray.300" }}
+              onKeyDown={handleKeyDownAnswer}
+              {...field}
+            />
+          )}
+        />
+      </Stack>
+    </Box>
+  );
+};
 
 export const CardEditor = Component;
