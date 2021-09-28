@@ -4,10 +4,10 @@ service cloud.firestore {
     return card.size() == 3
     && 'question' in card
     && card.question is string
-    && card.question.size() <= 100
+    && card.question.size() > 0 && card.question.size() <= 100
     && 'answer' in card
     && card.answer is string
-    && card.answer.size() <= 100
+    && card.answer.size() > 0 && card.answer.size() <= 100
     && 'index' in card
     && card.index is int
     && card.index >= 0 && card.index < 100
@@ -17,7 +17,7 @@ service cloud.firestore {
     return deck.size() == 2
     && 'name' in deck 
     && deck.name is string
-    && deck.name.size() <= 50
+    && deck.name.size() > 0 && deck.name.size() <= 50
     && 'cardLength' in deck
     && deck.cardLength is int
     && deck.cardLength >= 0 && deck.cardLength <= 100

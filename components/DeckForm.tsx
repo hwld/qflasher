@@ -37,7 +37,12 @@ export const DeckForm: React.FC<Props> = ({
   onSubmit,
 }) => {
   // form用のFlashCards[]とexistsCards[]は対応させる
-  const { control, setFocus, handleSubmit } = useForm<DeckFormFields>({
+  const {
+    control,
+    setFocus,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<DeckFormFields>({
     mode: "onChange",
   });
 
@@ -246,15 +251,27 @@ export const DeckForm: React.FC<Props> = ({
           control={control}
           name="name"
           defaultValue={defaultName}
+          rules={{
+            required: { value: true, message: "文字を入力してください" },
+            maxLength: { value: 50, message: "50文字以下で入力してください" },
+          }}
           render={({ field }) => (
             <Input
               mt={3}
+              autoComplete="off"
+              spellCheck={false}
+              isInvalid={!!errors.name}
               colorScheme="green"
               onKeyDown={handleKeyDownInName}
               {...field}
             />
           )}
         />
+        {errors.name?.message && (
+          <Text ml={3} my={2} color="red">
+            ※{errors.name.message}
+          </Text>
+        )}
       </Box>
       {existsCards.map((card, i) => {
         return (
@@ -264,6 +281,7 @@ export const DeckForm: React.FC<Props> = ({
             boxShadow="dark-lg"
             index={i}
             formControl={control}
+            cardErrors={errors.cards}
             key={card.id}
             id={card.id}
             defaultValue={defaultCards.find((c) => c.id === card.id)}

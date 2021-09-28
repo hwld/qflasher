@@ -9,7 +9,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
-import { Control, Controller } from "react-hook-form";
+import { Control, Controller, FormState } from "react-hook-form";
 import { MdDelete } from "react-icons/md";
 import { FlashCard } from "../types";
 import { DeckFormFields } from "./DeckForm";
@@ -23,6 +23,7 @@ type Props = {
   index: number;
   id: string;
   formControl: Control<DeckFormFields, object>;
+  cardErrors: FormState<DeckFormFields>["errors"]["cards"];
   defaultValue?: FlashCard;
   onFocusQuestion: (id: string) => void;
   onKeyDownInQuestion: (id: string, event: KeyboardEvent<Element>) => void;
@@ -34,6 +35,7 @@ const Component: React.FC<Props> = ({
   index,
   id,
   formControl,
+  cardErrors,
   defaultValue = { id: "", question: "", answer: "" },
   onFocusQuestion,
   onKeyDownInQuestion,
@@ -41,6 +43,9 @@ const Component: React.FC<Props> = ({
   onDelete,
   ...styleProps
 }) => {
+  const questionError = cardErrors?.[index]?.question;
+  const answerError = cardErrors?.[index]?.answer;
+
   const handleKeyDownQuestion: KeyboardEventHandler = (e) => {
     onKeyDownInQuestion(id, e);
   };
@@ -79,35 +84,69 @@ const Component: React.FC<Props> = ({
             </Button>
           </Tooltip>
         </Flex>
-        <Controller
-          control={formControl}
-          name={`cards.${index}.question`}
-          defaultValue={defaultValue.question}
-          shouldUnregister={true}
-          render={({ field }) => (
-            <Input
-              placeholder="質問"
-              _placeholder={{ color: "gray.300" }}
-              onKeyDown={handleKeyDownQuestion}
-              {...field}
-            />
+        <Box>
+          <Controller
+            control={formControl}
+            name={`cards.${index}.question`}
+            defaultValue={defaultValue.question}
+            rules={{
+              required: { value: true, message: "文字を入力してください" },
+              maxLength: {
+                value: 100,
+                message: "100文字以下で入力してください。",
+              },
+            }}
+            shouldUnregister={true}
+            render={({ field }) => (
+              <Input
+                autoComplete="off"
+                spellCheck={false}
+                placeholder="質問"
+                _placeholder={{ color: "gray.300" }}
+                isInvalid={!!questionError}
+                onKeyDown={handleKeyDownQuestion}
+                {...field}
+              />
+            )}
+          />
+          {questionError?.message && (
+            <Text ml={3} my={2} color="red">
+              ※{questionError?.message}
+            </Text>
           )}
-        />
+        </Box>
 
-        <Controller
-          control={formControl}
-          name={`cards.${index}.answer`}
-          defaultValue={defaultValue.answer}
-          shouldUnregister={true}
-          render={({ field }) => (
-            <Input
-              placeholder="答え"
-              _placeholder={{ color: "gray.300" }}
-              onKeyDown={handleKeyDownAnswer}
-              {...field}
-            />
+        <Box>
+          <Controller
+            control={formControl}
+            name={`cards.${index}.answer`}
+            defaultValue={defaultValue.answer}
+            shouldUnregister={true}
+            rules={{
+              required: { value: true, message: "文字を入力してください" },
+              maxLength: {
+                value: 100,
+                message: "100文字以下で入力してください",
+              },
+            }}
+            render={({ field }) => (
+              <Input
+                autoComplete="off"
+                spellCheck={false}
+                placeholder="答え"
+                _placeholder={{ color: "gray.300" }}
+                isInvalid={!!answerError}
+                onKeyDown={handleKeyDownAnswer}
+                {...field}
+              />
+            )}
+          />
+          {answerError?.message && (
+            <Text ml={3} my={2} color="red">
+              ※{answerError?.message}
+            </Text>
           )}
-        />
+        </Box>
       </Stack>
     </Box>
   );
