@@ -6,7 +6,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
-import React from "react";
+import React, { useState } from "react";
 import { MdSave } from "react-icons/md";
 import { useMyDeckListOperations } from "../../../contexts/MyDeckListContext";
 import { useMyDeck } from "../../../hooks/useMyDeck";
@@ -22,6 +22,7 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({ deckId }) => {
   const router = useRouter();
   const toast = useToast();
   const { updateDeck } = useMyDeckListOperations();
+  const [isLoading, setIsLoading] = useState(false);
   const useMyDeckResult = useMyDeck(deckId);
   const formId = "updateDeckForm";
 
@@ -45,9 +46,11 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({ deckId }) => {
     formCards: FormFlashCard[]
   ) => {
     try {
+      setIsLoading(true);
       await updateDeck(deckWithoutCards, formCards);
       router.push("/decks");
     } catch (e) {
+      setIsLoading(false);
       console.error(e);
       toast({
         title: "エラー",
@@ -59,7 +62,7 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({ deckId }) => {
 
   return (
     <Box minH="100vh">
-      <Header />
+      <Header isLoading={isLoading} />
       <PageTitle mt={5}>デッキ更新</PageTitle>
       <Box mt={5} maxW="800px" marginX="auto">
         <DeckForm

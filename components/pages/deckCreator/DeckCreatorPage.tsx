@@ -1,6 +1,6 @@
 import { Box, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
-import React from "react";
+import React, { useState } from "react";
 import { MdSave } from "react-icons/md";
 import { useMyDeckListOperations } from "../../../contexts/MyDeckListContext";
 import { DeckWithoutCards } from "../../../types";
@@ -13,6 +13,7 @@ export const DeckCreatorPage: React.FC = () => {
   const router = useRouter();
   const toast = useToast();
   const { addDeck } = useMyDeckListOperations();
+  const [isLoading, setIsLoading] = useState(false);
 
   const formId = "createDeckForm";
 
@@ -21,7 +22,7 @@ export const DeckCreatorPage: React.FC = () => {
     formCards: FormFlashCard[]
   ) => {
     try {
-      //仮のid
+      setIsLoading(true);
       await addDeck({
         ...deckWithoutCards,
         // 削除されているcardsは除外する
@@ -29,6 +30,8 @@ export const DeckCreatorPage: React.FC = () => {
       });
       router.push("/decks");
     } catch (e) {
+      // 処理が成功したらページを移動するので失敗したときにのみ状態を変更する
+      setIsLoading(false);
       console.error(e);
       toast({
         title: "エラー",
@@ -40,7 +43,7 @@ export const DeckCreatorPage: React.FC = () => {
 
   return (
     <Box minH="100vh">
-      <Header />
+      <Header isLoading={isLoading} />
       <PageTitle mt={5}>デッキ作成</PageTitle>
       <Box mt={5} maxW="800px" marginX="auto">
         <DeckForm formId={formId} onSubmit={handleSubmit} />

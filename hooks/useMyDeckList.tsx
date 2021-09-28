@@ -52,6 +52,7 @@ export const useMyDeckList = (): useMyDeckListResult => {
       const cardsRef = collection(deckDoc, "cards").withConverter(
         cardConverter
       );
+
       deck.cards.forEach((c, index) => {
         // cardはDeckFormで作成した時点でidを識別する必要があるため、firestoreのautoIdは使用しない。
         const cardDoc = doc(cardsRef, c.id);
