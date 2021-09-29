@@ -1,14 +1,30 @@
 import { Box, Center, CircularProgress, Heading, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import { useMyDeck } from "../../../hooks/useMyDeck";
 import { DeckPlayer } from "../../DeckPlayer";
 import { Header } from "../../Header";
 import { PageTitle } from "../../PageTitle";
+import { PlaySettingPage } from "./PlaySettingPage";
 
 type DeckPlayerPageProps = { deckId: string };
 
+export type DeckPlayConfig = {
+  initialFront: "question" | "answer";
+  isOrderRandom: boolean;
+};
+
 export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({ deckId }) => {
+  const [completedSetting, setCompletedSetting] = useState(false);
+  const [config, setConfig] = useState<DeckPlayConfig>({
+    initialFront: "question",
+    isOrderRandom: false,
+  });
   const useMyDeckResult = useMyDeck(deckId);
+
+  const handleCompleteSetting = (config: DeckPlayConfig) => {
+    setCompletedSetting(true);
+    setConfig(config);
+  };
 
   if (useMyDeckResult.status === "loading") {
     return (
@@ -25,6 +41,10 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({ deckId }) => {
     );
   }
 
+  if (!completedSetting) {
+    return <PlaySettingPage onComplete={handleCompleteSetting} />;
+  }
+
   return (
     <Box minH="100vh">
       <Header />
@@ -34,7 +54,12 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({ deckId }) => {
           {useMyDeckResult.deck.name}
         </Text>
       </Center>
-      <DeckPlayer mt={5} mx="auto" deck={useMyDeckResult.deck} />
+      <DeckPlayer
+        mt={5}
+        mx="auto"
+        deck={useMyDeckResult.deck}
+        config={config}
+      />
     </Box>
   );
 };
