@@ -3,9 +3,13 @@ import React from "react";
 import { FlashCard } from "../types";
 import { FlashCardItem } from "./FlashCardItem";
 
-type Props = { cards: FlashCard[]; front: "question" | "answer" };
+type Props = {
+  cards: FlashCard[];
+  topFront: "question" | "answer";
+  initialFront: "question" | "answer";
+};
 
-const Component: React.FC<Props> = ({ cards, front }) => {
+const Component: React.FC<Props> = ({ cards, topFront, initialFront }) => {
   return (
     <Box
       bgColor="gray.700"
@@ -27,7 +31,7 @@ const Component: React.FC<Props> = ({ cards, front }) => {
           right={0}
           margin="auto"
           // 最後のcard(一番全面にあるcard)のfrontのみを変化させる
-          front={cards.length - 1 === index ? front : "question"}
+          front={cards.length - 1 === index ? topFront : initialFront}
         />
       ))}
     </Box>

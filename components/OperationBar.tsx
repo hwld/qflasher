@@ -74,18 +74,16 @@ const Component: React.FC<Props> = ({
               </Tooltip>
             )}
           </Box>
-          <Box boxSize="70px">
-            {!isOpen && (
-              <Tooltip label="裏返す">
-                <Button
-                  colorScheme="green"
-                  boxSize="100%"
-                  onClick={handleTurnOver}
-                >
-                  <MdReplay size={30} />
-                </Button>
-              </Tooltip>
-            )}
+          <Box boxSize="70px" mx={3}>
+            <Tooltip label="裏返す">
+              <Button
+                colorScheme="green"
+                boxSize="100%"
+                onClick={handleTurnOver}
+              >
+                <MdReplay size={30} />
+              </Button>
+            </Tooltip>
           </Box>
           <Box boxSize="70px">
             {isOpen && (

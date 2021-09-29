@@ -1,17 +1,14 @@
 import { Box, BoxProps } from "@chakra-ui/react";
-import { useRouter } from "next/dist/client/router";
 import React, { useState } from "react";
 import { Deck } from "../types";
 import { FlashCardViewer } from "./FlashCardViewer";
 import { OperationBar } from "./OperationBar";
 
-type Props = { deck: Deck } & BoxProps;
+type Props = { deck: Deck; initialFront: "question" | "answer" } & BoxProps;
 
-const Component: React.FC<Props> = ({ deck, ...styleProps }) => {
-  const router = useRouter();
+const Component: React.FC<Props> = ({ deck, initialFront, ...styleProps }) => {
   const [cards, setCards] = useState([...deck.cards].reverse());
-  const initFront = "question";
-  const [front, setFront] = useState<"question" | "answer">(initFront);
+  const [front, setFront] = useState<"question" | "answer">(initialFront);
 
   const handleTurnOver = () => {
     setFront((front) => {
@@ -21,17 +18,21 @@ const Component: React.FC<Props> = ({ deck, ...styleProps }) => {
 
   const handleCorrect = () => {
     setCards((cards) => cards.filter((_, index) => index !== cards.length - 1));
-    setFront("question");
+    setFront(initialFront);
   };
 
   const handleInCorrect = () => {
     setCards((cards) => cards.filter((_, index) => index !== cards.length - 1));
-    setFront("question");
+    setFront(initialFront);
   };
 
   return (
     <Box width="min-content" {...styleProps}>
-      <FlashCardViewer cards={cards} front={front} />
+      <FlashCardViewer
+        cards={cards}
+        topFront={front}
+        initialFront={initialFront}
+      />
       <OperationBar
         mt={3}
         isEnd={cards.length === 0}
