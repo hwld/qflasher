@@ -4,11 +4,8 @@ import { AuthRequiredPage } from "../../components/AuthRequiredPage";
 import { DeckCreatorPage } from "../../components/pages/deckCreator/DeckCreatorPage";
 
 const Create: NextPage = () => {
-  return (
-    <AuthRequiredPage>
-      <DeckCreatorPage />
-    </AuthRequiredPage>
-  );
+  const page = (userId: string) => <DeckCreatorPage userId={userId} />;
+  return <AuthRequiredPage>{page}</AuthRequiredPage>;
 };
 
 export default Create;

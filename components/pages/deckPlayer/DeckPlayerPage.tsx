@@ -6,20 +6,23 @@ import { Header } from "../../Header";
 import { PageTitle } from "../../PageTitle";
 import { PlaySettingPage } from "./PlaySettingPage";
 
-type DeckPlayerPageProps = { deckId: string };
+type DeckPlayerPageProps = { deckId: string; userId: string };
 
 export type DeckPlayConfig = {
   initialFront: "question" | "answer";
   isOrderRandom: boolean;
 };
 
-export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({ deckId }) => {
+export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
+  deckId,
+  userId,
+}) => {
   const [completedSetting, setCompletedSetting] = useState(false);
   const [config, setConfig] = useState<DeckPlayConfig>({
     initialFront: "question",
     isOrderRandom: false,
   });
-  const useMyDeckResult = useMyDeck(deckId);
+  const useMyDeckResult = useMyDeck(userId, deckId);
 
   const handleCompleteSetting = (config: DeckPlayConfig) => {
     setCompletedSetting(true);

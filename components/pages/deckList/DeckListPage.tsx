@@ -2,22 +2,26 @@ import { Box, Center, CircularProgress, Grid, Heading } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React, { useMemo } from "react";
 import { MdAdd } from "react-icons/md";
-import { useMyDeckListData } from "../../../contexts/MyDeckListContext";
+import { useDeckList } from "../../../hooks/useDeckList";
+import { useDeckOperation } from "../../../hooks/useDeckOperation";
 import { DeckListItem } from "../../DeckListItem";
 import { Fab } from "../../Fab";
 import { Header } from "../../Header";
 import { PageTitle } from "../../PageTitle";
 
-export const DeckListPage: React.FC = () => {
+type DeckListPageProps = { userId: string };
+
+export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
   const router = useRouter();
-  const useMyDeckListDataResult = useMyDeckListData();
+  const useDeckListResult = useDeckList(userId);
+  const { deleteDeck } = useDeckOperation(userId);
 
   const handleAddDeck = () => {
     router.push("/decks/create");
   };
 
   const deckList = useMemo(() => {
-    switch (useMyDeckListDataResult.status) {
+    switch (useDeckListResult.status) {
       case "error": {
         return (
           <Center>
@@ -39,14 +43,20 @@ export const DeckListPage: React.FC = () => {
             gap={5}
             justifyContent="center"
           >
-            {useMyDeckListDataResult.deckList.map((deck) => {
-              return <DeckListItem key={deck.id} deck={deck} />;
+            {useDeckListResult.deckList.map((deck) => {
+              return (
+                <DeckListItem
+                  key={deck.id}
+                  deck={deck}
+                  onDeleteDeck={deleteDeck}
+                />
+              );
             })}
           </Grid>
         );
       }
     }
-  }, [useMyDeckListDataResult.deckList, useMyDeckListDataResult.status]);
+  }, [deleteDeck, useDeckListResult.deckList, useDeckListResult.status]);
 
   return (
     <Box h="100vh">

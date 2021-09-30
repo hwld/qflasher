@@ -1,39 +1,27 @@
-import { collection } from "@firebase/firestore";
-import { deleteDoc, doc, getDocs, writeBatch } from "firebase/firestore";
+import { collection, doc, writeBatch } from "@firebase/firestore";
+import { deleteDoc, getDocs } from "firebase/firestore";
 import { useCallback, useMemo } from "react";
-import { useFirestore, useFirestoreCollectionData, useUser } from "reactfire";
+import { useFirestore } from "reactfire";
 import { FormFlashCard } from "../components/DeckForm";
 import { cardConverter, deckConverter } from "../firebase/firestoreConverters";
 import { Deck, DeckWithoutCards } from "../types";
 
-export type DeckListData =
-  | { status: "loading"; deckList: undefined }
-  | { status: "error"; deckList: undefined }
-  | { status: "success"; deckList: DeckWithoutCards[] };
-export type DeckListOperation = {
+export type DeckOperation = {
   addDeck: (deck: Deck) => Promise<void>;
   updateDeck: (deck: DeckWithoutCards, cards: FormFlashCard[]) => Promise<void>;
   deleteDeck: (id: string) => Promise<void>;
 };
 
-type useMyDeckListResult = [DeckListData, DeckListOperation];
-
-export const useMyDeckList = (): useMyDeckListResult => {
+export const useDeckOperation = (userId: string): DeckOperation => {
   const firestore = useFirestore();
-  const { data: user } = useUser();
 
   const myDecksRef = useMemo(
     () =>
-      collection(firestore, "users", `${user?.uid}`, "decks").withConverter(
+      collection(firestore, "users", `${userId}`, "decks").withConverter(
         deckConverter
       ),
-    [firestore, user?.uid]
+    [firestore, userId]
   );
-  const {
-    data: myDeckListData,
-    status,
-    error,
-  } = useFirestoreCollectionData(myDecksRef);
 
   const addDeck = useCallback(
     async (deck: Omit<Deck, "id">) => {
@@ -116,26 +104,5 @@ export const useMyDeckList = (): useMyDeckListResult => {
     [firestore, myDecksRef]
   );
 
-  const data: DeckListData = useMemo(() => {
-    // errorが設定されているのにstatusがsuccessになることがあるので
-    const dataStatus = error ? "error" : status;
-
-    switch (dataStatus) {
-      case "loading": {
-        return { status: dataStatus, deckList: undefined };
-      }
-      case "error": {
-        return { status: dataStatus, deckList: undefined };
-      }
-      case "success": {
-        return { status: dataStatus, deckList: myDeckListData };
-      }
-    }
-  }, [error, myDeckListData, status]);
-
-  const operations: DeckListOperation = useMemo(() => {
-    return { addDeck, deleteDeck, updateDeck };
-  }, [addDeck, deleteDeck, updateDeck]);
-
-  return [data, operations];
+  return { addDeck, updateDeck, deleteDeck };
 };

@@ -8,7 +8,7 @@ import {
 import { useRouter } from "next/dist/client/router";
 import React, { useState } from "react";
 import { MdSave } from "react-icons/md";
-import { useMyDeckListOperations } from "../../../contexts/MyDeckListContext";
+import { useDeckOperation } from "../../../hooks/useDeckOperation";
 import { useMyDeck } from "../../../hooks/useMyDeck";
 import { DeckWithoutCards } from "../../../types";
 import { DeckForm, FormFlashCard } from "../../DeckForm";
@@ -16,14 +16,17 @@ import { Fab } from "../../Fab";
 import { Header } from "../../Header";
 import { PageTitle } from "../../PageTitle";
 
-type DeckEditPageProps = { deckId: string };
+type DeckEditPageProps = { deckId: string; userId: string };
 
-export const DeckEditPage: React.FC<DeckEditPageProps> = ({ deckId }) => {
+export const DeckEditPage: React.FC<DeckEditPageProps> = ({
+  deckId,
+  userId,
+}) => {
   const router = useRouter();
   const toast = useToast();
-  const { updateDeck } = useMyDeckListOperations();
+  const { updateDeck } = useDeckOperation(userId);
   const [isLoading, setIsLoading] = useState(false);
-  const useMyDeckResult = useMyDeck(deckId);
+  const useMyDeckResult = useMyDeck(userId, deckId);
   const formId = "updateDeckForm";
 
   if (useMyDeckResult.status === "loading") {

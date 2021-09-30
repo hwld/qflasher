@@ -26,11 +26,10 @@ const Edit: NextPage = () => {
     );
   }
 
-  return (
-    <AuthRequiredPage>
-      <DeckEditPage deckId={id} />
-    </AuthRequiredPage>
+  const deckEditPage = (userId: string) => (
+    <DeckEditPage deckId={id} userId={userId} />
   );
+  return <AuthRequiredPage>{deckEditPage}</AuthRequiredPage>;
 };
 
 export default Edit;

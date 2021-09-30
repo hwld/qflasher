@@ -1,12 +1,14 @@
 import { Center } from "@chakra-ui/layout";
 import { CircularProgress } from "@chakra-ui/progress";
-import React from "react";
+import React, { ReactElement } from "react";
 import { useSigninCheck } from "reactfire";
 import { SignInForm } from "./SignInForm";
 
-type Props = {};
+export type AuthRequiredPageProps = {
+  children: (uesrId: string) => ReactElement;
+};
 
-const Component: React.FC<Props> = ({ children }) => {
+const Component: React.VFC<AuthRequiredPageProps> = ({ children }) => {
   const { status, data: signInCheckResult } = useSigninCheck();
 
   if (status === "loading") {
@@ -18,7 +20,7 @@ const Component: React.FC<Props> = ({ children }) => {
   }
 
   if (signInCheckResult.signedIn === true) {
-    return <>{children}</>;
+    return children(signInCheckResult.user.uid);
   } else {
     return <SignInForm />;
   }

@@ -2,17 +2,19 @@ import { Box, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React, { useState } from "react";
 import { MdSave } from "react-icons/md";
-import { useMyDeckListOperations } from "../../../contexts/MyDeckListContext";
+import { useDeckOperation } from "../../../hooks/useDeckOperation";
 import { DeckWithoutCards } from "../../../types";
 import { DeckForm, FormFlashCard } from "../../DeckForm";
 import { Fab } from "../../Fab";
 import { Header } from "../../Header";
 import { PageTitle } from "../../PageTitle";
 
-export const DeckCreatorPage: React.FC = () => {
+type Props = { userId: string };
+
+export const DeckCreatorPage: React.FC<Props> = ({ userId }) => {
   const router = useRouter();
   const toast = useToast();
-  const { addDeck } = useMyDeckListOperations();
+  const { addDeck } = useDeckOperation(userId);
   const [isLoading, setIsLoading] = useState(false);
 
   const formId = "createDeckForm";

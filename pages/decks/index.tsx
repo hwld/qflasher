@@ -4,11 +4,8 @@ import { AuthRequiredPage } from "../../components/AuthRequiredPage";
 import { DeckListPage } from "../../components/pages/deckList/DeckListPage";
 
 const Index: NextPage = () => {
-  return (
-    <AuthRequiredPage>
-      <DeckListPage />
-    </AuthRequiredPage>
-  );
+  const page = (userId: string) => <DeckListPage userId={userId} />;
+  return <AuthRequiredPage>{page}</AuthRequiredPage>;
 };
 
 export default Index;

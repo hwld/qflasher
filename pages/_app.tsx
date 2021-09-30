@@ -1,7 +1,6 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
 import React from "react";
-import { MyDeckListContextProvider } from "../contexts/MyDeckListContext";
 import { FirebaseProvider } from "../firebase/provider";
 import { theme } from "../theme/theme";
 
@@ -19,9 +18,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <NoSSR>
       <FirebaseProvider>
         <ChakraProvider theme={theme}>
-          <MyDeckListContextProvider>
-            <Component {...pageProps} />
-          </MyDeckListContextProvider>
+          <Component {...pageProps} />
         </ChakraProvider>
       </FirebaseProvider>
     </NoSSR>

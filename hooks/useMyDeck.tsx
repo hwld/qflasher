@@ -5,7 +5,6 @@ import {
   useFirestore,
   useFirestoreCollectionData,
   useFirestoreDocData,
-  useUser,
 } from "reactfire";
 import { cardConverter, deckConverter } from "../firebase/firestoreConverters";
 import { Deck, FlashCard } from "../types";
@@ -15,9 +14,8 @@ type UseMyDeckResult =
   | { status: "success"; deck: Deck }
   | { status: "error"; deck: undefined };
 
-export const useMyDeck = (deckId: string): UseMyDeckResult => {
+export const useMyDeck = (userId: string, deckId: string): UseMyDeckResult => {
   const firestore = useFirestore();
-  const { data: user } = useUser();
   const [deck, setDeck] = useState<Deck>();
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading"
@@ -25,10 +23,10 @@ export const useMyDeck = (deckId: string): UseMyDeckResult => {
 
   const deckRef = useMemo(
     () =>
-      doc(firestore, "users", `${user?.uid}`, "/decks", deckId).withConverter(
+      doc(firestore, "users", `${userId}`, "/decks", deckId).withConverter(
         deckConverter
       ),
-    [deckId, firestore, user?.uid]
+    [deckId, firestore, userId]
   );
 
   const cardsRef = useMemo(() => {

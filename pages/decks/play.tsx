@@ -25,11 +25,11 @@ const Play: NextPage = () => {
       </Center>
     );
   }
-  return (
-    <AuthRequiredPage>
-      <DeckPlayerPage deckId={id} />
-    </AuthRequiredPage>
+
+  const page = (userId: string) => (
+    <DeckPlayerPage deckId={id} userId={userId} />
   );
+  return <AuthRequiredPage>{page}</AuthRequiredPage>;
 };
 
 export default Play;
