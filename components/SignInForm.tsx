@@ -1,19 +1,15 @@
 import { Center } from "@chakra-ui/layout";
 import { Box } from "@chakra-ui/react";
-import { GoogleAuthProvider, signInWithPopup } from "@firebase/auth";
 import React from "react";
-import { useAuth } from "reactfire";
+import { auth, firebase } from "../firebase/config";
 import { GoogleSignInButton } from "./GoogleSignInButton";
 
 type Props = {};
 
 const Component: React.FC<Props> = ({}) => {
-  const auth = useAuth();
-
   const handleSignIn = async () => {
-    const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
     } catch (e) {
       console.error(e);
     }

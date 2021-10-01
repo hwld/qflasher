@@ -1,13 +1,16 @@
-import { collection, doc, orderBy } from "@firebase/firestore";
-import { query } from "firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
 import {
-  useFirestore,
-  useFirestoreCollectionData,
-  useFirestoreDocData,
-} from "reactfire";
+  useCollectionData,
+  useDocumentData,
+} from "react-firebase-hooks/firestore";
+import { db } from "../firebase/config";
 import { cardConverter, deckConverter } from "../firebase/firestoreConverters";
-import { Deck, FlashCard } from "../types";
+import {
+  Deck,
+  DeckWithoutCards,
+  FirestoreFlashCard,
+  FlashCard,
+} from "../types";
 
 type UseMyDeckResult =
   | { status: "loading"; deck: undefined }
@@ -15,57 +18,45 @@ type UseMyDeckResult =
   | { status: "error"; deck: undefined };
 
 export const useMyDeck = (userId: string, deckId: string): UseMyDeckResult => {
-  const firestore = useFirestore();
   const [deck, setDeck] = useState<Deck>();
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading"
   );
 
-  const deckRef = useMemo(
-    () =>
-      doc(firestore, "users", `${userId}`, "/decks", deckId).withConverter(
-        deckConverter
-      ),
-    [deckId, firestore, userId]
-  );
+  const deckRef = useMemo(() => {
+    return db
+      .collection("users")
+      .doc(userId)
+      .collection("decks")
+      .doc(deckId)
+      .withConverter(deckConverter);
+  }, [deckId, userId]);
 
   const cardsRef = useMemo(() => {
-    return collection(deckRef, "cards").withConverter(cardConverter);
+    return deckRef.collection("cards").withConverter(cardConverter);
   }, [deckRef]);
 
-  const {
-    data: myDeckData,
-    status: deckStatus,
-    error: deckError,
-  } = useFirestoreDocData(deckRef);
-  const {
-    data: myDeckCardsData,
-    status: cardsStatus,
-    error: cardsError,
-  } = useFirestoreCollectionData(query(cardsRef, orderBy("index", "asc")));
+  const [myDeckData, deckLoading, deckError] =
+    useDocumentData<DeckWithoutCards>(deckRef);
+  const [myDeckCardsData, cardsLoading, cardsError] =
+    useCollectionData<FirestoreFlashCard>(cardsRef.orderBy("index", "asc"));
 
   // deckDocとcardDoc[]からDeckを作成する
   useEffect(() => {
     //　どちらかがエラーだったらエラーにセットする
-    if (
-      deckStatus === "error" ||
-      cardsStatus === "error" ||
-      // statusがerrorじゃなくてもErrorオブジェクトが設定されていることがある。
-      // とりあえず原因がわからないからこれも追加するけど後で調べてみたい。
-      deckError ||
-      cardsError
-    ) {
+    if (deckError || cardsError) {
       setStatus("error");
       return;
     }
     // どちらかがロード中だったらロード中にセットする
-    if (deckStatus === "loading" || cardsStatus === "loading") {
+    if (deckLoading || cardsLoading) {
       setStatus("loading");
       return;
     }
 
+    // TODO 読み込みは成功するけど存在しない場合は？
     // どっちも成功
-    const cards = myDeckCardsData.map(
+    const cards = myDeckCardsData!.map(
       (c): FlashCard => ({
         id: c.id,
         question: c.question,
@@ -73,18 +64,18 @@ export const useMyDeck = (userId: string, deckId: string): UseMyDeckResult => {
       })
     );
     const deck: Deck = {
-      id: myDeckData.id,
-      name: myDeckData.name,
-      cardLength: myDeckData.cardLength,
+      id: myDeckData!.id,
+      name: myDeckData!.name,
+      cardLength: myDeckData!.cardLength,
       cards,
     };
     setDeck(deck);
     setStatus("success");
   }, [
     cardsError,
-    cardsStatus,
+    cardsLoading,
     deckError,
-    deckStatus,
+    deckLoading,
     myDeckCardsData,
     myDeckData,
   ]);

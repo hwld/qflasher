@@ -1,8 +1,6 @@
-import { collection, doc, writeBatch } from "@firebase/firestore";
-import { deleteDoc, getDocs } from "firebase/firestore";
 import { useCallback, useMemo } from "react";
-import { useFirestore } from "reactfire";
 import { FormFlashCard } from "../components/DeckForm";
+import { db } from "../firebase/config";
 import { cardConverter, deckConverter } from "../firebase/firestoreConverters";
 import { Deck, DeckWithoutCards } from "../types";
 
@@ -13,23 +11,21 @@ export type DeckOperation = {
 };
 
 export const useDeckOperation = (userId: string): DeckOperation => {
-  const firestore = useFirestore();
-
-  const myDecksRef = useMemo(
-    () =>
-      collection(firestore, "users", `${userId}`, "decks").withConverter(
-        deckConverter
-      ),
-    [firestore, userId]
-  );
+  const myDecksRef = useMemo(() => {
+    return db
+      .collection("users")
+      .doc(userId)
+      .collection("decks")
+      .withConverter(deckConverter);
+  }, [userId]);
 
   const addDeck = useCallback(
     async (deck: Omit<Deck, "id">) => {
       // バッチ書き込みは最大500ドキュメントにしか書き込めないから、後でなんとかしたい
-      const batch = writeBatch(firestore);
+      const batch = db.batch();
 
       // deckの書き込み
-      const deckDoc = doc(myDecksRef);
+      const deckDoc = myDecksRef.doc();
       batch.set(deckDoc, {
         id: deckDoc.id,
         name: deck.name,
@@ -37,13 +33,11 @@ export const useDeckOperation = (userId: string): DeckOperation => {
       });
 
       // cardsの書き込み
-      const cardsRef = collection(deckDoc, "cards").withConverter(
-        cardConverter
-      );
+      const cardsRef = deckDoc.collection("cards").withConverter(cardConverter);
 
       deck.cards.forEach((c, index) => {
         // cardはDeckFormで作成した時点でidを識別する必要があるため、firestoreのautoIdは使用しない。
-        const cardDoc = doc(cardsRef, c.id);
+        const cardDoc = cardsRef.doc(c.id);
         batch.set(cardDoc, {
           id: c.id,
           index,
@@ -54,20 +48,19 @@ export const useDeckOperation = (userId: string): DeckOperation => {
 
       await batch.commit();
     },
-    [firestore, myDecksRef]
+    [myDecksRef]
   );
 
   const deleteDeck = useCallback(
     async (id: string) => {
-      const deckDoc = doc(myDecksRef, id);
-      await deleteDoc(deckDoc);
+      const deckDoc = myDecksRef.doc(id);
+      await deckDoc.delete();
 
       // deckが削除されたらcardsは見えないので削除処理は投げっぱなしにする
-      const cardsRef = collection(deckDoc, "cards").withConverter(
-        cardConverter
-      );
-      (await getDocs(cardsRef)).forEach(({ ref }) => {
-        deleteDoc(ref);
+
+      const cardsRef = deckDoc.collection("cards").withConverter(cardConverter);
+      (await cardsRef.get()).forEach(({ ref }) => {
+        ref.delete();
       });
     },
     [myDecksRef]
@@ -75,9 +68,10 @@ export const useDeckOperation = (userId: string): DeckOperation => {
 
   const updateDeck = useCallback(
     async (deckWithoutCards: DeckWithoutCards, formCards: FormFlashCard[]) => {
-      const batch = writeBatch(firestore);
+      const batch = db.batch();
 
-      const deckRef = doc(myDecksRef, deckWithoutCards.id);
+      const deckRef = myDecksRef.doc(deckWithoutCards.id);
+
       batch.set(deckRef, {
         id: deckRef.id,
         name: deckWithoutCards.name,
@@ -85,9 +79,11 @@ export const useDeckOperation = (userId: string): DeckOperation => {
       });
       formCards.forEach((c, index) => {
         // cardはDeckFormで作成した時点でidを識別する必要があるため、firestoreのautoIdは使用しない。
-        const cardRef = doc(deckRef, `cards/${c.id}`).withConverter(
-          cardConverter
-        );
+
+        const cardRef = deckRef
+          .collection("cards")
+          .doc(c.id)
+          .withConverter(cardConverter);
         if (c.deleted) {
           batch.delete(cardRef);
         } else {
@@ -101,7 +97,7 @@ export const useDeckOperation = (userId: string): DeckOperation => {
       });
       batch.commit();
     },
-    [firestore, myDecksRef]
+    [myDecksRef]
   );
 
   return { addDeck, updateDeck, deleteDeck };

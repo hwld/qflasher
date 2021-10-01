@@ -1,7 +1,8 @@
 import { Center } from "@chakra-ui/layout";
 import { CircularProgress } from "@chakra-ui/progress";
 import React, { ReactElement } from "react";
-import { useSigninCheck } from "reactfire";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../firebase/config";
 import { SignInForm } from "./SignInForm";
 
 export type AuthRequiredPageProps = {
@@ -9,9 +10,9 @@ export type AuthRequiredPageProps = {
 };
 
 const Component: React.VFC<AuthRequiredPageProps> = ({ children }) => {
-  const { status, data: signInCheckResult } = useSigninCheck();
+  const [user, loading, error] = useAuthState(auth);
 
-  if (status === "loading") {
+  if (loading) {
     return (
       <Center minH="100vh">
         <CircularProgress isIndeterminate />
@@ -19,8 +20,8 @@ const Component: React.VFC<AuthRequiredPageProps> = ({ children }) => {
     );
   }
 
-  if (signInCheckResult.signedIn === true) {
-    return children(signInCheckResult.user.uid);
+  if (user) {
+    return children(user.uid);
   } else {
     return <SignInForm />;
   }

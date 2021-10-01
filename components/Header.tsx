@@ -1,13 +1,13 @@
 import { Box, Button, Flex, FlexProps, Progress } from "@chakra-ui/react";
 import React from "react";
-import { useAuth, useSigninCheck } from "reactfire";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../firebase/config";
 import { Logo } from "./Logo";
 
 type Props = { isLoading?: boolean } & FlexProps;
 
 const Component: React.FC<Props> = ({ isLoading, ...styleProps }) => {
-  const { data: signInCheckResult } = useSigninCheck();
-  const auth = useAuth();
+  const [user] = useAuthState(auth);
   const headerHeight = 60;
   const progressHeight = 5;
 
@@ -31,7 +31,7 @@ const Component: React.FC<Props> = ({ isLoading, ...styleProps }) => {
           align="center"
         >
           <Logo />
-          {signInCheckResult?.signedIn && (
+          {user && (
             <Button onClick={handleSignOut} mr={5} colorScheme="red">
               ログアウト
             </Button>

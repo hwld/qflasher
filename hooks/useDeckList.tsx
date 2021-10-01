@@ -1,6 +1,6 @@
-import { collection } from "@firebase/firestore";
 import { useMemo } from "react";
-import { useFirestore, useFirestoreCollectionData } from "reactfire";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { db } from "../firebase/config";
 import { deckConverter } from "../firebase/firestoreConverters";
 import { DeckWithoutCards } from "../types";
 
@@ -10,37 +10,29 @@ export type DeckListData =
   | { status: "success"; deckList: DeckWithoutCards[] };
 
 export const useDeckList = (userId: string) => {
-  const firestore = useFirestore();
+  const myDecksRef = useMemo(() => {
+    return db
+      .collection("users")
+      .doc(userId)
+      .collection("decks")
+      .withConverter(deckConverter);
+  }, [userId]);
 
-  const myDecksRef = useMemo(
-    () =>
-      collection(firestore, "users", `${userId}`, "decks").withConverter(
-        deckConverter
-      ),
-    [firestore, userId]
-  );
-  const {
-    data: myDeckListData,
-    status,
-    error,
-  } = useFirestoreCollectionData(myDecksRef);
+  const [myDeckListData, loading, error] =
+    useCollectionData<DeckWithoutCards>(myDecksRef);
 
   const data: DeckListData = useMemo(() => {
-    // errorが設定されているのにstatusがsuccessになることがあるので
-    const dataStatus = error ? "error" : status;
-
-    switch (dataStatus) {
-      case "loading": {
-        return { status: dataStatus, deckList: undefined };
-      }
-      case "error": {
-        return { status: dataStatus, deckList: undefined };
-      }
-      case "success": {
-        return { status: dataStatus, deckList: myDeckListData };
-      }
+    if (loading) {
+      return { status: "loading", deckList: undefined };
     }
-  }, [error, myDeckListData, status]);
+
+    if (error) {
+      return { status: "error", deckList: undefined };
+    }
+
+    // TODO 読み込みは成功するけど存在しない場合は？
+    return { status: "success", deckList: myDeckListData! };
+  }, [error, loading, myDeckListData]);
 
   return data;
 };
