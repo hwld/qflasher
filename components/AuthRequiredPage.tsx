@@ -1,8 +1,7 @@
 import { Center } from "@chakra-ui/layout";
 import { CircularProgress } from "@chakra-ui/progress";
 import React, { ReactElement } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../firebase/config";
+import { useAuthState } from "../hooks/useAuthState";
 import { SignInForm } from "./SignInForm";
 
 export type AuthRequiredPageProps = {
@@ -10,7 +9,7 @@ export type AuthRequiredPageProps = {
 };
 
 const Component: React.VFC<AuthRequiredPageProps> = ({ children }) => {
-  const [user, loading, error] = useAuthState(auth);
+  const { user, loading, error } = useAuthState();
 
   if (loading) {
     return (

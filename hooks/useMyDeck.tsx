@@ -1,16 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
 import {
-  useCollectionData,
-  useDocumentData,
-} from "react-firebase-hooks/firestore";
+  collection,
+  doc,
+  FirestoreError,
+  onSnapshot,
+} from "firebase/firestore";
+import { useEffect, useMemo, useState } from "react";
 import { db } from "../firebase/config";
 import { cardConverter, deckConverter } from "../firebase/firestoreConverters";
-import {
-  Deck,
-  DeckWithoutCards,
-  FirestoreFlashCard,
-  FlashCard,
-} from "../types";
+import { Deck, DeckWithoutCards, FlashCard } from "../types";
 
 type UseMyDeckResult =
   | { status: "loading"; deck: undefined }
@@ -18,66 +15,87 @@ type UseMyDeckResult =
   | { status: "error"; deck: undefined };
 
 export const useMyDeck = (userId: string, deckId: string): UseMyDeckResult => {
+  const [deckInfo, setDeckInfo] = useState<DeckWithoutCards>();
+  const [deckInfoLoading, setDeckInfoLoading] = useState(true);
+  const [deckInfoError, setDeckInfoError] = useState<FirestoreError>();
+
+  const [cards, setCards] = useState<FlashCard[]>([]);
+  const [cardsLoading, setCardsLoading] = useState(true);
+  const [cardsError, setCardsError] = useState<FirestoreError>();
+
   const [deck, setDeck] = useState<Deck>();
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading"
   );
 
   const deckRef = useMemo(() => {
-    return db
-      .collection("users")
-      .doc(userId)
-      .collection("decks")
-      .doc(deckId)
-      .withConverter(deckConverter);
+    return doc(db, `users/${userId}/decks/${deckId}`).withConverter(
+      deckConverter
+    );
   }, [deckId, userId]);
 
   const cardsRef = useMemo(() => {
-    return deckRef.collection("cards").withConverter(cardConverter);
+    return collection(deckRef, "cards").withConverter(cardConverter);
+  }, [deckRef]);
+  //query(cardsRef, orderBy("index", "asc"));
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(deckRef, {
+      next: (snap) => {
+        setDeckInfo(snap.data());
+        setDeckInfoLoading(false);
+      },
+      error: (e) => {
+        setDeckInfoError(e);
+        setDeckInfoLoading(false);
+      },
+    });
+    return () => unsubscribe();
   }, [deckRef]);
 
-  const [myDeckData, deckLoading, deckError] =
-    useDocumentData<DeckWithoutCards>(deckRef);
-  const [myDeckCardsData, cardsLoading, cardsError] =
-    useCollectionData<FirestoreFlashCard>(cardsRef.orderBy("index", "asc"));
+  useEffect(() => {
+    const unsubscribe = onSnapshot(cardsRef, {
+      next: (snap) => {
+        setCards(snap.docs.map((d) => d.data()));
+        setCardsLoading(false);
+      },
+      error: (e) => {
+        setCardsError(e);
+        setCardsLoading(false);
+      },
+    });
+    return () => unsubscribe();
+  }, [cardsRef]);
 
   // deckDocとcardDoc[]からDeckを作成する
   useEffect(() => {
     //　どちらかがエラーだったらエラーにセットする
-    if (deckError || cardsError) {
+    if (deckInfoError || cardsError) {
       setStatus("error");
       return;
     }
     // どちらかがロード中だったらロード中にセットする
-    if (deckLoading || cardsLoading) {
+    if (deckInfoLoading || cardsLoading) {
       setStatus("loading");
       return;
     }
 
-    // TODO 読み込みは成功するけど存在しない場合は？
-    // どっちも成功
-    const cards = myDeckCardsData!.map(
-      (c): FlashCard => ({
-        id: c.id,
-        question: c.question,
-        answer: c.answer,
-      })
-    );
+    // TODO 読み込みは成功するけど存在しない場合はdeckInfoundefinedになるんじゃないか
     const deck: Deck = {
-      id: myDeckData!.id,
-      name: myDeckData!.name,
-      cardLength: myDeckData!.cardLength,
+      id: deckInfo!.id,
+      name: deckInfo!.name,
+      cardLength: deckInfo!.cardLength,
       cards,
     };
     setDeck(deck);
     setStatus("success");
   }, [
+    cards,
     cardsError,
     cardsLoading,
-    deckError,
-    deckLoading,
-    myDeckCardsData,
-    myDeckData,
+    deckInfo,
+    deckInfoError,
+    deckInfoLoading,
   ]);
 
   switch (status) {

@@ -1,6 +1,6 @@
-import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/firestore";
+import { getApp, getApps, initializeApp } from "firebase/app";
+import { connectAuthEmulator, getAuth } from "firebase/auth";
+import { connectFirestoreEmulator, getFirestore } from "firebase/firestore";
 
 export const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_API_KEY,
@@ -12,18 +12,14 @@ export const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID,
 };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
+const firebase =
+  getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+const auth = getAuth(firebase);
+const db = getFirestore(firebase);
 
-  if (process.env.NODE_ENV !== "production") {
-    const auth = firebase.auth();
-    // @ts-ignore
-    auth.useEmulator("http://localhost:9099", { disableWarnings: true });
-    firebase.firestore().useEmulator("localhost", 8080);
-  }
+if (process.env.NODE_ENV !== "production") {
+  connectAuthEmulator(auth, "http://localhost:9099", { disableWarnings: true });
+  connectFirestoreEmulator(db, "localhost", 8080);
 }
 
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-export { auth, db, firebase };
+export { firebase, auth, db };

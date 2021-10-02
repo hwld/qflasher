@@ -1,13 +1,13 @@
 import { Box, Button, Flex, FlexProps, Progress } from "@chakra-ui/react";
 import React from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebase/config";
+import { useAuthState } from "../hooks/useAuthState";
 import { Logo } from "./Logo";
 
 type Props = { isLoading?: boolean } & FlexProps;
 
 const Component: React.FC<Props> = ({ isLoading, ...styleProps }) => {
-  const [user] = useAuthState(auth);
+  const { user } = useAuthState();
   const headerHeight = 60;
   const progressHeight = 5;
 
