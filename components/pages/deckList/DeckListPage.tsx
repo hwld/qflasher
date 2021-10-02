@@ -43,7 +43,7 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
             gap={5}
             justifyContent="center"
           >
-            {useDeckListResult.deckList.map((deck) => {
+            {useDeckListResult.decks.map((deck) => {
               return (
                 <DeckListItem
                   key={deck.id}
@@ -56,7 +56,7 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
         );
       }
     }
-  }, [deleteDeck, useDeckListResult.deckList, useDeckListResult.status]);
+  }, [deleteDeck, useDeckListResult.decks, useDeckListResult.status]);
 
   return (
     <Box h="100vh">

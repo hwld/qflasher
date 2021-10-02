@@ -5,7 +5,7 @@ import {
   getDocs,
   writeBatch,
 } from "firebase/firestore";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { FormFlashCard } from "../components/DeckForm";
 import { db } from "../firebase/config";
 import { cardConverter, deckConverter } from "../firebase/firestoreConverters";
@@ -18,12 +18,10 @@ export type DeckOperation = {
 };
 
 export const useDeckOperation = (userId: string): DeckOperation => {
-  const myDecksRef = useMemo(
+  const decksRef = useMemo(
     () => collection(db, `users/${userId}/decks`).withConverter(deckConverter),
     [userId]
   );
-
-  useEffect(() => {}, []);
 
   const addDeck = useCallback(
     async (deck: Omit<Deck, "id">) => {
@@ -31,7 +29,7 @@ export const useDeckOperation = (userId: string): DeckOperation => {
       const batch = writeBatch(db);
 
       // deckの書き込み
-      const deckDoc = doc(myDecksRef);
+      const deckDoc = doc(decksRef);
       batch.set(deckDoc, {
         id: deckDoc.id,
         name: deck.name,
@@ -56,12 +54,12 @@ export const useDeckOperation = (userId: string): DeckOperation => {
 
       await batch.commit();
     },
-    [myDecksRef]
+    [decksRef]
   );
 
   const deleteDeck = useCallback(
     async (id: string) => {
-      const deckDoc = doc(myDecksRef, id);
+      const deckDoc = doc(decksRef, id);
       await deleteDoc(deckDoc);
 
       // deckが削除されたらcardsは見えないので削除処理は投げっぱなしにする
@@ -73,14 +71,14 @@ export const useDeckOperation = (userId: string): DeckOperation => {
         deleteDoc(ref);
       });
     },
-    [myDecksRef]
+    [decksRef]
   );
 
   const updateDeck = useCallback(
     async (deckWithoutCards: DeckWithoutCards, formCards: FormFlashCard[]) => {
       const batch = writeBatch(db);
 
-      const deckRef = doc(myDecksRef, deckWithoutCards.id);
+      const deckRef = doc(decksRef, deckWithoutCards.id);
 
       batch.set(deckRef, {
         id: deckRef.id,
@@ -105,7 +103,7 @@ export const useDeckOperation = (userId: string): DeckOperation => {
       });
       await batch.commit();
     },
-    [myDecksRef]
+    [decksRef]
   );
 
   return { addDeck, updateDeck, deleteDeck };
