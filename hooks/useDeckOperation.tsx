@@ -2,7 +2,9 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
+  serverTimestamp,
   writeBatch,
 } from "firebase/firestore";
 import { useCallback, useMemo } from "react";
@@ -34,6 +36,7 @@ export const useDeckOperation = (userId: string): DeckOperation => {
         id: deckDoc.id,
         name: deck.name,
         cardLength: deck.cards.length,
+        createdAt: serverTimestamp(),
       });
 
       // cardsの書き込み
@@ -79,11 +82,17 @@ export const useDeckOperation = (userId: string): DeckOperation => {
       const batch = writeBatch(db);
 
       const deckRef = doc(decksRef, deckWithoutCards.id);
+      const deck = (await getDoc(deckRef)).data();
+
+      if (!deck) {
+        throw new Error("存在しないデッキを更新しようとしました");
+      }
 
       batch.set(deckRef, {
         id: deckRef.id,
         name: deckWithoutCards.name,
         cardLength: formCards.filter((c) => !c.deleted).length,
+        createdAt: deck.createdAt,
       });
       formCards.forEach((c, index) => {
         // cardはDeckFormで作成した時点でidを識別する必要があるため、firestoreのautoIdは使用しない。

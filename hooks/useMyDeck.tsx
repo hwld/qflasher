@@ -1,4 +1,4 @@
-import { collection, doc } from "firebase/firestore";
+import { collection, doc, orderBy, query } from "firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
 import { db } from "../firebase/config";
 import { cardConverter, deckConverter } from "../firebase/firestoreConverters";
@@ -23,12 +23,15 @@ export const useMyDeck = (userId: string, deckId: string): UseMyDeckResult => {
     );
   }, [deckId, userId]);
 
-  const cardsRef = useMemo(() => {
-    return collection(deckRef, "cards").withConverter(cardConverter);
+  const cardsQuery = useMemo(() => {
+    return query(
+      collection(deckRef, "cards").withConverter(cardConverter),
+      orderBy("index", "asc")
+    );
   }, [deckRef]);
 
   const deckInfoResult = useFirestoreDocData(deckRef);
-  const cardsResult = useFirestoreCollectionData(cardsRef);
+  const cardsResult = useFirestoreCollectionData(cardsQuery);
 
   // deckDocとcardDoc[]からDeckを作成する
   useEffect(() => {

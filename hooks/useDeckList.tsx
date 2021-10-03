@@ -1,4 +1,4 @@
-import { collection } from "firebase/firestore";
+import { collection, orderBy, query } from "firebase/firestore";
 import { useMemo } from "react";
 import { db } from "../firebase/config";
 import { deckConverter } from "../firebase/firestoreConverters";
@@ -11,12 +11,16 @@ export type DeckListData =
   | { status: "success"; decks: DeckWithoutCards[] };
 
 export const useDeckList = (userId: string) => {
-  const decksRef = useMemo(
-    () => collection(db, `users/${userId}/decks`).withConverter(deckConverter),
+  const decksQuery = useMemo(
+    () =>
+      query(
+        collection(db, `users/${userId}/decks`).withConverter(deckConverter),
+        orderBy("createdAt", "desc")
+      ),
     [userId]
   );
 
-  const deckListResult = useFirestoreCollectionData(decksRef);
+  const deckListResult = useFirestoreCollectionData(decksQuery);
 
   const data: DeckListData = useMemo(() => {
     switch (deckListResult.status) {
