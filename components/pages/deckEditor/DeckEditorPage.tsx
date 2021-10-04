@@ -1,19 +1,13 @@
-import {
-  Box,
-  Center,
-  CircularProgress,
-  Heading,
-  useToast,
-} from "@chakra-ui/react";
+import { Box, Center, Heading, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { MdSave } from "react-icons/md";
+import { useSetAppState } from "../../../context/AppStateContextProvider";
 import { useDeckOperation } from "../../../hooks/useDeckOperation";
 import { useMyDeck } from "../../../hooks/useMyDeck";
 import { DeckWithoutCards } from "../../../types";
 import { DeckForm, FormFlashCard } from "../../DeckForm";
 import { Fab } from "../../Fab";
-import { Header } from "../../Header";
 import { PageTitle } from "../../PageTitle";
 
 type DeckEditPageProps = { deckId: string; userId: string };
@@ -25,16 +19,20 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
   const router = useRouter();
   const toast = useToast();
   const { updateDeck } = useDeckOperation(userId);
-  const [isLoading, setIsLoading] = useState(false);
+  const { setIsLoading } = useSetAppState();
   const useMyDeckResult = useMyDeck(userId, deckId);
   const formId = "updateDeckForm";
 
+  useEffect(() => {
+    if (useMyDeckResult.status !== "loading") {
+      setIsLoading(false);
+    } else {
+      setIsLoading(true);
+    }
+  }, [setIsLoading, useMyDeckResult.status]);
+
   if (useMyDeckResult.status === "loading") {
-    return (
-      <Center minH="100vh">
-        <CircularProgress isIndeterminate />
-      </Center>
-    );
+    return <></>;
   }
   if (useMyDeckResult.status === "error") {
     return (
@@ -64,8 +62,7 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
   };
 
   return (
-    <Box minH="100vh">
-      <Header isLoading={isLoading} />
+    <Box>
       <PageTitle mt={5}>デッキ更新</PageTitle>
       <Box mt={5} maxW="800px" marginX="auto">
         <DeckForm

@@ -1,6 +1,6 @@
 import { Center } from "@chakra-ui/layout";
-import { CircularProgress } from "@chakra-ui/progress";
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect } from "react";
+import { useSetAppState } from "../context/AppStateContextProvider";
 import { useAuthState } from "../hooks/useAuthState";
 import { SignInForm } from "./SignInForm";
 
@@ -9,20 +9,27 @@ export type AuthRequiredPageProps = {
 };
 
 const Component: React.VFC<AuthRequiredPageProps> = ({ children }) => {
+  const { setIsLoading } = useSetAppState();
   const { user, loading, error } = useAuthState();
 
-  if (loading) {
-    return (
-      <Center minH="100vh">
-        <CircularProgress isIndeterminate />
-      </Center>
-    );
-  }
+  useEffect(() => {
+    // loading中じゃなくて、userが存在しない場合にはappのローディング状態をfalseにする。
+    // userが存在する場合にはchildrenでtrueに設定されている可能性があるので何も行わない。
+    if (!loading && !user) {
+      setIsLoading(false);
+    }
+  }, [loading, setIsLoading, user]);
 
-  if (user) {
+  if (loading) {
+    return <></>;
+  } else if (user) {
     return children(user.uid);
   } else {
-    return <SignInForm />;
+    return (
+      <Center>
+        <SignInForm mt={10} />
+      </Center>
+    );
   }
 };
 

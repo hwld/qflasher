@@ -1,12 +1,12 @@
 import { Box, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { MdSave } from "react-icons/md";
+import { useSetAppState } from "../../../context/AppStateContextProvider";
 import { useDeckOperation } from "../../../hooks/useDeckOperation";
 import { DeckWithoutCards } from "../../../types";
 import { DeckForm, FormFlashCard } from "../../DeckForm";
 import { Fab } from "../../Fab";
-import { Header } from "../../Header";
 import { PageTitle } from "../../PageTitle";
 
 type Props = { userId: string };
@@ -15,9 +15,12 @@ export const DeckCreatorPage: React.FC<Props> = ({ userId }) => {
   const router = useRouter();
   const toast = useToast();
   const { addDeck } = useDeckOperation(userId);
-  const [isLoading, setIsLoading] = useState(false);
-
+  const { setIsLoading } = useSetAppState();
   const formId = "createDeckForm";
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, [setIsLoading]);
 
   const handleSubmit = async (
     deckWithoutCards: DeckWithoutCards,
@@ -44,8 +47,7 @@ export const DeckCreatorPage: React.FC<Props> = ({ userId }) => {
   };
 
   return (
-    <Box minH="100vh">
-      <Header isLoading={isLoading} />
+    <Box>
       <PageTitle mt={5}>デッキ作成</PageTitle>
       <Box mt={5} maxW="800px" marginX="auto">
         <DeckForm formId={formId} onSubmit={handleSubmit} />

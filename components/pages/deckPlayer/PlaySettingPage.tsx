@@ -1,6 +1,5 @@
 import { Box, Button, Checkbox, Flex } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { Header } from "../../Header";
 import { PageTitle } from "../../PageTitle";
 import { DeckPlayConfig } from "./DeckPlayerPage";
 
@@ -20,8 +19,7 @@ const Component: React.FC<Props> = ({ onComplete }) => {
   };
 
   return (
-    <Box minH="100vh">
-      <Header />
+    <Box>
       <Flex flexDir="column" maxW="800px" m="auto" alignItems="center">
         <PageTitle mt={5}>暗記設定</PageTitle>
         <Box mt={5} p={5} bgColor="gray.700" w="100%">

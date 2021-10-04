@@ -1,8 +1,8 @@
-import { Box, Center, CircularProgress, Heading, Text } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { Box, Center, Heading, Text } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { useSetAppState } from "../../../context/AppStateContextProvider";
 import { useMyDeck } from "../../../hooks/useMyDeck";
 import { DeckPlayer } from "../../DeckPlayer";
-import { Header } from "../../Header";
 import { PageTitle } from "../../PageTitle";
 import { PlaySettingPage } from "./PlaySettingPage";
 
@@ -23,6 +23,15 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
     isOrderRandom: false,
   });
   const useMyDeckResult = useMyDeck(userId, deckId);
+  const { setIsLoading } = useSetAppState();
+
+  useEffect(() => {
+    if (useMyDeckResult.status !== "loading") {
+      setIsLoading(false);
+    } else {
+      setIsLoading(true);
+    }
+  }, [setIsLoading, useMyDeckResult.status]);
 
   const handleCompleteSetting = (config: DeckPlayConfig) => {
     setCompletedSetting(true);
@@ -30,11 +39,7 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
   };
 
   if (useMyDeckResult.status === "loading") {
-    return (
-      <Center minH="100vh">
-        <CircularProgress isIndeterminate />
-      </Center>
-    );
+    return <></>;
   }
   if (useMyDeckResult.status === "error") {
     return (
@@ -49,8 +54,7 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
   }
 
   return (
-    <Box minH="100vh">
-      <Header />
+    <Box>
       <PageTitle mt={5}>暗記</PageTitle>
       <Center w="700px" mt={5} mx="auto">
         <Text fontWeight="bold" fontSize="2xl" textAlign="center">

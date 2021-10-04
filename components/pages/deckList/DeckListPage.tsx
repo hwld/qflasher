@@ -1,24 +1,34 @@
-import { Box, Center, CircularProgress, Grid, Heading } from "@chakra-ui/react";
+import { Center, Grid, Heading } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { MdAdd } from "react-icons/md";
+import { useSetAppState } from "../../../context/AppStateContextProvider";
 import { useDeckList } from "../../../hooks/useDeckList";
 import { useDeckOperation } from "../../../hooks/useDeckOperation";
 import { DeckListItem } from "../../DeckListItem";
 import { Fab } from "../../Fab";
-import { Header } from "../../Header";
 import { PageTitle } from "../../PageTitle";
 
 type DeckListPageProps = { userId: string };
 
 export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
+  const { setIsLoading } = useSetAppState();
   const router = useRouter();
   const useDeckListResult = useDeckList(userId);
   const { deleteDeck } = useDeckOperation(userId);
 
   const handleAddDeck = () => {
+    setIsLoading(true);
     router.push("/decks/create");
   };
+
+  useEffect(() => {
+    if (useDeckListResult.status === "loading") {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
+    }
+  }, [setIsLoading, useDeckListResult.status]);
 
   const deckList = useMemo(() => {
     switch (useDeckListResult.status) {
@@ -30,11 +40,7 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
         );
       }
       case "loading": {
-        return (
-          <Center>
-            <CircularProgress isIndeterminate />
-          </Center>
-        );
+        return undefined;
       }
       case "success": {
         return (
@@ -59,8 +65,7 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
   }, [deleteDeck, useDeckListResult.decks, useDeckListResult.status]);
 
   return (
-    <Box h="100vh">
-      <Header />
+    <>
       <PageTitle mt={5} mb={5}>
         デッキ一覧
       </PageTitle>
@@ -68,6 +73,6 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
       <Fab tooltipLabel="追加" onClick={handleAddDeck}>
         <MdAdd size="70%" />
       </Fab>
-    </Box>
+    </>
   );
 };

@@ -1,27 +1,36 @@
 import { Center, Heading } from "@chakra-ui/layout";
-import { CircularProgress } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
-import React from "react";
+import React, { useEffect } from "react";
 import { AuthRequiredPage } from "../../components/AuthRequiredPage";
 import { DeckEditPage } from "../../components/pages/deckEditor/DeckEditorPage";
+import { useSetAppState } from "../../context/AppStateContextProvider";
 
 const Edit: NextPage = () => {
   const router = useRouter();
   const id = router.query.id;
+  const { setIsLoading } = useSetAppState();
 
-  if (typeof id === "undefined") {
-    return (
-      <Center minH="100vh">
-        <CircularProgress isIndeterminate />
-      </Center>
-    );
+  const notExistsId = typeof id === "undefined";
+  const incorrectId = typeof id !== "string" || id === "";
+
+  useEffect(() => {
+    if (notExistsId || incorrectId) {
+      setIsLoading(false);
+    }
+  }, [incorrectId, notExistsId, setIsLoading]);
+
+  console.log(id);
+  if (notExistsId) {
+    return <></>;
   }
 
-  if (typeof id !== "string") {
+  if (incorrectId) {
     return (
-      <Center minH="100vh">
-        <Heading size="4xl">deckIdが無効です</Heading>
+      <Center>
+        <Heading mt={10} size="4xl">
+          deckIdが無効です
+        </Heading>
       </Center>
     );
   }
