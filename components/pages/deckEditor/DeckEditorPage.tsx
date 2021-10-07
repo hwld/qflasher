@@ -1,9 +1,9 @@
 import { Box, Center, Heading, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
-import React, { useEffect } from "react";
+import React from "react";
 import { MdSave } from "react-icons/md";
-import { useSetAppState } from "../../../context/AppStateContextProvider";
 import { useDeckOperation } from "../../../hooks/useDeckOperation";
+import { useLoadingEffect } from "../../../hooks/useLoadingEffect";
 import { useMyDeck } from "../../../hooks/useMyDeck";
 import { DeckWithoutCards } from "../../../types";
 import { DeckForm, FormFlashCard } from "../../DeckForm";
@@ -19,17 +19,10 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
   const router = useRouter();
   const toast = useToast();
   const { updateDeck } = useDeckOperation(userId);
-  const { setIsLoading } = useSetAppState();
   const useMyDeckResult = useMyDeck(userId, deckId);
   const formId = "updateDeckForm";
 
-  useEffect(() => {
-    if (useMyDeckResult.status !== "loading") {
-      setIsLoading(false);
-    } else {
-      setIsLoading(true);
-    }
-  }, [setIsLoading, useMyDeckResult.status]);
+  useLoadingEffect(useMyDeckResult.status === "loading");
 
   if (useMyDeckResult.status === "loading") {
     return <></>;
@@ -47,11 +40,9 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
     formCards: FormFlashCard[]
   ) => {
     try {
-      setIsLoading(true);
       await updateDeck(deckWithoutCards, formCards);
       router.push("/decks");
     } catch (e) {
-      setIsLoading(false);
       console.error(e);
       toast({
         title: "エラー",

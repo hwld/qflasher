@@ -1,6 +1,6 @@
 import { Box, Center, Heading, Text } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import { useSetAppState } from "../../../context/AppStateContextProvider";
+import React, { useState } from "react";
+import { useLoadingEffect } from "../../../hooks/useLoadingEffect";
 import { useMyDeck } from "../../../hooks/useMyDeck";
 import { DeckPlayer } from "../../DeckPlayer";
 import { PageTitle } from "../../PageTitle";
@@ -17,24 +17,17 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
   deckId,
   userId,
 }) => {
-  const [completedSetting, setCompletedSetting] = useState(false);
+  const [hasCompletedSetting, setHasCompletedSetting] = useState(false);
   const [config, setConfig] = useState<DeckPlayConfig>({
     initialFront: "question",
     isOrderRandom: false,
   });
   const useMyDeckResult = useMyDeck(userId, deckId);
-  const { setIsLoading } = useSetAppState();
 
-  useEffect(() => {
-    if (useMyDeckResult.status !== "loading") {
-      setIsLoading(false);
-    } else {
-      setIsLoading(true);
-    }
-  }, [setIsLoading, useMyDeckResult.status]);
+  useLoadingEffect(useMyDeckResult.status === "loading");
 
   const handleCompleteSetting = (config: DeckPlayConfig) => {
-    setCompletedSetting(true);
+    setHasCompletedSetting(true);
     setConfig(config);
   };
 
@@ -49,7 +42,7 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
     );
   }
 
-  if (!completedSetting) {
+  if (!hasCompletedSetting) {
     return <PlaySettingPage onComplete={handleCompleteSetting} />;
   }
 

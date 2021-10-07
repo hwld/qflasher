@@ -1,10 +1,10 @@
 import { Center, Grid, Heading } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import { MdAdd } from "react-icons/md";
-import { useSetAppState } from "../../../context/AppStateContextProvider";
 import { useDeckList } from "../../../hooks/useDeckList";
 import { useDeckOperation } from "../../../hooks/useDeckOperation";
+import { useLoadingEffect } from "../../../hooks/useLoadingEffect";
 import { DeckListItem } from "../../DeckListItem";
 import { Fab } from "../../Fab";
 import { PageTitle } from "../../PageTitle";
@@ -12,23 +12,15 @@ import { PageTitle } from "../../PageTitle";
 type DeckListPageProps = { userId: string };
 
 export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
-  const { setIsLoading } = useSetAppState();
   const router = useRouter();
   const useDeckListResult = useDeckList(userId);
   const { deleteDeck } = useDeckOperation(userId);
 
   const handleAddDeck = () => {
-    setIsLoading(true);
     router.push("/decks/create");
   };
 
-  useEffect(() => {
-    if (useDeckListResult.status === "loading") {
-      setIsLoading(true);
-    } else {
-      setIsLoading(false);
-    }
-  }, [setIsLoading, useDeckListResult.status]);
+  useLoadingEffect(useDeckListResult.status === "loading");
 
   const deckList = useMemo(() => {
     switch (useDeckListResult.status) {

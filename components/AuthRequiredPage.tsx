@@ -1,7 +1,7 @@
 import { Center } from "@chakra-ui/layout";
-import React, { ReactElement, useEffect } from "react";
-import { useSetAppState } from "../context/AppStateContextProvider";
+import React, { ReactElement } from "react";
 import { useAuthState } from "../hooks/useAuthState";
+import { useLoadingEffect } from "../hooks/useLoadingEffect";
 import { SignInForm } from "./SignInForm";
 
 export type AuthRequiredPageProps = {
@@ -9,16 +9,9 @@ export type AuthRequiredPageProps = {
 };
 
 const Component: React.VFC<AuthRequiredPageProps> = ({ children }) => {
-  const { setIsLoading } = useSetAppState();
-  const { user, loading, error } = useAuthState();
+  const { user, loading } = useAuthState();
 
-  useEffect(() => {
-    // loading中じゃなくて、userが存在しない場合にはappのローディング状態をfalseにする。
-    // userが存在する場合にはchildrenでtrueに設定されている可能性があるので何も行わない。
-    if (!loading && !user) {
-      setIsLoading(false);
-    }
-  }, [loading, setIsLoading, user]);
+  useLoadingEffect(loading);
 
   if (loading) {
     return <></>;

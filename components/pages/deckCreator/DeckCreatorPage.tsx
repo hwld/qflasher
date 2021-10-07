@@ -1,6 +1,6 @@
 import { Box, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
-import React, { useEffect } from "react";
+import React from "react";
 import { MdSave } from "react-icons/md";
 import { useSetAppState } from "../../../context/AppStateContextProvider";
 import { useDeckOperation } from "../../../hooks/useDeckOperation";
@@ -15,28 +15,24 @@ export const DeckCreatorPage: React.FC<Props> = ({ userId }) => {
   const router = useRouter();
   const toast = useToast();
   const { addDeck } = useDeckOperation(userId);
-  const { setIsLoading } = useSetAppState();
+  const { startLoading, endLoading } = useSetAppState();
   const formId = "createDeckForm";
-
-  useEffect(() => {
-    setIsLoading(false);
-  }, [setIsLoading]);
 
   const handleSubmit = async (
     deckWithoutCards: DeckWithoutCards,
     formCards: FormFlashCard[]
   ) => {
+    let id = startLoading();
     try {
-      setIsLoading(true);
       await addDeck({
         ...deckWithoutCards,
         // 削除されているcardsは除外する
         cards: formCards.filter((c) => !c.deleted),
       });
+      endLoading(id);
       router.push("/decks");
     } catch (e) {
-      // 処理が成功したらページを移動するので失敗したときにのみ状態を変更する
-      setIsLoading(false);
+      endLoading(id);
       console.error(e);
       toast({
         title: "エラー",

@@ -1,32 +1,26 @@
 import { Center, Heading } from "@chakra-ui/layout";
 import { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
-import React, { useEffect } from "react";
+import React from "react";
 import { AuthRequiredPage } from "../../components/AuthRequiredPage";
 import { DeckPlayerPage } from "../../components/pages/deckPlayer/DeckPlayerPage";
-import { useSetAppState } from "../../context/AppStateContextProvider";
+import { useLoadingEffect } from "../../hooks/useLoadingEffect";
 
 const Play: NextPage = () => {
   const router = useRouter();
   const id = router.query.id;
-  const { setIsLoading } = useSetAppState();
 
-  const notExistsId = typeof id === "undefined";
-  const incorrectId = typeof id !== "string" || id === "";
+  // 準備ができるまでロード状態にする
+  useLoadingEffect(!router.isReady);
 
-  useEffect(() => {
-    if (notExistsId || incorrectId) {
-      setIsLoading(false);
-    }
-  }, [incorrectId, notExistsId, setIsLoading]);
-
-  if (notExistsId) {
+  // ルーターの準備ができるまで何も表示しない
+  if (!router.isReady) {
     return <></>;
   }
 
-  if (incorrectId) {
+  if (typeof id !== "string" || id === "") {
     return (
-      <Center minH="100vh">
+      <Center mt={10}>
         <Heading size="4xl">deckIdが無効です</Heading>
       </Center>
     );
@@ -39,6 +33,3 @@ const Play: NextPage = () => {
 };
 
 export default Play;
-function setIsLoading(arg0: boolean) {
-  throw new Error("Function not implemented.");
-}

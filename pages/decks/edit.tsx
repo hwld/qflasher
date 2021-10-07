@@ -1,31 +1,22 @@
 import { Center, Heading } from "@chakra-ui/layout";
 import type { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
-import React, { useEffect } from "react";
+import React from "react";
 import { AuthRequiredPage } from "../../components/AuthRequiredPage";
 import { DeckEditPage } from "../../components/pages/deckEditor/DeckEditorPage";
-import { useSetAppState } from "../../context/AppStateContextProvider";
+import { useLoadingEffect } from "../../hooks/useLoadingEffect";
 
 const Edit: NextPage = () => {
   const router = useRouter();
   const id = router.query.id;
-  const { setIsLoading } = useSetAppState();
 
-  const notExistsId = typeof id === "undefined";
-  const incorrectId = typeof id !== "string" || id === "";
+  useLoadingEffect(!router.isReady);
 
-  useEffect(() => {
-    if (notExistsId || incorrectId) {
-      setIsLoading(false);
-    }
-  }, [incorrectId, notExistsId, setIsLoading]);
-
-  console.log(id);
-  if (notExistsId) {
+  if (!router.isReady) {
     return <></>;
   }
 
-  if (incorrectId) {
+  if (typeof id !== "string" || id === "") {
     return (
       <Center>
         <Heading mt={10} size="4xl">
