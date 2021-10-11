@@ -1,6 +1,7 @@
 import { Box, Button, Flex, FlexProps, Tooltip } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React, { useState } from "react";
+import { GrPowerCycle } from "react-icons/gr";
 import {
   MdArrowBack,
   MdClear,
@@ -12,31 +13,38 @@ type Props = {
   className?: string;
   isEnd: boolean;
   onTurnOver: () => void;
-  onCorrect: () => void;
-  onIncorrect: () => void;
+  onRight: () => void;
+  onWrong: () => void;
+  onReplayWrong: () => void;
 } & FlexProps;
 
 const Component: React.FC<Props> = ({
   className,
   isEnd,
   onTurnOver,
-  onCorrect,
-  onIncorrect,
+  onRight,
+  onWrong,
+  onReplayWrong,
   ...styleProps
 }) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleCorrect = () => {
+  const handleRight = () => {
     // TODO 仮
     setIsOpen(false);
-    onCorrect();
+    onRight();
   };
 
-  const handleInCorrect = () => {
+  const handleWrong = () => {
     // TODO 仮
     setIsOpen(false);
-    onIncorrect();
+    onWrong();
+  };
+
+  const handleReplayWrong = () => {
+    setIsOpen(false);
+    onReplayWrong();
   };
 
   const handleTurnOver = () => {
@@ -51,13 +59,37 @@ const Component: React.FC<Props> = ({
   return (
     <Flex className={className} align="center" {...styleProps}>
       {isEnd ? (
-        <Box boxSize="70px">
-          <Tooltip label="戻る">
-            <Button colorScheme="blue" boxSize="100%" onClick={handleBack}>
-              <MdArrowBack size={30} />
-            </Button>
-          </Tooltip>
-        </Box>
+        <>
+          <Box boxSize="70px">
+            <Tooltip label="戻る">
+              <Button colorScheme="green" boxSize="100%" onClick={handleBack}>
+                <MdArrowBack size={30} />
+              </Button>
+            </Tooltip>
+          </Box>
+          <Box boxSize="70px" mx={3}>
+            <Tooltip label="間違えた問題を再暗記">
+              <Button
+                colorScheme="red"
+                boxSize="100%"
+                onClick={handleReplayWrong}
+              >
+                <MdReplay size={30} />
+              </Button>
+            </Tooltip>
+          </Box>
+          <Box boxSize="70px">
+            <Tooltip label="すべての問題を再暗記">
+              <Button
+                colorScheme="blue"
+                boxSize="100%"
+                onClick={handleReplayWrong}
+              >
+                <MdReplay size={30} />
+              </Button>
+            </Tooltip>
+          </Box>
+        </>
       ) : (
         <>
           <Box boxSize="70px">
@@ -67,7 +99,7 @@ const Component: React.FC<Props> = ({
                   colorScheme="blue"
                   boxSize="100%"
                   rounded="full"
-                  onClick={handleCorrect}
+                  onClick={handleRight}
                 >
                   <MdPanoramaFishEye size={30} />
                 </Button>
@@ -81,7 +113,7 @@ const Component: React.FC<Props> = ({
                 boxSize="100%"
                 onClick={handleTurnOver}
               >
-                <MdReplay size={30} />
+                <GrPowerCycle size={30} />
               </Button>
             </Tooltip>
           </Box>
@@ -92,7 +124,7 @@ const Component: React.FC<Props> = ({
                   colorScheme="red"
                   boxSize="100%"
                   rounded="full"
-                  onClick={handleInCorrect}
+                  onClick={handleWrong}
                 >
                   <MdClear size={30} />
                 </Button>

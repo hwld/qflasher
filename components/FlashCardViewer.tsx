@@ -12,9 +12,9 @@ type Props = {
 const Component: React.FC<Props> = ({ cards, topFront, initialFront }) => {
   return (
     <Box
-      bgColor="gray.700"
-      boxShadow="dark-lg"
       position="relative"
+      bgColor="gray.600"
+      boxShadow="dark-lg"
       w="800px"
       h="500px"
       rounded="3xl"

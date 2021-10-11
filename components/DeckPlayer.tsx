@@ -1,6 +1,6 @@
 import { Box, BoxProps } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { Deck } from "../types";
+import { Deck, FlashCard } from "../types";
 import { getShuffledArray } from "../utils/getShuffledArray";
 import { FlashCardViewer } from "./FlashCardViewer";
 import { OperationBar } from "./OperationBar";
@@ -22,19 +22,32 @@ const Component: React.FC<Props> = ({ deck, config, ...styleProps }) => {
     config.initialFront
   );
 
+  const [wrongCards, setWrongCards] = useState<FlashCard[]>([]);
+
   const handleTurnOver = () => {
     setFront((front) => {
       return front === "question" ? "answer" : "question";
     });
   };
 
-  const handleCorrect = () => {
-    setCards((cards) => cards.filter((_, index) => index !== cards.length - 1));
+  const handleRight = () => {
+    setCards((cards) => cards.slice(0, -1));
     setFront(config.initialFront);
   };
 
-  const handleInCorrect = () => {
-    setCards((cards) => cards.filter((_, index) => index !== cards.length - 1));
+  const handleWrong = () => {
+    setCards((cards) => cards.slice(0, -1));
+    setWrongCards((wrongCards) => [...wrongCards, cards[cards.length - 1]]);
+    setFront(config.initialFront);
+  };
+
+  const handleReplayWrongCards = () => {
+    // 間違えたカードをカードにセットする
+    const cards = config.isOrderRandom
+      ? getShuffledArray(wrongCards)
+      : wrongCards;
+    setCards([...cards].reverse());
+    setWrongCards([]);
     setFront(config.initialFront);
   };
 
@@ -49,8 +62,9 @@ const Component: React.FC<Props> = ({ deck, config, ...styleProps }) => {
         mt={3}
         isEnd={cards.length === 0}
         onTurnOver={handleTurnOver}
-        onCorrect={handleCorrect}
-        onIncorrect={handleInCorrect}
+        onRight={handleRight}
+        onWrong={handleWrong}
+        onReplayWrong={handleReplayWrongCards}
         justify="center"
       />
     </Box>
