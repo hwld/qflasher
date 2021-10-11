@@ -15,6 +15,7 @@ type Props = {
   onTurnOver: () => void;
   onRight: () => void;
   onWrong: () => void;
+  onReplayAll: () => void;
   onReplayWrong: () => void;
 } & FlexProps;
 
@@ -24,6 +25,7 @@ const Component: React.FC<Props> = ({
   onTurnOver,
   onRight,
   onWrong,
+  onReplayAll,
   onReplayWrong,
   ...styleProps
 }) => {
@@ -40,6 +42,11 @@ const Component: React.FC<Props> = ({
     // TODO 仮
     setIsOpen(false);
     onWrong();
+  };
+
+  const handleReplayAll = () => {
+    setIsOpen(false);
+    onReplayAll();
   };
 
   const handleReplayWrong = () => {
@@ -83,7 +90,7 @@ const Component: React.FC<Props> = ({
               <Button
                 colorScheme="blue"
                 boxSize="100%"
-                onClick={handleReplayWrong}
+                onClick={handleReplayAll}
               >
                 <MdReplay size={30} />
               </Button>

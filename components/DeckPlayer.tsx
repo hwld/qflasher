@@ -41,7 +41,16 @@ const Component: React.FC<Props> = ({ deck, config, ...styleProps }) => {
     setFront(config.initialFront);
   };
 
-  const handleReplayWrongCards = () => {
+  const handleReplayAll = () => {
+    const cards = config.isOrderRandom
+      ? getShuffledArray(deck.cards)
+      : deck.cards;
+    setCards([...cards].reverse());
+    setWrongCards([]);
+    setFront(config.initialFront);
+  };
+
+  const handleReplayWrong = () => {
     // 間違えたカードをカードにセットする
     const cards = config.isOrderRandom
       ? getShuffledArray(wrongCards)
@@ -64,7 +73,8 @@ const Component: React.FC<Props> = ({ deck, config, ...styleProps }) => {
         onTurnOver={handleTurnOver}
         onRight={handleRight}
         onWrong={handleWrong}
-        onReplayWrong={handleReplayWrongCards}
+        onReplayWrong={handleReplayWrong}
+        onReplayAll={handleReplayAll}
         justify="center"
       />
     </Box>
