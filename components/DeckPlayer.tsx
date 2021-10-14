@@ -1,6 +1,7 @@
 import { Box, BoxProps } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { Reducer, useReducer } from "react";
 import { Deck, FlashCard } from "../types";
+import { assertNever } from "../utils/assertNever";
 import { getShuffledArray } from "../utils/getShuffledArray";
 import { FlashCardViewer } from "./FlashCardViewer";
 import { OperationBar } from "./OperationBar";
@@ -11,65 +12,105 @@ type Props = {
   config: DeckPlayConfig;
 } & BoxProps;
 
-const Component: React.FC<Props> = ({ deck, config, ...styleProps }) => {
-  const [cards, setCards] = useState(() => {
-    const cards = config.isOrderRandom
-      ? getShuffledArray(deck.cards)
-      : [...deck.cards];
-    return cards.reverse();
-  });
-  const [front, setFront] = useState<"question" | "answer">(
-    config.initialFront
-  );
+type Status = {
+  initialCards: FlashCard[];
+  config: DeckPlayConfig;
+  cardStack: FlashCard[];
+  wrongCards: FlashCard[];
+  front: "question" | "answer";
+};
+type Action = "trunOver" | "right" | "wrong" | "replayAll" | "replayWrong";
 
-  const [wrongCards, setWrongCards] = useState<FlashCard[]>([]);
+const reducer: Reducer<Status, Action> = (state, action) => {
+  const { initialCards, config, cardStack, wrongCards, front } = state;
+  switch (action) {
+    case "trunOver": {
+      return {
+        ...state,
+        front: front === "question" ? "answer" : "question",
+      };
+    }
+    case "right": {
+      return {
+        ...state,
+        cardStack: cardStack.slice(0, -1),
+        front: config.initialFront,
+      };
+    }
+    case "wrong": {
+      return {
+        ...state,
+        wrongCards: [...wrongCards, cardStack[cardStack.length - 1]],
+        cardStack: cardStack.slice(0, -1),
+        front: config.initialFront,
+      };
+    }
+    case "replayAll": {
+      return {
+        ...state,
+        cardStack: buildCardStack(initialCards, config.isOrderRandom),
+        wrongCards: [],
+        front: config.initialFront,
+      };
+    }
+    case "replayWrong": {
+      return {
+        ...state,
+        cardStack: buildCardStack(wrongCards, config.isOrderRandom),
+        wrongCards: [],
+        front: config.initialFront,
+      };
+    }
+    default: {
+      assertNever(action);
+    }
+  }
+};
+
+const buildCardStack = (cards: FlashCard[], isOrderRandom: boolean) => {
+  const stack = isOrderRandom ? getShuffledArray(cards) : cards;
+  return [...stack].reverse();
+};
+
+const Component: React.FC<Props> = ({ deck, config, ...styleProps }) => {
+  const [status, dispatch] = useReducer(reducer, {
+    initialCards: deck.cards,
+    config,
+    cardStack: buildCardStack(deck.cards, config.isOrderRandom),
+    wrongCards: [],
+    front: config.initialFront,
+  });
 
   const handleTurnOver = () => {
-    setFront((front) => {
-      return front === "question" ? "answer" : "question";
-    });
+    dispatch("trunOver");
   };
 
   const handleRight = () => {
-    setCards((cards) => cards.slice(0, -1));
-    setFront(config.initialFront);
+    dispatch("right");
   };
 
   const handleWrong = () => {
-    setCards((cards) => cards.slice(0, -1));
-    setWrongCards((wrongCards) => [...wrongCards, cards[cards.length - 1]]);
-    setFront(config.initialFront);
+    dispatch("wrong");
   };
 
   const handleReplayAll = () => {
-    const cards = config.isOrderRandom
-      ? getShuffledArray(deck.cards)
-      : deck.cards;
-    setCards([...cards].reverse());
-    setWrongCards([]);
-    setFront(config.initialFront);
+    dispatch("replayAll");
   };
 
   const handleReplayWrong = () => {
-    // 間違えたカードをカードにセットする
-    const cards = config.isOrderRandom
-      ? getShuffledArray(wrongCards)
-      : wrongCards;
-    setCards([...cards].reverse());
-    setWrongCards([]);
-    setFront(config.initialFront);
+    dispatch("replayWrong");
   };
 
   return (
     <Box width="min-content" {...styleProps}>
       <FlashCardViewer
-        cards={cards}
-        topFront={front}
+        cards={status.cardStack}
+        topFront={status.front}
         initialFront={config.initialFront}
       />
       <OperationBar
         mt={3}
-        isEnd={cards.length === 0}
+        isEnd={status.cardStack.length === 0}
         onTurnOver={handleTurnOver}
         onRight={handleRight}
         onWrong={handleWrong}
