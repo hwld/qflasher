@@ -1,38 +1,42 @@
-import { Flex, FlexProps, Text } from "@chakra-ui/react";
+import { Box, BoxProps } from "@chakra-ui/react";
 import React from "react";
 import { FlashCard } from "../types";
+import { OneSideFlashCardItem } from "./OneSideFlashCardItem";
 
 type Props = {
   card: FlashCard;
+  initialFront: "question" | "answer";
   front: "question" | "answer";
-} & FlexProps;
+} & BoxProps;
 
-const Component: React.FC<Props> = ({ card, front, ...styleProps }) => {
+export const FlashCardItem: React.FC<Props> = ({
+  card,
+  initialFront,
+  front,
+  ...styleProps
+}) => {
+  const frontText = initialFront === "question" ? card.question : card.answer;
+  const frontType = initialFront;
+
+  const backText = initialFront === "question" ? card.answer : card.question;
+  const backType = initialFront === "question" ? "answer" : "question";
+
   return (
-    <Flex
-      bgColor="gray.700"
-      flexDir="column"
-      justify="center"
-      align="center"
-      padding={7}
-      overflowY="auto"
+    <Box
+      // frontがinitialFrontと同じであれば表、違えば裏
+      transform={front === initialFront ? "rotateY(0deg)" : "rotateY(180deg)"}
+      transitionDuration="300ms"
+      style={{ transformStyle: "preserve-3d" }}
+      position="absolute"
+      boxSize="100%"
       {...styleProps}
     >
-      <Flex flex="auto" justify="center" align="center" w="100%">
-        <Text
-          fontSize="4xl"
-          fontWeight="bold"
-          wordBreak="break-all"
-          textAlign="center"
-        >
-          {front === "question" ? card.question : card.answer}
-        </Text>
-      </Flex>
-      <Flex w="100%">
-        <Text color="gray.300">{front === "question" ? "質問" : "答え"}</Text>
-      </Flex>
-    </Flex>
+      <OneSideFlashCardItem text={frontText} type={frontType} />
+      <OneSideFlashCardItem
+        transform="rotateY(180deg)"
+        text={backText}
+        type={backType}
+      />
+    </Box>
   );
 };
-
-export const FlashCardItem = Component;

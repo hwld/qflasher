@@ -5,16 +5,19 @@ import { FlashCardItem } from "./FlashCardItem";
 
 type Props = {
   cards: FlashCard[];
-  topFront: "question" | "answer";
   initialFront: "question" | "answer";
+  topFront: "question" | "answer";
 };
 
-const Component: React.FC<Props> = ({ cards, topFront, initialFront }) => {
+export const FlashCardViewer: React.FC<Props> = ({
+  cards,
+  initialFront,
+  topFront,
+}) => {
   return (
     <Box
       position="relative"
       bgColor="gray.600"
-      boxShadow="dark-lg"
       w="800px"
       h="500px"
       rounded="3xl"
@@ -22,20 +25,11 @@ const Component: React.FC<Props> = ({ cards, topFront, initialFront }) => {
       {cards.map((card, index) => (
         <FlashCardItem
           key={card.id}
+          initialFront={initialFront}
           card={card}
-          rounded="3xl"
-          position="absolute"
-          top={0}
-          bottom={0}
-          left={0}
-          right={0}
-          margin="auto"
-          // 最後のcard(一番全面にあるcard)のfrontのみを変化させる
-          front={cards.length - 1 === index ? topFront : initialFront}
+          front={index === cards.length - 1 ? topFront : initialFront}
         />
       ))}
     </Box>
   );
 };
-
-export const FlashCardViewer = Component;

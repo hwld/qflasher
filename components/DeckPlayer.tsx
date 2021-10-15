@@ -105,8 +105,8 @@ const Component: React.FC<Props> = ({ deck, config, ...styleProps }) => {
     <Box width="min-content" {...styleProps}>
       <FlashCardViewer
         cards={status.cardStack}
-        topFront={status.front}
         initialFront={config.initialFront}
+        topFront={status.front}
       />
       <OperationBar
         mt={3}
