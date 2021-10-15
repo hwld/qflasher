@@ -2,6 +2,7 @@ import { Box, Center, Heading, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdSave } from "react-icons/md";
+import { useSetAppState } from "../../../context/AppStateContextProvider";
 import { useDeckOperation } from "../../../hooks/useDeckOperation";
 import { useLoadingEffect } from "../../../hooks/useLoadingEffect";
 import { useMyDeck } from "../../../hooks/useMyDeck";
@@ -19,6 +20,7 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
   const router = useRouter();
   const toast = useToast();
   const { updateDeck } = useDeckOperation(userId);
+  const { startLoading, endLoading } = useSetAppState();
   const useMyDeckResult = useMyDeck(userId, deckId);
   const formId = "updateDeckForm";
 
@@ -39,10 +41,13 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
     deckWithoutCards: DeckWithoutCards,
     formCards: FormFlashCard[]
   ) => {
+    let id = startLoading();
     try {
       await updateDeck(deckWithoutCards, formCards);
+      endLoading(id);
       router.push("/decks");
     } catch (e) {
+      endLoading(id);
       console.error(e);
       toast({
         title: "エラー",

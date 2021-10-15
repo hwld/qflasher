@@ -11,6 +11,7 @@ import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdEdit, MdPlayArrow } from "react-icons/md";
 import { RiPushpin2Fill } from "react-icons/ri";
+import { useSetAppState } from "../context/AppStateContextProvider";
 import { DeckWithoutCards } from "../types";
 import { DeleteDeckButton } from "./DeleteDeckButton";
 
@@ -28,6 +29,8 @@ const Component: React.FC<Props> = ({
 }) => {
   const router = useRouter();
   const toast = useToast();
+  const { startLoading, endLoading } = useSetAppState();
+
   const handlePlayDeck = () => {
     router.push({ pathname: "/decks/play", query: { id: deck.id } });
   };
@@ -37,15 +40,18 @@ const Component: React.FC<Props> = ({
   };
 
   const handleDelete = async () => {
+    let id = startLoading();
     try {
       await onDeleteDeck(deck.id);
     } catch (e) {
-      console.error(e);
+      endLoading(id);
       toast({
         title: "エラー",
         description: "エラーが発生しました",
         status: "error",
       });
+    } finally {
+      endLoading(id);
     }
   };
 
