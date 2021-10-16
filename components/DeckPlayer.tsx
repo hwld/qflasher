@@ -12,17 +12,27 @@ type Props = {
   config: DeckPlayConfig;
 } & BoxProps;
 
-type Status = {
+type State = {
   initialCards: FlashCard[];
   config: DeckPlayConfig;
   cardStack: FlashCard[];
   wrongCards: FlashCard[];
+  totalCardsLength: number;
+  progress: number;
   front: "question" | "answer";
 };
 type Action = "trunOver" | "right" | "wrong" | "replayAll" | "replayWrong";
 
-const reducer: Reducer<Status, Action> = (state, action) => {
-  const { initialCards, config, cardStack, wrongCards, front } = state;
+const reducer: Reducer<State, Action> = (state, action) => {
+  const {
+    initialCards,
+    config,
+    cardStack,
+    wrongCards,
+    totalCardsLength,
+    front,
+  } = state;
+
   switch (action) {
     case "trunOver": {
       return {
@@ -34,6 +44,9 @@ const reducer: Reducer<Status, Action> = (state, action) => {
       return {
         ...state,
         cardStack: cardStack.slice(0, -1),
+        progress:
+          ((totalCardsLength - (cardStack.length - 1)) / totalCardsLength) *
+          100,
         front: config.initialFront,
       };
     }
@@ -42,6 +55,9 @@ const reducer: Reducer<Status, Action> = (state, action) => {
         ...state,
         wrongCards: [...wrongCards, cardStack[cardStack.length - 1]],
         cardStack: cardStack.slice(0, -1),
+        progress:
+          ((totalCardsLength - (cardStack.length - 1)) / totalCardsLength) *
+          100,
         front: config.initialFront,
       };
     }
@@ -50,6 +66,8 @@ const reducer: Reducer<Status, Action> = (state, action) => {
         ...state,
         cardStack: buildCardStack(initialCards, config.isOrderRandom),
         wrongCards: [],
+        totalCardsLength: initialCards.length,
+        progress: 0,
         front: config.initialFront,
       };
     }
@@ -58,6 +76,8 @@ const reducer: Reducer<Status, Action> = (state, action) => {
         ...state,
         cardStack: buildCardStack(wrongCards, config.isOrderRandom),
         wrongCards: [],
+        totalCardsLength: wrongCards.length,
+        progress: 0,
         front: config.initialFront,
       };
     }
@@ -73,11 +93,13 @@ const buildCardStack = (cards: FlashCard[], isOrderRandom: boolean) => {
 };
 
 const Component: React.FC<Props> = ({ deck, config, ...styleProps }) => {
-  const [status, dispatch] = useReducer(reducer, {
+  const [state, dispatch] = useReducer(reducer, {
     initialCards: deck.cards,
     config,
     cardStack: buildCardStack(deck.cards, config.isOrderRandom),
     wrongCards: [],
+    totalCardsLength: deck.cards.length,
+    progress: 0,
     front: config.initialFront,
   });
 
@@ -104,13 +126,14 @@ const Component: React.FC<Props> = ({ deck, config, ...styleProps }) => {
   return (
     <Box width="min-content" {...styleProps}>
       <FlashCardViewer
-        cards={status.cardStack}
+        cards={state.cardStack}
+        progress={state.progress}
         initialFront={config.initialFront}
-        topFront={status.front}
+        topFront={state.front}
       />
       <OperationBar
         mt={3}
-        isEnd={status.cardStack.length === 0}
+        isEnd={state.cardStack.length === 0}
         onTurnOver={handleTurnOver}
         onRight={handleRight}
         onWrong={handleWrong}
