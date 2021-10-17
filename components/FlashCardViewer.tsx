@@ -32,6 +32,7 @@ export const FlashCardViewer: React.FC<Props> = ({
           initialFront={initialFront}
           card={card}
           front={index === cards.length - 1 ? topFront : initialFront}
+          isBackground={index === cards.length - 1 ? false : true}
         />
       ))}
       <Progress

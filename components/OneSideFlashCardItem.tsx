@@ -1,11 +1,16 @@
 import { Flex, FlexProps, Text } from "@chakra-ui/layout";
 import React from "react";
 
-type Props = { text: string; type: "question" | "answer" } & FlexProps;
+type Props = {
+  text: string;
+  type: "question" | "answer";
+  isBackground?: boolean;
+} & FlexProps;
 
 export const OneSideFlashCardItem: React.FC<Props> = ({
   text,
   type,
+  isBackground,
   ...styleProps
 }) => {
   return (
@@ -29,12 +34,15 @@ export const OneSideFlashCardItem: React.FC<Props> = ({
           fontWeight="bold"
           wordBreak="break-all"
           textAlign="center"
+          opacity={isBackground ? 0.2 : 1}
         >
           {text}
         </Text>
       </Flex>
       <Flex w="100%">
-        <Text color="gray.300">{type === "question" ? "質問" : "答え"}</Text>
+        <Text color="gray.300" opacity={isBackground ? 0.2 : 1}>
+          {type === "question" ? "質問" : "答え"}
+        </Text>
       </Flex>
     </Flex>
   );

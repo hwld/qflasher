@@ -7,12 +7,14 @@ type Props = {
   card: FlashCard;
   initialFront: "question" | "answer";
   front: "question" | "answer";
+  isBackground?: boolean;
 } & BoxProps;
 
 export const FlashCardItem: React.FC<Props> = ({
   card,
   initialFront,
   front,
+  isBackground,
   ...styleProps
 }) => {
   const frontText = initialFront === "question" ? card.question : card.answer;
@@ -31,11 +33,16 @@ export const FlashCardItem: React.FC<Props> = ({
       boxSize="100%"
       {...styleProps}
     >
-      <OneSideFlashCardItem text={frontText} type={frontType} />
+      <OneSideFlashCardItem
+        text={frontText}
+        type={frontType}
+        isBackground={isBackground}
+      />
       <OneSideFlashCardItem
         transform="rotateY(180deg)"
         text={backText}
         type={backType}
+        isBackground={isBackground}
       />
     </Box>
   );
