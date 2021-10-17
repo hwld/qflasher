@@ -12,6 +12,7 @@ import {
 type Props = {
   className?: string;
   isEnd: boolean;
+  wrongAnswerCount: number;
   onTurnOver: () => void;
   onRight: () => void;
   onWrong: () => void;
@@ -22,6 +23,7 @@ type Props = {
 const Component: React.FC<Props> = ({
   className,
   isEnd,
+  wrongAnswerCount,
   onTurnOver,
   onRight,
   onWrong,
@@ -74,18 +76,22 @@ const Component: React.FC<Props> = ({
               </Button>
             </Tooltip>
           </Box>
-          <Box boxSize="70px" mx={3}>
-            <Tooltip label="間違えた問題を再暗記">
-              <Button
-                colorScheme="red"
-                boxSize="100%"
-                onClick={handleReplayWrong}
-              >
-                <MdReplay size={30} />
-              </Button>
-            </Tooltip>
-          </Box>
-          <Box boxSize="70px">
+
+          {wrongAnswerCount !== 0 && (
+            <Box boxSize="70px" mx={3}>
+              <Tooltip label="間違えた問題を再暗記">
+                <Button
+                  colorScheme="red"
+                  boxSize="100%"
+                  onClick={handleReplayWrong}
+                >
+                  <MdReplay size={30} />
+                </Button>
+              </Tooltip>
+            </Box>
+          )}
+
+          <Box boxSize="70px" mx={wrongAnswerCount === 0 ? 3 : 0}>
             <Tooltip label="すべての問題を再暗記">
               <Button
                 colorScheme="blue"

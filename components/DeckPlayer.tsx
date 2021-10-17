@@ -16,8 +16,9 @@ type State = {
   initialCards: FlashCard[];
   config: DeckPlayConfig;
   cardStack: FlashCard[];
+  rightAnswerCount: number;
   wrongCards: FlashCard[];
-  totalCardsLength: number;
+  totalCardsCount: number;
   progress: number;
   front: "question" | "answer";
 };
@@ -28,8 +29,9 @@ const reducer: Reducer<State, Action> = (state, action) => {
     initialCards,
     config,
     cardStack,
+    rightAnswerCount,
     wrongCards,
-    totalCardsLength,
+    totalCardsCount,
     front,
   } = state;
 
@@ -43,10 +45,10 @@ const reducer: Reducer<State, Action> = (state, action) => {
     case "right": {
       return {
         ...state,
+        rightAnswerCount: rightAnswerCount + 1,
         cardStack: cardStack.slice(0, -1),
         progress:
-          ((totalCardsLength - (cardStack.length - 1)) / totalCardsLength) *
-          100,
+          ((totalCardsCount - (cardStack.length - 1)) / totalCardsCount) * 100,
         front: config.initialFront,
       };
     }
@@ -56,8 +58,7 @@ const reducer: Reducer<State, Action> = (state, action) => {
         wrongCards: [...wrongCards, cardStack[cardStack.length - 1]],
         cardStack: cardStack.slice(0, -1),
         progress:
-          ((totalCardsLength - (cardStack.length - 1)) / totalCardsLength) *
-          100,
+          ((totalCardsCount - (cardStack.length - 1)) / totalCardsCount) * 100,
         front: config.initialFront,
       };
     }
@@ -65,8 +66,9 @@ const reducer: Reducer<State, Action> = (state, action) => {
       return {
         ...state,
         cardStack: buildCardStack(initialCards, config.isOrderRandom),
+        rightAnswerCount: 0,
         wrongCards: [],
-        totalCardsLength: initialCards.length,
+        totalCardsCount: initialCards.length,
         progress: 0,
         front: config.initialFront,
       };
@@ -75,8 +77,9 @@ const reducer: Reducer<State, Action> = (state, action) => {
       return {
         ...state,
         cardStack: buildCardStack(wrongCards, config.isOrderRandom),
+        rightAnswerCount: 0,
         wrongCards: [],
-        totalCardsLength: wrongCards.length,
+        totalCardsCount: wrongCards.length,
         progress: 0,
         front: config.initialFront,
       };
@@ -97,8 +100,9 @@ const Component: React.FC<Props> = ({ deck, config, ...styleProps }) => {
     initialCards: deck.cards,
     config,
     cardStack: buildCardStack(deck.cards, config.isOrderRandom),
+    rightAnswerCount: 0,
     wrongCards: [],
-    totalCardsLength: deck.cards.length,
+    totalCardsCount: deck.cards.length,
     progress: 0,
     front: config.initialFront,
   });
@@ -126,6 +130,8 @@ const Component: React.FC<Props> = ({ deck, config, ...styleProps }) => {
   return (
     <Box width="min-content" {...styleProps}>
       <FlashCardViewer
+        totalCardsCount={state.totalCardsCount}
+        rightAnswersCount={state.rightAnswerCount}
         cards={state.cardStack}
         progress={state.progress}
         initialFront={config.initialFront}
@@ -134,6 +140,7 @@ const Component: React.FC<Props> = ({ deck, config, ...styleProps }) => {
       <OperationBar
         mt={3}
         isEnd={state.cardStack.length === 0}
+        wrongAnswerCount={state.wrongCards.length}
         onTurnOver={handleTurnOver}
         onRight={handleRight}
         onWrong={handleWrong}

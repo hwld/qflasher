@@ -18,7 +18,6 @@ export const OneSideFlashCardItem: React.FC<Props> = ({
       position="absolute"
       boxSize="100%"
       boxShadow="dark-lg"
-      rounded="3xl"
       bgColor="gray.700"
       flexDir="column"
       justify="center"
