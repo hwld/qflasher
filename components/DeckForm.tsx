@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Deck, DeckWithoutCards, FlashCard } from "../types";
 import { CardEditor } from "./CardEditor";
 
+// リストから削除すると削除すべきカードが特定できないので論理削除にする
 export type FormFlashCard = FlashCard & { deleted: boolean };
 
 type Props = {
@@ -28,7 +29,8 @@ type Props = {
 
 export type DeckFormFields = {
   name: string;
-  cards: Omit<FlashCard, "id">[];
+  // cardsがそんざいしない可能性があるのでundefinedとのunionを取る
+  cards: Omit<FlashCard, "id">[] | undefined;
 };
 
 export const DeckForm: React.FC<Props> = ({
@@ -41,16 +43,18 @@ export const DeckForm: React.FC<Props> = ({
     control,
     setFocus,
     handleSubmit,
+    trigger,
     formState: { errors },
   } = useForm<DeckFormFields>({
     mode: "onChange",
   });
 
+  // questionやanswerはreact-hook-formで管理する
   const [cards, setCards] = useState<{ id: string; deleted: boolean }[]>(
     defaultDeck.cards.map((c) => ({ id: c.id, deleted: false }))
   );
 
-  const existsCards = useMemo(() => {
+  const existingCards = useMemo(() => {
     return cards.filter((c) => !c.deleted);
   }, [cards]);
 
@@ -67,70 +71,80 @@ export const DeckForm: React.FC<Props> = ({
   const addCardTimer = useRef<NodeJS.Timeout>();
 
   const isFirstCard = (cardId: string) => {
-    const cardIndex = existsCards.findIndex((c) => c.id === cardId);
+    const cardIndex = existingCards.findIndex((c) => c.id === cardId);
     return cardIndex === 0;
   };
 
   const isLastCard = (cardId: string) => {
-    const cardIndex = existsCards.findIndex((c) => c.id === cardId);
-    return cardIndex === existsCards.length - 1;
+    const cardIndex = existingCards.findIndex((c) => c.id === cardId);
+    return cardIndex === existingCards.length - 1;
   };
 
   const focusQuestion = (cardId: string) => {
-    const index = existsCards.findIndex((field) => field.id === cardId);
+    const index = existingCards.findIndex((field) => field.id === cardId);
     if (index === -1) return;
 
     setFocus(`cards.${index}.question`);
   };
   const focusAnswer = (cardId: string) => {
-    const index = existsCards.findIndex((field) => field.id === cardId);
+    const index = existingCards.findIndex((field) => field.id === cardId);
     if (index === -1) return;
 
     setFocus(`cards.${index}.answer`);
   };
 
   const firstCardId = () => {
-    return existsCards[0].id;
+    return existingCards[0].id;
   };
 
   const prevCardId = (cardId: string) => {
-    const cardIndex = existsCards.findIndex((c) => c.id === cardId);
-    return existsCards[cardIndex - 1].id;
+    const cardIndex = existingCards.findIndex((c) => c.id === cardId);
+    return existingCards[cardIndex - 1].id;
   };
 
   const nextCardId = (cardId: string) => {
-    const cardIndex = existsCards.findIndex((c) => c.id === cardId);
-    return existsCards[cardIndex + 1].id;
+    const cardIndex = existingCards.findIndex((c) => c.id === cardId);
+    return existingCards[cardIndex + 1].id;
   };
 
   const lastCardId = () => {
-    return existsCards[existsCards.length - 1].id;
+    return existingCards[existingCards.length - 1].id;
   };
 
   const submit = (fields: DeckFormFields) => {
+    if (fields.cards === undefined) {
+      addCard();
+      trigger();
+      return;
+    }
+
+    // cardsの情報とreact-hook-formの情報からFormFlashCardsを作成する
+    const formCards: FormFlashCard[] = cards.map((card) => {
+      const index = existingCards.findIndex((c) => c.id === card.id);
+      if (index === -1) {
+        // 削除されている場合は情報が存在しないので空文字にする
+        return { ...card, question: "", answer: "" };
+      }
+
+      if (fields.cards === undefined) {
+        throw new Error();
+      }
+
+      const field = fields.cards[index];
+      if (!fields) {
+        throw new Error();
+      }
+
+      return { ...card, question: field.question, answer: field.answer };
+    });
+
     onSubmit(
       {
         id: defaultDeck.id,
         name: fields.name,
-        cardLength: cards.filter((c) => !c.deleted).length,
+        cardLength: existingCards.length,
       },
-      cards.map((card) => {
-        const existsIndex = existsCards.findIndex(
-          (exists) => exists.id === card.id
-        );
-
-        if (existsIndex === -1) {
-          // 削除されている場合は空文字にする
-          return { ...card, question: "", answer: "" };
-        }
-
-        const field = fields.cards[existsIndex];
-        if (!field) {
-          throw new Error();
-        }
-
-        return { ...card, question: field.question, answer: field.answer };
-      })
+      formCards
     );
   };
 
@@ -167,7 +181,7 @@ export const DeckForm: React.FC<Props> = ({
   const handleKeyDownInName: KeyboardEventHandler = (event) => {
     handleKeyDownTemplate(event, () => {
       if (event.key === "Enter") {
-        if (existsCards.length === 0) {
+        if (existingCards.length === 0) {
           addCard();
         } else {
           focusQuestion(firstCardId());
@@ -273,7 +287,7 @@ export const DeckForm: React.FC<Props> = ({
           </Text>
         )}
       </Box>
-      {existsCards.map((card, i) => {
+      {existingCards.map((card, i) => {
         return (
           <CardEditor
             mt={2}

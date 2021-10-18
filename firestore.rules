@@ -26,7 +26,7 @@ service cloud.firestore {
     && deck.name.size() > 0 && deck.name.size() <= 50
     && 'cardLength' in deck
     && deck.cardLength is int
-    && deck.cardLength >= 0 && deck.cardLength <= 100
+    && deck.cardLength > 0 && deck.cardLength <= 100
     && 'createdAt' in deck
     && deck.createdAt is timestamp
   }
