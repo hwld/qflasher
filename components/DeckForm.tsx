@@ -1,5 +1,5 @@
 import { Box, Text } from "@chakra-ui/layout";
-import { Button, Input } from "@chakra-ui/react";
+import { Button, Input, useToast } from "@chakra-ui/react";
 import React, {
   KeyboardEvent,
   KeyboardEventHandler,
@@ -49,6 +49,8 @@ export const DeckForm: React.FC<Props> = ({
     mode: "onChange",
   });
 
+  const toast = useToast();
+
   // questionやanswerはreact-hook-formで管理する
   const [cards, setCards] = useState<{ id: string; deleted: boolean }[]>(
     defaultDeck.cards.map((c) => ({ id: c.id, deleted: false }))
@@ -57,16 +59,6 @@ export const DeckForm: React.FC<Props> = ({
   const existingCards = useMemo(() => {
     return cards.filter((c) => !c.deleted);
   }, [cards]);
-
-  // defaultDeckが変更されても初回レンダリング時のdefaultDeckを持ち続けるようにする
-  const defaultName = useMemo(() => {
-    return defaultDeck.name;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  const defaultCards = useMemo(() => {
-    return defaultDeck.cards;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const addCardTimer = useRef<NodeJS.Timeout>();
 
@@ -149,6 +141,16 @@ export const DeckForm: React.FC<Props> = ({
   };
 
   const addCard = () => {
+    if (existingCards.length >= 5) {
+      toast({
+        title: "エラー",
+        description: "カードは100枚までしか作れません",
+        status: "error",
+        isClosable: true,
+      });
+      return;
+    }
+
     const id = uuidv4();
     // addCardを非同期関数内でawaitのあとに呼び出すと、setCardsが呼び出されたあとにすぐrender関数が呼ばれ、
     // 更新前のcardMapを参照してしまうので必ずcardMapを更新したあとに呼び出す
@@ -264,7 +266,7 @@ export const DeckForm: React.FC<Props> = ({
         <Controller
           control={control}
           name="name"
-          defaultValue={defaultName}
+          defaultValue={defaultDeck.name}
           rules={{
             required: { value: true, message: "文字を入力してください" },
             maxLength: { value: 50, message: "50文字以下で入力してください" },
@@ -298,7 +300,7 @@ export const DeckForm: React.FC<Props> = ({
             cardErrors={errors.cards}
             key={card.id}
             id={card.id}
-            defaultValue={defaultCards.find((c) => c.id === card.id)}
+            defaultValue={defaultDeck.cards.find((c) => c.id === card.id)}
             onFocusQuestion={focusQuestion}
             onKeyDownInQuestion={handleKeyDownInQuestion}
             onKeyDownInAnswer={handleKeyDownInAnswer}
