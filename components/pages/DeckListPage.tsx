@@ -2,12 +2,12 @@ import { Center, Grid, Heading } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React, { useMemo } from "react";
 import { MdAdd } from "react-icons/md";
-import { useDeckList } from "../../../hooks/useDeckList";
-import { useDeckOperation } from "../../../hooks/useDeckOperation";
-import { useLoadingEffect } from "../../../hooks/useLoadingEffect";
-import { DeckListItem } from "../../DeckListItem";
-import { Fab } from "../../Fab";
-import { PageTitle } from "../../PageTitle";
+import { useDeckList } from "../../hooks/useDeckList";
+import { useDeckOperation } from "../../hooks/useDeckOperation";
+import { useLoadingEffect } from "../../hooks/useLoadingEffect";
+import { DeckListItem } from "../DeckListItem";
+import { Fab } from "./common/Fab";
+import { PageTitle } from "./common/PageTitle";
 
 type DeckListPageProps = { userId: string };
 

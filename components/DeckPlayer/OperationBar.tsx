@@ -20,7 +20,7 @@ type Props = {
   onReplayWrong: () => void;
 } & FlexProps;
 
-const Component: React.FC<Props> = ({
+export const OperationBar: React.FC<Props> = ({
   className,
   isEnd,
   wrongAnswerCount,
@@ -149,5 +149,3 @@ const Component: React.FC<Props> = ({
     </Flex>
   );
 };
-
-export const OperationBar = Component;

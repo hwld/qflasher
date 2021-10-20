@@ -2,14 +2,14 @@ import { Box, Center, Heading, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdSave } from "react-icons/md";
-import { useSetAppState } from "../../../context/AppStateContextProvider";
-import { useDeckOperation } from "../../../hooks/useDeckOperation";
-import { useLoadingEffect } from "../../../hooks/useLoadingEffect";
-import { useMyDeck } from "../../../hooks/useMyDeck";
-import { DeckWithoutCards } from "../../../types";
-import { DeckForm, FormFlashCard } from "../../DeckForm";
-import { Fab } from "../../Fab";
-import { PageTitle } from "../../PageTitle";
+import { useSetAppState } from "../../context/AppStateContextProvider";
+import { useDeckOperation } from "../../hooks/useDeckOperation";
+import { useLoadingEffect } from "../../hooks/useLoadingEffect";
+import { useMyDeck } from "../../hooks/useMyDeck";
+import { DeckWithoutCards } from "../../types";
+import { DeckForm, FormFlashCard } from "../DeckForm";
+import { Fab } from "./common/Fab";
+import { PageTitle } from "./common/PageTitle";
 
 type DeckEditPageProps = { deckId: string; userId: string };
 

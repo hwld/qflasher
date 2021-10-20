@@ -1,9 +1,9 @@
 import { Box, Center, Heading, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { useLoadingEffect } from "../../../hooks/useLoadingEffect";
-import { useMyDeck } from "../../../hooks/useMyDeck";
-import { DeckPlayer } from "../../DeckPlayer";
-import { PageTitle } from "../../PageTitle";
+import { useLoadingEffect } from "../../hooks/useLoadingEffect";
+import { useMyDeck } from "../../hooks/useMyDeck";
+import { DeckPlayer } from "../DeckPlayer";
+import { PageTitle } from "./common/PageTitle";
 import { PlaySettingPage } from "./PlaySettingPage";
 
 type DeckPlayerPageProps = { deckId: string; userId: string };

@@ -21,7 +21,7 @@ type Props = {
   onDeleteDeck: (id: string) => Promise<void>;
 } & BoxProps;
 
-const Component: React.FC<Props> = ({
+export const DeckListItem: React.FC<Props> = ({
   className,
   deck,
   onDeleteDeck,
@@ -167,5 +167,3 @@ const Component: React.FC<Props> = ({
     </Flex>
   );
 };
-
-export const DeckListItem = Component;

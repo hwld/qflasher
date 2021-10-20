@@ -3,7 +3,7 @@ import React from "react";
 
 type Props = BoxProps;
 
-const Component: React.FC<Props> = ({ children, ...styleProps }) => {
+export const PageTitle: React.FC<Props> = ({ children, ...styleProps }) => {
   return (
     <Box
       padding={3}
@@ -20,5 +20,3 @@ const Component: React.FC<Props> = ({ children, ...styleProps }) => {
     </Box>
   );
 };
-
-export const PageTitle = Component;

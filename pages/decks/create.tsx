@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import React from "react";
 import { AuthRequiredPage } from "../../components/AuthRequiredPage";
-import { DeckCreatorPage } from "../../components/pages/deckCreator/DeckCreatorPage";
+import { DeckCreatorPage } from "../../components/pages/DeckCreatorPage";
 
 const Create: NextPage = () => {
   const page = (userId: string) => <DeckCreatorPage userId={userId} />;

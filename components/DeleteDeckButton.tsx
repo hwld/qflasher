@@ -14,7 +14,7 @@ import { MdDelete } from "react-icons/md";
 
 type Props = { onDelete: () => void };
 
-const Component: React.FC<Props> = ({ onDelete }) => {
+export const DeleteDeckButton: React.FC<Props> = ({ onDelete }) => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLButtonElement | null>(null);
 
@@ -67,5 +67,3 @@ const Component: React.FC<Props> = ({ onDelete }) => {
     </>
   );
 };
-
-export const DeleteDeckButton = Component;

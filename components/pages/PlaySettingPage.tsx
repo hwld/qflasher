@@ -1,13 +1,13 @@
 import { Box, Button, Checkbox, Flex } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { PageTitle } from "../../PageTitle";
+import { PageTitle } from "./common/PageTitle";
 import { DeckPlayConfig } from "./DeckPlayerPage";
 
 type Props = {
   onComplete: (config: DeckPlayConfig) => void;
 };
 
-const Component: React.FC<Props> = ({ onComplete }) => {
+export const PlaySettingPage: React.FC<Props> = ({ onComplete }) => {
   const [isAnswerFirst, setIsAnswerFirst] = useState(false);
   const [isOrderRandom, setIsOrderRandom] = useState(false);
 
@@ -49,5 +49,3 @@ const Component: React.FC<Props> = ({ onComplete }) => {
     </Box>
   );
 };
-
-export const PlaySettingPage = Component;

@@ -3,7 +3,7 @@ import React from "react";
 
 type Props = { tooltipLabel?: string } & ButtonProps;
 
-const Component: React.FC<Props> = ({ children, tooltipLabel, ...props }) => {
+export const Fab: React.FC<Props> = ({ children, tooltipLabel, ...props }) => {
   return (
     <Box h="120px">
       <Tooltip label={tooltipLabel}>
@@ -28,5 +28,3 @@ const Component: React.FC<Props> = ({ children, tooltipLabel, ...props }) => {
     </Box>
   );
 };
-
-export const Fab = Component;

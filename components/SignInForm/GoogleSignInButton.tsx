@@ -5,7 +5,7 @@ import { GoogleIcon } from "./GoogleIcon";
 
 type Props = {} & ButtonProps;
 
-const Component: React.FC<Props> = ({ ...props }) => {
+export const GoogleSignInButton: React.FC<Props> = ({ ...props }) => {
   return (
     <Button
       {...props}
@@ -35,5 +35,3 @@ const Component: React.FC<Props> = ({ ...props }) => {
     </Button>
   );
 };
-
-export const GoogleSignInButton = Component;

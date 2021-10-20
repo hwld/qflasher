@@ -1,11 +1,11 @@
 import { Box, BoxProps } from "@chakra-ui/react";
 import React, { Reducer, useReducer } from "react";
-import { Deck, FlashCard } from "../types";
-import { assertNever } from "../utils/assertNever";
-import { getShuffledArray } from "../utils/getShuffledArray";
+import { Deck, FlashCard } from "../../types";
+import { assertNever } from "../../utils/assertNever";
+import { getShuffledArray } from "../../utils/getShuffledArray";
+import { DeckPlayConfig } from "../pages/DeckPlayerPage";
 import { FlashCardViewer } from "./FlashCardViewer";
 import { OperationBar } from "./OperationBar";
-import { DeckPlayConfig } from "./pages/deckPlayer/DeckPlayerPage";
 
 type Props = {
   deck: Deck;
@@ -95,7 +95,11 @@ const buildCardStack = (cards: FlashCard[], isOrderRandom: boolean) => {
   return [...stack].reverse();
 };
 
-const Component: React.FC<Props> = ({ deck, config, ...styleProps }) => {
+export const DeckPlayer: React.FC<Props> = ({
+  deck,
+  config,
+  ...styleProps
+}) => {
   const [state, dispatch] = useReducer(reducer, {
     initialCards: deck.cards,
     config,
@@ -151,5 +155,3 @@ const Component: React.FC<Props> = ({ deck, config, ...styleProps }) => {
     </Box>
   );
 };
-
-export const DeckPlayer = Component;

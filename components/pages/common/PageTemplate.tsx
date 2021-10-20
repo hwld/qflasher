@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import React from "react";
-import { useAppState } from "../context/AppStateContextProvider";
+import { useAppState } from "../../../context/AppStateContextProvider";
 import { Header } from "./Header";
 
 export const PageTemplate: React.FC = ({ children }) => {

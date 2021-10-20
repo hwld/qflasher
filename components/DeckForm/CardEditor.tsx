@@ -11,8 +11,8 @@ import {
 import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
 import { Control, Controller, FormState } from "react-hook-form";
 import { MdDelete } from "react-icons/md";
-import { FlashCard } from "../types";
-import { DeckFormFields } from "./DeckForm";
+import { DeckFormFields } from ".";
+import { FlashCard } from "../../types";
 
 export type CardEditorHandler = {
   focusQuestion: () => void;
@@ -31,7 +31,7 @@ type Props = {
   onDelete: (id: string) => void;
 } & Omit<BoxProps, "defaultValue">;
 
-const Component: React.FC<Props> = ({
+export const CardEditor: React.FC<Props> = ({
   index,
   id,
   formControl,
@@ -151,5 +151,3 @@ const Component: React.FC<Props> = ({
     </Box>
   );
 };
-
-export const CardEditor = Component;

@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { AuthRequiredPage } from "../../components/AuthRequiredPage";
-import { DeckPlayerPage } from "../../components/pages/deckPlayer/DeckPlayerPage";
+import { DeckPlayerPage } from "../../components/pages/DeckPlayerPage";
 import { useLoadingEffect } from "../../hooks/useLoadingEffect";
 
 const Play: NextPage = () => {

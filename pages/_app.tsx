@@ -1,7 +1,7 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
 import React from "react";
-import { PageTemplate } from "../components/PageTemplate";
+import { PageTemplate } from "../components/pages/common/PageTemplate";
 import { AppStateContextProvider } from "../context/AppStateContextProvider";
 import { theme } from "../theme/theme";
 

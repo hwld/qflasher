@@ -8,7 +8,9 @@ export type AuthRequiredPageProps = {
   children: (uesrId: string) => ReactElement;
 };
 
-const Component: React.VFC<AuthRequiredPageProps> = ({ children }) => {
+export const AuthRequiredPage: React.VFC<AuthRequiredPageProps> = ({
+  children,
+}) => {
   const { user, loading } = useAuthState();
 
   useLoadingEffect(loading);
@@ -25,5 +27,3 @@ const Component: React.VFC<AuthRequiredPageProps> = ({ children }) => {
     );
   }
 };
-
-export const AuthRequiredPage = Component;

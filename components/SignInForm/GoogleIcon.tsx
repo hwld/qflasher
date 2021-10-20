@@ -4,7 +4,7 @@ type Props = {
   size?: number;
 };
 
-const Component: React.FC<Props> = ({ size }) => {
+export const GoogleIcon: React.FC<Props> = ({ size }) => {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -33,5 +33,3 @@ const Component: React.FC<Props> = ({ size }) => {
     </svg>
   );
 };
-
-export const GoogleIcon = Component;

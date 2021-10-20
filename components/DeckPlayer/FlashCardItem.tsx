@@ -1,6 +1,6 @@
 import { Box, BoxProps } from "@chakra-ui/react";
 import React from "react";
-import { FlashCard } from "../types";
+import { FlashCard } from "../../types";
 import { OneSideFlashCardItem } from "./OneSideFlashCardItem";
 
 type Props = {

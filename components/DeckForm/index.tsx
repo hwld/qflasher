@@ -11,7 +11,7 @@ import React, {
 import { Controller, useForm } from "react-hook-form";
 import { MdAdd } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
-import { Deck, DeckWithoutCards, FlashCard } from "../types";
+import { Deck, DeckWithoutCards, FlashCard } from "../../types";
 import { CardEditor } from "./CardEditor";
 
 // リストから削除すると削除すべきカードが特定できないので論理削除にする

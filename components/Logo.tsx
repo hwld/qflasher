@@ -4,7 +4,7 @@ import React from "react";
 
 type Props = {};
 
-const Component: React.FC<Props> = ({}) => {
+export const Logo: React.FC<Props> = ({}) => {
   return (
     <Flex padding={2} align="center">
       <img alt="logo" src="/icon.png" width={43} height={22} />
@@ -14,5 +14,3 @@ const Component: React.FC<Props> = ({}) => {
     </Flex>
   );
 };
-
-export const Logo = Component;
