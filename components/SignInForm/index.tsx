@@ -6,7 +6,7 @@ import { GoogleSignInButton } from "./GoogleSignInButton";
 
 type Props = BoxProps;
 
-export const SignInForm: React.FC<Props> = ({ children, ...styleProps }) => {
+export const SignInForm: React.FC<Props> = ({ children, ...styles }) => {
   const handleSignIn = async () => {
     try {
       await signInWithPopup(auth, new GoogleAuthProvider());
@@ -16,7 +16,7 @@ export const SignInForm: React.FC<Props> = ({ children, ...styleProps }) => {
   };
 
   return (
-    <Box bgColor="gray.700" padding={10} boxShadow="dark-lg" {...styleProps}>
+    <Box bgColor="gray.700" padding={10} boxShadow="dark-lg" {...styles}>
       <GoogleSignInButton onClick={handleSignIn} />
     </Box>
   );

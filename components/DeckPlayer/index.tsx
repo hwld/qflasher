@@ -98,7 +98,7 @@ const buildCardStack = (cards: FlashCard[], isOrderRandom: boolean) => {
 export const DeckPlayer: React.FC<Props> = ({
   deck,
   config,
-  ...styleProps
+  ...styles
 }) => {
   const [state, dispatch] = useReducer(reducer, {
     initialCards: deck.cards,
@@ -132,7 +132,7 @@ export const DeckPlayer: React.FC<Props> = ({
   };
 
   return (
-    <Box width="min-content" {...styleProps}>
+    <Box width="min-content" {...styles}>
       <FlashCardViewer
         totalCardsCount={state.totalCardsCount}
         rightAnswersCount={state.rightAnswerCount}

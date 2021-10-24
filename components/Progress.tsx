@@ -7,8 +7,8 @@ import React from "react";
 
 type Props = ChakraProgressProps;
 
-const Component: React.FC<Props> = ({ ...styleProps }) => {
-  return <ChakraProgress {...styleProps} />;
+const Component: React.FC<Props> = ({ ...styles }) => {
+  return <ChakraProgress {...styles} />;
 };
 
 export const Progress = styled(Component)`

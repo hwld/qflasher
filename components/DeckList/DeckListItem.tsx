@@ -11,8 +11,8 @@ import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdEdit, MdPlayArrow } from "react-icons/md";
 import { RiPushpin2Fill } from "react-icons/ri";
-import { useSetAppState } from "../context/AppStateContextProvider";
-import { DeckWithoutCards } from "../types";
+import { useSetAppState } from "../../context/AppStateContextProvider";
+import { DeckWithoutCards } from "../../types";
 import { DeleteDeckButton } from "./DeleteDeckButton";
 
 type Props = {
@@ -25,7 +25,7 @@ export const DeckListItem: React.FC<Props> = ({
   className,
   deck,
   onDeleteDeck,
-  ...styleProps
+  ...styles
 }) => {
   const router = useRouter();
   const toast = useToast();
@@ -61,7 +61,7 @@ export const DeckListItem: React.FC<Props> = ({
 
   return (
     <Flex
-      {...styleProps}
+      {...styles}
       align="center"
       w={`${leftWidth + rightWidth}px`}
       h={`${height}px`}

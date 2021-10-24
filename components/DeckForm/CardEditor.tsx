@@ -41,7 +41,7 @@ export const CardEditor: React.FC<Props> = ({
   onKeyDownInQuestion,
   onKeyDownInAnswer,
   onDelete,
-  ...styleProps
+  ...styles
 }) => {
   const questionError = cardErrors?.[index]?.question;
   const answerError = cardErrors?.[index]?.answer;
@@ -64,7 +64,7 @@ export const CardEditor: React.FC<Props> = ({
   }, []);
 
   return (
-    <Box key={id} padding={5} pt={3} bgColor="gray.700" {...styleProps}>
+    <Box key={id} padding={5} pt={3} bgColor="gray.700" {...styles}>
       <Stack>
         <Flex justify="space-between">
           <Text fontWeight="bold" mr={2}>

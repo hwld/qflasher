@@ -6,15 +6,19 @@ import {
   AlertDialogHeader,
   AlertDialogOverlay,
   Button,
+  ButtonProps,
   Text,
   Tooltip,
 } from "@chakra-ui/react";
 import React, { useRef, useState } from "react";
 import { MdDelete } from "react-icons/md";
 
-type Props = { onDelete: () => void };
+type Props = { onDelete: () => void } & ButtonProps;
 
-export const DeleteDeckButton: React.FC<Props> = ({ onDelete }) => {
+export const DeleteDeckButton: React.FC<Props> = ({
+  onDelete,
+  ...styles
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLButtonElement | null>(null);
 
@@ -36,6 +40,7 @@ export const DeleteDeckButton: React.FC<Props> = ({ onDelete }) => {
           rounded="full"
           padding={0}
           onClick={handleOpen}
+          {...styles}
         >
           <MdDelete size="60%" />
         </Button>

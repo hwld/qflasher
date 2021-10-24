@@ -1,11 +1,11 @@
-import { Center, Grid, Heading } from "@chakra-ui/react";
+import { Center, Heading } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React, { useMemo } from "react";
 import { MdAdd } from "react-icons/md";
 import { useDeckList } from "../../hooks/useDeckList";
 import { useDeckOperation } from "../../hooks/useDeckOperation";
 import { useLoadingEffect } from "../../hooks/useLoadingEffect";
-import { DeckListItem } from "../DeckListItem";
+import { DeckList } from "../DeckList";
 import { Fab } from "./common/Fab";
 import { PageTitle } from "./common/PageTitle";
 
@@ -36,21 +36,7 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
       }
       case "success": {
         return (
-          <Grid
-            templateColumns="repeat(auto-fill,500px)"
-            gap={5}
-            justifyContent="center"
-          >
-            {useDeckListResult.decks.map((deck) => {
-              return (
-                <DeckListItem
-                  key={deck.id}
-                  deck={deck}
-                  onDeleteDeck={deleteDeck}
-                />
-              );
-            })}
-          </Grid>
+          <DeckList decks={useDeckListResult.decks} onDelete={deleteDeck} />
         );
       }
     }

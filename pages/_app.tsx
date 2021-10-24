@@ -1,5 +1,6 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
+import Head from "next/head";
 import React from "react";
 import { PageTemplate } from "../components/pages/common/PageTemplate";
 import { AppStateContextProvider } from "../context/AppStateContextProvider";
@@ -17,6 +18,9 @@ const NoSSR: React.FC = ({ children }) => {
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <NoSSR>
+      <Head>
+        <meta name="viewport" content="initial-scale=1.0,width=device-width" />
+      </Head>
       <ChakraProvider theme={theme}>
         <AppStateContextProvider>
           <PageTemplate>

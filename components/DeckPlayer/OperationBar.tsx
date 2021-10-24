@@ -29,7 +29,7 @@ export const OperationBar: React.FC<Props> = ({
   onWrong,
   onReplayAll,
   onReplayWrong,
-  ...styleProps
+  ...styles
 }) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -66,7 +66,7 @@ export const OperationBar: React.FC<Props> = ({
   };
 
   return (
-    <Flex className={className} align="center" {...styleProps}>
+    <Flex className={className} align="center" {...styles}>
       {isEnd ? (
         <>
           <Box boxSize="70px">

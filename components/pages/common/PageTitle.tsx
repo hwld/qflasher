@@ -3,16 +3,16 @@ import React from "react";
 
 type Props = BoxProps;
 
-export const PageTitle: React.FC<Props> = ({ children, ...styleProps }) => {
+export const PageTitle: React.FC<Props> = ({ children, ...styles }) => {
   return (
     <Box
       padding={3}
-      w="800px"
+      w="80%"
       bgColor="gray.700"
       mx="auto"
       boxShadow="dark-lg"
       borderRadius="md"
-      {...styleProps}
+      {...styles}
     >
       <Heading fontSize="2xl" textAlign="center">
         {children}

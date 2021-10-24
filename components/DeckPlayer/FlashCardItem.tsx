@@ -15,7 +15,7 @@ export const FlashCardItem: React.FC<Props> = ({
   initialFront,
   front,
   isBackground,
-  ...styleProps
+  ...styles
 }) => {
   const frontText = initialFront === "question" ? card.question : card.answer;
   const frontType = initialFront;
@@ -31,7 +31,7 @@ export const FlashCardItem: React.FC<Props> = ({
       style={{ transformStyle: "preserve-3d" }}
       position="absolute"
       boxSize="100%"
-      {...styleProps}
+      {...styles}
     >
       <OneSideFlashCardItem
         text={frontText}
