@@ -4,7 +4,6 @@ import React, {
   KeyboardEvent,
   KeyboardEventHandler,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -13,6 +12,7 @@ import { MdAdd } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
 import { Deck, DeckWithoutCards, FlashCard } from "../../types";
 import { CardEditor } from "./CardEditor";
+import { useExistingCardIds } from "./useExistingCardIds";
 
 // リストから削除すると削除すべきカードが特定できないので論理削除にする
 export type FormFlashCard = FlashCard & { deleted: boolean };
@@ -56,21 +56,17 @@ export const DeckForm: React.FC<Props> = ({
     defaultDeck.cards.map((c) => ({ id: c.id, deleted: false }))
   );
 
-  const existingCards = useMemo(() => {
-    return cards.filter((c) => !c.deleted);
-  }, [cards]);
+  const {
+    existingCards,
+    isFirstCard,
+    isLastCard,
+    firstCardId,
+    prevCardId,
+    nextCardId,
+    lastCardId,
+  } = useExistingCardIds(cards);
 
   const addCardTimer = useRef<NodeJS.Timeout>();
-
-  const isFirstCard = (cardId: string) => {
-    const cardIndex = existingCards.findIndex((c) => c.id === cardId);
-    return cardIndex === 0;
-  };
-
-  const isLastCard = (cardId: string) => {
-    const cardIndex = existingCards.findIndex((c) => c.id === cardId);
-    return cardIndex === existingCards.length - 1;
-  };
 
   const focusQuestion = (cardId: string) => {
     const index = existingCards.findIndex((field) => field.id === cardId);
@@ -83,24 +79,6 @@ export const DeckForm: React.FC<Props> = ({
     if (index === -1) return;
 
     setFocus(`cards.${index}.answer`);
-  };
-
-  const firstCardId = () => {
-    return existingCards[0].id;
-  };
-
-  const prevCardId = (cardId: string) => {
-    const cardIndex = existingCards.findIndex((c) => c.id === cardId);
-    return existingCards[cardIndex - 1].id;
-  };
-
-  const nextCardId = (cardId: string) => {
-    const cardIndex = existingCards.findIndex((c) => c.id === cardId);
-    return existingCards[cardIndex + 1].id;
-  };
-
-  const lastCardId = () => {
-    return existingCards[existingCards.length - 1].id;
   };
 
   const submit = (fields: DeckFormFields) => {
@@ -152,8 +130,6 @@ export const DeckForm: React.FC<Props> = ({
     }
 
     const id = uuidv4();
-    // addCardを非同期関数内でawaitのあとに呼び出すと、setCardsが呼び出されたあとにすぐrender関数が呼ばれ、
-    // 更新前のcardMapを参照してしまうので必ずcardMapを更新したあとに呼び出す
     setCards((cards) => [
       ...cards,
       { id, question: "", answer: "", deleted: false },
@@ -241,7 +217,7 @@ export const DeckForm: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    if (cards.length === 0) {
+    if (existingCards.length === 0) {
       setFocus("name");
     } else {
       focusQuestion(lastCardId());
