@@ -1,58 +1,53 @@
 import { useCallback, useMemo } from "react";
+import { FormFlashCardId } from ".";
 
-export const useExistingCardIds = (
-  cards: { id: string; deleted: boolean }[]
-) => {
-  const existingCards = useMemo(() => {
-    return cards
-      .filter((c) => !c.deleted)
-      .map((c) => ({
-        id: c.id,
-      }));
-  }, [cards]);
+export const useExistingCardIds = (cardIds: FormFlashCardId[]) => {
+  const existingCardIds = useMemo(() => {
+    return cardIds.filter((id) => !id.deleted).map((id) => id.value);
+  }, [cardIds]);
 
   const isFirstCard = useCallback(
     (cardId: string) => {
-      const cardIndex = existingCards.findIndex((c) => c.id === cardId);
+      const cardIndex = existingCardIds.findIndex((id) => id === cardId);
       return cardIndex === 0;
     },
-    [existingCards]
+    [existingCardIds]
   );
 
   const isLastCard = useCallback(
     (cardId: string) => {
-      const cardIndex = existingCards.findIndex((c) => c.id === cardId);
-      return cardIndex === existingCards.length - 1;
+      const cardIndex = existingCardIds.findIndex((id) => id === cardId);
+      return cardIndex === existingCardIds.length - 1;
     },
-    [existingCards]
+    [existingCardIds]
   );
 
   const firstCardId = useCallback(() => {
-    return existingCards[0].id;
-  }, [existingCards]);
+    return existingCardIds[0];
+  }, [existingCardIds]);
 
   const prevCardId = useCallback(
     (cardId: string) => {
-      const cardIndex = existingCards.findIndex((c) => c.id === cardId);
-      return existingCards[cardIndex - 1].id;
+      const cardIndex = existingCardIds.findIndex((id) => id === cardId);
+      return existingCardIds[cardIndex - 1];
     },
-    [existingCards]
+    [existingCardIds]
   );
 
   const nextCardId = useCallback(
     (cardId: string) => {
-      const cardIndex = existingCards.findIndex((c) => c.id === cardId);
-      return existingCards[cardIndex + 1].id;
+      const cardIndex = existingCardIds.findIndex((id) => id === cardId);
+      return existingCardIds[cardIndex + 1];
     },
-    [existingCards]
+    [existingCardIds]
   );
 
   const lastCardId = useCallback(() => {
-    return existingCards[existingCards.length - 1].id;
-  }, [existingCards]);
+    return existingCardIds[existingCardIds.length - 1];
+  }, [existingCardIds]);
 
   return {
-    existingCards,
+    existingCardIds,
     isFirstCard,
     isLastCard,
     firstCardId,

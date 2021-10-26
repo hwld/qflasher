@@ -7,15 +7,21 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { MdAdd } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
 import { Deck, DeckWithoutCards, FlashCard } from "../../types";
 import { CardEditor } from "./CardEditor";
+import { useDeckForm } from "./useDeckForm";
 import { useExistingCardIds } from "./useExistingCardIds";
 
 // リストから削除すると削除すべきカードが特定できないので論理削除にする
 export type FormFlashCard = FlashCard & { deleted: boolean };
+
+export type FormFlashCardId = {
+  value: FormFlashCard["id"];
+  deleted: FormFlashCard["deleted"];
+};
 
 type Props = {
   defaultDeck?: Deck;
@@ -38,62 +44,55 @@ export const DeckForm: React.FC<Props> = ({
   formId,
   onSubmit,
 }) => {
-  // form用のFlashCards[]とexistsCards[]は対応させる
-  const {
-    control,
-    setFocus,
-    handleSubmit,
-    trigger,
-    formState: { errors },
-  } = useForm<DeckFormFields>({
-    mode: "onChange",
-  });
-
   const toast = useToast();
 
   // questionやanswerはreact-hook-formで管理する
-  const [cards, setCards] = useState<{ id: string; deleted: boolean }[]>(
-    defaultDeck.cards.map((c) => ({ id: c.id, deleted: false }))
+  const [cardIds, setCardIds] = useState<FormFlashCardId[]>(
+    defaultDeck.cards.map((c) => ({ value: c.id, deleted: false }))
   );
 
   const {
-    existingCards,
+    existingCardIds,
     isFirstCard,
     isLastCard,
     firstCardId,
     prevCardId,
     nextCardId,
     lastCardId,
-  } = useExistingCardIds(cards);
+  } = useExistingCardIds(cardIds);
 
-  const addCardTimer = useRef<NodeJS.Timeout>();
+  const {
+    control,
+    focusDeckName,
+    focusQuestion,
+    focusAnswer,
+    handleSubmit,
+    triggerValidation,
+    errors,
+  } = useDeckForm({
+    formCardIds: existingCardIds,
+  });
 
-  const focusQuestion = (cardId: string) => {
-    const index = existingCards.findIndex((field) => field.id === cardId);
-    if (index === -1) return;
-
-    setFocus(`cards.${index}.question`);
-  };
-  const focusAnswer = (cardId: string) => {
-    const index = existingCards.findIndex((field) => field.id === cardId);
-    if (index === -1) return;
-
-    setFocus(`cards.${index}.answer`);
-  };
+  const addCardTimer = useRef<number>();
 
   const submit = (fields: DeckFormFields) => {
     if (fields.cards === undefined) {
-      addCard();
-      trigger();
+      addCardEditor();
+      triggerValidation();
       return;
     }
 
     // cardsの情報とreact-hook-formの情報からFormFlashCardsを作成する
-    const formCards: FormFlashCard[] = cards.map((card) => {
-      const index = existingCards.findIndex((c) => c.id === card.id);
+    const formCards: FormFlashCard[] = cardIds.map((formCardId) => {
+      const index = existingCardIds.findIndex((id) => id === formCardId.value);
       if (index === -1) {
         // 削除されている場合は情報が存在しないので空文字にする
-        return { ...card, question: "", answer: "" };
+        return {
+          id: formCardId.value,
+          question: "",
+          answer: "",
+          deleted: formCardId.deleted,
+        };
       }
 
       if (fields.cards === undefined) {
@@ -105,21 +104,26 @@ export const DeckForm: React.FC<Props> = ({
         throw new Error();
       }
 
-      return { ...card, question: field.question, answer: field.answer };
+      return {
+        id: formCardId.value,
+        question: field.question,
+        answer: field.answer,
+        deleted: formCardId.deleted,
+      };
     });
 
     onSubmit(
       {
         id: defaultDeck.id,
         name: fields.name,
-        cardLength: existingCards.length,
+        cardLength: existingCardIds.length,
       },
       formCards
     );
   };
 
-  const addCard = () => {
-    if (existingCards.length >= 5) {
+  const addCardEditor = () => {
+    if (existingCardIds.length >= 100) {
       toast({
         title: "エラー",
         description: "カードは100枚までしか作れません",
@@ -130,20 +134,17 @@ export const DeckForm: React.FC<Props> = ({
     }
 
     const id = uuidv4();
-    setCards((cards) => [
-      ...cards,
-      { id, question: "", answer: "", deleted: false },
-    ]);
+    setCardIds((ids) => [...ids, { value: id, deleted: false }]);
     return id;
   };
 
-  const handleDeleteCard = (id: string) => {
-    setCards((cards) =>
-      cards.map((c) => {
-        if (c.id === id) {
-          return { ...c, deleted: true };
+  const handleDeleteCardEditor = (targetId: string) => {
+    setCardIds((ids) =>
+      ids.map((id) => {
+        if (id.value === targetId) {
+          return { ...id, deleted: true };
         }
-        return c;
+        return id;
       })
     );
   };
@@ -159,8 +160,8 @@ export const DeckForm: React.FC<Props> = ({
   const handleKeyDownInName: KeyboardEventHandler = (event) => {
     handleKeyDownTemplate(event, () => {
       if (event.key === "Enter") {
-        if (existingCards.length === 0) {
-          addCard();
+        if (existingCardIds.length === 0) {
+          addCardEditor();
         } else {
           focusQuestion(firstCardId());
         }
@@ -176,7 +177,7 @@ export const DeckForm: React.FC<Props> = ({
     handleKeyDownTemplate(event, () => {
       if (event.key === "Enter" && event.shiftKey) {
         if (isFirstCard(cardId)) {
-          setFocus("name");
+          focusDeckName();
         } else {
           focusAnswer(prevCardId(cardId));
         }
@@ -205,8 +206,8 @@ export const DeckForm: React.FC<Props> = ({
           if (addCardTimer.current) {
             clearTimeout(addCardTimer.current);
           }
-          addCardTimer.current = setTimeout(() => {
-            addCard();
+          addCardTimer.current = window.setTimeout(() => {
+            addCardEditor();
           }, 50);
         } else {
           focusQuestion(nextCardId(cardId));
@@ -217,8 +218,8 @@ export const DeckForm: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    if (existingCards.length === 0) {
-      setFocus("name");
+    if (existingCardIds.length === 0) {
+      focusDeckName();
     } else {
       focusQuestion(lastCardId());
     }
@@ -265,7 +266,7 @@ export const DeckForm: React.FC<Props> = ({
           </Text>
         )}
       </Box>
-      {existingCards.map((card, i) => {
+      {existingCardIds.map((id, i) => {
         return (
           <CardEditor
             mt={2}
@@ -274,13 +275,13 @@ export const DeckForm: React.FC<Props> = ({
             index={i}
             formControl={control}
             cardErrors={errors.cards}
-            key={card.id}
-            id={card.id}
-            defaultValue={defaultDeck.cards.find((c) => c.id === card.id)}
+            key={id}
+            id={id}
+            defaultValue={defaultDeck.cards.find((c) => c.id === id)}
             onFocusQuestion={focusQuestion}
             onKeyDownInQuestion={handleKeyDownInQuestion}
             onKeyDownInAnswer={handleKeyDownInAnswer}
-            onDelete={handleDeleteCard}
+            onDelete={handleDeleteCardEditor}
           />
         );
       })}
@@ -291,7 +292,7 @@ export const DeckForm: React.FC<Props> = ({
         borderTopRadius="md"
         borderBottomRadius="3xl"
         boxShadow="dark-lg"
-        onClick={addCard}
+        onClick={addCardEditor}
       >
         <MdAdd size="100%" />
       </Button>
