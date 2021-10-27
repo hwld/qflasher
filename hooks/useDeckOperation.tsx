@@ -8,14 +8,17 @@ import {
   writeBatch,
 } from "firebase/firestore";
 import { useCallback, useMemo } from "react";
-import { FormFlashCard } from "../components/DeckForm";
 import { db } from "../firebase/config";
 import { cardConverter, deckConverter } from "../firebase/firestoreConverters";
-import { Deck, DeckWithoutCards } from "../types";
+import { Deck, DeckWithoutCards, FlashCard } from "../types";
 
 export type DeckOperation = {
   addDeck: (deck: Deck) => Promise<void>;
-  updateDeck: (deck: DeckWithoutCards, cards: FormFlashCard[]) => Promise<void>;
+  updateDeck: (
+    deck: DeckWithoutCards,
+    oldCards: FlashCard[],
+    newCards: FlashCard[]
+  ) => Promise<void>;
   deleteDeck: (id: string) => Promise<void>;
 };
 
@@ -78,7 +81,11 @@ export const useDeckOperation = (userId: string): DeckOperation => {
   );
 
   const updateDeck = useCallback(
-    async (deckWithoutCards: DeckWithoutCards, formCards: FormFlashCard[]) => {
+    async (
+      deckWithoutCards: DeckWithoutCards,
+      oldCards: FlashCard[],
+      newCards: FlashCard[]
+    ) => {
       const batch = writeBatch(db);
 
       const deckRef = doc(decksRef, deckWithoutCards.id);
@@ -91,25 +98,35 @@ export const useDeckOperation = (userId: string): DeckOperation => {
       batch.set(deckRef, {
         id: deckRef.id,
         name: deckWithoutCards.name,
-        cardLength: formCards.filter((c) => !c.deleted).length,
+        cardLength: newCards.length,
         createdAt: deck.createdAt,
       });
-      formCards.forEach((c, index) => {
-        // cardはDeckFormで作成した時点でidを識別する必要があるため、firestoreのautoIdは使用しない。
-        const cardRef = doc(deckRef, `cards/${c.id}`).withConverter(
-          cardConverter
-        );
-        if (c.deleted) {
+
+      // カードの削除
+      oldCards.forEach((oldCard) => {
+        if (
+          newCards.find((newCard) => newCard.id === oldCard.id) === undefined
+        ) {
+          const cardRef = doc(deckRef, `cards/${oldCard.id}`).withConverter(
+            cardConverter
+          );
           batch.delete(cardRef);
-        } else {
-          batch.set(cardRef, {
-            id: c.id,
-            index: index,
-            question: c.question,
-            answer: c.answer,
-          });
         }
       });
+
+      // カードの追加・更新
+      newCards.forEach(({ id, question, answer }, index) => {
+        const cardRef = doc(deckRef, `cards/${id}`).withConverter(
+          cardConverter
+        );
+        batch.set(cardRef, {
+          id,
+          index,
+          question,
+          answer,
+        });
+      });
+
       await batch.commit();
     },
     [decksRef]

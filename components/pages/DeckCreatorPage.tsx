@@ -4,8 +4,8 @@ import React from "react";
 import { MdSave } from "react-icons/md";
 import { useSetAppState } from "../../context/AppStateContextProvider";
 import { useDeckOperation } from "../../hooks/useDeckOperation";
-import { DeckWithoutCards } from "../../types";
-import { DeckForm, FormFlashCard } from "../DeckForm";
+import { DeckWithoutCards, FlashCard } from "../../types";
+import { DeckForm } from "../DeckForm";
 import { Fab } from "./common/Fab";
 import { PageTitle } from "./common/PageTitle";
 
@@ -20,14 +20,14 @@ export const DeckCreatorPage: React.FC<Props> = ({ userId }) => {
 
   const handleSubmit = async (
     deckWithoutCards: DeckWithoutCards,
-    formCards: FormFlashCard[]
+    oldCards: FlashCard[],
+    newCards: FlashCard[]
   ) => {
-    let id = startLoading();
+    const id = startLoading();
     try {
       await addDeck({
         ...deckWithoutCards,
-        // 削除されているcardsは除外する
-        cards: formCards.filter((c) => !c.deleted),
+        cards: newCards,
       });
       endLoading(id);
       router.push("/decks");

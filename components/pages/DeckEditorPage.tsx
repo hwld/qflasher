@@ -6,8 +6,8 @@ import { useSetAppState } from "../../context/AppStateContextProvider";
 import { useDeckOperation } from "../../hooks/useDeckOperation";
 import { useLoadingEffect } from "../../hooks/useLoadingEffect";
 import { useMyDeck } from "../../hooks/useMyDeck";
-import { DeckWithoutCards } from "../../types";
-import { DeckForm, FormFlashCard } from "../DeckForm";
+import { DeckWithoutCards, FlashCard } from "../../types";
+import { DeckForm } from "../DeckForm";
 import { Fab } from "./common/Fab";
 import { PageTitle } from "./common/PageTitle";
 
@@ -39,11 +39,12 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
 
   const handleUpdateDeck = async (
     deckWithoutCards: DeckWithoutCards,
-    formCards: FormFlashCard[]
+    oldCards: FlashCard[],
+    newCards: FlashCard[]
   ) => {
-    let id = startLoading();
+    const id = startLoading();
     try {
-      await updateDeck(deckWithoutCards, formCards);
+      await updateDeck(deckWithoutCards, oldCards, newCards);
       endLoading(id);
       router.push("/decks");
     } catch (e) {
