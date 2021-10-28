@@ -53,9 +53,14 @@ const reducer: Reducer<State, Action> = (state, action) => {
       };
     }
     case "wrong": {
+      const wrongCard = cardStack[cardStack.length - 1];
+      if (!wrongCard) {
+        throw new Error("存在しないカード");
+      }
+
       return {
         ...state,
-        wrongCards: [...wrongCards, cardStack[cardStack.length - 1]],
+        wrongCards: [...wrongCards, wrongCard],
         cardStack: cardStack.slice(0, -1),
         progress:
           ((totalCardsCount - (cardStack.length - 1)) / totalCardsCount) * 100,
@@ -95,11 +100,7 @@ const buildCardStack = (cards: FlashCard[], isOrderRandom: boolean) => {
   return [...stack].reverse();
 };
 
-export const DeckPlayer: React.FC<Props> = ({
-  deck,
-  config,
-  ...styles
-}) => {
+export const DeckPlayer: React.FC<Props> = ({ deck, config, ...styles }) => {
   const [state, dispatch] = useReducer(reducer, {
     initialCards: deck.cards,
     config,

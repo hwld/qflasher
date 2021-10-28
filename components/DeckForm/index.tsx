@@ -8,7 +8,6 @@ import React, {
 } from "react";
 import { Controller } from "react-hook-form";
 import { MdAdd } from "react-icons/md";
-import { v4 as uuidv4 } from "uuid";
 import { Deck, DeckWithoutCards, FlashCard } from "../../types";
 import { CardEditor } from "./CardEditor";
 import { useCardIds } from "./useCardIds";
@@ -41,7 +40,8 @@ export const DeckForm: React.FC<Props> = ({
   // questionやanswerはreact-hook-formで管理する
   const {
     cardIds,
-    setCardIds,
+    addCardId,
+    deleteCardId,
     isFirstCard,
     isLastCard,
     firstCardId,
@@ -64,52 +64,31 @@ export const DeckForm: React.FC<Props> = ({
 
   const addCardTimer = useRef<number>();
 
-  const submit = (fields: DeckFormFields) => {
-    if (fields.cards === undefined) {
+  const submit = ({ name, cardLength, cards }: Omit<Deck, "id">) => {
+    if (cards.length === 0) {
       addCardEditor();
       triggerValidation();
       return;
     }
 
-    // cardsの情報とreact-hook-formの情報からFormFlashCardsを作成する
-    const cards = fields.cards;
-    const newCards: FlashCard[] = cardIds.map((id, index) => {
-      const field = cards[index];
-      if (!field) {
-        throw new Error();
-      }
-      return { id, question: field.question, answer: field.answer };
-    });
-
     onSubmit(
-      {
-        id: defaultDeck.id,
-        name: fields.name,
-        cardLength: cardIds.length,
-      },
+      { id: defaultDeck.id, name, cardLength },
       defaultDeck.cards,
-      newCards
+      cards
     );
   };
 
   const addCardEditor = () => {
-    if (cardIds.length >= 100) {
+    const result = addCardId();
+    if (result.type === "error") {
       toast({
         title: "エラー",
-        description: "カードは100枚までしか作れません",
+        description: result.message,
         status: "error",
         isClosable: true,
       });
       return;
     }
-
-    const id = uuidv4();
-    setCardIds((ids) => [...ids, id]);
-    return id;
-  };
-
-  const handleDeleteCardEditor = (targetId: string) => {
-    setCardIds((ids) => ids.filter((id) => id !== targetId));
   };
 
   const handleKeyDownTemplate = (event: KeyboardEvent, handler: () => void) => {
@@ -244,7 +223,7 @@ export const DeckForm: React.FC<Props> = ({
             onFocusQuestion={focusQuestion}
             onKeyDownInQuestion={handleKeyDownInQuestion}
             onKeyDownInAnswer={handleKeyDownInAnswer}
-            onDelete={handleDeleteCardEditor}
+            onDelete={deleteCardId}
           />
         );
       })}
