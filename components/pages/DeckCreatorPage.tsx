@@ -4,8 +4,7 @@ import React from "react";
 import { MdSave } from "react-icons/md";
 import { useSetAppState } from "../../context/AppStateContextProvider";
 import { useDeckOperation } from "../../hooks/useDeckOperation";
-import { DeckWithoutCards, FlashCard } from "../../types";
-import { DeckForm } from "../DeckForm";
+import { DeckForm, DeckFormProps } from "../DeckForm";
 import { Fab } from "./common/Fab";
 import { PageTitle } from "./common/PageTitle";
 
@@ -18,17 +17,10 @@ export const DeckCreatorPage: React.FC<Props> = ({ userId }) => {
   const { startLoading, endLoading } = useSetAppState();
   const formId = "createDeckForm";
 
-  const handleSubmit = async (
-    deckWithoutCards: DeckWithoutCards,
-    oldCards: FlashCard[],
-    newCards: FlashCard[]
-  ) => {
+  const handleSubmit: DeckFormProps["onSubmit"] = async ({ newDeck }) => {
     const id = startLoading();
     try {
-      await addDeck({
-        ...deckWithoutCards,
-        cards: newCards,
-      });
+      await addDeck(newDeck);
       endLoading(id);
       router.push("/decks");
     } catch (e) {

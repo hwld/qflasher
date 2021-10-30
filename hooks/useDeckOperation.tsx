@@ -10,15 +10,11 @@ import {
 import { useCallback, useMemo } from "react";
 import { db } from "../firebase/config";
 import { cardConverter, deckConverter } from "../firebase/firestoreConverters";
-import { Deck, DeckWithoutCards, FlashCard } from "../types";
+import { Deck, FlashCard } from "../types";
 
 export type DeckOperation = {
   addDeck: (deck: Deck) => Promise<void>;
-  updateDeck: (
-    deck: DeckWithoutCards,
-    oldCards: FlashCard[],
-    newCards: FlashCard[]
-  ) => Promise<void>;
+  updateDeck: (newDeck: Deck, oldCards: FlashCard[]) => Promise<void>;
   deleteDeck: (id: string) => Promise<void>;
 };
 
@@ -81,14 +77,10 @@ export const useDeckOperation = (userId: string): DeckOperation => {
   );
 
   const updateDeck = useCallback(
-    async (
-      deckWithoutCards: DeckWithoutCards,
-      oldCards: FlashCard[],
-      newCards: FlashCard[]
-    ) => {
+    async (newDeck: Deck, oldCards: FlashCard[]) => {
       const batch = writeBatch(db);
 
-      const deckRef = doc(decksRef, deckWithoutCards.id);
+      const deckRef = doc(decksRef, newDeck.id);
       const deck = (await getDoc(deckRef)).data();
 
       if (!deck) {
@@ -97,17 +89,15 @@ export const useDeckOperation = (userId: string): DeckOperation => {
 
       batch.set(deckRef, {
         id: deckRef.id,
-        name: deckWithoutCards.name,
-        cardLength: newCards.length,
+        name: newDeck.name,
+        cardLength: newDeck.cardLength,
         createdAt: deck.createdAt,
       });
 
       // カードの削除
-      oldCards.forEach((oldCard) => {
-        if (
-          newCards.find((newCard) => newCard.id === oldCard.id) === undefined
-        ) {
-          const cardRef = doc(deckRef, `cards/${oldCard.id}`).withConverter(
+      oldCards.forEach((old) => {
+        if (!newDeck.cards.find((newCard) => newCard.id === old.id)) {
+          const cardRef = doc(deckRef, `cards/${old.id}`).withConverter(
             cardConverter
           );
           batch.delete(cardRef);
@@ -115,7 +105,7 @@ export const useDeckOperation = (userId: string): DeckOperation => {
       });
 
       // カードの追加・更新
-      newCards.forEach(({ id, question, answer }, index) => {
+      newDeck.cards.forEach(({ id, question, answer }, index) => {
         const cardRef = doc(deckRef, `cards/${id}`).withConverter(
           cardConverter
         );

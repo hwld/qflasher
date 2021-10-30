@@ -27,7 +27,7 @@ export const useDeckForm = ({ formCardIds }: UseDeckFormArg) => {
       return innerHandleSubmit((fields: DeckFormFields) => {
         let cards: FlashCard[];
 
-        if (fields.cards === undefined) {
+        if (!fields.cards) {
           cards = [];
         } else {
           const cardFields = fields.cards;

@@ -8,20 +8,16 @@ import React, {
 } from "react";
 import { Controller } from "react-hook-form";
 import { MdAdd } from "react-icons/md";
-import { Deck, DeckWithoutCards, FlashCard } from "../../types";
+import { Deck, FlashCard } from "../../types";
 import { CardEditor } from "./CardEditor";
 import { useCardIds } from "./useCardIds";
 import { useDeckForm } from "./useDeckForm";
 
-type Props = {
+export type DeckFormProps = {
   defaultDeck?: Deck;
   formId: string;
   // ctrl+EnterでもSubmitされるようにする
-  onSubmit: (
-    deckWithoutCards: DeckWithoutCards,
-    oldCards: FlashCard[],
-    newCards: FlashCard[]
-  ) => void;
+  onSubmit: (arg: { newDeck: Deck; oldCards: FlashCard[] }) => void;
 };
 
 export type DeckFormFields = {
@@ -30,7 +26,7 @@ export type DeckFormFields = {
   cards: Omit<FlashCard, "id">[] | undefined;
 };
 
-export const DeckForm: React.FC<Props> = ({
+export const DeckForm: React.FC<DeckFormProps> = ({
   defaultDeck = { id: "", name: "", cards: [], cardLength: 0 },
   formId,
   onSubmit,
@@ -71,11 +67,15 @@ export const DeckForm: React.FC<Props> = ({
       return;
     }
 
-    onSubmit(
-      { id: defaultDeck.id, name, cardLength },
-      defaultDeck.cards,
-      cards
-    );
+    onSubmit({
+      newDeck: {
+        id: defaultDeck.id,
+        name,
+        cards,
+        cardLength,
+      },
+      oldCards: defaultDeck.cards,
+    });
   };
 
   const addCardEditor = () => {

@@ -50,7 +50,7 @@ export const useMyDeck = (userId: string, deckId: string): UseMyDeckResult => {
     }
 
     // firestoreのルールでドキュメントが存在しない場合にはエラーを出すようにしているので、例外を出す
-    if (deckInfoResult.value === undefined) {
+    if (!deckInfoResult.value) {
       throw new Error("Succeeded with non-existent deckInfo.");
     }
 
