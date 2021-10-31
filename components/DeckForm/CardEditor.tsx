@@ -9,6 +9,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
+import { Draggable } from "react-beautiful-dnd";
 import { Control, Controller, FormState } from "react-hook-form";
 import { MdDelete } from "react-icons/md";
 import { DeckFormFields } from ".";
@@ -64,90 +65,102 @@ export const CardEditor: React.FC<Props> = ({
   }, []);
 
   return (
-    <Box key={id} padding={5} pt={3} bgColor="gray.700" {...styles}>
-      <Stack>
-        <Flex justify="space-between">
-          <Text fontWeight="bold" mr={2}>
-            {index + 1}.
-          </Text>
-          <Tooltip label="削除">
-            <Button
-              ml={5}
-              boxSize="40px"
-              rounded="full"
-              minW="unset"
-              variant="solid"
-              onClick={handleDelete}
-              p={0}
-            >
-              <MdDelete size="60%" />
-            </Button>
-          </Tooltip>
-        </Flex>
-        <Box>
-          <Controller
-            control={formControl}
-            name={`cards.${index}.question`}
-            defaultValue={defaultValue.question}
-            rules={{
-              required: { value: true, message: "文字を入力してください" },
-              maxLength: {
-                value: 100,
-                message: "100文字以下で入力してください。",
-              },
-            }}
-            shouldUnregister={true}
-            render={({ field }) => (
-              <Input
-                autoComplete="off"
-                spellCheck={false}
-                placeholder="質問"
-                _placeholder={{ color: "gray.300" }}
-                isInvalid={!!questionError}
-                onKeyDown={handleKeyDownQuestion}
-                {...field}
+    <Draggable draggableId={id} index={index}>
+      {(provider, snapshot) => (
+        <Box
+          padding={5}
+          pt={3}
+          bgColor="gray.700"
+          {...styles}
+          ref={provider.innerRef}
+          {...provider.draggableProps}
+          {...provider.dragHandleProps}
+        >
+          <Stack>
+            <Flex justify="space-between">
+              <Text fontWeight="bold" mr={2}>
+                {index + 1}.
+              </Text>
+              <Tooltip label="削除">
+                <Button
+                  ml={5}
+                  boxSize="40px"
+                  rounded="full"
+                  minW="unset"
+                  variant="solid"
+                  onClick={handleDelete}
+                  p={0}
+                >
+                  <MdDelete size="60%" />
+                </Button>
+              </Tooltip>
+            </Flex>
+            <Box>
+              <Controller
+                control={formControl}
+                name={`cards.${index}.question`}
+                defaultValue={defaultValue.question}
+                rules={{
+                  required: { value: true, message: "文字を入力してください" },
+                  maxLength: {
+                    value: 100,
+                    message: "100文字以下で入力してください。",
+                  },
+                }}
+                shouldUnregister={true}
+                render={({ field }) => (
+                  <Input
+                    autoComplete="off"
+                    spellCheck={false}
+                    placeholder="質問"
+                    _placeholder={{ color: "gray.300" }}
+                    isInvalid={!!questionError}
+                    onKeyDown={handleKeyDownQuestion}
+                    {...field}
+                  />
+                )}
               />
-            )}
-          />
-          {questionError?.message && (
-            <Text ml={3} my={2} color="red">
-              ※{questionError?.message}
-            </Text>
-          )}
-        </Box>
+              {questionError?.message && (
+                <Text ml={3} my={2} color="red">
+                  ※{questionError?.message}
+                </Text>
+              )}
+            </Box>
 
-        <Box>
-          <Controller
-            control={formControl}
-            name={`cards.${index}.answer`}
-            defaultValue={defaultValue.answer}
-            shouldUnregister={true}
-            rules={{
-              required: { value: true, message: "文字を入力してください" },
-              maxLength: {
-                value: 100,
-                message: "100文字以下で入力してください",
-              },
-            }}
-            render={({ field }) => (
-              <Input
-                autoComplete="off"
-                spellCheck={false}
-                placeholder="答え"
-                _placeholder={{ color: "gray.300" }}
-                isInvalid={!!answerError}
-                onKeyDown={handleKeyDownAnswer}
-                {...field}
+            <Box>
+              <Controller
+                control={formControl}
+                name={`cards.${index}.answer`}
+                defaultValue={defaultValue.answer}
+                shouldUnregister={true}
+                rules={{
+                  required: { value: true, message: "文字を入力してください" },
+                  maxLength: {
+                    value: 100,
+                    message: "100文字以下で入力してください",
+                  },
+                }}
+                render={({ field }) => (
+                  <Input
+                    autoComplete="off"
+                    spellCheck={false}
+                    placeholder="答え"
+                    _placeholder={{ color: "gray.300" }}
+                    isInvalid={!!answerError}
+                    onKeyDown={handleKeyDownAnswer}
+                    {...field}
+                  />
+                )}
               />
-            )}
-          />
-          {answerError?.message && (
-            <Text ml={3} my={2} color="red">
-              ※{answerError?.message}
-            </Text>
-          )}
+              {answerError?.message && (
+                <Text ml={3} my={2} color="red">
+                  ※{answerError?.message}
+                </Text>
+              )}
+            </Box>
+          </Stack>
         </Box>
-      </Stack>
-    </Box>
+      )}
+    </Draggable>
   );
 };

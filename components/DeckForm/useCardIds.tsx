@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import { v4 as uuid } from "uuid";
+import { reorder } from "../../utils/reorder";
 
 export const useCardIds = (initialIds: string[]) => {
   const [cardIds, setCardIds] = useState(initialIds);
@@ -22,6 +23,14 @@ export const useCardIds = (initialIds: string[]) => {
   const deleteCardId = useCallback((targetId: string) => {
     setCardIds((ids) => ids.filter((id) => id !== targetId));
   }, []);
+
+  const reorderCardIds = useCallback(
+    (startIndex: number, endIndex: number) => {
+      const ids = reorder(cardIds, startIndex, endIndex);
+      setCardIds(ids);
+    },
+    [cardIds]
+  );
 
   const isFirstCard = useCallback(
     (cardId: string): boolean => {
@@ -84,6 +93,7 @@ export const useCardIds = (initialIds: string[]) => {
     cardIds,
     addCardId,
     deleteCardId,
+    reorderCardIds,
     isFirstCard,
     isLastCard,
     firstCardId,

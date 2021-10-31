@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useRef,
 } from "react";
+import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { Controller } from "react-hook-form";
 import { MdAdd } from "react-icons/md";
 import { Deck, FlashCard } from "../../types";
@@ -38,6 +39,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
     cardIds,
     addCardId,
     deleteCardId,
+    reorderCardIds,
     isFirstCard,
     isLastCard,
     firstCardId,
@@ -159,6 +161,18 @@ export const DeckForm: React.FC<DeckFormProps> = ({
     });
   };
 
+  const handleDragEnd = (result: DropResult) => {
+    if (!result.destination) {
+      return;
+    }
+
+    if (result.destination.index === result.source.index) {
+      return;
+    }
+
+    reorderCardIds(result.source.index, result.destination.index);
+  };
+
   useEffect(() => {
     if (cardIds.length === 0) {
       focusDeckName();
@@ -208,25 +222,34 @@ export const DeckForm: React.FC<DeckFormProps> = ({
           </Text>
         )}
       </Box>
-      {cardIds.map((id, i) => {
-        return (
-          <CardEditor
-            mt={2}
-            borderRadius="md"
-            boxShadow="dark-lg"
-            index={i}
-            formControl={control}
-            cardErrors={errors.cards}
-            key={id}
-            id={id}
-            defaultValue={defaultDeck.cards.find((c) => c.id === id)}
-            onFocusQuestion={focusQuestion}
-            onKeyDownInQuestion={handleKeyDownInQuestion}
-            onKeyDownInAnswer={handleKeyDownInAnswer}
-            onDelete={deleteCardId}
-          />
-        );
-      })}
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId="cardEditors">
+          {(provided) => (
+            <Box {...provided.droppableProps} ref={provided.innerRef}>
+              {cardIds.map((id, i) => {
+                return (
+                  <CardEditor
+                    mt={2}
+                    borderRadius="md"
+                    boxShadow="dark-lg"
+                    index={i}
+                    formControl={control}
+                    cardErrors={errors.cards}
+                    key={id}
+                    id={id}
+                    defaultValue={defaultDeck.cards.find((c) => c.id === id)}
+                    onFocusQuestion={focusQuestion}
+                    onKeyDownInQuestion={handleKeyDownInQuestion}
+                    onKeyDownInAnswer={handleKeyDownInAnswer}
+                    onDelete={deleteCardId}
+                  />
+                );
+              })}
+              {provided.placeholder}
+            </Box>
+          )}
+        </Droppable>
+      </DragDropContext>
       <Button
         mt={2}
         w="100%"

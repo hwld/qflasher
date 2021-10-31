@@ -2,7 +2,7 @@ import { Box, BoxProps } from "@chakra-ui/react";
 import React, { Reducer, useReducer } from "react";
 import { Deck, FlashCard } from "../../types";
 import { assertNever } from "../../utils/assertNever";
-import { getShuffledArray } from "../../utils/getShuffledArray";
+import { shuffle } from "../../utils/shuffle";
 import { DeckPlayConfig } from "../pages/DeckPlayerPage";
 import { FlashCardViewer } from "./FlashCardViewer";
 import { OperationBar } from "./OperationBar";
@@ -96,7 +96,7 @@ const reducer: Reducer<State, Action> = (state, action) => {
 };
 
 const buildCardStack = (cards: FlashCard[], isOrderRandom: boolean) => {
-  const stack = isOrderRandom ? getShuffledArray(cards) : cards;
+  const stack = isOrderRandom ? shuffle(cards) : cards;
   return [...stack].reverse();
 };
 
