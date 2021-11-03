@@ -1,14 +1,10 @@
 import { Box, Text } from "@chakra-ui/layout";
 import { Button, Input, useToast } from "@chakra-ui/react";
-import React, {
-  KeyboardEvent,
-  KeyboardEventHandler,
-  useEffect,
-  useRef,
-} from "react";
+import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { Controller } from "react-hook-form";
 import { MdAdd } from "react-icons/md";
+import { useDebounce } from "../../hooks/useDebounce";
 import { Deck, FlashCard } from "../../types";
 import { CardEditor } from "./CardEditor";
 import { useCardIds } from "./useCardIds";
@@ -60,7 +56,18 @@ export const DeckForm: React.FC<DeckFormProps> = ({
     formCardIds: cardIds,
   });
 
-  const addCardTimer = useRef<number>();
+  const addCardEditor = useDebounce(50, () => {
+    const result = addCardId();
+    if (result.type === "error") {
+      toast({
+        title: "エラー",
+        description: result.message,
+        status: "error",
+        isClosable: true,
+      });
+      return;
+    }
+  });
 
   const submit = ({ name, cardLength, cards }: Omit<Deck, "id">) => {
     if (cards.length === 0) {
@@ -78,19 +85,6 @@ export const DeckForm: React.FC<DeckFormProps> = ({
       },
       oldCards: defaultDeck.cards,
     });
-  };
-
-  const addCardEditor = () => {
-    const result = addCardId();
-    if (result.type === "error") {
-      toast({
-        title: "エラー",
-        description: result.message,
-        status: "error",
-        isClosable: true,
-      });
-      return;
-    }
   };
 
   const handleKeyDownTemplate = (event: KeyboardEvent, handler: () => void) => {
@@ -147,12 +141,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
 
       if (event.key === "Enter") {
         if (isLastCard(cardId)) {
-          if (addCardTimer.current) {
-            clearTimeout(addCardTimer.current);
-          }
-          addCardTimer.current = window.setTimeout(() => {
-            addCardEditor();
-          }, 50);
+          addCardEditor();
         } else {
           focusQuestion(nextCardId(cardId));
         }
