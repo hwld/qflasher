@@ -11,7 +11,7 @@ import {
 import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { Control, Controller, FormState } from "react-hook-form";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdDragHandle } from "react-icons/md";
 import { DeckFormFields } from ".";
 import { FlashCard } from "../../types";
 
@@ -66,7 +66,7 @@ export const CardEditor: React.FC<Props> = ({
 
   return (
     <Draggable draggableId={id} index={index}>
-      {(provider, snapshot) => (
+      {(provider) => (
         <Box
           padding={5}
           pt={3}
@@ -74,13 +74,21 @@ export const CardEditor: React.FC<Props> = ({
           {...styles}
           ref={provider.innerRef}
           {...provider.draggableProps}
-          {...provider.dragHandleProps}
         >
           <Stack>
             <Flex justify="space-between">
               <Text fontWeight="bold" mr={2}>
                 {index + 1}.
               </Text>
+              <Box
+                bgColor="gray.500"
+                w="100px"
+                h="25px"
+                rounded="md"
+                {...provider.dragHandleProps}
+              >
+                <MdDragHandle size="100%" />
+              </Box>
               <Tooltip label="削除">
                 <Button
                   ml={5}
