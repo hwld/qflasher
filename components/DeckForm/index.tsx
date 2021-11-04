@@ -1,12 +1,12 @@
 import { Box, Text } from "@chakra-ui/layout";
-import { Button, Input, useToast } from "@chakra-ui/react";
+import { Button, useToast } from "@chakra-ui/react";
 import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
-import { Controller } from "react-hook-form";
 import { MdAdd } from "react-icons/md";
 import { useDebounce } from "../../hooks/useDebounce";
 import { Deck, FlashCard } from "../../types";
 import { CardEditor } from "./CardEditor";
+import { DeckFormInput } from "./DeckFormInput";
 import { useCardIds } from "./useCardIds";
 import { useDeckForm } from "./useDeckForm";
 
@@ -175,41 +175,25 @@ export const DeckForm: React.FC<DeckFormProps> = ({
     <Box>
       {/* Enterが入力されてもsubmitが発生しないように独立させる。 */}
       <form id={formId} onSubmit={handleSubmit(submit)}></form>
-      <Box
-        bgColor="gray.700"
-        padding={5}
-        borderTopRadius="3xl"
-        borderBottomRadius="md"
-        boxShadow="dark-lg"
-      >
+      <Box bgColor="gray.700" padding={5} borderRadius="md" boxShadow="dark-lg">
         <Text fontWeight="bold" fontSize="xl">
-          名前
+          デッキ名
         </Text>
-        <Controller
+        <DeckFormInput
           control={control}
           name="name"
-          defaultValue={defaultDeck.name}
-          rules={{
-            required: { value: true, message: "文字を入力してください" },
-            maxLength: { value: 50, message: "50文字以下で入力してください" },
+          error={errors.name}
+          controllerProps={{
+            defaultValue: defaultDeck.name,
+            rules: {
+              required: { value: true, message: "文字を入力してください" },
+              maxLength: { value: 50, message: "50文字以下で入力してください" },
+            },
           }}
-          render={({ field }) => (
-            <Input
-              mt={3}
-              autoComplete="off"
-              spellCheck={false}
-              isInvalid={!!errors.name}
-              colorScheme="green"
-              onKeyDown={handleKeyDownInName}
-              {...field}
-            />
-          )}
+          placeholder="デッキ名"
+          onKeyDown={handleKeyDownInName}
+          mt={3}
         />
-        {errors.name?.message && (
-          <Text ml={3} my={2} color="red">
-            ※{errors.name.message}
-          </Text>
-        )}
       </Box>
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="cardEditors">
@@ -243,8 +227,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
         mt={2}
         w="100%"
         h="50px"
-        borderTopRadius="md"
-        borderBottomRadius="3xl"
+        borderRadius="md"
         boxShadow="dark-lg"
         onClick={addCardEditor}
       >

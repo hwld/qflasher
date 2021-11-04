@@ -1,0 +1,50 @@
+import { Box, Input as ChakraInput, InputProps, Text } from "@chakra-ui/react";
+import {
+  Control,
+  Controller,
+  ControllerProps,
+  FieldError,
+} from "react-hook-form";
+import { DeckFormFields } from "./useDeckForm";
+
+type PropsWithoutInput = {
+  control: Control<DeckFormFields>;
+  name: `name` | `cards.${number}.question` | `cards.${number}.answer`;
+  error?: FieldError;
+} & {
+  controllerProps?: Omit<ControllerProps, "render" | "control" | "name">;
+};
+type Props = PropsWithoutInput & Omit<InputProps, keyof PropsWithoutInput>;
+
+export const DeckFormInput: React.FC<Props> = ({
+  control,
+  name,
+  error,
+  controllerProps,
+  ...inputProps
+}) => {
+  return (
+    <Box>
+      <Controller
+        control={control}
+        name={name}
+        render={({ field }) => (
+          <ChakraInput
+            autoComplete="off"
+            spellCheck={false}
+            _placeholder={{ color: "gray.300" }}
+            isInvalid={!!error}
+            {...inputProps}
+            {...field}
+          />
+        )}
+        {...controllerProps}
+      />
+      {error?.message && (
+        <Text ml={3} my={2} color="red">
+          ※{error?.message}
+        </Text>
+      )}
+    </Box>
+  );
+};
