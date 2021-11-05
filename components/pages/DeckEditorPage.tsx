@@ -8,7 +8,7 @@ import { useLoadingEffect } from "../../hooks/useLoadingEffect";
 import { useMyDeck } from "../../hooks/useMyDeck";
 import { DeckForm, DeckFormProps } from "../DeckForm";
 import { Fab } from "./common/Fab";
-import { PageTitle } from "./common/PageTitle";
+import { PageTemplate } from "./common/PageTemplate";
 
 type DeckEditPageProps = { deckId: string; userId: string };
 
@@ -57,9 +57,8 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
   };
 
   return (
-    <Box>
-      <PageTitle mt={5}>デッキ更新</PageTitle>
-      <Box mt={5} maxW="800px" marginX="auto">
+    <PageTemplate title="デッキ更新">
+      <Box maxW="800px" marginX="auto">
         <DeckForm
           defaultDeck={useMyDeckResult.deck}
           formId={formId}
@@ -69,6 +68,6 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
           <MdSave size="60%" />
         </Fab>
       </Box>
-    </Box>
+    </PageTemplate>
   );
 };

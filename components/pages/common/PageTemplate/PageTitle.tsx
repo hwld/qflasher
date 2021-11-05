@@ -9,12 +9,11 @@ export const PageTitle: React.FC<Props> = ({ children, ...styles }) => {
       padding={3}
       w="80%"
       bgColor="gray.700"
-      mx="auto"
       boxShadow="dark-lg"
       borderRadius="md"
       {...styles}
     >
-      <Heading fontSize="2xl" textAlign="center">
+      <Heading fontSize={{ base: "xl", md: "2xl" }} textAlign="center">
         {children}
       </Heading>
     </Box>

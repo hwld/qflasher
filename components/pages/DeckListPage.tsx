@@ -7,7 +7,7 @@ import { useDeckOperation } from "../../hooks/useDeckOperation";
 import { useLoadingEffect } from "../../hooks/useLoadingEffect";
 import { DeckList } from "../DeckList";
 import { Fab } from "./common/Fab";
-import { PageTitle } from "./common/PageTitle";
+import { PageTemplate } from "./common/PageTemplate";
 
 type DeckListPageProps = { userId: string };
 
@@ -43,14 +43,11 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
   }, [deleteDeck, useDeckListResult.decks, useDeckListResult.status]);
 
   return (
-    <>
-      <PageTitle mt={5} mb={5}>
-        デッキ一覧
-      </PageTitle>
+    <PageTemplate title="デッキ一覧">
       {deckList}
       <Fab tooltipLabel="追加" onClick={handleAddDeck}>
         <MdAdd size="70%" />
       </Fab>
-    </>
+    </PageTemplate>
   );
 };

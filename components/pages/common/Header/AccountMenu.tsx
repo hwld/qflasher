@@ -19,9 +19,9 @@ export const AccountMenu: React.FC<Props> = ({ onSignOut, ...styles }) => {
         as={Button}
         color="gray.700"
         rounded="full"
-        bgColor="teal.200"
-        _hover={{ bgColor: "teal.300" }}
-        _active={{ bgColor: "teal.400" }}
+        bgColor="gray.200"
+        _hover={{ bgColor: "gray.300" }}
+        _active={{ bgColor: "gray.400" }}
         boxSize="40px"
         p={0}
         {...styles}

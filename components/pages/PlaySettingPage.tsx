@@ -1,6 +1,6 @@
 import { Box, Button, Checkbox, Flex } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { PageTitle } from "./common/PageTitle";
+import { PageTemplate } from "./common/PageTemplate";
 import { DeckPlayConfig } from "./DeckPlayerPage";
 
 type Props = {
@@ -19,10 +19,9 @@ export const PlaySettingPage: React.FC<Props> = ({ onComplete }) => {
   };
 
   return (
-    <Box>
+    <PageTemplate title="暗記設定">
       <Flex flexDir="column" maxW="800px" m="auto" alignItems="center">
-        <PageTitle mt={5}>暗記設定</PageTitle>
-        <Box mt={5} p={5} bgColor="gray.700" w="100%">
+        <Box p={5} bgColor="gray.700" w="100%">
           <Checkbox
             size="lg"
             colorScheme="green"
@@ -46,6 +45,6 @@ export const PlaySettingPage: React.FC<Props> = ({ onComplete }) => {
           暗記を始める
         </Button>
       </Flex>
-    </Box>
+    </PageTemplate>
   );
 };

@@ -2,6 +2,7 @@ import { Box, Flex, FlexProps, Progress } from "@chakra-ui/react";
 import React from "react";
 import { auth } from "../../../../firebase/config";
 import { useAuthState } from "../../../../hooks/useAuthState";
+import { Link } from "../../../Link";
 import { AccountMenu } from "./AccountMenu";
 import { Logo } from "./Logo";
 
@@ -27,12 +28,16 @@ export const Header: React.FC<Props> = ({ isLoading, ...styles }) => {
           bgGradient="linear(to-r, green.500 70%, green.400)"
           w="100vw"
           h={`${headerHeight}px`}
-          {...styles}
           justify="space-between"
           align="center"
+          pr={{ base: 3, md: 5 }}
+          pl={{ base: 1, md: 5 }}
+          {...styles}
         >
-          <Logo />
-          {user && <AccountMenu onSignOut={handleSignOut} mr={3} />}
+          <Link href="/decks">
+            <Logo />
+          </Link>
+          {user && <AccountMenu onSignOut={handleSignOut} />}
         </Flex>
         <Progress
           colorScheme="green"

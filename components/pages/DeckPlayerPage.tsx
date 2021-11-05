@@ -1,9 +1,9 @@
-import { Box, Center, Heading, Text } from "@chakra-ui/react";
+import { Center, Heading, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useLoadingEffect } from "../../hooks/useLoadingEffect";
 import { useMyDeck } from "../../hooks/useMyDeck";
 import { DeckPlayer } from "../DeckPlayer";
-import { PageTitle } from "./common/PageTitle";
+import { PageTemplate } from "./common/PageTemplate";
 import { PlaySettingPage } from "./PlaySettingPage";
 
 type DeckPlayerPageProps = { deckId: string; userId: string };
@@ -47,9 +47,8 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
   }
 
   return (
-    <Box>
-      <PageTitle mt={5}>暗記</PageTitle>
-      <Center w="700px" mt={5} mx="auto">
+    <PageTemplate title="暗記">
+      <Center w="700px" mx="auto">
         <Text fontWeight="bold" fontSize="2xl" textAlign="center">
           {useMyDeckResult.deck.name}
         </Text>
@@ -60,6 +59,6 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
         deck={useMyDeckResult.deck}
         config={config}
       />
-    </Box>
+    </PageTemplate>
   );
 };

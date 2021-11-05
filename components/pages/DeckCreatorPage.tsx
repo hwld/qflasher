@@ -6,7 +6,7 @@ import { useSetAppState } from "../../context/AppStateContextProvider";
 import { useDeckOperation } from "../../hooks/useDeckOperation";
 import { DeckForm, DeckFormProps } from "../DeckForm";
 import { Fab } from "./common/Fab";
-import { PageTitle } from "./common/PageTitle";
+import { PageTemplate } from "./common/PageTemplate";
 
 type Props = { userId: string };
 
@@ -35,14 +35,13 @@ export const DeckCreatorPage: React.FC<Props> = ({ userId }) => {
   };
 
   return (
-    <Box>
-      <PageTitle mt={5}>デッキ作成</PageTitle>
-      <Box mt={5} maxW="800px" marginX="auto">
+    <PageTemplate title="デッキ作成">
+      <Box maxW="800px" marginX="auto">
         <DeckForm formId={formId} onSubmit={handleSubmit} />
       </Box>
       <Fab tooltipLabel="作成" type="submit" form={formId}>
         <MdSave size="60%" />
       </Fab>
-    </Box>
+    </PageTemplate>
   );
 };
