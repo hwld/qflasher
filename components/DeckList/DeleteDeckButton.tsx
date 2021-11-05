@@ -8,17 +8,14 @@ import {
   Button,
   ButtonProps,
   Text,
-  Tooltip,
 } from "@chakra-ui/react";
 import React, { useRef, useState } from "react";
 import { MdDelete } from "react-icons/md";
+import { DeckCardButton } from "./DeckCardButton";
 
 type Props = { onDelete: () => void } & ButtonProps;
 
-export const DeleteDeckButton: React.FC<Props> = ({
-  onDelete,
-  ...styles
-}) => {
+export const DeleteDeckButton: React.FC<Props> = ({ onDelete, ...styles }) => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLButtonElement | null>(null);
 
@@ -32,19 +29,9 @@ export const DeleteDeckButton: React.FC<Props> = ({
 
   return (
     <>
-      <Tooltip label="削除">
-        <Button
-          colorScheme="gray"
-          boxSize="40px"
-          minW="none"
-          rounded="full"
-          padding={0}
-          onClick={handleOpen}
-          {...styles}
-        >
-          <MdDelete size="60%" />
-        </Button>
-      </Tooltip>
+      <DeckCardButton label="削除" onClick={handleOpen}>
+        <MdDelete size="60%" />
+      </DeckCardButton>
       <AlertDialog
         leastDestructiveRef={ref}
         isOpen={isOpen}

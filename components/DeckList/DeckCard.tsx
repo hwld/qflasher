@@ -13,16 +13,20 @@ import { MdEdit, MdPlayArrow } from "react-icons/md";
 import { RiPushpin2Fill } from "react-icons/ri";
 import { useSetAppState } from "../../context/AppStateContextProvider";
 import { DeckWithoutCards } from "../../types";
+import { DeckCardButton } from "./DeckCardButton";
 import { DeleteDeckButton } from "./DeleteDeckButton";
+import { deckCardStyle } from "./useDeckCardStyle";
 
 type Props = {
   className?: string;
+  style: deckCardStyle;
   deck: DeckWithoutCards;
   onDeleteDeck: (id: string) => Promise<void>;
 } & BoxProps;
 
-export const DeckListItem: React.FC<Props> = ({
+export const DeckCard: React.FC<Props> = ({
   className,
+  style: { ringWidth, cardWidth, height, nameFontSize, metaFontSize },
   deck,
   onDeleteDeck,
   ...styles
@@ -55,30 +59,26 @@ export const DeckListItem: React.FC<Props> = ({
     }
   };
 
-  const leftWidth = 50;
-  const rightWidth = 450;
-  const height = 200;
-
   return (
     <Flex
       {...styles}
       align="center"
-      w={`${leftWidth + rightWidth}px`}
+      w={`${ringWidth + cardWidth}px`}
       h={`${height}px`}
     >
       <Box
-        w={`${leftWidth}px`}
-        h={`${leftWidth * 2}px`}
+        w={`${ringWidth}px`}
+        h={`${ringWidth * 2}px`}
         borderWidth="5px"
         borderStyle="solid"
         borderColor="green.400"
         borderRight="none"
-        borderLeftRadius={`${leftWidth}px`}
+        borderLeftRadius={`${ringWidth}px`}
         bgColor="gray.700"
         boxShadow="dark-lg"
       />
       <Flex
-        w={`${rightWidth}px`}
+        w={`${cardWidth}px`}
         h={`${height}px`}
         bgColor="gray.700"
         rounded="2xl"
@@ -95,16 +95,16 @@ export const DeckListItem: React.FC<Props> = ({
             <Text
               flexGrow={1}
               fontWeight="bold"
-              fontSize="lg"
+              fontSize={nameFontSize}
               minH={0}
               overflowY="auto"
-              wordBreak="break-all"
             >
               {deck.name}
             </Text>
             <Text
               flexGrow={0}
               flexShrink={0}
+              fontSize={metaFontSize}
               fontWeight="bold"
               color="gray.300"
               ml={3}
@@ -114,41 +114,22 @@ export const DeckListItem: React.FC<Props> = ({
               枚数: {deck.cardLength}
             </Text>
           </Flex>
-          <Tooltip label="固定">
-            <Button
-              ml={3}
-              colorScheme="gray"
-              boxSize="40px"
-              rounded="full"
-              padding={0}
-              flexGrow={0}
-              flexShrink={0}
-            >
-              <RiPushpin2Fill size="60%" />
-            </Button>
-          </Tooltip>
+          <DeckCardButton ml={3} label="固定" flexShrink={0}>
+            <RiPushpin2Fill size="60%" />
+          </DeckCardButton>
         </Flex>
 
         <Flex shrink={0} align="baseline" justify="space-between">
           <Flex>
             <DeleteDeckButton onDelete={handleDelete} />
-            <Tooltip label="編集">
-              <Button
-                ml={2}
-                colorScheme="gray"
-                boxSize="40px"
-                rounded="full"
-                padding={0}
-                onClick={handleUpdateDeck}
-              >
-                <MdEdit size="60%" />
-              </Button>
-            </Tooltip>
+            <DeckCardButton ml={2} label="編集" onClick={handleUpdateDeck}>
+              <MdEdit size="60%" />
+            </DeckCardButton>
           </Flex>
           <Flex>
             <Tooltip label="暗記">
               <Button
-                boxSize="60px"
+                boxSize="50px"
                 rounded="full"
                 colorScheme="green"
                 bgColor="green.300"
