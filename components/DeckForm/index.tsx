@@ -56,7 +56,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
     formCardIds: cardIds,
   });
 
-  const addCardEditor = useDebounce(50, () => {
+  const addCardEditor = () => {
     const result = addCardId();
     if (result.type === "error") {
       toast({
@@ -67,7 +67,9 @@ export const DeckForm: React.FC<DeckFormProps> = ({
       });
       return;
     }
-  });
+  };
+
+  const addCardEditorWithDebounce = useDebounce(50, addCardEditor);
 
   const submit = ({ name, cardLength, cards }: Omit<Deck, "id">) => {
     if (cards.length === 0) {
@@ -99,7 +101,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
     handleKeyDownTemplate(event, () => {
       if (event.key === "Enter") {
         if (cardIds.length === 0) {
-          addCardEditor();
+          addCardEditorWithDebounce();
         } else {
           focusQuestion(firstCardId());
         }
@@ -141,7 +143,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
 
       if (event.key === "Enter") {
         if (isLastCard(cardId)) {
-          addCardEditor();
+          addCardEditorWithDebounce();
         } else {
           focusQuestion(nextCardId(cardId));
         }
