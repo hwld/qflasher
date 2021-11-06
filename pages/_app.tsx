@@ -4,6 +4,7 @@ import Head from "next/head";
 import React from "react";
 import { AppTemplate } from "../components/pages/common/AppTemplate";
 import { AppStateContextProvider } from "../context/AppStateContextProvider";
+import "../theme/scrollbar.css";
 import { theme } from "../theme/theme";
 
 // SSRを使用せずにstatic html exportを使用するので、next devでSSRされないようにする
