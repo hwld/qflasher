@@ -1,4 +1,4 @@
-import { Flex, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Flex, useBreakpointValue } from "@chakra-ui/react";
 import React from "react";
 import { useAppState } from "../../../context/AppStateContextProvider";
 import { Header } from "./Header";
@@ -8,9 +8,9 @@ export const AppTemplate: React.FC = ({ children }) => {
   const size =
     useBreakpointValue<"sm" | "md">({ base: "sm", md: "md" }) ?? "md";
   return (
-    <Flex h="100vh" direction="column">
+    <Flex h="100vh" direction="column" overflow="hidden">
       <Header isLoading={isLoading} size={size} />
-      {children}
+      <Box overflow="auto">{children}</Box>
     </Flex>
   );
 };
