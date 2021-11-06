@@ -1,4 +1,11 @@
-import { Box, Button, Flex, FlexProps, Tooltip } from "@chakra-ui/react";
+import {
+  Box,
+  BoxProps,
+  Button,
+  Flex,
+  FlexProps,
+  Tooltip,
+} from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React, { useState } from "react";
 import { GrPowerCycle } from "react-icons/gr";
@@ -10,7 +17,7 @@ import {
 } from "react-icons/md";
 
 type Props = {
-  className?: string;
+  size: "sm" | "md";
   isEnd: boolean;
   wrongAnswerCount: number;
   onTurnOver: () => void;
@@ -21,7 +28,7 @@ type Props = {
 } & FlexProps;
 
 export const OperationBar: React.FC<Props> = ({
-  className,
+  size,
   isEnd,
   wrongAnswerCount,
   onTurnOver,
@@ -33,6 +40,19 @@ export const OperationBar: React.FC<Props> = ({
 }) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+
+  let buttonSize: BoxProps["boxSize"];
+  const iconSize = "50%";
+  switch (size) {
+    case "sm": {
+      buttonSize = "50px";
+      break;
+    }
+    case "md": {
+      buttonSize = "70px";
+      break;
+    }
+  }
 
   const handleRight = () => {
     // TODO 仮
@@ -66,80 +86,90 @@ export const OperationBar: React.FC<Props> = ({
   };
 
   return (
-    <Flex className={className} align="center" {...styles}>
+    <Flex align="center" {...styles}>
       {isEnd ? (
         <>
-          <Box boxSize="70px">
+          <Box boxSize={buttonSize}>
             <Tooltip label="戻る">
-              <Button colorScheme="green" boxSize="100%" onClick={handleBack}>
-                <MdArrowBack size={30} />
+              <Button
+                p={0}
+                colorScheme="green"
+                boxSize="100%"
+                onClick={handleBack}
+              >
+                <MdArrowBack size={iconSize} />
               </Button>
             </Tooltip>
           </Box>
 
           {wrongAnswerCount !== 0 && (
-            <Box boxSize="70px" mx={3}>
+            <Box boxSize={buttonSize} mx={3}>
               <Tooltip label="間違えた問題を再暗記">
                 <Button
+                  p={0}
                   colorScheme="red"
                   boxSize="100%"
                   onClick={handleReplayWrong}
                 >
-                  <MdReplay size={30} />
+                  <MdReplay size={iconSize} />
                 </Button>
               </Tooltip>
             </Box>
           )}
 
-          <Box boxSize="70px" mx={wrongAnswerCount === 0 ? 3 : 0}>
+          <Box boxSize={buttonSize} mx={wrongAnswerCount === 0 ? 3 : 0}>
             <Tooltip label="すべての問題を再暗記">
               <Button
+                p={0}
                 colorScheme="blue"
                 boxSize="100%"
                 onClick={handleReplayAll}
               >
-                <MdReplay size={30} />
+                <MdReplay size={iconSize} />
               </Button>
             </Tooltip>
           </Box>
         </>
       ) : (
         <>
-          <Box boxSize="70px">
+          <Box boxSize={buttonSize}>
             {isOpen && (
               <Tooltip label="正解">
                 <Button
+                  p={0}
                   colorScheme="blue"
                   boxSize="100%"
                   rounded="full"
                   onClick={handleRight}
                 >
-                  <MdPanoramaFishEye size={30} />
+                  <MdPanoramaFishEye size={iconSize} />
                 </Button>
               </Tooltip>
             )}
           </Box>
-          <Box boxSize="70px" mx={3}>
+          <Box boxSize={buttonSize} mx={3}>
             <Tooltip label="裏返す">
               <Button
+                p={0}
                 colorScheme="green"
                 boxSize="100%"
                 onClick={handleTurnOver}
               >
-                <GrPowerCycle size={30} />
+                <GrPowerCycle size={iconSize} />
               </Button>
             </Tooltip>
           </Box>
-          <Box boxSize="70px">
+          <Box boxSize={buttonSize}>
             {isOpen && (
               <Tooltip label="不正解">
                 <Button
+                  p={0}
                   colorScheme="red"
                   boxSize="100%"
                   rounded="full"
                   onClick={handleWrong}
                 >
-                  <MdClear size={30} />
+                  <MdClear size={iconSize} />
                 </Button>
               </Tooltip>
             )}

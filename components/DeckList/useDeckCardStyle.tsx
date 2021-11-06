@@ -15,7 +15,6 @@ export const useDeckCardStyle = (size: "sm" | "md"): deckCardStyle => {
   let nameFontSize: TextProps["fontSize"];
   let metaFontSize: TextProps["fontSize"];
 
-  console.log(size);
   switch (size) {
     case "sm": {
       ringWidth = 25;

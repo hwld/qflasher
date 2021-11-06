@@ -1,6 +1,12 @@
-import { Box, Button, Checkbox, Flex } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Flex,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
-import { PageTemplate } from "./common/PageTemplate";
+import { PageTitle } from "./common/PageTitle";
 import { DeckPlayConfig } from "./DeckPlayerPage";
 
 type Props = {
@@ -10,6 +16,7 @@ type Props = {
 export const PlaySettingPage: React.FC<Props> = ({ onComplete }) => {
   const [isAnswerFirst, setIsAnswerFirst] = useState(false);
   const [isOrderRandom, setIsOrderRandom] = useState(false);
+  const checkBoxSize = useBreakpointValue({ base: "sm", md: "lg" }) ?? "lg";
 
   const handleClick = () => {
     onComplete({
@@ -19,11 +26,14 @@ export const PlaySettingPage: React.FC<Props> = ({ onComplete }) => {
   };
 
   return (
-    <PageTemplate title="暗記設定">
+    <Box>
+      <PageTitle my={{ base: 3, md: 5 }} mx="auto">
+        暗記設定
+      </PageTitle>
       <Flex flexDir="column" maxW="800px" m="auto" alignItems="center">
-        <Box p={5} bgColor="gray.700" w="100%">
+        <Box p={{ base: 3, md: 5 }} bgColor="gray.700" w="100%">
           <Checkbox
-            size="lg"
+            size={checkBoxSize}
             colorScheme="green"
             isChecked={isAnswerFirst}
             onChange={({ target: { checked } }) => setIsAnswerFirst(checked)}
@@ -31,9 +41,9 @@ export const PlaySettingPage: React.FC<Props> = ({ onComplete }) => {
             答え → 質問の順で表示する
           </Checkbox>
         </Box>
-        <Box mt={3} p={5} bgColor="gray.700" w="100%">
+        <Box mt={3} p={{ base: 3, md: 5 }} bgColor="gray.700" w="100%">
           <Checkbox
-            size="lg"
+            size={checkBoxSize}
             colorScheme="green"
             isChecked={isOrderRandom}
             onChange={({ target: { checked } }) => setIsOrderRandom(checked)}
@@ -45,6 +55,6 @@ export const PlaySettingPage: React.FC<Props> = ({ onComplete }) => {
           暗記を始める
         </Button>
       </Flex>
-    </PageTemplate>
+    </Box>
   );
 };

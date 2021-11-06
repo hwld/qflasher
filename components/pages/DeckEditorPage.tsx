@@ -8,7 +8,7 @@ import { useLoadingEffect } from "../../hooks/useLoadingEffect";
 import { useMyDeck } from "../../hooks/useMyDeck";
 import { DeckForm, DeckFormProps } from "../DeckForm";
 import { Fab } from "./common/Fab";
-import { PageTemplate } from "./common/PageTemplate";
+import { PageTitle } from "./common/PageTitle";
 
 type DeckEditPageProps = { deckId: string; userId: string };
 
@@ -30,7 +30,7 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
   }
   if (useMyDeckResult.status === "error") {
     return (
-      <Center minH="100vh">
+      <Center>
         <Heading>デッキの読み込みに失敗しました</Heading>
       </Center>
     );
@@ -57,7 +57,10 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
   };
 
   return (
-    <PageTemplate title="デッキ更新">
+    <Box>
+      <PageTitle my={{ base: 3, md: 5 }} mx="auto">
+        デッキ更新
+      </PageTitle>
       <Box maxW="800px" marginX="auto">
         <DeckForm
           defaultDeck={useMyDeckResult.deck}
@@ -68,6 +71,6 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
           <MdSave size="60%" />
         </Fab>
       </Box>
-    </PageTemplate>
+    </Box>
   );
 };

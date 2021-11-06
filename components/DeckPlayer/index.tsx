@@ -1,4 +1,4 @@
-import { Box, BoxProps } from "@chakra-ui/react";
+import { Flex, FlexProps } from "@chakra-ui/react";
 import React, { Reducer, useReducer } from "react";
 import { Deck, FlashCard } from "../../types";
 import { assertNever } from "../../utils/assertNever";
@@ -10,7 +10,8 @@ import { OperationBar } from "./OperationBar";
 type Props = {
   deck: Deck;
   config: DeckPlayConfig;
-} & BoxProps;
+  size: "sm" | "md";
+} & FlexProps;
 
 type State = {
   initialCards: FlashCard[];
@@ -100,7 +101,12 @@ const buildCardStack = (cards: FlashCard[], isOrderRandom: boolean) => {
   return [...stack].reverse();
 };
 
-export const DeckPlayer: React.FC<Props> = ({ deck, config, ...styles }) => {
+export const DeckPlayer: React.FC<Props> = ({
+  deck,
+  config,
+  size,
+  ...styles
+}) => {
   const [state, dispatch] = useReducer(reducer, {
     initialCards: deck.cards,
     config,
@@ -133,17 +139,21 @@ export const DeckPlayer: React.FC<Props> = ({ deck, config, ...styles }) => {
   };
 
   return (
-    <Box width="min-content" {...styles}>
+    <Flex direction="column" {...styles}>
       <FlashCardViewer
+        w="100%"
+        flexGrow={1}
+        size={size}
+        initialFront={config.initialFront}
         totalCardsCount={state.totalCardsCount}
         rightAnswersCount={state.rightAnswerCount}
         cards={state.cardStack}
         progress={state.progress}
-        initialFront={config.initialFront}
         topFront={state.front}
       />
       <OperationBar
-        mt={3}
+        my={5}
+        size={size}
         isEnd={state.cardStack.length === 0}
         wrongAnswerCount={state.wrongCards.length}
         onTurnOver={handleTurnOver}
@@ -153,6 +163,6 @@ export const DeckPlayer: React.FC<Props> = ({ deck, config, ...styles }) => {
         onReplayAll={handleReplayAll}
         justify="center"
       />
-    </Box>
+    </Flex>
   );
 };

@@ -51,7 +51,7 @@ export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
           isIndeterminate={isLoading}
         />
       </Box>
-      <Box h={`${barHeight + progressHeight}px`} />
+      <Box h={`${barHeight + progressHeight}px`} flexShrink={0} />
     </>
   );
 };

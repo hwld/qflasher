@@ -4,6 +4,7 @@ import { FlashCard } from "../../types";
 import { OneSideFlashCardItem } from "./OneSideFlashCardItem";
 
 type Props = {
+  size: "sm" | "md";
   card: FlashCard;
   initialFront: "question" | "answer";
   front: "question" | "answer";
@@ -11,6 +12,7 @@ type Props = {
 } & BoxProps;
 
 export const FlashCardItem: React.FC<Props> = ({
+  size,
   card,
   initialFront,
   front,
@@ -34,11 +36,13 @@ export const FlashCardItem: React.FC<Props> = ({
       {...styles}
     >
       <OneSideFlashCardItem
+        size={size}
         text={frontText}
         type={frontType}
         isBackground={isBackground}
       />
       <OneSideFlashCardItem
+        size={size}
         transform="rotateY(180deg)"
         text={backText}
         type={backType}

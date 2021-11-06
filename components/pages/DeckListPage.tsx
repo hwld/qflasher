@@ -1,4 +1,4 @@
-import { Center, Heading } from "@chakra-ui/react";
+import { Box, Center, Heading } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React, { useMemo } from "react";
 import { MdAdd } from "react-icons/md";
@@ -7,7 +7,7 @@ import { useDeckOperation } from "../../hooks/useDeckOperation";
 import { useLoadingEffect } from "../../hooks/useLoadingEffect";
 import { DeckList } from "../DeckList";
 import { Fab } from "./common/Fab";
-import { PageTemplate } from "./common/PageTemplate";
+import { PageTitle } from "./common/PageTitle";
 
 type DeckListPageProps = { userId: string };
 
@@ -43,11 +43,14 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
   }, [deleteDeck, useDeckListResult.decks, useDeckListResult.status]);
 
   return (
-    <PageTemplate title="デッキ一覧">
+    <Box>
+      <PageTitle my={{ base: 3, md: 5 }} mx="auto">
+        デッキ一覧
+      </PageTitle>
       {deckList}
       <Fab tooltipLabel="追加" onClick={handleAddDeck}>
         <MdAdd size="70%" />
       </Fab>
-    </PageTemplate>
+    </Box>
   );
 };

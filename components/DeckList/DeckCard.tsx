@@ -18,14 +18,12 @@ import { DeleteDeckButton } from "./DeleteDeckButton";
 import { deckCardStyle } from "./useDeckCardStyle";
 
 type Props = {
-  className?: string;
   style: deckCardStyle;
   deck: DeckWithoutCards;
   onDeleteDeck: (id: string) => Promise<void>;
 } & BoxProps;
 
 export const DeckCard: React.FC<Props> = ({
-  className,
   style: { ringWidth, cardWidth, height, nameFontSize, metaFontSize },
   deck,
   onDeleteDeck,

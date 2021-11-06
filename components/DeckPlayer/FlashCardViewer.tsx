@@ -1,39 +1,42 @@
-import { Box } from "@chakra-ui/react";
+import { Box, BoxProps } from "@chakra-ui/react";
 import React from "react";
 import { FlashCard } from "../../types";
-import { FlashCardItem } from "./FlashCardItem";
 import { Progress } from "../Progress";
+import { FlashCardItem } from "./FlashCardItem";
 import { ResultItem } from "./ResultItem";
 
 type Props = {
+  size: "sm" | "md";
   totalCardsCount: number;
   rightAnswersCount: number;
   cards: FlashCard[];
   progress: number;
   initialFront: "question" | "answer";
   topFront: "question" | "answer";
-};
+} & Omit<BoxProps, "size">;
 
 export const FlashCardViewer: React.FC<Props> = ({
+  size,
   totalCardsCount,
   rightAnswersCount,
   cards,
   progress,
   initialFront,
   topFront,
+  ...styles
 }) => {
   return (
     <Box
       position="relative"
       bgColor="gray.700"
-      w="800px"
-      h="500px"
       rounded="3xl"
       overflow="hidden"
+      {...styles}
     >
       {cards.length !== 0 ? (
         cards.map((card, index) => (
           <FlashCardItem
+            size={size}
             key={card.id}
             initialFront={initialFront}
             card={card}
@@ -43,6 +46,7 @@ export const FlashCardViewer: React.FC<Props> = ({
         ))
       ) : (
         <ResultItem
+          size={size}
           totalCardsCount={totalCardsCount}
           rightAnswersCount={rightAnswersCount}
         />

@@ -1,9 +1,14 @@
-import { Center, Heading, Text } from "@chakra-ui/react";
+import {
+  Center,
+  Flex,
+  Heading,
+  Text,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useLoadingEffect } from "../../hooks/useLoadingEffect";
 import { useMyDeck } from "../../hooks/useMyDeck";
 import { DeckPlayer } from "../DeckPlayer";
-import { PageTemplate } from "./common/PageTemplate";
 import { PlaySettingPage } from "./PlaySettingPage";
 
 type DeckPlayerPageProps = { deckId: string; userId: string };
@@ -17,6 +22,8 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
   deckId,
   userId,
 }) => {
+  const deckPlayerSize =
+    useBreakpointValue<"sm" | "md">({ base: "sm", md: "md" }) ?? "md";
   const [hasCompletedSetting, setHasCompletedSetting] = useState(false);
   const [config, setConfig] = useState<DeckPlayConfig>({
     initialFront: "question",
@@ -36,7 +43,7 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
   }
   if (useMyDeckResult.status === "error") {
     return (
-      <Center minH="100vh">
+      <Center>
         <Heading>デッキの読み込みに失敗しました</Heading>
       </Center>
     );
@@ -47,18 +54,25 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
   }
 
   return (
-    <PageTemplate title="暗記">
-      <Center w="700px" mx="auto">
-        <Text fontWeight="bold" fontSize="2xl" textAlign="center">
+    <Flex flexGrow={1} direction="column">
+      <Center mt={5} maxW="700px" mx="auto">
+        <Text
+          fontWeight="bold"
+          fontSize={{ base: "lg", md: "2xl" }}
+          textAlign="center"
+        >
           {useMyDeckResult.deck.name}
         </Text>
       </Center>
       <DeckPlayer
+        flexGrow={1}
         mt={5}
         mx="auto"
+        w="90%"
+        size={deckPlayerSize}
         deck={useMyDeckResult.deck}
         config={config}
       />
-    </PageTemplate>
+    </Flex>
   );
 };

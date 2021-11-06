@@ -1,20 +1,40 @@
-import { Box, Center, Text } from "@chakra-ui/layout";
+import { Box, Center, Text, TextProps } from "@chakra-ui/layout";
 import React from "react";
 
-type Props = { totalCardsCount: number; rightAnswersCount: number };
+type Props = {
+  size: "sm" | "md";
+  totalCardsCount: number;
+  rightAnswersCount: number;
+};
 
 export const ResultItem: React.FC<Props> = ({
+  size,
   totalCardsCount,
   rightAnswersCount,
 }) => {
+  let resultFontSize: TextProps["fontSize"];
+  let textFontSize: TextProps["fontSize"];
+  switch (size) {
+    case "sm": {
+      resultFontSize = "3xl";
+      textFontSize = "xl";
+      break;
+    }
+    case "md": {
+      resultFontSize = "6xl";
+      textFontSize = "3xl";
+      break;
+    }
+  }
+
   return (
     <Center boxSize="100%">
       <Box>
         <Text
-          fontSize="6xl"
+          fontSize={resultFontSize}
           textAlign="center"
         >{`${rightAnswersCount} / ${totalCardsCount}`}</Text>
-        <Text fontSize="3xl" textAlign="center">
+        <Text fontSize={textFontSize} textAlign="center">
           正解数
         </Text>
       </Box>
