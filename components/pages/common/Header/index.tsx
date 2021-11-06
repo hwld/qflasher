@@ -5,13 +5,14 @@ import { useAuthState } from "../../../../hooks/useAuthState";
 import { Link } from "../../../Link";
 import { AccountMenu } from "./AccountMenu";
 import { Logo } from "./Logo";
+import { useHeaderStyle } from "./useHeaderStyle";
 
-type Props = { isLoading?: boolean } & FlexProps;
+type Props = { isLoading?: boolean; size: "sm" | "md" } & FlexProps;
 
-export const Header: React.FC<Props> = ({ isLoading, ...styles }) => {
+export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
   const { user } = useAuthState();
-  const headerHeight = 60;
-  const progressHeight = 5;
+  const { barHeight, progressHeight, logoWidth, accountIconSize } =
+    useHeaderStyle(size);
 
   const handleSignOut = async () => {
     try {
@@ -27,7 +28,7 @@ export const Header: React.FC<Props> = ({ isLoading, ...styles }) => {
         <Flex
           bgGradient="linear(to-r, green.500 70%, green.400)"
           w="100vw"
-          h={`${headerHeight}px`}
+          h={`${barHeight}px`}
           justify="space-between"
           align="center"
           pr={{ base: 3, md: 5 }}
@@ -35,9 +36,14 @@ export const Header: React.FC<Props> = ({ isLoading, ...styles }) => {
           {...styles}
         >
           <Link href="/decks">
-            <Logo />
+            <Logo w={`${logoWidth}px`} />
           </Link>
-          {user && <AccountMenu onSignOut={handleSignOut} />}
+          {user && (
+            <AccountMenu
+              onSignOut={handleSignOut}
+              boxSize={`${accountIconSize}px`}
+            />
+          )}
         </Flex>
         <Progress
           colorScheme="green"
@@ -45,7 +51,7 @@ export const Header: React.FC<Props> = ({ isLoading, ...styles }) => {
           isIndeterminate={isLoading}
         />
       </Box>
-      <Box h={`${headerHeight + progressHeight}px`} />
+      <Box h={`${barHeight + progressHeight}px`} />
     </>
   );
 };

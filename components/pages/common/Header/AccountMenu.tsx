@@ -22,6 +22,7 @@ export const AccountMenu: React.FC<Props> = ({ onSignOut, ...styles }) => {
         bgColor="gray.200"
         _hover={{ bgColor: "gray.300" }}
         _active={{ bgColor: "gray.400" }}
+        minW="none"
         boxSize="40px"
         p={0}
         {...styles}

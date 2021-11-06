@@ -6,14 +6,14 @@ type Props = BoxProps;
 export const PageTitle: React.FC<Props> = ({ children, ...styles }) => {
   return (
     <Box
-      padding={3}
+      padding={{ base: 1, md: 3 }}
       w="80%"
       bgColor="gray.700"
       boxShadow="dark-lg"
       borderRadius="md"
       {...styles}
     >
-      <Heading fontSize={{ base: "xl", md: "2xl" }} textAlign="center">
+      <Heading fontSize={{ base: "lg", md: "2xl" }} textAlign="center">
         {children}
       </Heading>
     </Box>
