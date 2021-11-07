@@ -39,11 +39,11 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
   };
 
   if (useMyDeckResult.status === "loading") {
-    return <></>;
+    return null;
   }
   if (useMyDeckResult.status === "error") {
     return (
-      <Center>
+      <Center mt={5}>
         <Heading>デッキの読み込みに失敗しました</Heading>
       </Center>
     );

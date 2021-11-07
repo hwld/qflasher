@@ -1,4 +1,3 @@
-import { Center, Heading } from "@chakra-ui/layout";
 import type { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
@@ -13,17 +12,12 @@ const Edit: NextPage = () => {
   useLoadingEffect(!router.isReady);
 
   if (!router.isReady) {
-    return <></>;
+    return null;
   }
 
   if (typeof id !== "string" || id === "") {
-    return (
-      <Center>
-        <Heading mt={10} size="4xl">
-          deckIdが無効です
-        </Heading>
-      </Center>
-    );
+    router.push("/");
+    return null;
   }
 
   const deckEditPage = (userId: string) => (

@@ -1,4 +1,3 @@
-import { Center, Heading } from "@chakra-ui/layout";
 import { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
@@ -15,15 +14,12 @@ const Play: NextPage = () => {
 
   // ルーターの準備ができるまで何も表示しない
   if (!router.isReady) {
-    return <></>;
+    return null;
   }
 
   if (typeof id !== "string" || id === "") {
-    return (
-      <Center mt={10}>
-        <Heading size="4xl">deckIdが無効です</Heading>
-      </Center>
-    );
+    router.push("/decks");
+    return null;
   }
 
   const page = (userId: string) => (
