@@ -141,7 +141,9 @@ export const DeckPlayer: React.FC<Props> = ({
   return (
     <Flex direction="column" {...styles}>
       <FlashCardViewer
+        maxW="800px"
         w="100%"
+        mx="auto"
         flexGrow={1}
         size={size}
         initialFront={config.initialFront}
