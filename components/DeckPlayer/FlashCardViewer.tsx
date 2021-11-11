@@ -25,6 +25,14 @@ export const FlashCardViewer: React.FC<Props> = ({
   topFront,
   ...styles
 }) => {
+  const isTopCard = (id: string) => {
+    const lastCardId = cards[cards.length - 1]?.id;
+    if (!lastCardId) {
+      return false;
+    }
+    return id === lastCardId;
+  };
+
   return (
     <Box
       position="relative"
@@ -34,16 +42,18 @@ export const FlashCardViewer: React.FC<Props> = ({
       {...styles}
     >
       {cards.length !== 0 ? (
-        cards.map((card, index) => (
-          <FlashCardItem
-            size={size}
-            key={card.id}
-            initialFront={initialFront}
-            card={card}
-            front={index === cards.length - 1 ? topFront : initialFront}
-            isBackground={index === cards.length - 1 ? false : true}
-          />
-        ))
+        cards
+          .slice(-2)
+          .map((card) => (
+            <FlashCardItem
+              size={size}
+              key={card.id}
+              initialFront={initialFront}
+              card={card}
+              front={isTopCard(card.id) ? topFront : initialFront}
+              isBackground={isTopCard(card.id) ? false : true}
+            />
+          ))
       ) : (
         <ResultItem
           size={size}
