@@ -18,7 +18,7 @@ const Play: NextPage = () => {
   }
 
   if (typeof id !== "string" || id === "") {
-    router.push("/decks");
+    router.push("/");
     return null;
   }
 

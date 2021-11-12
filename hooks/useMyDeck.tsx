@@ -1,5 +1,5 @@
 import { collection, doc, orderBy, query } from "firebase/firestore";
-import { useEffect, useMemo, useState } from "react";
+import { Reducer, useEffect, useMemo, useReducer } from "react";
 import { db } from "../firebase/config";
 import { cardConverter, deckConverter } from "../firebase/firestoreConverters";
 import { Deck } from "../types";
@@ -7,15 +7,33 @@ import { useFirestoreCollectionData } from "./useFirestoreCollectionData";
 import { useFirestoreDocData } from "./useFirestoreDocData";
 
 type UseMyDeckResult =
-  | { status: "loading"; deck: undefined }
+  | { status: "loading" }
   | { status: "success"; deck: Deck }
-  | { status: "error"; deck: undefined };
+  | { status: "error"; deck: undefined; error: "not-found" | "unknown" };
+
+type Action =
+  | { type: "load" }
+  | { type: "success"; deck: Deck }
+  | { type: "error"; error: "not-found" | "unknown" };
+
+const reducer: Reducer<UseMyDeckResult, Action> = (_, action) => {
+  switch (action.type) {
+    case "load": {
+      return { status: "loading" };
+    }
+    case "success": {
+      return { status: "success", deck: action.deck };
+    }
+    case "error": {
+      return { status: "error", error: action.error };
+    }
+  }
+};
 
 export const useMyDeck = (userId: string, deckId: string): UseMyDeckResult => {
-  const [deck, setDeck] = useState<Deck>();
-  const [status, setStatus] = useState<"loading" | "success" | "error">(
-    "loading"
-  );
+  const [state, dispatch] = useReducer(reducer, {
+    status: "loading",
+  });
 
   const deckRef = useMemo(() => {
     return doc(db, `users/${userId}/decks/${deckId}`).withConverter(
@@ -35,9 +53,15 @@ export const useMyDeck = (userId: string, deckId: string): UseMyDeckResult => {
 
   // deckDocとcardDoc[]からDeckを作成する
   useEffect(() => {
+    console.log("effect");
     //　どちらかがエラーだったらエラーにセットする
     if (deckInfoResult.status === "error" || cardsResult.status === "error") {
-      setStatus("error");
+      if (deckInfoResult.error?.code === "permission-denied") {
+        dispatch({ type: "error", error: "not-found" });
+        return;
+      }
+
+      dispatch({ type: "error", error: "unknown" });
       return;
     }
     // どちらかがロード中だったらロード中にセットする
@@ -45,11 +69,12 @@ export const useMyDeck = (userId: string, deckId: string): UseMyDeckResult => {
       deckInfoResult.status === "loading" ||
       cardsResult.status === "loading"
     ) {
-      setStatus("loading");
+      dispatch({ type: "load" });
       return;
     }
 
-    // firestoreのルールでドキュメントが存在しない場合にはエラーを出すようにしているので、例外を出す
+    // firestoreのルールでドキュメントが存在しない場合にはエラーを出すようにしているので、
+    // ここに到達したときにはvalueはundefinedではないはず
     if (!deckInfoResult.value) {
       throw new Error("Succeeded with non-existent deckInfo.");
     }
@@ -61,25 +86,8 @@ export const useMyDeck = (userId: string, deckId: string): UseMyDeckResult => {
       cardLength: deckInfo!.cardLength,
       cards: cardsResult.value,
     };
-    setDeck(deck);
-    setStatus("success");
-  }, [
-    cardsResult.status,
-    cardsResult.value,
-    deckInfoResult.status,
-    deckInfoResult.value,
-  ]);
+    dispatch({ type: "success", deck });
+  }, [cardsResult, deckInfoResult]);
 
-  switch (status) {
-    case "loading": {
-      return { status, deck: undefined };
-    }
-    case "success": {
-      // successのときはdeckはundefinedではない
-      return { status, deck: deck! };
-    }
-    case "error": {
-      return { status, deck: undefined };
-    }
-  }
+  return state;
 };

@@ -16,7 +16,7 @@ export const AuthRequiredPage: React.VFC<AuthRequiredPageProps> = ({
   useLoadingEffect(loading);
 
   if (loading) {
-    return <></>;
+    return null;
   } else if (user) {
     return children(user.uid);
   } else {

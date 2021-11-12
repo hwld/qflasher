@@ -82,10 +82,8 @@ export const DeckCard: React.FC<Props> = ({
         rounded="2xl"
         direction="column"
         justify="space-between"
-        paddingTop={5}
+        p={3}
         paddingLeft={5}
-        paddingRight={3}
-        paddingBottom={2}
         boxShadow="dark-lg"
       >
         <Flex justify="space-between" grow={1} minH={0}>
@@ -96,20 +94,9 @@ export const DeckCard: React.FC<Props> = ({
               fontSize={nameFontSize}
               minH={0}
               overflowY="auto"
-            >
-              {deck.name}
-            </Text>
-            <Text
-              flexGrow={0}
-              flexShrink={0}
-              fontSize={metaFontSize}
-              fontWeight="bold"
-              color="gray.300"
-              ml={3}
-              textOverflow="ellipsis"
               wordBreak="break-all"
             >
-              枚数: {deck.cardLength}
+              {deck.name}
             </Text>
           </Flex>
           <DeckCardButton ml={3} label="固定" flexShrink={0}>
@@ -117,17 +104,31 @@ export const DeckCard: React.FC<Props> = ({
           </DeckCardButton>
         </Flex>
 
-        <Flex shrink={0} align="baseline" justify="space-between">
-          <Flex>
-            <DeleteDeckButton onDelete={handleDelete} />
-            <DeckCardButton ml={2} label="編集" onClick={handleUpdateDeck}>
-              <MdEdit size="60%" />
-            </DeckCardButton>
+        <Flex shrink={0} align="end" justify="space-between">
+          <Flex direction="column">
+            <Text
+              flexGrow={0}
+              flexShrink={0}
+              fontSize={metaFontSize}
+              fontWeight="bold"
+              color="gray.300"
+              ml={2}
+              textOverflow="ellipsis"
+              wordBreak="break-all"
+            >
+              枚数: {deck.cardLength}
+            </Text>
+            <Flex mt={1}>
+              <DeleteDeckButton onDelete={handleDelete} />
+              <DeckCardButton ml={2} label="編集" onClick={handleUpdateDeck}>
+                <MdEdit size="60%" />
+              </DeckCardButton>
+            </Flex>
           </Flex>
           <Flex>
             <Tooltip label="暗記">
               <Button
-                boxSize="50px"
+                boxSize="60px"
                 rounded="full"
                 colorScheme="green"
                 bgColor="green.300"
