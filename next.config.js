@@ -9,6 +9,7 @@ module.exports = {
       "/decks/create": { page: "/decks/create" },
       "/decks/edit": { page: "/decks/edit" },
       "/decks/play": { page: "/decks/play" },
+      "/404.html": { page: "/404" },
     };
   },
 };
