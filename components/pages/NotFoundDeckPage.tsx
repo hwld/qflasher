@@ -11,7 +11,7 @@ export const NotFoundDeckPage: React.FC = () => {
   };
 
   return (
-    <Box flexGrow={1}>
+    <Box>
       <Flex
         direction="column"
         justify="space-around"

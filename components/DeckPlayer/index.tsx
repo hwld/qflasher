@@ -1,4 +1,4 @@
-import { Flex, FlexProps } from "@chakra-ui/react";
+import { Grid, GridProps } from "@chakra-ui/react";
 import React from "react";
 import { Deck } from "../../types";
 import { DeckPlayConfig } from "../pages/DeckPlayerPage";
@@ -10,7 +10,7 @@ type Props = {
   deck: Deck;
   config: DeckPlayConfig;
   size: "sm" | "md";
-} & FlexProps;
+} & GridProps;
 
 export const DeckPlayer: React.FC<Props> = ({
   deck,
@@ -33,12 +33,11 @@ export const DeckPlayer: React.FC<Props> = ({
   } = useDeckPlayerState(deck, config);
 
   return (
-    <Flex direction="column" {...styles}>
+    <Grid templateRows="1fr auto" {...styles}>
       <FlashCardViewer
         maxW="800px"
         w="100%"
         mx="auto"
-        flexGrow={1}
         size={size}
         initialFront={config.initialFront}
         totalCardsCount={totalCardsCount}
@@ -59,6 +58,6 @@ export const DeckPlayer: React.FC<Props> = ({
         onReplayAll={handleReplayAll}
         justify="center"
       />
-    </Flex>
+    </Grid>
   );
 };

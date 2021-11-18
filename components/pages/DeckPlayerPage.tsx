@@ -1,4 +1,4 @@
-import { Center, Flex, Text, useBreakpointValue } from "@chakra-ui/react";
+import { Center, Grid, Text, useBreakpointValue } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useLoadingEffect } from "../../hooks/useLoadingEffect";
 import { useMyDeck } from "../../hooks/useMyDeck";
@@ -50,7 +50,7 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
         return <PlaySettingPage onComplete={handleCompleteSetting} />;
       }
       return (
-        <Flex flexGrow={1} direction="column">
+        <Grid templateRows="auto 1fr" h="100%">
           <Center mt={5} maxW="700px" mx="auto">
             <Text
               fontWeight="bold"
@@ -61,7 +61,6 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
             </Text>
           </Center>
           <DeckPlayer
-            flexGrow={1}
             mt={5}
             mx="auto"
             w="90%"
@@ -69,7 +68,7 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
             deck={useMyDeckResult.deck}
             config={config}
           />
-        </Flex>
+        </Grid>
       );
     }
   }
