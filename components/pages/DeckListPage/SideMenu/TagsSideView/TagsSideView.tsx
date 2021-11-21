@@ -1,12 +1,11 @@
 import { Box, Button, Flex, Grid, Text } from "@chakra-ui/react";
 import React, { Reducer, useReducer } from "react";
 import { RiAddFill } from "react-icons/ri";
+import { Tag } from "../../../../../types";
 import { assertNever } from "../../../../../utils/assertNever";
 import { TagList } from "./TagList/TagList";
 
 type Props = {};
-
-export type Tag = { id: string; name: string };
 
 type State = { isAll: boolean; selectedTagId: string };
 type Action = { type: "selectTag"; tagId: string } | { type: "selectAll" };

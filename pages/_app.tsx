@@ -17,6 +17,9 @@ const NoSSR: React.FC = ({ children }) => {
 };
 
 function MyApp({ Component, pageProps }: AppProps) {
+  // @ts-ignore
+  const getProvider = Component.getProvider || ((page: unknown) => page);
+
   return (
     <NoSSR>
       <Head>
@@ -28,9 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <ChakraProvider theme={theme}>
         <AppStateContextProvider>
-          <AppTemplate>
-            <Component {...pageProps} />
-          </AppTemplate>
+          <AppTemplate>{getProvider(<Component {...pageProps} />)}</AppTemplate>
         </AppStateContextProvider>
       </ChakraProvider>
     </NoSSR>

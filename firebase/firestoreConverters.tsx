@@ -1,5 +1,5 @@
 import { FirestoreDataConverter } from "firebase/firestore";
-import { FirestoreDeck, FirestoreFlashCard } from "../types";
+import { FirestoreDeck, FirestoreFlashCard, FirestoreTag } from "../types";
 
 export const deckConverter: FirestoreDataConverter<FirestoreDeck> = {
   fromFirestore: (snapshot, option) => {
@@ -38,5 +38,15 @@ export const cardConverter: FirestoreDataConverter<FirestoreFlashCard> = {
       question: card.question,
       answer: card.answer,
     };
+  },
+};
+
+export const flagConverter: FirestoreDataConverter<FirestoreTag> = {
+  fromFirestore: (snapshot, options) => {
+    const flag = snapshot.data(options)!;
+    return { id: flag.id, name: flag.name, createdAt: flag.createdAt };
+  },
+  toFirestore: (flag) => {
+    return { id: flag.id, name: flag.name, createdAt: flag.createdAt };
   },
 };
