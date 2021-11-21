@@ -53,7 +53,6 @@ export const useMyDeck = (userId: string, deckId: string): UseMyDeckResult => {
 
   // deckDocとcardDoc[]からDeckを作成する
   useEffect(() => {
-    console.log("effect");
     //　どちらかがエラーだったらエラーにセットする
     if (deckInfoResult.status === "error" || cardsResult.status === "error") {
       if (deckInfoResult.error?.code === "permission-denied") {

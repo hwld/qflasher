@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/layout";
+import { Center } from "@chakra-ui/layout";
 import React, { ReactElement } from "react";
 import { useAuthState } from "../hooks/useAuthState";
 import { useLoadingEffect } from "../hooks/useLoadingEffect";
@@ -21,9 +21,9 @@ export const AuthRequiredPage: React.VFC<AuthRequiredPageProps> = ({
     return children(user.uid);
   } else {
     return (
-      <Box mx="auto">
+      <Center mx="auto">
         <SignInForm mt={10} />
-      </Box>
+      </Center>
     );
   }
 };
