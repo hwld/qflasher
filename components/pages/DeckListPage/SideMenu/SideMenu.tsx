@@ -1,6 +1,7 @@
 import { Box, Flex } from "@chakra-ui/layout";
 import React from "react";
 import { AiFillTags, AiOutlineSearch } from "react-icons/ai";
+import { UseTagsResult } from "../../../../hooks/useTags";
 import { SideArea } from "./SideArea";
 import { SideMenuItem } from "./SideMenuItem";
 import { TagsSideView } from "./TagsSideView/TagsSideView";
@@ -10,9 +11,16 @@ export type SideMenuChoices = "tags" | "search" | "none";
 type Props = {
   selected: SideMenuChoices;
   onSelect: (selected: SideMenuChoices) => void;
-};
+} & UseTagsResult;
 
-export const SideMenu: React.FC<Props> = ({ selected, onSelect }) => {
+export const SideMenu: React.FC<Props> = ({
+  selected,
+  onSelect,
+  tags,
+  addTag,
+  deleteTag,
+  updateTag,
+}) => {
   const handleClickTags = () => {
     if (selected === "tags") {
       onSelect("none");
@@ -43,7 +51,16 @@ export const SideMenu: React.FC<Props> = ({ selected, onSelect }) => {
         />
       </Box>
       {selected !== "none" && (
-        <SideArea>{selected === "tags" && <TagsSideView />}</SideArea>
+        <SideArea>
+          {selected === "tags" && (
+            <TagsSideView
+              tags={tags}
+              addTag={addTag}
+              updateTag={updateTag}
+              deleteTag={deleteTag}
+            />
+          )}
+        </SideArea>
       )}
     </Flex>
   );

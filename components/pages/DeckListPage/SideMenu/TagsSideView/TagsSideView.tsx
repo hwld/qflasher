@@ -1,11 +1,11 @@
 import { Box, Button, Flex, Grid, Text } from "@chakra-ui/react";
 import React, { Reducer, useReducer } from "react";
 import { RiAddFill } from "react-icons/ri";
-import { Tag } from "../../../../../types";
+import { UseTagsResult } from "../../../../../hooks/useTags";
 import { assertNever } from "../../../../../utils/assertNever";
-import { TagList } from "./TagList/TagList";
+import { TagList } from "../../../../TagList/TagList";
 
-type Props = {};
+type Props = {} & UseTagsResult;
 
 type State = { isAll: boolean; selectedTagId: string };
 type Action = { type: "selectTag"; tagId: string } | { type: "selectAll" };
@@ -30,12 +30,12 @@ const reducer: Reducer<State, Action> = (state, action) => {
   }
 };
 
-export const TagsSideView: React.FC<Props> = ({}) => {
-  const tags: Tag[] = [...new Array(10)].map((_, i) => ({
-    id: i.toString(),
-    name: `タグ${i}`,
-  }));
-
+export const TagsSideView: React.FC<Props> = ({
+  tags,
+  addTag,
+  updateTag,
+  deleteTag,
+}) => {
   const [{ isAll, selectedTagId }, dispatch] = useReducer(reducer, {
     isAll: true,
     selectedTagId: "",
@@ -47,6 +47,10 @@ export const TagsSideView: React.FC<Props> = ({}) => {
 
   const selectTag = (id: string) => {
     dispatch({ type: "selectTag", tagId: id });
+  };
+
+  const handleClickAdd = () => {
+    addTag({ name: "新しいタグ" });
   };
 
   return (
@@ -61,6 +65,7 @@ export const TagsSideView: React.FC<Props> = ({}) => {
           mr={1}
           minW="none"
           p={0}
+          onClick={handleClickAdd}
         >
           <RiAddFill size="100%" />
         </Button>
@@ -93,6 +98,8 @@ export const TagsSideView: React.FC<Props> = ({}) => {
         selectedId={selectedTagId}
         selectTag={selectTag}
         overflow="auto"
+        updateTag={updateTag}
+        deleteTag={deleteTag}
       />
     </Grid>
   );

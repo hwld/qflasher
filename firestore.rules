@@ -1,5 +1,17 @@
 rules_version = '2';
 service cloud.firestore {
+  function isValidTag(tag,id){
+    return tag.size() == 3
+    && 'id' in tag
+    && tag.id is string
+    && tag.id == id
+    && 'name' in tag
+    && tag.name is string
+    && tag.name.size() > 0 && tag.name.size() <= 100
+    && 'createdAt' in tag
+    && tag.createdAt is timestamp
+  }
+
   function isValidCard(card,id){
     return card.size() == 4
     && 'id' in card
@@ -40,6 +52,14 @@ service cloud.firestore {
       allow read, write: if false;
     }
     match /users/{userId} {
+      match /tags/{tagId} {
+        allow create: if isAuth(userId) && isValidTag(request.resource.data, tagId);
+        allow update: if isAuth(userId) && isValidTag(request.resource.data, tagId);
+        allow delete: if isAuth(userId);
+
+        allow get: if isAuth(userId) && exists(request.path);
+        allow list: if isAuth(userId);
+      }
       match /decks/{deckId} {
         allow create: if isAuth(userId) && isValidDeck(request.resource.data, deckId);
         allow update: if isAuth(userId) && isValidDeck(request.resource.data, deckId);

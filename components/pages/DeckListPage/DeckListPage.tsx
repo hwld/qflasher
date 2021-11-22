@@ -5,6 +5,7 @@ import { MdAdd } from "react-icons/md";
 import { useDeckList } from "../../../hooks/useDeckList";
 import { useDeckOperation } from "../../../hooks/useDeckOperation";
 import { useLoadingEffect } from "../../../hooks/useLoadingEffect";
+import { useTags } from "../../../hooks/useTags";
 import { DeckList } from "../../DeckList";
 import { Fab } from "../common/Fab";
 import { PageTitle } from "../common/PageTitle";
@@ -14,6 +15,8 @@ type DeckListPageProps = { userId: string };
 
 export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
   const router = useRouter();
+
+  const { tags, addTag, updateTag, deleteTag } = useTags(userId);
   const useDeckListResult = useDeckList(userId);
   const { deleteDeck } = useDeckOperation(userId);
 
@@ -50,7 +53,14 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
 
   return (
     <Flex h="100%">
-      <SideMenu selected={selected} onSelect={handleSelect} />
+      <SideMenu
+        selected={selected}
+        onSelect={handleSelect}
+        tags={tags}
+        addTag={addTag}
+        updateTag={updateTag}
+        deleteTag={deleteTag}
+      />
       <Box flexGrow={1} overflow="auto">
         <PageTitle my={{ base: 3, md: 5 }} mx="auto">
           デッキ一覧
