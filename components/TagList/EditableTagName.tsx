@@ -8,12 +8,12 @@ import React, {
 } from "react";
 
 type Props = {
-  defaultTagName: string;
+  defaultTagName?: string;
   onComplete: (tagName: string) => void;
 };
 
 export const EditableTagName: React.FC<Props> = ({
-  defaultTagName,
+  defaultTagName = "",
   onComplete,
 }) => {
   const ref = useRef<HTMLInputElement | null>(null);
@@ -25,21 +25,13 @@ export const EditableTagName: React.FC<Props> = ({
     setTagName(value);
   };
 
-  const completeUpdate = () => {
-    if (tagName === "") {
-      onComplete(defaultTagName);
-    } else {
-      onComplete(tagName);
-    }
-  };
-
   const handleInputBlur = () => {
-    completeUpdate();
+    onComplete(tagName);
   };
 
   const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = ({ key }) => {
     if (key === "Enter") {
-      completeUpdate();
+      onComplete(tagName);
     }
   };
 

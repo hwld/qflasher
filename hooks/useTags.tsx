@@ -15,7 +15,7 @@ import { useFirestoreCollectionData } from "./useFirestoreCollectionData";
 
 export type UseTagsResult = {
   tags: Tag[];
-  addTag: (formTag: Omit<Tag, "id">) => Promise<void>;
+  addTag: (formTag: Omit<Tag, "id">) => Promise<Tag>;
   updateTag: (newTag: Tag) => Promise<void>;
   deleteTag: (id: string) => Promise<void>;
 };
@@ -26,7 +26,7 @@ export const useTags = (userId: string): UseTagsResult => {
     [userId]
   );
   const tagsQuery = useMemo(
-    () => query(tagsRef, orderBy("createdAt", "asc")),
+    () => query(tagsRef, orderBy("createdAt", "desc")),
     [tagsRef]
   );
 
@@ -44,6 +44,8 @@ export const useTags = (userId: string): UseTagsResult => {
         name: formTag.name,
         createdAt: serverTimestamp(),
       });
+
+      return { id: tagRef.id, ...formTag };
     },
     [tagsRef]
   );

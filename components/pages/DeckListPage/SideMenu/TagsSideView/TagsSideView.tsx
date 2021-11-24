@@ -4,6 +4,7 @@ import { RiAddFill } from "react-icons/ri";
 import { UseTagsResult } from "../../../../../hooks/useTags";
 import { assertNever } from "../../../../../utils/assertNever";
 import { TagList } from "../../../../TagList/TagList";
+import { useTagListItems } from "../../../../TagList/useTagListItems";
 
 type Props = {} & UseTagsResult;
 
@@ -36,6 +37,9 @@ export const TagsSideView: React.FC<Props> = ({
   updateTag,
   deleteTag,
 }) => {
+  const { tagListItems, addTagCreator, addTagData, deleteTagCreator } =
+    useTagListItems(tags, addTag);
+
   const [{ isAll, selectedTagId }, dispatch] = useReducer(reducer, {
     isAll: true,
     selectedTagId: "",
@@ -50,7 +54,7 @@ export const TagsSideView: React.FC<Props> = ({
   };
 
   const handleClickAdd = () => {
-    addTag({ name: "新しいタグ" });
+    addTagCreator();
   };
 
   return (
@@ -94,10 +98,12 @@ export const TagsSideView: React.FC<Props> = ({
         </Box>
       </Box>
       <TagList
-        tags={tags}
-        selectedId={selectedTagId}
-        selectTag={selectTag}
         overflow="auto"
+        tagListItems={tagListItems}
+        selectedId={selectedTagId}
+        addTagData={addTagData}
+        deleteTagCreator={deleteTagCreator}
+        selectTag={selectTag}
         updateTag={updateTag}
         deleteTag={deleteTag}
       />

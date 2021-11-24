@@ -1,19 +1,24 @@
 import { ListProps, UnorderedList } from "@chakra-ui/layout";
 import React from "react";
-import { Tag } from "../../types";
+import { UseTagsResult } from "../../hooks/useTags";
 import { TagListItem } from "./TagListItem";
+import { TagListItemType, UseTagListItemsResult } from "./useTagListItems";
 
 type Props = {
-  tags: Tag[];
+  tagListItems: TagListItemType[];
   selectedId: string;
+  deleteTagCreator: UseTagListItemsResult["deleteTagCreator"];
+  addTagData: UseTagListItemsResult["addTagData"];
   selectTag: (tagId: string) => void;
-  updateTag: (tag: Tag) => void;
-  deleteTag: (id: string) => void;
+  updateTag: UseTagsResult["updateTag"];
+  deleteTag: UseTagsResult["deleteTag"];
 } & ListProps;
 
 export const TagList: React.FC<Props> = ({
-  tags,
+  tagListItems,
   selectedId,
+  deleteTagCreator,
+  addTagData,
   selectTag,
   updateTag,
   deleteTag,
@@ -21,13 +26,15 @@ export const TagList: React.FC<Props> = ({
 }) => {
   return (
     <UnorderedList listStyleType="none" m={0} p={0} {...styles}>
-      {tags.map((tag) => {
+      {tagListItems.map((tag) => {
         return (
           <TagListItem
             key={tag.id}
-            tag={tag}
+            tagListItem={tag}
             onSelect={selectTag}
             selected={selectedId === tag.id}
+            deleteTagCreator={deleteTagCreator}
+            addTagData={addTagData}
             updateTag={updateTag}
             deleteTag={deleteTag}
           />
