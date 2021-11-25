@@ -15,7 +15,7 @@ import { useFirestoreCollectionData } from "./useFirestoreCollectionData";
 
 export type UseTagsResult = {
   tags: Tag[];
-  addTag: (formTag: Omit<Tag, "id">) => Promise<Tag>;
+  addTag: (tag: Tag) => Promise<Tag>;
   updateTag: (newTag: Tag) => Promise<void>;
   deleteTag: (id: string) => Promise<void>;
 };
@@ -37,15 +37,15 @@ export const useTags = (userId: string): UseTagsResult => {
   }, [tagsData.value]);
 
   const addTag = useCallback(
-    async (formTag: Omit<Tag, "id">) => {
-      const tagRef = doc(tagsRef);
+    async (tag: Tag) => {
+      const tagRef = doc(tagsRef, tag.id);
       await setDoc(tagRef, {
         id: tagRef.id,
-        name: formTag.name,
+        name: tag.name,
         createdAt: serverTimestamp(),
       });
 
-      return { id: tagRef.id, ...formTag };
+      return { ...tag };
     },
     [tagsRef]
   );

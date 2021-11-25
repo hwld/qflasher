@@ -102,6 +102,7 @@ export const TagsSideView: React.FC<Props> = ({
         tagListItems={tagListItems}
         selectedId={selectedTagId}
         addTagData={addTagData}
+        addTagCreator={addTagCreator}
         deleteTagCreator={deleteTagCreator}
         selectTag={selectTag}
         updateTag={updateTag}

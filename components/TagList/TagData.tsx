@@ -5,7 +5,7 @@ import { MdDelete, MdEdit } from "react-icons/md";
 import { useSetAppState } from "../../context/AppStateContextProvider";
 import { UseTagsResult } from "../../hooks/useTags";
 import { Tag } from "../../types";
-import { EditableTagName } from "./EditableTagName";
+import { EditableTagName, EditableTagNameProps } from "./EditableTagName";
 
 type Props = {
   tag: Tag;
@@ -25,7 +25,7 @@ export const TagData: React.FC<Props> = ({
   const { startLoading, endLoading } = useSetAppState();
   const [editable, setEditable] = useState(false);
 
-  const onCompleteUpdate = async (tagName: string) => {
+  const completeUpdate = async (tagName: string) => {
     if (tagName !== "" && tag.name !== tagName) {
       let id = startLoading();
       await updateTag({ ...tag, name: tagName });
@@ -34,12 +34,25 @@ export const TagData: React.FC<Props> = ({
     setEditable(false);
   };
 
-  const onClickEdit = (e: SyntheticEvent) => {
+  const handleKeyDownEditableTagName: EditableTagNameProps["onKeyDown"] = (
+    { key },
+    tagName
+  ) => {
+    if (key === "Enter") {
+      completeUpdate(tagName);
+    }
+  };
+
+  const handleBlurEditableTagName = (tagName: string) => {
+    completeUpdate(tagName);
+  };
+
+  const handleClickEdit = (e: SyntheticEvent) => {
     e.stopPropagation();
     setEditable(true);
   };
 
-  const onClickDelete = (e: SyntheticEvent) => {
+  const handleClickDelete = (e: SyntheticEvent) => {
     e.stopPropagation();
     deleteTag(tag.id);
   };
@@ -49,7 +62,8 @@ export const TagData: React.FC<Props> = ({
       {editable ? (
         <EditableTagName
           defaultTagName={tag.name}
-          onComplete={onCompleteUpdate}
+          onKeyDown={handleKeyDownEditableTagName}
+          onBlur={handleBlurEditableTagName}
         />
       ) : (
         <>
@@ -81,7 +95,7 @@ export const TagData: React.FC<Props> = ({
               mr={1}
               p={0}
               variant="outline"
-              onClick={onClickEdit}
+              onClick={handleClickEdit}
             >
               <MdEdit size="70%" />
             </Button>
@@ -91,7 +105,7 @@ export const TagData: React.FC<Props> = ({
               minW="none"
               p={0}
               variant="outline"
-              onClick={onClickDelete}
+              onClick={handleClickDelete}
             >
               <MdDelete size="70%" />
             </Button>

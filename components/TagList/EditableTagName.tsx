@@ -7,14 +7,19 @@ import React, {
   useState,
 } from "react";
 
-type Props = {
+export type EditableTagNameProps = {
   defaultTagName?: string;
-  onComplete: (tagName: string) => void;
+  onKeyDown: (
+    event: React.KeyboardEvent<HTMLInputElement>,
+    tagName: string
+  ) => void;
+  onBlur: (tagName: string) => void;
 };
 
-export const EditableTagName: React.FC<Props> = ({
+export const EditableTagName: React.FC<EditableTagNameProps> = ({
   defaultTagName = "",
-  onComplete,
+  onKeyDown,
+  onBlur,
 }) => {
   const ref = useRef<HTMLInputElement | null>(null);
   const [tagName, setTagName] = useState(defaultTagName);
@@ -26,13 +31,11 @@ export const EditableTagName: React.FC<Props> = ({
   };
 
   const handleInputBlur = () => {
-    onComplete(tagName);
+    onBlur(tagName);
   };
 
-  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = ({ key }) => {
-    if (key === "Enter") {
-      onComplete(tagName);
-    }
+  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
+    onKeyDown(event, tagName);
   };
 
   useEffect(() => {

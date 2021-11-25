@@ -12,6 +12,7 @@ type Props = {
   tagListItem: TagListItemType;
   onSelect: (id: string) => void;
   selected: boolean;
+  addTagCreator: UseTagListItemsResult["addTagCreator"];
   deleteTagCreator: UseTagListItemsResult["deleteTagCreator"];
   addTagData: UseTagListItemsResult["addTagData"];
   updateTag: UseTagsResult["updateTag"];
@@ -22,6 +23,7 @@ export const TagListItem: React.FC<Props> = ({
   tagListItem,
   onSelect,
   selected,
+  addTagCreator,
   deleteTagCreator,
   addTagData,
   updateTag,
@@ -51,6 +53,7 @@ export const TagListItem: React.FC<Props> = ({
           <TagCreator
             creatorId={tagListItem.id}
             addTagData={addTagData}
+            addTagCreator={addTagCreator}
             deleteTagCreator={deleteTagCreator}
           />
         );
@@ -60,6 +63,7 @@ export const TagListItem: React.FC<Props> = ({
       }
     }
   }, [
+    addTagCreator,
     addTagData,
     deleteTag,
     deleteTagCreator,
