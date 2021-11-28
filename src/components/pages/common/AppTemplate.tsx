@@ -8,7 +8,14 @@ export const AppTemplate: React.FC = ({ children }) => {
   const size =
     useBreakpointValue<"sm" | "md">({ base: "sm", md: "md" }) ?? "md";
   return (
-    <Grid templateRows="auto 1fr" h="100vh" overflow="hidden">
+    <Grid
+      templateRows="auto 1fr"
+      h="100vh"
+      overflow="hidden"
+      bgImage="url('/background.svg')"
+      bgPosition="center"
+      bgSize="cover"
+    >
       <Header isLoading={isLoading} size={size} />
       <Box overflow="auto">{children}</Box>
     </Grid>
