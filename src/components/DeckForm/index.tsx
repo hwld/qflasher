@@ -1,5 +1,5 @@
 import { Box, Text } from "@chakra-ui/layout";
-import { Button, useToast } from "@chakra-ui/react";
+import { Button, Icon, useToast } from "@chakra-ui/react";
 import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { MdAdd } from "react-icons/md";
@@ -232,8 +232,12 @@ export const DeckForm: React.FC<DeckFormProps> = ({
         borderRadius="md"
         boxShadow="dark-lg"
         onClick={addCardEditor}
+        bgColor="gray.500"
+        _hover={{ bgColor: "gray.600" }}
+        _active={{ bgColor: "gray.700" }}
       >
-        <MdAdd size="100%" />
+        <Icon as={MdAdd} boxSize="40px" />
+        <Text fontWeight="bold">カードを追加</Text>
       </Button>
     </Box>
   );

@@ -6,7 +6,6 @@ import {
   useBreakpointValue,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { PageTitle } from "./common/PageTitle";
 import { DeckPlayConfig } from "./DeckPlayerPage";
 
 type Props = {
@@ -27,10 +26,13 @@ export const PlaySettingPage: React.FC<Props> = ({ onComplete }) => {
 
   return (
     <Box>
-      <PageTitle my={{ base: 3, md: 5 }} mx="auto">
-        暗記設定
-      </PageTitle>
-      <Flex flexDir="column" maxW="800px" m="auto" alignItems="center">
+      <Flex
+        my={{ base: 3, md: 5 }}
+        flexDir="column"
+        maxW="800px"
+        m="auto"
+        alignItems="center"
+      >
         <Box p={{ base: 3, md: 5 }} bgColor="gray.700" w="100%">
           <Checkbox
             size={checkBoxSize}

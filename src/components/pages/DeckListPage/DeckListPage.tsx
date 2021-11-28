@@ -8,7 +8,6 @@ import { useLoadingEffect } from "../../../hooks/useLoadingEffect";
 import { useTags } from "../../../hooks/useTags";
 import { DeckList } from "../../DeckList";
 import { Fab } from "../common/Fab";
-import { PageTitle } from "../common/PageTitle";
 import { SideMenu, SideMenuChoices } from "./SideMenu/SideMenu";
 
 type DeckListPageProps = { userId: string };
@@ -62,10 +61,7 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
         deleteTag={deleteTag}
       />
       <Box flexGrow={1} overflow="auto">
-        <PageTitle my={{ base: 3, md: 5 }} mx="auto">
-          デッキ一覧
-        </PageTitle>
-        {deckList}
+        <Box my={{ base: 3, md: 5 }}>{deckList}</Box>
         <Fab tooltipLabel="追加" onClick={handleAddDeck}>
           <MdAdd size="70%" />
         </Fab>
