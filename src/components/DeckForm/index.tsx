@@ -4,13 +4,15 @@ import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { MdAdd } from "react-icons/md";
 import { useDebounce } from "../../hooks/useDebounce";
-import { Deck, FlashCard } from "../../types";
+import { Deck, FlashCard, Tag } from "../../types";
 import { CardEditor } from "./CardEditor";
 import { DeckFormInput } from "./DeckFormInput";
+import { TagsSelect } from "./TagsSelect";
 import { useCardIds } from "./useCardIds";
 import { useDeckForm } from "./useDeckForm";
 
 export type DeckFormProps = {
+  tags: Tag[];
   defaultDeck?: Deck;
   formId: string;
   // ctrl+EnterでもSubmitされるようにする
@@ -24,6 +26,7 @@ export type DeckFormFields = {
 };
 
 export const DeckForm: React.FC<DeckFormProps> = ({
+  tags,
   defaultDeck = { id: "", name: "", cards: [], cardLength: 0 },
   formId,
   onSubmit,
@@ -196,6 +199,20 @@ export const DeckForm: React.FC<DeckFormProps> = ({
           onKeyDown={handleKeyDownInName}
           mt={3}
         />
+      </Box>
+      <Box
+        mt={2}
+        bgColor="gray.700"
+        padding={5}
+        borderRadius="md"
+        boxShadow="dark-lg"
+      >
+        <Text fontWeight="bold" fontSize="xl">
+          タグ
+        </Text>
+        <Box mt={3}>
+          <TagsSelect tags={tags}  />
+        </Box>
       </Box>
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="cardEditors">

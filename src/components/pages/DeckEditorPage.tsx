@@ -6,6 +6,7 @@ import { useSetAppState } from "../../context/AppStateContextProvider";
 import { useDeckOperation } from "../../hooks/useDeckOperation";
 import { useLoadingEffect } from "../../hooks/useLoadingEffect";
 import { useMyDeck } from "../../hooks/useMyDeck";
+import { useTags } from "../../hooks/useTags";
 import { DeckForm, DeckFormProps } from "../DeckForm";
 import { Fab } from "./common/Fab";
 import { DeckLoadingErrorPage } from "./DeckLoadingErrorPage";
@@ -19,6 +20,7 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
 }) => {
   const router = useRouter();
   const toast = useToast();
+  const { tags } = useTags(userId);
   const { updateDeck } = useDeckOperation(userId);
   const { startLoading, endLoading } = useSetAppState();
   const useMyDeckResult = useMyDeck(userId, deckId);
@@ -61,6 +63,7 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
         <Box>
           <Box my={{ base: 3, md: 5 }} maxW="800px" marginX="auto">
             <DeckForm
+              tags={tags}
               defaultDeck={useMyDeckResult.deck}
               formId={formId}
               onSubmit={handleUpdateDeck}
