@@ -9,6 +9,8 @@ import { DeckFormFields } from "./useDeckForm";
 
 type PropsWithoutInput = {
   control: Control<DeckFormFields>;
+  // react-hook-formのFieldPathを使うとcards.${number}も受け入れるようになり、
+  // オブジェクト形式のvalueがInputに渡ってしまう。
   name: `name` | `cards.${number}.question` | `cards.${number}.answer`;
   error?: FieldError;
 } & {

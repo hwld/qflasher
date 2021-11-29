@@ -2,10 +2,10 @@ import { Box, BoxProps, Stack } from "@chakra-ui/react";
 import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { Control, FormState } from "react-hook-form";
-import { DeckFormFields } from "..";
 import { FlashCard } from "../../../types";
-import { CardEditorHeader } from "./CardEditorHeader";
 import { DeckFormInput } from "../DeckFormInput";
+import { DeckFormFields } from "../useDeckForm";
+import { CardEditorHeader } from "./CardEditorHeader";
 
 export type CardEditorHandler = {
   focusQuestion: () => void;

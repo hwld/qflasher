@@ -19,12 +19,6 @@ export type DeckFormProps = {
   onSubmit: (arg: { newDeck: Deck; oldCards: FlashCard[] }) => void;
 };
 
-export type DeckFormFields = {
-  name: string;
-  // cardsがそんざいしない可能性があるのでundefinedとのunionを取る
-  cards: Omit<FlashCard, "id">[] | undefined;
-};
-
 export const DeckForm: React.FC<DeckFormProps> = ({
   tags,
   defaultDeck = { id: "", name: "", cards: [], cardLength: 0 },
@@ -211,7 +205,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
           タグ
         </Text>
         <Box mt={3}>
-          <TagsSelect tags={tags}  />
+          <TagsSelect control={control} tags={tags} />
         </Box>
       </Box>
       <DragDropContext onDragEnd={handleDragEnd}>
