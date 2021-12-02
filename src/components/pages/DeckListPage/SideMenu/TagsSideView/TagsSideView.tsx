@@ -8,22 +8,18 @@ import { useTagListItems } from "../../../../TagList/useTagListItems";
 
 type Props = {} & UseTagsResult;
 
-type State = { isAll: boolean; selectedTagId: string };
+type State =
+  | { isAllSelected: true; selectedTagId: undefined }
+  | { isAllSelected: false; selectedTagId: string };
 type Action = { type: "selectTag"; tagId: string } | { type: "selectAll" };
 
 const reducer: Reducer<State, Action> = (state, action) => {
   switch (action.type) {
     case "selectTag": {
-      if (state.selectedTagId === action.tagId) {
-        return { isAll: true, selectedTagId: "" };
-      }
-      return { isAll: false, selectedTagId: action.tagId };
+      return { isAllSelected: false, selectedTagId: action.tagId };
     }
     case "selectAll": {
-      if (state.isAll) {
-        return state;
-      }
-      return { isAll: true, selectedTagId: "" };
+      return { isAllSelected: true, selectedTagId: undefined };
     }
     default: {
       return assertNever(action);
@@ -40,9 +36,9 @@ export const TagsSideView: React.FC<Props> = ({
   const { tagListItems, addTagCreator, addTagData, deleteTagCreator } =
     useTagListItems(tags, addTag);
 
-  const [{ isAll, selectedTagId }, dispatch] = useReducer(reducer, {
-    isAll: true,
-    selectedTagId: "",
+  const [{ isAllSelected, selectedTagId }, dispatch] = useReducer(reducer, {
+    isAllSelected: true,
+    selectedTagId: undefined,
   });
 
   const handleClickShowAll = () => {
@@ -76,7 +72,7 @@ export const TagsSideView: React.FC<Props> = ({
       </Flex>
       <Box
         bgColor="whiteAlpha.200"
-        aria-selected={isAll}
+        aria-selected={isAllSelected}
         _selected={{ bgColor: "whiteAlpha.400" }}
         m={3}
         rounded="md"
@@ -90,7 +86,7 @@ export const TagsSideView: React.FC<Props> = ({
           <Text
             fontWeight="bold"
             textAlign="center"
-            color={isAll ? "gray.50" : "gray.300"}
+            color={isAllSelected ? "gray.50" : "gray.300"}
             userSelect="none"
           >
             すべて表示

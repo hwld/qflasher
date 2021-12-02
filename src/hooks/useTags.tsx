@@ -1,15 +1,19 @@
 import {
+  arrayRemove,
   collection,
   deleteDoc,
   getDoc,
+  getDocs,
   orderBy,
   serverTimestamp,
   setDoc,
+  updateDoc,
+  where,
 } from "@firebase/firestore";
 import { doc, query } from "firebase/firestore";
 import { useCallback, useMemo } from "react";
 import { db } from "../firebase/config";
-import { flagConverter } from "../firebase/firestoreConverters";
+import { deckConverter, flagConverter } from "../firebase/firestoreConverters";
 import { Tag } from "../types";
 import { useFirestoreCollectionData } from "./useFirestoreCollectionData";
 
@@ -28,6 +32,14 @@ export const useTags = (userId: string): UseTagsResult => {
   const tagsQuery = useMemo(
     () => query(tagsRef, orderBy("createdAt", "desc")),
     [tagsRef]
+  );
+  const decksQuery = useMemo(
+    () =>
+      query(
+        collection(db, `users/${userId}/decks`).withConverter(deckConverter),
+        orderBy("createdAt", "desc")
+      ),
+    [userId]
   );
 
   const tagsData = useFirestoreCollectionData(tagsQuery);
@@ -72,9 +84,15 @@ export const useTags = (userId: string): UseTagsResult => {
       const tagRef = doc(tagsRef, id);
       await deleteDoc(tagRef);
 
-      // TODO:　デッキから当該タグの削除を行う
+      const decksSnapshot = await getDocs(
+        query(decksQuery, where("tagIds", "array-contains", id))
+      );
+      const promises = decksSnapshot.docs.map((deckDoc) => {
+        return updateDoc(deckDoc.ref, { tagIds: arrayRemove(id) });
+      });
+      await Promise.all(promises);
     },
-    [tagsRef]
+    [decksQuery, tagsRef]
   );
 
   return { tags, addTag, updateTag, deleteTag };

@@ -4,6 +4,7 @@ export type Deck = {
   id: string;
   name: string;
   cards: FlashCard[];
+  tagIds: string[];
   cardLength: number;
 };
 export type DeckWithoutCards = Omit<Deck, "cards">;

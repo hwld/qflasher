@@ -5,7 +5,7 @@ import { Deck, FlashCard, Tag } from "../../types";
 export type DeckFormFields = {
   name: string;
   cards: Omit<FlashCard, "id">[] | undefined;
-  tags?: Tag[];
+  tags: Tag[];
 };
 
 type UseDeckFormArg = {
@@ -43,7 +43,12 @@ export const useDeckForm = ({ formCardIds }: UseDeckFormArg) => {
           });
         }
 
-        callback({ name: fields.name, cards, cardLength: cards.length });
+        callback({
+          name: fields.name,
+          cards,
+          tagIds: fields.tags.map((t) => t.id),
+          cardLength: cards.length,
+        });
       });
     },
     [formCardIds, innerHandleSubmit]

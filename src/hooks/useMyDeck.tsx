@@ -82,6 +82,7 @@ export const useMyDeck = (userId: string, deckId: string): UseMyDeckResult => {
     const deck: Deck = {
       id: deckInfo.id,
       name: deckInfo.name,
+      tagIds: deckInfo.tagIds,
       cardLength: deckInfo!.cardLength,
       cards: cardsResult.value,
     };

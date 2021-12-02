@@ -6,7 +6,7 @@ import { TagListItemType, UseTagListItemsResult } from "./useTagListItems";
 
 type Props = {
   tagListItems: TagListItemType[];
-  selectedId: string;
+  selectedId?: string;
   addTagCreator: UseTagListItemsResult["addTagCreator"];
   deleteTagCreator: UseTagListItemsResult["deleteTagCreator"];
   addTagData: UseTagListItemsResult["addTagData"];

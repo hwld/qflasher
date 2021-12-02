@@ -21,7 +21,7 @@ export type DeckFormProps = {
 
 export const DeckForm: React.FC<DeckFormProps> = ({
   tags,
-  defaultDeck = { id: "", name: "", cards: [], cardLength: 0 },
+  defaultDeck = { id: "", name: "", cards: [], tagIds: [], cardLength: 0 },
   formId,
   onSubmit,
 }) => {
@@ -68,7 +68,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
 
   const addCardEditorWithDebounce = useDebounce(50, addCardEditor);
 
-  const submit = ({ name, cardLength, cards }: Omit<Deck, "id">) => {
+  const submit = ({ name, cards, tagIds, cardLength }: Omit<Deck, "id">) => {
     if (cards.length === 0) {
       addCardEditor();
       triggerValidation();
@@ -80,6 +80,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
         id: defaultDeck.id,
         name,
         cards,
+        tagIds,
         cardLength,
       },
       oldCards: defaultDeck.cards,
@@ -205,7 +206,11 @@ export const DeckForm: React.FC<DeckFormProps> = ({
           タグ
         </Text>
         <Box mt={3}>
-          <TagsSelect control={control} tags={tags} />
+          <TagsSelect
+            control={control}
+            tags={tags}
+            defaultTagIds={defaultDeck.tagIds}
+          />
         </Box>
       </Box>
       <DragDropContext onDragEnd={handleDragEnd}>

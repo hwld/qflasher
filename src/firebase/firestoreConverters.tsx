@@ -8,16 +8,20 @@ export const deckConverter: FirestoreDataConverter<FirestoreDeck> = {
       id: deck.id,
       name: deck.name,
       cardLength: deck.cardLength,
+      tagIds: deck.tagIds,
       createdAt: deck.createdAt,
     };
   },
   toFirestore: (deck) => {
-    return {
+    // deckの型ではプロパティがオプショナルになるのでFirestoreDeckにプロパティが追加されたときにエラーにならないので手動で型をつける
+    const firestoreDeck: { [T in keyof FirestoreDeck]: typeof deck[T] } = {
       id: deck.id,
       name: deck.name,
       cardLength: deck.cardLength,
+      tagIds: deck.tagIds,
       createdAt: deck.createdAt,
     };
+    return firestoreDeck;
   },
 };
 
@@ -32,12 +36,13 @@ export const cardConverter: FirestoreDataConverter<FirestoreFlashCard> = {
     };
   },
   toFirestore: (card) => {
-    return {
+    const firestoreCard: { [T in keyof FirestoreFlashCard]: typeof card[T] } = {
       id: card.id,
       index: card.index,
       question: card.question,
       answer: card.answer,
     };
+    return firestoreCard;
   },
 };
 

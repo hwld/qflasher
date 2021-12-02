@@ -35,6 +35,7 @@ export const useDeckOperation = (userId: string): DeckOperation => {
         id: deckDoc.id,
         name: deck.name,
         cardLength: deck.cards.length,
+        tagIds: deck.tagIds,
         createdAt: serverTimestamp(),
       });
 
@@ -91,6 +92,7 @@ export const useDeckOperation = (userId: string): DeckOperation => {
         id: deckRef.id,
         name: newDeck.name,
         cardLength: newDeck.cardLength,
+        tagIds: newDeck.tagIds,
         createdAt: deck.createdAt,
       });
 
