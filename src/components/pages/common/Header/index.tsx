@@ -26,7 +26,7 @@ export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
     <>
       <Box position="fixed" zIndex="1">
         <Flex
-          bgGradient="linear(to-r, green.500 70%, green.400)"
+          bgGradient="linear(to-r, green.400 70%, green.500)"
           w="100vw"
           h={`${barHeight}px`}
           justify="space-between"

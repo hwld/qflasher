@@ -22,6 +22,7 @@ export const TagsSelect: React.FC<Props> = ({
   const defaultTags: Tag[] = useMemo(
     () =>
       defaultTagIds.map((defaultTagId) => {
+        console.log(defaultTagId);
         const tag = tags.find((tag) => tag.id === defaultTagId);
         if (!tag) {
           throw new Error();

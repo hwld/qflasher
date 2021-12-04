@@ -33,7 +33,7 @@ export const PlaySettingPage: React.FC<Props> = ({ onComplete }) => {
         m="auto"
         alignItems="center"
       >
-        <Box p={{ base: 3, md: 5 }} bgColor="gray.700" w="100%">
+        <Box p={{ base: 3, md: 5 }} bgColor="gray.700" w="100%" rounded="md">
           <Checkbox
             size={checkBoxSize}
             colorScheme="green"
@@ -43,7 +43,13 @@ export const PlaySettingPage: React.FC<Props> = ({ onComplete }) => {
             答え → 質問の順で表示する
           </Checkbox>
         </Box>
-        <Box mt={3} p={{ base: 3, md: 5 }} bgColor="gray.700" w="100%">
+        <Box
+          mt={3}
+          p={{ base: 3, md: 5 }}
+          bgColor="gray.700"
+          w="100%"
+          rounded="md"
+        >
           <Checkbox
             size={checkBoxSize}
             colorScheme="green"

@@ -1,33 +1,19 @@
 import { Box, Button, Flex, Grid, Text } from "@chakra-ui/react";
-import React, { Reducer, useReducer } from "react";
+import React, { Dispatch } from "react";
 import { RiAddFill } from "react-icons/ri";
 import { UseTagsResult } from "../../../../../hooks/useTags";
-import { assertNever } from "../../../../../utils/assertNever";
 import { TagList } from "../../../../TagList/TagList";
 import { useTagListItems } from "../../../../TagList/useTagListItems";
+import { SelectedTag, SelectedTagAction } from "../../DeckListPage";
 
-type Props = {} & UseTagsResult;
-
-type State =
-  | { isAllSelected: true; selectedTagId: undefined }
-  | { isAllSelected: false; selectedTagId: string };
-type Action = { type: "selectTag"; tagId: string } | { type: "selectAll" };
-
-const reducer: Reducer<State, Action> = (state, action) => {
-  switch (action.type) {
-    case "selectTag": {
-      return { isAllSelected: false, selectedTagId: action.tagId };
-    }
-    case "selectAll": {
-      return { isAllSelected: true, selectedTagId: undefined };
-    }
-    default: {
-      return assertNever(action);
-    }
-  }
-};
+type Props = {
+  selectedTag: SelectedTag;
+  dispatch: Dispatch<SelectedTagAction>;
+} & UseTagsResult;
 
 export const TagsSideView: React.FC<Props> = ({
+  selectedTag: { selectedTagId, isAllSelected },
+  dispatch,
   tags,
   addTag,
   updateTag,
@@ -35,11 +21,6 @@ export const TagsSideView: React.FC<Props> = ({
 }) => {
   const { tagListItems, addTagCreator, addTagData, deleteTagCreator } =
     useTagListItems(tags, addTag);
-
-  const [{ isAllSelected, selectedTagId }, dispatch] = useReducer(reducer, {
-    isAllSelected: true,
-    selectedTagId: undefined,
-  });
 
   const handleClickShowAll = () => {
     dispatch({ type: "selectAll" });
