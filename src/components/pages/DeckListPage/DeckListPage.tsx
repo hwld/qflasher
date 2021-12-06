@@ -11,11 +11,11 @@ import { assertNever } from "../../../utils/assertNever";
 import { DeckList } from "../../DeckList";
 import { Fab } from "../common/Fab";
 import { SideArea } from "./SideMenu/SideArea";
-import { SideMenuChoices } from "./SideMenu/SideMenu";
 import { SideMenuItem } from "./SideMenu/SideMenuItem";
 import { TagsSideView } from "./SideMenu/TagsSideView/TagsSideView";
 
 type DeckListPageProps = { userId: string };
+type SideMenuChoices = "tags" | "search" | "none";
 
 export type SelectedTag =
   | { isAllSelected: true; selectedTagId: undefined }

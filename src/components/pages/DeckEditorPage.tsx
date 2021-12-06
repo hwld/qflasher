@@ -2,7 +2,7 @@ import { Box, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdSave } from "react-icons/md";
-import { useSetAppState } from "../../context/AppStateContextProvider";
+import { useLoadingStateAction } from "../../context/LoadingStateContext";
 import { useDeckOperation } from "../../hooks/useDeckOperation";
 import { useLoadingEffect } from "../../hooks/useLoadingEffect";
 import { useMyDeck } from "../../hooks/useMyDeck";
@@ -22,7 +22,7 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
   const toast = useToast();
   const { tags } = useTags(userId);
   const { updateDeck } = useDeckOperation(userId);
-  const { startLoading, endLoading } = useSetAppState();
+  const { startLoading, endLoading } = useLoadingStateAction();
   const useMyDeckResult = useMyDeck(userId, deckId);
   const formId = "updateDeckForm";
 

@@ -2,7 +2,7 @@ import { Box, Flex, Text } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/react";
 import React, { SyntheticEvent, useState } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
-import { useSetAppState } from "../../context/AppStateContextProvider";
+import { useLoadingStateAction } from "../../context/LoadingStateContext";
 import { UseTagsResult } from "../../hooks/useTags";
 import { Tag } from "../../types";
 import { EditableTagName, EditableTagNameProps } from "./EditableTagName";
@@ -22,7 +22,7 @@ export const TagData: React.FC<Props> = ({
   updateTag,
   deleteTag,
 }) => {
-  const { startLoading, endLoading } = useSetAppState();
+  const { startLoading, endLoading } = useLoadingStateAction();
   const [editable, setEditable] = useState(false);
 
   const completeUpdate = async (tagName: string) => {

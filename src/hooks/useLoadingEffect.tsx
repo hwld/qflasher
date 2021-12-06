@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
-import { useSetAppState } from "../context/AppStateContextProvider";
+import { useLoadingStateAction } from "../context/LoadingStateContext";
 
 export const useLoadingEffect = (isLoading: boolean) => {
-  const { startLoading, endLoading } = useSetAppState();
+  const { startLoading, endLoading } = useLoadingStateAction();
   const loadingId = useRef<string | undefined>();
 
   useEffect(() => {

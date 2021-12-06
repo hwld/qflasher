@@ -3,7 +3,7 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import React from "react";
 import { AppTemplate } from "../components/pages/common/AppTemplate";
-import { AppStateContextProvider } from "../context/AppStateContextProvider";
+import { AppStateContextProvider } from "../context/AppStateContext";
 import "../theme/scrollbar.css";
 import { theme } from "../theme/theme";
 

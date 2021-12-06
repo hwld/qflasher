@@ -1,5 +1,5 @@
 import React from "react";
-import { useSetAppState } from "../../context/AppStateContextProvider";
+import { useLoadingStateAction } from "../../context/LoadingStateContext";
 import { EditableTagName, EditableTagNameProps } from "./EditableTagName";
 import { UseTagListItemsResult } from "./useTagListItems";
 
@@ -16,7 +16,7 @@ export const TagCreator: React.FC<Props> = ({
   addTagCreator,
   deleteTagCreator,
 }) => {
-  const { startLoading, endLoading } = useSetAppState();
+  const { startLoading, endLoading } = useLoadingStateAction();
 
   const completeCreate = async (tagName: string) => {
     if (tagName !== "") {

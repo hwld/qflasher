@@ -2,7 +2,7 @@ import { Box, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdSave } from "react-icons/md";
-import { useSetAppState } from "../../context/AppStateContextProvider";
+import { useLoadingStateAction } from "../../context/LoadingStateContext";
 import { useDeckOperation } from "../../hooks/useDeckOperation";
 import { useTags } from "../../hooks/useTags";
 import { DeckForm, DeckFormProps } from "../DeckForm";
@@ -15,7 +15,7 @@ export const DeckCreatorPage: React.FC<Props> = ({ userId }) => {
   const toast = useToast();
   const { tags } = useTags(userId);
   const { addDeck } = useDeckOperation(userId);
-  const { startLoading, endLoading } = useSetAppState();
+  const { startLoading, endLoading } = useLoadingStateAction();
   const formId = "createDeckForm";
 
   const handleSubmit: DeckFormProps["onSubmit"] = async ({ newDeck }) => {

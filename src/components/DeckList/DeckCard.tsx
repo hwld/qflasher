@@ -10,7 +10,7 @@ import {
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdEdit, MdPlayArrow } from "react-icons/md";
-import { useSetAppState } from "../../context/AppStateContextProvider";
+import { useLoadingStateAction } from "../../context/LoadingStateContext";
 import { DeckWithoutCards } from "../../types";
 import { DeckCardButton } from "./DeckCardButton";
 import { DeleteDeckButton } from "./DeleteDeckButton";
@@ -30,7 +30,7 @@ export const DeckCard: React.FC<Props> = ({
 }) => {
   const router = useRouter();
   const toast = useToast();
-  const { startLoading, endLoading } = useSetAppState();
+  const { startLoading, endLoading } = useLoadingStateAction();
 
   const handlePlayDeck = () => {
     router.push({ pathname: "/decks/play", query: { id: deck.id } });
