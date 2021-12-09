@@ -1,10 +1,10 @@
 import { Box, Button, Flex, Grid, Text } from "@chakra-ui/react";
 import React, { Dispatch } from "react";
 import { RiAddFill } from "react-icons/ri";
-import { UseTagsResult } from "../../../../../hooks/useTags";
-import { TagList } from "../../../../TagList/TagList";
-import { useTagListItems } from "../../../../TagList/useTagListItems";
-import { SelectedTag, SelectedTagAction } from "../../DeckListPage";
+import { UseTagsResult } from "../hooks/useTags";
+import { SelectedTag, SelectedTagAction } from "./pages/DeckListPage";
+import { TagList } from "./TagList/TagList";
+import { useTagListItems } from "./TagList/useTagListItems";
 
 type Props = {
   selectedTag: SelectedTag;
@@ -70,7 +70,7 @@ export const TagsSideView: React.FC<Props> = ({
             color={isAllSelected ? "gray.50" : "gray.300"}
             userSelect="none"
           >
-            すべて表示
+            全てのデッキ
           </Text>
         </Box>
       </Box>

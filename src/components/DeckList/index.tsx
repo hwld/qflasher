@@ -2,7 +2,7 @@ import { Grid } from "@chakra-ui/layout";
 import { useBreakpointValue } from "@chakra-ui/media-query";
 import React from "react";
 import { DeckWithoutCards } from "../../types";
-import { SelectedTag } from "../pages/DeckListPage/DeckListPage";
+import { SelectedTag } from "../pages/DeckListPage";
 import { DeckCard } from "./DeckCard";
 import { useDeckCardStyle } from "./useDeckCardStyle";
 

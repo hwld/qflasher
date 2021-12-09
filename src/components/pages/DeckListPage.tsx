@@ -3,19 +3,19 @@ import { useRouter } from "next/dist/client/router";
 import React, { Reducer, useMemo, useReducer, useState } from "react";
 import { AiFillTags, AiOutlineSearch } from "react-icons/ai";
 import { MdAdd } from "react-icons/md";
-import { useDeckList } from "../../../hooks/useDeckList";
-import { useDeckOperation } from "../../../hooks/useDeckOperation";
-import { useLoadingEffect } from "../../../hooks/useLoadingEffect";
-import { useTags } from "../../../hooks/useTags";
-import { assertNever } from "../../../utils/assertNever";
-import { DeckList } from "../../DeckList";
-import { Fab } from "../common/Fab";
-import { SideArea } from "./SideMenu/SideArea";
-import { SideMenuItem } from "./SideMenu/SideMenuItem";
-import { TagsSideView } from "./SideMenu/TagsSideView/TagsSideView";
+import { useDeckList } from "../../hooks/useDeckList";
+import { useDeckOperation } from "../../hooks/useDeckOperation";
+import { useLoadingEffect } from "../../hooks/useLoadingEffect";
+import { useTags } from "../../hooks/useTags";
+import { assertNever } from "../../utils/assertNever";
+import { DeckList } from "../DeckList";
+import { Fab } from "../Fab";
+import { SideMenu } from "../SideMenu/SideMenu";
+import { SideArea } from "../SideArea";
+import { TagsSideView } from "../TagsSideView";
 
 type DeckListPageProps = { userId: string };
-type SideMenuChoices = "tags" | "search" | "none";
+type SideMenuNames = "tags" | "search" | "none";
 
 export type SelectedTag =
   | { isAllSelected: true; selectedTagId: undefined }
@@ -56,21 +56,13 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
     router.push("/decks/create");
   };
 
-  const [selected, setSelected] = useState<SideMenuChoices>("none");
+  const [selected, setSelected] = useState<SideMenuNames>("none");
 
-  const handleSelectTags = () => {
-    if (selected === "tags") {
+  const handleSelect = (name: SideMenuNames) => {
+    if (selected === name) {
       setSelected("none");
     } else {
-      setSelected("tags");
-    }
-  };
-
-  const handleSelectSearch = () => {
-    if (selected === "search") {
-      setSelected("none");
-    } else {
-      setSelected("search");
+      setSelected(name);
     }
   };
 
@@ -108,18 +100,14 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
   return (
     <Flex h="100%">
       <Flex>
-        <Box w="60px" h="100%" bgColor="gray.600" boxShadow="xl">
-          <SideMenuItem
-            selected={selected === "tags"}
-            icon={AiFillTags}
-            onClick={handleSelectTags}
-          />
-          <SideMenuItem
-            selected={selected === "search"}
-            icon={AiOutlineSearch}
-            onClick={handleSelectSearch}
-          />
-        </Box>
+        <SideMenu
+          selected={selected}
+          onSelect={handleSelect}
+          items={[
+            { name: "tags", icon: AiFillTags },
+            { name: "search", icon: AiOutlineSearch },
+          ]}
+        />
         {selected !== "none" && (
           <SideArea>
             {selected === "tags" && (

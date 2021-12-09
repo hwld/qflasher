@@ -1,8 +1,8 @@
 import { Box, Flex, FlexProps, Progress } from "@chakra-ui/react";
 import React from "react";
-import { auth } from "../../../../firebase/config";
-import { useAuthState } from "../../../../hooks/useAuthState";
-import { Link } from "../../../Link";
+import { auth } from "../../firebase/config";
+import { useAuthState } from "../../hooks/useAuthState";
+import { Link } from "../Link";
 import { AccountMenu } from "./AccountMenu";
 import { Logo } from "./Logo";
 import { useHeaderStyle } from "./useHeaderStyle";

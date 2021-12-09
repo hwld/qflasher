@@ -9,12 +9,12 @@ export const SideArea: React.FC<Props> = ({ children }) => {
   const handleRef = useRef<HTMLDivElement>(null);
 
   const currentWidth = useRef(0);
-  const isDown = useRef(false);
+  const isMouseDown = useRef(false);
   const startX = useRef(0);
 
   const handleMouseDown: MouseEventHandler = (e) => {
     e.preventDefault();
-    isDown.current = true;
+    isMouseDown.current = true;
     startX.current = e.clientX;
     currentWidth.current =
       handleRef.current?.getBoundingClientRect().width ?? 0;
@@ -22,12 +22,12 @@ export const SideArea: React.FC<Props> = ({ children }) => {
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (isDown.current) {
+      if (isMouseDown.current) {
         setW(currentWidth.current + (e.clientX - startX.current));
       }
     };
     const handleMouseUp = () => {
-      isDown.current = false;
+      isMouseDown.current = false;
     };
 
     window.addEventListener("mousemove", handleMouseMove);
@@ -41,15 +41,8 @@ export const SideArea: React.FC<Props> = ({ children }) => {
   }, []);
 
   return (
-    <Flex position="relative" boxShadow="xl">
-      <Box
-        ref={handleRef}
-        minW="300px"
-        maxW="700px"
-        w={`${w}px`}
-        h="100%"
-        bgColor="gray.700"
-      >
+    <Flex position="relative" boxShadow="xl" bgColor="gray.700">
+      <Box ref={handleRef} minW="300px" maxW="700px" h="100%" w={`${w}px`}>
         {children}
       </Box>
       <Box

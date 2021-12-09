@@ -1,10 +1,24 @@
 import { Box, Flex } from "@chakra-ui/layout";
-import { As, Button, Icon } from "@chakra-ui/react";
+import { Button, Icon } from "@chakra-ui/react";
 import React from "react";
 
-type Props = { selected: boolean; icon: As; onClick: () => void };
+type Props<T> = {
+  name: T;
+  icon: React.ElementType;
+  selected: boolean;
+  onSelect: (name: T) => void;
+};
 
-export const SideMenuItem: React.FC<Props> = ({ selected, icon, onClick }) => {
+export const SideMenuItem = <T,>({
+  selected,
+  icon,
+  name,
+  onSelect,
+}: Props<T>) => {
+  const handleClick = () => {
+    onSelect(name);
+  };
+
   return (
     <Flex mt={3}>
       <Box w="3px" bgColor={selected ? "green.300" : "transparent"}></Box>
@@ -17,7 +31,7 @@ export const SideMenuItem: React.FC<Props> = ({ selected, icon, onClick }) => {
           p={0}
           minH="auto"
           minW="auto"
-          onClick={onClick}
+          onClick={handleClick}
         >
           <Icon
             as={icon}

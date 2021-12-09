@@ -1,6 +1,6 @@
 import { Box, Grid, useBreakpointValue } from "@chakra-ui/react";
 import React from "react";
-import { useLoadingState } from "../../../context/LoadingStateContext";
+import { useLoadingState } from "../context/LoadingStateContext";
 import { Header } from "./Header";
 
 export const AppTemplate: React.FC = ({ children }) => {

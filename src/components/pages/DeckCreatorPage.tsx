@@ -6,7 +6,7 @@ import { useLoadingStateAction } from "../../context/LoadingStateContext";
 import { useDeckOperation } from "../../hooks/useDeckOperation";
 import { useTags } from "../../hooks/useTags";
 import { DeckForm, DeckFormProps } from "../DeckForm";
-import { Fab } from "./common/Fab";
+import { Fab } from "../Fab";
 
 type Props = { userId: string };
 

@@ -8,7 +8,7 @@ import { useLoadingEffect } from "../../hooks/useLoadingEffect";
 import { useMyDeck } from "../../hooks/useMyDeck";
 import { useTags } from "../../hooks/useTags";
 import { DeckForm, DeckFormProps } from "../DeckForm";
-import { Fab } from "./common/Fab";
+import { Fab } from "../Fab";
 import { DeckLoadingErrorPage } from "./DeckLoadingErrorPage";
 import { NotFoundDeckPage } from "./NotFoundDeckPage";
 
