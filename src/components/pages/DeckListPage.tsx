@@ -1,68 +1,45 @@
 import { Box, Center, Flex, Heading, Tag } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
-import React, { Reducer, useMemo, useReducer, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { AiFillTags, AiOutlineSearch } from "react-icons/ai";
 import { MdAdd } from "react-icons/md";
 import { useDeckList } from "../../hooks/useDeckList";
 import { useDeckOperation } from "../../hooks/useDeckOperation";
 import { useLoadingEffect } from "../../hooks/useLoadingEffect";
 import { useTags } from "../../hooks/useTags";
-import { assertNever } from "../../utils/assertNever";
 import { DeckList } from "../DeckList";
 import { Fab } from "../Fab";
-import { SideMenu } from "../SideMenu/SideMenu";
 import { SideArea } from "../SideArea";
+import { SideMenu } from "../SideMenu/SideMenu";
 import { TagsSideView } from "../TagsSideView";
 
 type DeckListPageProps = { userId: string };
 type SideMenuNames = "tags" | "search" | "none";
 
-export type SelectedTag =
-  | { isAllSelected: true; selectedTagId: undefined }
-  | { isAllSelected: false; selectedTagId: string };
-export type SelectedTagAction =
-  | { type: "selectTag"; tagId: string }
-  | { type: "selectAll" };
-
-const reducer: Reducer<SelectedTag, SelectedTagAction> = (state, action) => {
-  switch (action.type) {
-    case "selectTag": {
-      return { isAllSelected: false, selectedTagId: action.tagId };
-    }
-    case "selectAll": {
-      return { isAllSelected: true, selectedTagId: undefined };
-    }
-    default: {
-      return assertNever(action);
-    }
-  }
-};
-
 export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
   const router = useRouter();
 
   const { tags, addTag, updateTag, deleteTag } = useTags(userId);
-  const [selectedTag, dispatch] = useReducer(reducer, {
-    isAllSelected: true,
-    selectedTagId: undefined,
-  });
-  const selectedTagName = tags.find(
-    (t) => t.id === selectedTag.selectedTagId
-  )?.name;
+  const [selectedTagId, setSelectedTagId] = useState<string | undefined>();
+  const selectedTagName = tags.find((t) => t.id === selectedTagId)?.name;
   const useDeckListResult = useDeckList(userId);
   const { deleteDeck } = useDeckOperation(userId);
+
+  const handleSelectTagId = (id: string | undefined) => {
+    setSelectedTagId(id);
+  };
 
   const handleAddDeck = () => {
     router.push("/decks/create");
   };
 
-  const [selected, setSelected] = useState<SideMenuNames>("none");
+  const [menuSelected, setMenuSelected] = useState<SideMenuNames>("none");
 
   const handleSelect = (name: SideMenuNames) => {
-    if (selected === name) {
-      setSelected("none");
+    if (menuSelected === name) {
+      setMenuSelected("none");
     } else {
-      setSelected(name);
+      setMenuSelected(name);
     }
   };
 
@@ -83,7 +60,7 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
       case "success": {
         return (
           <DeckList
-            selectedTag={selectedTag}
+            selectedTagId={selectedTagId}
             decks={useDeckListResult.decks}
             onDelete={deleteDeck}
           />
@@ -92,7 +69,7 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
     }
   }, [
     deleteDeck,
-    selectedTag,
+    selectedTagId,
     useDeckListResult.decks,
     useDeckListResult.status,
   ]);
@@ -101,19 +78,19 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
     <Flex h="100%">
       <Flex>
         <SideMenu
-          selected={selected}
+          selected={menuSelected}
           onSelect={handleSelect}
           items={[
             { name: "tags", icon: AiFillTags },
             { name: "search", icon: AiOutlineSearch },
           ]}
         />
-        {selected !== "none" && (
+        {menuSelected !== "none" && (
           <SideArea>
-            {selected === "tags" && (
+            {menuSelected === "tags" && (
               <TagsSideView
-                selectedTag={selectedTag}
-                dispatch={dispatch}
+                selectedTagId={selectedTagId}
+                onSelectTagId={handleSelectTagId}
                 tags={tags}
                 addTag={addTag}
                 updateTag={updateTag}

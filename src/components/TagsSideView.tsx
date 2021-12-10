@@ -1,33 +1,30 @@
 import { Box, Button, Flex, Grid, Text } from "@chakra-ui/react";
-import React, { Dispatch } from "react";
+import React from "react";
 import { RiAddFill } from "react-icons/ri";
 import { UseTagsResult } from "../hooks/useTags";
-import { SelectedTag, SelectedTagAction } from "./pages/DeckListPage";
 import { TagList } from "./TagList/TagList";
 import { useTagListItems } from "./TagList/useTagListItems";
 
 type Props = {
-  selectedTag: SelectedTag;
-  dispatch: Dispatch<SelectedTagAction>;
+  selectedTagId: string | undefined;
+  onSelectTagId: (id: string | undefined) => void;
 } & UseTagsResult;
 
 export const TagsSideView: React.FC<Props> = ({
-  selectedTag: { selectedTagId, isAllSelected },
-  dispatch,
+  selectedTagId,
+  onSelectTagId,
   tags,
   addTag,
   updateTag,
   deleteTag,
 }) => {
+  const isAllSelected = selectedTagId === undefined;
+
   const { tagListItems, addTagCreator, addTagData, deleteTagCreator } =
     useTagListItems(tags, addTag);
 
   const handleClickShowAll = () => {
-    dispatch({ type: "selectAll" });
-  };
-
-  const selectTag = (id: string) => {
-    dispatch({ type: "selectTag", tagId: id });
+    onSelectTagId(undefined);
   };
 
   const handleClickAdd = () => {
@@ -81,7 +78,7 @@ export const TagsSideView: React.FC<Props> = ({
         addTagData={addTagData}
         addTagCreator={addTagCreator}
         deleteTagCreator={deleteTagCreator}
-        selectTag={selectTag}
+        selectTag={onSelectTagId}
         updateTag={updateTag}
         deleteTag={deleteTag}
       />
