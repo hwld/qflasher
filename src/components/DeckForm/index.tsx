@@ -4,6 +4,7 @@ import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { MdAdd } from "react-icons/md";
 import { useDebounce } from "../../hooks/useDebounce";
+import { UseTagsResult } from "../../hooks/useTags";
 import { Deck, FlashCard, Tag } from "../../types";
 import { CardEditor } from "./CardEditor";
 import { DeckFormInput } from "./DeckFormInput";
@@ -17,6 +18,8 @@ export type DeckFormProps = {
   formId: string;
   // ctrl+EnterでもSubmitされるようにする
   onSubmit: (arg: { newDeck: Deck; oldCards: FlashCard[] }) => void;
+  onAddTag: UseTagsResult["addTag"];
+  onDeleteTag: UseTagsResult["deleteTag"];
 };
 
 export const DeckForm: React.FC<DeckFormProps> = ({
@@ -24,6 +27,8 @@ export const DeckForm: React.FC<DeckFormProps> = ({
   defaultDeck = { id: "", name: "", cards: [], tagIds: [], cardLength: 0 },
   formId,
   onSubmit,
+  onAddTag,
+  onDeleteTag,
 }) => {
   const toast = useToast();
 
@@ -210,6 +215,8 @@ export const DeckForm: React.FC<DeckFormProps> = ({
             control={control}
             tags={tags}
             defaultTagIds={defaultDeck.tagIds}
+            onAddTag={onAddTag}
+            onDeleteTag={onDeleteTag}
           />
         </Box>
       </Box>

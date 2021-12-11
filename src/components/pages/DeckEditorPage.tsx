@@ -20,7 +20,7 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
 }) => {
   const router = useRouter();
   const toast = useToast();
-  const { tags } = useTags(userId);
+  const { tags, addTag, deleteTag } = useTags(userId);
   const { updateDeck } = useDeckOperation(userId);
   const { startLoading, endLoading } = useLoadingStateAction();
   const useMyDeckResult = useMyDeck(userId, deckId);
@@ -67,6 +67,8 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
               defaultDeck={useMyDeckResult.deck}
               formId={formId}
               onSubmit={handleUpdateDeck}
+              onAddTag={addTag}
+              onDeleteTag={deleteTag}
             />
             <Fab tooltipLabel="更新" type="submit" form={formId}>
               <MdSave size="60%" />

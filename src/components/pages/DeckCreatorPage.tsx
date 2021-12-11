@@ -13,7 +13,7 @@ type Props = { userId: string };
 export const DeckCreatorPage: React.FC<Props> = ({ userId }) => {
   const router = useRouter();
   const toast = useToast();
-  const { tags } = useTags(userId);
+  const { tags, addTag, deleteTag } = useTags(userId);
   const { addDeck } = useDeckOperation(userId);
   const { startLoading, endLoading } = useLoadingStateAction();
   const formId = "createDeckForm";
@@ -38,7 +38,13 @@ export const DeckCreatorPage: React.FC<Props> = ({ userId }) => {
   return (
     <Box>
       <Box my={{ base: 3, md: 5 }} maxW="800px" marginX="auto">
-        <DeckForm tags={tags} formId={formId} onSubmit={handleSubmit} />
+        <DeckForm
+          tags={tags}
+          formId={formId}
+          onSubmit={handleSubmit}
+          onAddTag={addTag}
+          onDeleteTag={deleteTag}
+        />
       </Box>
       <Fab tooltipLabel="作成" type="submit" form={formId}>
         <MdSave size="60%" />
