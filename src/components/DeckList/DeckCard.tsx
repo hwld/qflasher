@@ -9,11 +9,11 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
-import { MdEdit, MdPlayArrow } from "react-icons/md";
+import { MdDelete, MdEdit, MdPlayArrow } from "react-icons/md";
 import { useLoadingStateAction } from "../../context/LoadingStateContext";
 import { DeckWithoutCards } from "../../types";
+import { Confirm } from "../Confirm";
 import { DeckCardButton } from "./DeckCardButton";
-import { DeleteDeckButton } from "./DeleteDeckButton";
 import { deckCardStyle } from "./useDeckCardStyle";
 
 type Props = {
@@ -115,7 +115,23 @@ export const DeckCard: React.FC<Props> = ({
               枚数: {deck.cardLength}
             </Text>
             <Flex mt={1}>
-              <DeleteDeckButton onDelete={handleDelete} />
+              <Confirm
+                trigger={(onOpen) => (
+                  <DeckCardButton label="削除" onClick={onOpen}>
+                    <MdDelete size="60%" />
+                  </DeckCardButton>
+                )}
+                onApply={handleDelete}
+                title="暗記帳の削除"
+                body={
+                  <>
+                    <Text>削除するともとに戻すことはできません。</Text>
+                    <Text>それでも削除しますか？</Text>
+                  </>
+                }
+                applyText="削除する"
+                cancelText="キャンセル"
+              />
               <DeckCardButton ml={2} label="編集" onClick={handleUpdateDeck}>
                 <MdEdit size="60%" />
               </DeckCardButton>
