@@ -123,12 +123,7 @@ export const DeckCard: React.FC<Props> = ({
                 )}
                 onApply={handleDelete}
                 title="暗記帳の削除"
-                body={
-                  <>
-                    <Text>削除するともとに戻すことはできません。</Text>
-                    <Text>それでも削除しますか？</Text>
-                  </>
-                }
+                body={<Text>単語帳を削除しますか？</Text>}
                 applyText="削除する"
                 cancelText="キャンセル"
               />

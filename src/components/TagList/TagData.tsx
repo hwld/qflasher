@@ -5,6 +5,7 @@ import { MdDelete, MdEdit } from "react-icons/md";
 import { useLoadingStateAction } from "../../context/LoadingStateContext";
 import { UseTagsResult } from "../../hooks/useTags";
 import { Tag } from "../../types";
+import { Confirm } from "../Confirm";
 import { EditableTagName, EditableTagNameProps } from "./EditableTagName";
 
 type Props = {
@@ -52,8 +53,7 @@ export const TagData: React.FC<Props> = ({
     setEditable(true);
   };
 
-  const handleClickDelete = (e: SyntheticEvent) => {
-    e.stopPropagation();
+  const handleApplyDelete = () => {
     deleteTag(tag.id);
   };
 
@@ -99,16 +99,27 @@ export const TagData: React.FC<Props> = ({
             >
               <MdEdit size="70%" />
             </Button>
-            <Button
-              rounded="md"
-              boxSize="30px"
-              minW="none"
-              p={0}
-              variant="outline"
-              onClick={handleClickDelete}
-            >
-              <MdDelete size="70%" />
-            </Button>
+            <Confirm
+              trigger={(onOpen) => {
+                return (
+                  <Button
+                    rounded="md"
+                    boxSize="30px"
+                    minW="none"
+                    p={0}
+                    variant="outline"
+                    onClick={onOpen}
+                  >
+                    <MdDelete size="70%" />
+                  </Button>
+                );
+              }}
+              onApply={handleApplyDelete}
+              title="タグの削除"
+              body="タグを削除しますか？"
+              applyText="削除する"
+              cancelText="キャンセル"
+            />
           </Flex>
           <Box h="30px" />
         </>

@@ -10,6 +10,7 @@ import { Control, Controller, FieldError } from "react-hook-form";
 import { v4 as uuid } from "uuid";
 import { UseTagsResult } from "../../hooks/useTags";
 import { Tag } from "../../types";
+import { Confirm } from "../Confirm";
 import { CreatableSelect } from "../CreatableSelect";
 import { DeckFormFields } from "./useDeckForm";
 
@@ -80,16 +81,26 @@ export const TagsSelect: React.FC<Props> = ({
                   return (
                     <Flex justify="space-between" align="center" w="100%">
                       <TagComponent h="24px">{option.label}</TagComponent>
-                      <Button
-                        size="sm"
-                        colorScheme="red"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onDeleteTag(option.value);
-                        }}
-                      >
-                        削除
-                      </Button>
+                      <Confirm
+                        trigger={(onOpen) => (
+                          <Button
+                            size="sm"
+                            colorScheme="red"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onOpen();
+                            }}
+                            onMouseUp={(e) => e.stopPropagation()}
+                          >
+                            削除
+                          </Button>
+                        )}
+                        onApply={() => onDeleteTag(option.value)}
+                        title="タグの削除"
+                        body="タグを削除しますか？"
+                        applyText="削除する"
+                        cancelText="キャンセル"
+                      />
                     </Flex>
                   );
                 }
