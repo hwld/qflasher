@@ -31,6 +31,13 @@ export const TagsSideView: React.FC<Props> = ({
     addTagCreator();
   };
 
+  const handleDeleteTag = async (id: string) => {
+    if (id === selectedTagId) {
+      onSelectTagId(undefined);
+    }
+    deleteTag(id);
+  };
+
   return (
     <Grid h="100%" templateRows="auto auto 1fr">
       <Flex bgColor="gray.500" h="30px" alignItems="center">
@@ -80,7 +87,7 @@ export const TagsSideView: React.FC<Props> = ({
         deleteTagCreator={deleteTagCreator}
         selectTag={onSelectTagId}
         updateTag={updateTag}
-        deleteTag={deleteTag}
+        deleteTag={handleDeleteTag}
       />
     </Grid>
   );
