@@ -40,7 +40,13 @@ export const Confirm: React.VFC<Props> = ({
         onClose={onClose}
         isCentered
       >
-        <AlertDialogOverlay>
+        <AlertDialogOverlay
+          onClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+          onMouseUp={(e) => e.stopPropagation}
+          onTouchStart={(e) => e.stopPropagation()}
+          onTouchEnd={(e) => e.stopPropagation()}
+        >
           <AlertDialogContent>
             <AlertDialogHeader>{title}</AlertDialogHeader>
             <AlertDialogBody>{body}</AlertDialogBody>
