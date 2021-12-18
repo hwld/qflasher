@@ -8,7 +8,7 @@ import {
   Button,
   useDisclosure,
 } from "@chakra-ui/react";
-import { ReactNode, useRef } from "react";
+import { ReactNode, useMemo, useRef } from "react";
 
 type Props = {
   trigger: (onOpen: () => void) => ReactNode;
@@ -31,9 +31,13 @@ export const Confirm: React.VFC<Props> = ({
 
   const ref = useRef<HTMLButtonElement | null>(null);
 
+  const triggerComponent = useMemo(() => {
+    return trigger(onOpen);
+  }, [onOpen, trigger]);
+
   return (
     <>
-      {trigger(onOpen)}
+      {triggerComponent}
       <AlertDialog
         leastDestructiveRef={ref}
         isOpen={isOpen}

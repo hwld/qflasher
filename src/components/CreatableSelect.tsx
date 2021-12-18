@@ -44,6 +44,7 @@ export const CreatableSelect = forwardRef(
           position="absolute"
           w="100%"
           zIndex={1}
+          mt={1}
           {...props.innerProps}
           ref={ref}
         >
