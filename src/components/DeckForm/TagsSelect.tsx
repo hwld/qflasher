@@ -11,7 +11,7 @@ import { v4 as uuid } from "uuid";
 import { useConfirm } from "../../context/ConfirmContext";
 import { UseTagsResult } from "../../hooks/useTags";
 import { Tag } from "../../types";
-import { CreatableSelect } from "../CreatableSelect";
+import { CreatableSelect } from "./CreatableSelect";
 import { DeckFormFields } from "./useDeckForm";
 
 type Props = {
@@ -21,6 +21,8 @@ type Props = {
   error?: FieldError;
   onAddTag: UseTagsResult["addTag"];
   onDeleteTag: UseTagsResult["deleteTag"];
+  onNextFocus?: () => void;
+  onPrevFocus?: () => void;
 };
 
 export const TagsSelect: React.FC<Props> = ({
@@ -29,6 +31,8 @@ export const TagsSelect: React.FC<Props> = ({
   defaultTagIds = [],
   onAddTag,
   onDeleteTag,
+  onNextFocus,
+  onPrevFocus,
 }) => {
   const confirm = useConfirm();
   const [isLoading, setIsLoading] = useState(false);
@@ -58,6 +62,8 @@ export const TagsSelect: React.FC<Props> = ({
             isMulti
             options={options}
             {...field}
+            onNextFocus={onNextFocus}
+            onPrevFocus={onPrevFocus}
             value={field.value?.map((f) => ({ value: f.id, label: f.name }))}
             onChange={(options) => {
               field.onChange(

@@ -58,6 +58,10 @@ export const useDeckForm = ({ formCardIds }: UseDeckFormArg) => {
     setFocus("name");
   }, [setFocus]);
 
+  const focusTagSelect = useCallback(() => {
+    setFocus("tags");
+  }, [setFocus]);
+
   const focusQuestion = useCallback(
     (targetId: string) => {
       const index = formCardIds.findIndex((id) => id === targetId);
@@ -81,6 +85,7 @@ export const useDeckForm = ({ formCardIds }: UseDeckFormArg) => {
   return {
     control,
     focusDeckName,
+    focusTagSelect,
     focusQuestion,
     focusAnswer,
     handleSubmit,

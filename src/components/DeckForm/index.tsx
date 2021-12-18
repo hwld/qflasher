@@ -49,6 +49,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
   const {
     control,
     focusDeckName,
+    focusTagSelect,
     focusQuestion,
     focusAnswer,
     handleSubmit,
@@ -106,11 +107,19 @@ export const DeckForm: React.FC<DeckFormProps> = ({
         if (cardIds.length === 0) {
           addCardEditorWithDebounce();
         } else {
-          focusQuestion(firstCardId());
+          //focusQuestion(firstCardId());
+          focusTagSelect();
         }
         return;
       }
     });
+  };
+
+  const handleFocusNextToSelect = () => {
+    focusQuestion(firstCardId());
+  };
+  const handleFocusPrevSelect = () => {
+    focusDeckName();
   };
 
   const handleKeyDownInQuestion = (
@@ -120,7 +129,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
     handleKeyDownTemplate(event, () => {
       if (event.key === "Enter" && event.shiftKey) {
         if (isFirstCard(cardId)) {
-          focusDeckName();
+          focusTagSelect();
         } else {
           focusAnswer(prevCardId(cardId));
         }
@@ -217,6 +226,8 @@ export const DeckForm: React.FC<DeckFormProps> = ({
             defaultTagIds={defaultDeck.tagIds}
             onAddTag={onAddTag}
             onDeleteTag={onDeleteTag}
+            onNextFocus={handleFocusNextToSelect}
+            onPrevFocus={handleFocusPrevSelect}
           />
         </Box>
       </Box>
