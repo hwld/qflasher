@@ -65,7 +65,6 @@ export const TagsSelect: React.FC<Props> = ({
               );
             }}
             isLoading={isLoading}
-            isDisabled={isLoading}
             formatOptionLabel={(option, { context }) => {
               if (
                 context === "menu" &&
