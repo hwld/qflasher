@@ -2,10 +2,10 @@ import { Box, Flex, Text } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/react";
 import React, { SyntheticEvent, useState } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
+import { useConfirm } from "../../context/ConfirmContext";
 import { useLoadingStateAction } from "../../context/LoadingStateContext";
 import { UseTagsResult } from "../../hooks/useTags";
 import { Tag } from "../../types";
-import { Confirm } from "../Confirm";
 import { EditableTagName, EditableTagNameProps } from "./EditableTagName";
 
 type Props = {
@@ -25,6 +25,7 @@ export const TagData: React.FC<Props> = ({
 }) => {
   const { startLoading, endLoading } = useLoadingStateAction();
   const [editable, setEditable] = useState(false);
+  const confirm = useConfirm();
 
   const completeUpdate = async (tagName: string) => {
     if (tagName !== "" && tag.name !== tagName) {
@@ -55,6 +56,16 @@ export const TagData: React.FC<Props> = ({
 
   const handleApplyDelete = () => {
     deleteTag(tag.id);
+  };
+
+  const handleDelete = () => {
+    confirm({
+      onContinue: () => deleteTag(tag.id),
+      title: "タグの削除",
+      body: "タグを削除しますか？",
+      continueText: "削除する",
+      cancelText: "キャンセル",
+    });
   };
 
   return (
@@ -99,27 +110,16 @@ export const TagData: React.FC<Props> = ({
             >
               <MdEdit size="70%" />
             </Button>
-            <Confirm
-              trigger={(onOpen) => {
-                return (
-                  <Button
-                    rounded="md"
-                    boxSize="30px"
-                    minW="none"
-                    p={0}
-                    variant="outline"
-                    onClick={onOpen}
-                  >
-                    <MdDelete size="70%" />
-                  </Button>
-                );
-              }}
-              onApply={handleApplyDelete}
-              title="タグの削除"
-              body="タグを削除しますか？"
-              applyText="削除する"
-              cancelText="キャンセル"
-            />
+            <Button
+              rounded="md"
+              boxSize="30px"
+              minW="none"
+              p={0}
+              variant="outline"
+              onClick={handleDelete}
+            >
+              <MdDelete size="70%" />
+            </Button>
           </Flex>
           <Box h="30px" />
         </>

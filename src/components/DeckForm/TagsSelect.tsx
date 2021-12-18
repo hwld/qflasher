@@ -8,9 +8,9 @@ import {
 import React, { useMemo, useState } from "react";
 import { Control, Controller, FieldError } from "react-hook-form";
 import { v4 as uuid } from "uuid";
+import { useConfirm } from "../../context/ConfirmContext";
 import { UseTagsResult } from "../../hooks/useTags";
 import { Tag } from "../../types";
-import { Confirm } from "../Confirm";
 import { CreatableSelect } from "../CreatableSelect";
 import { DeckFormFields } from "./useDeckForm";
 
@@ -30,6 +30,7 @@ export const TagsSelect: React.FC<Props> = ({
   onAddTag,
   onDeleteTag,
 }) => {
+  const confirm = useConfirm();
   const [isLoading, setIsLoading] = useState(false);
   const options = tags.map((tag) => ({ value: tag.id, label: tag.name }));
   const gray300 = useToken("colors", "gray.300");
@@ -48,86 +49,80 @@ export const TagsSelect: React.FC<Props> = ({
   );
 
   return (
-    <>
-      <Controller
-        control={control}
-        name="tags"
-        render={({ field }) => {
-          return (
-            <CreatableSelect
-              isMulti
-              options={options}
-              {...field}
-              value={field.value?.map((f) => ({ value: f.id, label: f.name }))}
-              onChange={(options) => {
-                field.onChange(
-                  options.map((opt) => ({ id: opt.value, name: opt.label }))
+    <Controller
+      control={control}
+      name="tags"
+      render={({ field }) => {
+        return (
+          <CreatableSelect
+            isMulti
+            options={options}
+            {...field}
+            value={field.value?.map((f) => ({ value: f.id, label: f.name }))}
+            onChange={(options) => {
+              field.onChange(
+                options.map((opt) => ({ id: opt.value, name: opt.label }))
+              );
+            }}
+            isLoading={isLoading}
+            isDisabled={isLoading}
+            formatOptionLabel={(option, { context }) => {
+              if (
+                context === "menu" &&
+                (option as typeof option & { __isNew__?: boolean }).__isNew__
+              ) {
+                return (
+                  <Flex>
+                    <Text>新規作成:</Text>
+                    <TagComponent ml={3}>{option.label}</TagComponent>
+                  </Flex>
                 );
-              }}
-              isLoading={isLoading}
-              isDisabled={isLoading}
-              formatOptionLabel={(option, { context }) => {
-                if (
-                  context === "menu" &&
-                  (option as typeof option & { __isNew__?: boolean }).__isNew__
-                ) {
-                  return (
-                    <Flex>
-                      <Text>新規作成:</Text>
-                      <TagComponent ml={3}>{option.label}</TagComponent>
-                    </Flex>
-                  );
-                } else if (context === "menu") {
-                  return (
-                    <Flex justify="space-between" align="center" w="100%">
-                      <TagComponent h="24px">{option.label}</TagComponent>
-                      <Confirm
-                        trigger={(onOpen) => (
-                          <Button
-                            size="sm"
-                            colorScheme="red"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onOpen();
-                            }}
-                            onMouseUp={(e) => e.stopPropagation()}
-                          >
-                            削除
-                          </Button>
-                        )}
-                        onApply={() => onDeleteTag(option.value)}
-                        title="タグの削除"
-                        body="タグを削除しますか？"
-                        applyText="削除する"
-                        cancelText="キャンセル"
-                      />
-                    </Flex>
-                  );
-                }
-                return option.label;
-              }}
-              // formatOptionLabelでスタイリングするためにここで値だけを返す
-              formatCreateLabel={(name) => name}
-              noOptionsMessage={() => "タグが存在しません"}
-              styles={{
-                placeholder: (provided) => ({ ...provided, color: gray300 }),
-                noOptionsMessage: (provided) => ({
-                  ...provided,
-                  color: gray300,
-                }),
-              }}
-              onCreateOption={async (name) => {
-                setIsLoading(true);
-                const newTag = { id: uuid(), name };
-                await onAddTag(newTag);
-                field.onChange([...field.value, newTag]);
-                setIsLoading(false);
-              }}
-            />
-          );
-        }}
-        defaultValue={defaultTags}
-      />
-    </>
+              } else if (context === "menu") {
+                return (
+                  <Flex justify="space-between" align="center" w="100%">
+                    <TagComponent h="24px">{option.label}</TagComponent>
+                    <Button
+                      size="sm"
+                      colorScheme="red"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        confirm({
+                          onContinue: () => onDeleteTag(option.value),
+                          title: "タグの削除",
+                          body: "タグを削除しますか？",
+                          continueText: "削除する",
+                          cancelText: "キャンセル",
+                        });
+                      }}
+                    >
+                      削除
+                    </Button>
+                  </Flex>
+                );
+              }
+              return option.label;
+            }}
+            // formatOptionLabelでスタイリングするためにここで値だけを返す
+            formatCreateLabel={(name) => name}
+            noOptionsMessage={() => "タグが存在しません"}
+            styles={{
+              placeholder: (provided) => ({ ...provided, color: gray300 }),
+              noOptionsMessage: (provided) => ({
+                ...provided,
+                color: gray300,
+              }),
+            }}
+            onCreateOption={async (name) => {
+              setIsLoading(true);
+              const newTag = { id: uuid(), name };
+              await onAddTag(newTag);
+              field.onChange([...field.value, newTag]);
+              setIsLoading(false);
+            }}
+          />
+        );
+      }}
+      defaultValue={defaultTags}
+    />
   );
 };

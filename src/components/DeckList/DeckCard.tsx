@@ -10,9 +10,9 @@ import {
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdDelete, MdEdit, MdPlayArrow } from "react-icons/md";
+import { useConfirm } from "../../context/ConfirmContext";
 import { useLoadingStateAction } from "../../context/LoadingStateContext";
 import { DeckWithoutCards } from "../../types";
-import { Confirm } from "../Confirm";
 import { DeckCardButton } from "./DeckCardButton";
 import { deckCardStyle } from "./useDeckCardStyle";
 
@@ -30,6 +30,7 @@ export const DeckCard: React.FC<Props> = ({
 }) => {
   const router = useRouter();
   const toast = useToast();
+  const confirm = useConfirm();
   const { startLoading, endLoading } = useLoadingStateAction();
 
   const handlePlayDeck = () => {
@@ -40,7 +41,7 @@ export const DeckCard: React.FC<Props> = ({
     router.push({ pathname: "/decks/edit", query: { id: deck.id } });
   };
 
-  const handleDelete = async () => {
+  const deleteDeck = async () => {
     let id = startLoading();
     try {
       await onDeleteDeck(deck.id);
@@ -54,6 +55,16 @@ export const DeckCard: React.FC<Props> = ({
     } finally {
       endLoading(id);
     }
+  };
+
+  const handleDelete = () => {
+    confirm({
+      onContinue: () => deleteDeck(),
+      title: "単語帳の削除",
+      body: "単語帳を削除しますか？",
+      continueText: "削除する",
+      cancelText: "キャンセル",
+    });
   };
 
   return (
@@ -115,18 +126,9 @@ export const DeckCard: React.FC<Props> = ({
               枚数: {deck.cardLength}
             </Text>
             <Flex mt={1}>
-              <Confirm
-                trigger={(onOpen) => (
-                  <DeckCardButton label="削除" onClick={onOpen}>
-                    <MdDelete size="60%" />
-                  </DeckCardButton>
-                )}
-                onApply={handleDelete}
-                title="暗記帳の削除"
-                body={<Text>単語帳を削除しますか？</Text>}
-                applyText="削除する"
-                cancelText="キャンセル"
-              />
+              <DeckCardButton label="削除" onClick={handleDelete}>
+                <MdDelete size="60%" />
+              </DeckCardButton>
               <DeckCardButton ml={2} label="編集" onClick={handleUpdateDeck}>
                 <MdEdit size="60%" />
               </DeckCardButton>
