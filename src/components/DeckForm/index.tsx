@@ -104,19 +104,19 @@ export const DeckForm: React.FC<DeckFormProps> = ({
   const handleKeyDownInName: KeyboardEventHandler = (event) => {
     handleKeyDownTemplate(event, () => {
       if (event.key === "Enter") {
-        if (cardIds.length === 0) {
-          addCardEditorWithDebounce();
-        } else {
-          //focusQuestion(firstCardId());
-          focusTagSelect();
-        }
+        focusTagSelect();
         return;
       }
     });
   };
 
   const handleFocusNextToSelect = () => {
-    focusQuestion(firstCardId());
+    if (cardIds.length === 0) {
+      // TODO: 追加してカードにフォーカスがあたってもSelectのonBlurが発火されない
+      addCardEditorWithDebounce();
+    } else {
+      focusQuestion(firstCardId());
+    }
   };
   const handleFocusPrevSelect = () => {
     focusDeckName();

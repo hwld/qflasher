@@ -92,10 +92,9 @@ export const CreatableSelect = forwardRef(
         const handleKeyDownCapture = (
           event: React.KeyboardEvent<HTMLInputElement>
         ) => {
-          if (event.key === "Tab") {
+          if (event.key === "Enter") {
             event.stopPropagation();
             event.preventDefault();
-
             enteredForFocus.current = true;
 
             if (!event.shiftKey) {
