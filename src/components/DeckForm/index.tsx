@@ -112,8 +112,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
 
   const handleFocusNextToSelect = () => {
     if (cardIds.length === 0) {
-      // TODO: 追加してカードにフォーカスがあたってもSelectのonBlurが発火されない
-      addCardEditorWithDebounce();
+      addCardEditor();
     } else {
       focusQuestion(firstCardId());
     }

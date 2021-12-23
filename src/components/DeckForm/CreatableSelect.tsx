@@ -13,12 +13,12 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { components, GroupBase, InputProps, MenuProps } from "react-select";
+import { GroupBase, MenuProps } from "react-select";
 import { CreatableProps } from "react-select/creatable";
 import Select from "react-select/src/Select";
 import { useOutsideClick } from "../../hooks/useOutsideClick";
 
-// chakra-react-selectの型が合っていなかった。
+// chakra-react-selectの型が合っていなかったので
 // https://github.com/JedWatson/react-select/blob/master/packages/react-select/src/Creatable.tsx
 // をコピペで持ってきた
 // コンポーネントに as CreatableSelectをつけないとOptionがunknownと推論されてしまう。
@@ -37,7 +37,7 @@ type CreatableSelect = <
 const Menu: React.FC<MenuProps & { onCloseMenu: () => void }> = (props) => {
   // chakra-react-selectが内部で使用する
   const menuStyles = useMultiStyleConfig("Menu", {});
-  const ref = useRef<HTMLDivElement | null>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   useOutsideClick({
     enabled: ref.current !== null,
@@ -87,42 +87,30 @@ export const CreatableSelect = forwardRef(
       return <Menu {...props} onCloseMenu={closeMenu} />;
     }, []);
 
-    const CustomInput = useCallback(
-      (props: InputProps) => {
-        const handleKeyDownCapture = (
-          event: React.KeyboardEvent<HTMLInputElement>
-        ) => {
-          if (event.key === "Enter") {
-            event.stopPropagation();
-            event.preventDefault();
-            enteredForFocus.current = true;
-
-            if (!event.shiftKey) {
-              onNextFocus?.();
-            } else if (event.shiftKey) {
-              onPrevFocus?.();
-            }
-          }
-        };
-
-        return (
-          // 入力をhookするためにcaptureでkeydownをハンドリングする
-          <components.Input
-            {...props}
-            onKeyDownCapture={handleKeyDownCapture}
-          />
-        );
-      },
-      [onNextFocus, onPrevFocus]
-    );
-
     const customComponents = {
       ...props.components,
       Menu: CustomMenu,
-      Input: CustomInput,
     };
 
     const openMenu = () => setMenuIsOpen(true);
+
+    // Selectのkeydownをhookするためにキャプチャフェーズでハンドリングする
+    const handleKeyDownCapture = (
+      event: React.KeyboardEvent<HTMLInputElement>
+    ) => {
+      if (event.key === "Enter") {
+        event.stopPropagation();
+        event.preventDefault();
+        setMenuIsOpen(undefined);
+        enteredForFocus.current = true;
+
+        if (!event.shiftKey) {
+          onNextFocus?.();
+        } else if (event.shiftKey) {
+          onPrevFocus?.();
+        }
+      }
+    };
 
     const handleMenuOpen = () => {
       openMenu();
@@ -143,16 +131,18 @@ export const CreatableSelect = forwardRef(
     };
 
     return (
-      <CreatableSelectBase
-        // menuIsOpenがundefinedでもmenuが表示されることがあってよくわからない
-        menuIsOpen={menuIsOpen}
-        {...(props as any)}
-        ref={ref}
-        onMenuOpen={handleMenuOpen}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        components={customComponents}
-      />
+      <Box onKeyDownCapture={handleKeyDownCapture}>
+        <CreatableSelectBase
+          // menuIsOpenがundefinedでもmenuが表示されることがあってよくわからない
+          menuIsOpen={menuIsOpen}
+          {...(props as any)}
+          ref={ref}
+          onMenuOpen={handleMenuOpen}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          components={customComponents}
+        />
+      </Box>
     );
   }
 ) as CreatableSelect;

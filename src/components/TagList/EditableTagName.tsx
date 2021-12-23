@@ -21,7 +21,7 @@ export const EditableTagName: React.FC<EditableTagNameProps> = ({
   onKeyDown,
   onBlur,
 }) => {
-  const ref = useRef<HTMLInputElement | null>(null);
+  const ref = useRef<HTMLInputElement>(null);
   const [tagName, setTagName] = useState(defaultTagName);
 
   const handleInputChange: ChangeEventHandler<HTMLInputElement> = ({

@@ -43,7 +43,7 @@ export const ConfirmContextProvider: React.FC = ({ children }) => {
     onContinue: () => {},
   });
 
-  const ref = useRef<HTMLButtonElement | null>(null);
+  const ref = useRef<HTMLButtonElement>(null);
 
   const handleClose = useCallback(() => {
     setConfirmState((s) => ({ ...s, isOpen: false }));
