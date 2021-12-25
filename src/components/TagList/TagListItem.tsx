@@ -1,5 +1,5 @@
 import Icon from "@chakra-ui/icon";
-import { Flex, ListItem } from "@chakra-ui/layout";
+import { Flex, ListItem, ListItemProps } from "@chakra-ui/layout";
 import React, { useMemo } from "react";
 import { AiFillTag } from "react-icons/ai";
 import { UseTagsResult } from "../../hooks/useTags";
@@ -19,7 +19,9 @@ type Props = {
   deleteTag: UseTagsResult["deleteTag"];
 };
 
-export const TagListItem: React.FC<Props> = ({
+type TagListItemProps = Props & Omit<ListItemProps, keyof Props>;
+
+export const TagListItem: React.FC<TagListItemProps> = ({
   tagListItem,
   onSelect,
   selected,
@@ -28,6 +30,7 @@ export const TagListItem: React.FC<Props> = ({
   addTagData,
   updateTag,
   deleteTag,
+  ...props
 }) => {
   const itemClass = "tagListItem";
 
@@ -78,8 +81,8 @@ export const TagListItem: React.FC<Props> = ({
       rounded="md"
       key={tagListItem.id}
       aria-selected={selected}
-      mx={1}
       _selected={{ bgColor: "whiteAlpha.400" }}
+      {...props}
     >
       <Flex
         rounded="md"

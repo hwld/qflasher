@@ -3,6 +3,7 @@ import { useRouter } from "next/dist/client/router";
 import React, { useMemo, useState } from "react";
 import { AiFillTags, AiOutlineSearch } from "react-icons/ai";
 import { MdAdd } from "react-icons/md";
+import { useAppState } from "../../context/AppStateContext";
 import { useDeckList } from "../../hooks/useDeckList";
 import { useDeckOperation } from "../../hooks/useDeckOperation";
 import { useLoadingEffect } from "../../hooks/useLoadingEffect";
@@ -14,11 +15,13 @@ import { SideMenu } from "../SideMenu/SideMenu";
 import { TagsSideView } from "../TagsSideView";
 
 type DeckListPageProps = { userId: string };
-type SideMenuNames = "tags" | "search" | "none";
+export type DeckListSideMenuNames = "tags" | "search" | "none";
 
 export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
   const router = useRouter();
 
+  const { menuSelected, selectMenu, sideAreaWidth, setSideAreaWidth } =
+    useAppState();
   const { tags, addTag, updateTag, deleteTag } = useTags(userId);
   const [selectedTagId, setSelectedTagId] = useState<string | undefined>();
   const selectedTagName = tags.find((t) => t.id === selectedTagId)?.name;
@@ -33,13 +36,11 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
     router.push("/decks/create");
   };
 
-  const [menuSelected, setMenuSelected] = useState<SideMenuNames>("none");
-
-  const handleSelect = (name: SideMenuNames) => {
+  const handleSelect = (name: DeckListSideMenuNames) => {
     if (menuSelected === name) {
-      setMenuSelected("none");
+      selectMenu("none");
     } else {
-      setMenuSelected(name);
+      selectMenu(name);
     }
   };
 
@@ -86,7 +87,7 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
           ]}
         />
         {menuSelected !== "none" && (
-          <SideArea>
+          <SideArea width={sideAreaWidth} setWidth={setSideAreaWidth}>
             {menuSelected === "tags" && (
               <TagsSideView
                 selectedTagId={selectedTagId}

@@ -1,11 +1,10 @@
 import { Box, Flex } from "@chakra-ui/layout";
 import { MouseEventHandler } from "hoist-non-react-statics/node_modules/@types/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
-type Props = {};
+type Props = { width: number; setWidth: (w: number) => void };
 
-export const SideArea: React.FC<Props> = ({ children }) => {
-  const [w, setW] = useState(300);
+export const SideArea: React.FC<Props> = ({ children, width, setWidth }) => {
   const handleRef = useRef<HTMLDivElement>(null);
 
   const currentWidth = useRef(0);
@@ -23,7 +22,7 @@ export const SideArea: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isMouseDown.current) {
-        setW(currentWidth.current + (e.clientX - startX.current));
+        setWidth(currentWidth.current + (e.clientX - startX.current));
       }
     };
     const handleMouseUp = () => {
@@ -42,7 +41,7 @@ export const SideArea: React.FC<Props> = ({ children }) => {
 
   return (
     <Flex position="relative" boxShadow="xl" bgColor="gray.700">
-      <Box ref={handleRef} minW="300px" maxW="700px" h="100%" w={`${w}px`}>
+      <Box ref={handleRef} minW="300px" maxW="700px" h="100%" w={`${width}px`}>
         {children}
       </Box>
       <Box
