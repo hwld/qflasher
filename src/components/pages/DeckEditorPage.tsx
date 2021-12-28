@@ -1,8 +1,8 @@
-import { Box, useToast } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdSave } from "react-icons/md";
-import { useLoadingStateAction } from "../../context/LoadingStateContext";
+import { useAppOperation } from "../../hooks/useAppOperation";
 import { useDeckOperation } from "../../hooks/useDeckOperation";
 import { useLoadingEffect } from "../../hooks/useLoadingEffect";
 import { useMyDeck } from "../../hooks/useMyDeck";
@@ -19,34 +19,19 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
   userId,
 }) => {
   const router = useRouter();
-  const toast = useToast();
   const { tags, addTag, deleteTag } = useTags(userId);
   const { updateDeck } = useDeckOperation(userId);
-  const { startLoading, endLoading } = useLoadingStateAction();
   const useMyDeckResult = useMyDeck(userId, deckId);
   const formId = "updateDeckForm";
 
   useLoadingEffect(useMyDeckResult.status === "loading");
 
-  const handleUpdateDeck: DeckFormProps["onSubmit"] = async ({
-    newDeck,
-    oldCards,
-  }) => {
-    const id = startLoading();
-    try {
+  const handleUpdateDeck: DeckFormProps["onSubmit"] = useAppOperation(
+    async ({ newDeck, oldCards }) => {
       await updateDeck(newDeck, oldCards);
       router.push("/decks");
-    } catch (e) {
-      console.error(e);
-      toast({
-        title: "エラー",
-        description: "エラーが発生しました",
-        status: "error",
-      });
-    } finally {
-      endLoading(id);
     }
-  };
+  );
 
   switch (useMyDeckResult.status) {
     case "loading": {

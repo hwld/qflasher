@@ -1,10 +1,11 @@
 import { useWithLoading } from "../context/LoadingStateContext";
 import { useWithErrorHandling } from "./useWithErrorHandling";
 
+type Operation<T> = (arg: T) => Promise<void>;
 type Option = { errorTitle: string; errorDescription: string };
 
-export const useAppOperation = <_, T>(
-  operation: (arg: T) => Promise<void>,
+export const useAppOperation = <T, _>(
+  operation: Operation<T>,
   option: Option = {
     errorTitle: "エラー",
     errorDescription: "エラーが発生しました",

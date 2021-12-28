@@ -1,8 +1,8 @@
-import { Box, useToast } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdSave } from "react-icons/md";
-import { useLoadingStateAction } from "../../context/LoadingStateContext";
+import { useAppOperation } from "../../hooks/useAppOperation";
 import { useDeckOperation } from "../../hooks/useDeckOperation";
 import { useTags } from "../../hooks/useTags";
 import { DeckForm, DeckFormProps } from "../DeckForm";
@@ -12,28 +12,16 @@ type Props = { userId: string };
 
 export const DeckCreatorPage: React.FC<Props> = ({ userId }) => {
   const router = useRouter();
-  const toast = useToast();
   const { tags, addTag, deleteTag } = useTags(userId);
   const { addDeck } = useDeckOperation(userId);
-  const { startLoading, endLoading } = useLoadingStateAction();
   const formId = "createDeckForm";
 
-  const handleSubmit: DeckFormProps["onSubmit"] = async ({ newDeck }) => {
-    const id = startLoading();
-    try {
+  const handleSubmit: DeckFormProps["onSubmit"] = useAppOperation(
+    async ({ newDeck }) => {
       await addDeck(newDeck);
       router.push("/decks");
-    } catch (e) {
-      console.error(e);
-      toast({
-        title: "エラー",
-        description: "エラーが発生しました",
-        status: "error",
-      });
-    } finally {
-      endLoading(id);
     }
-  };
+  );
 
   return (
     <Box>
