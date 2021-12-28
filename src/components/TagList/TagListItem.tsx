@@ -12,11 +12,11 @@ type Props = {
   tagListItem: TagListItemType;
   onSelect: (id: string) => void;
   selected: boolean;
-  addTagCreator: UseTagListItemsResult["addTagCreator"];
-  deleteTagCreator: UseTagListItemsResult["deleteTagCreator"];
-  addTagData: UseTagListItemsResult["addTagData"];
-  updateTag: UseTagsResult["updateTag"];
-  deleteTag: UseTagsResult["deleteTag"];
+  onAddTagCreator: UseTagListItemsResult["addTagCreator"];
+  onDeleteTagCreator: UseTagListItemsResult["deleteTagCreator"];
+  onAddTagData: UseTagListItemsResult["addTagData"];
+  onUpdateTag: UseTagsResult["updateTag"];
+  onDeleteTag: UseTagsResult["deleteTag"];
 };
 
 type TagListItemProps = Props & Omit<ListItemProps, keyof Props>;
@@ -25,11 +25,11 @@ export const TagListItem: React.FC<TagListItemProps> = ({
   tagListItem,
   onSelect,
   selected,
-  addTagCreator,
-  deleteTagCreator,
-  addTagData,
-  updateTag,
-  deleteTag,
+  onAddTagCreator,
+  onDeleteTagCreator,
+  onAddTagData,
+  onUpdateTag,
+  onDeleteTag,
   ...props
 }) => {
   const itemClass = "tagListItem";
@@ -46,8 +46,8 @@ export const TagListItem: React.FC<TagListItemProps> = ({
             tag={tagListItem}
             selected={selected}
             itemClassName={itemClass}
-            updateTag={updateTag}
-            deleteTag={deleteTag}
+            onUpdateTag={onUpdateTag}
+            onDeleteTag={onDeleteTag}
           />
         );
       }
@@ -55,9 +55,9 @@ export const TagListItem: React.FC<TagListItemProps> = ({
         return (
           <TagCreator
             creatorId={tagListItem.id}
-            addTagData={addTagData}
-            addTagCreator={addTagCreator}
-            deleteTagCreator={deleteTagCreator}
+            onAddTagData={onAddTagData}
+            onAddTagCreator={onAddTagCreator}
+            onDeleteTagCreator={onDeleteTagCreator}
           />
         );
       }
@@ -66,13 +66,13 @@ export const TagListItem: React.FC<TagListItemProps> = ({
       }
     }
   }, [
-    addTagCreator,
-    addTagData,
-    deleteTag,
-    deleteTagCreator,
+    onAddTagCreator,
+    onAddTagData,
+    onDeleteTag,
+    onDeleteTagCreator,
     selected,
     tagListItem,
-    updateTag,
+    onUpdateTag,
   ]);
 
   return (

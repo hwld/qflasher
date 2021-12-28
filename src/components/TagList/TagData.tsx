@@ -12,16 +12,16 @@ type Props = {
   tag: Tag;
   itemClassName: string;
   selected: boolean;
-  updateTag: UseTagsResult["updateTag"];
-  deleteTag: UseTagsResult["deleteTag"];
+  onUpdateTag: UseTagsResult["updateTag"];
+  onDeleteTag: UseTagsResult["deleteTag"];
 };
 
 export const TagData: React.FC<Props> = ({
   tag,
   selected,
   itemClassName,
-  updateTag,
-  deleteTag,
+  onUpdateTag,
+  onDeleteTag,
 }) => {
   const { startLoading, endLoading } = useLoadingStateAction();
   const [editable, setEditable] = useState(false);
@@ -30,7 +30,7 @@ export const TagData: React.FC<Props> = ({
   const completeUpdate = async (tagName: string) => {
     if (tagName !== "" && tag.name !== tagName) {
       let id = startLoading();
-      await updateTag({ ...tag, name: tagName });
+      await onUpdateTag({ ...tag, name: tagName });
       endLoading(id);
     }
     setEditable(false);
@@ -54,13 +54,9 @@ export const TagData: React.FC<Props> = ({
     setEditable(true);
   };
 
-  const handleApplyDelete = () => {
-    deleteTag(tag.id);
-  };
-
   const handleDelete = () => {
     confirm({
-      onContinue: () => deleteTag(tag.id),
+      onContinue: () => onDeleteTag(tag.id),
       title: "タグの削除",
       body: "タグを削除しますか？",
       continueText: "削除する",

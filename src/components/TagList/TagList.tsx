@@ -7,23 +7,23 @@ import { TagListItemType, UseTagListItemsResult } from "./useTagListItems";
 type Props = {
   tagListItems: TagListItemType[];
   selectedId?: string;
-  addTagCreator: UseTagListItemsResult["addTagCreator"];
-  deleteTagCreator: UseTagListItemsResult["deleteTagCreator"];
-  addTagData: UseTagListItemsResult["addTagData"];
-  selectTag: (tagId: string) => void;
-  updateTag: UseTagsResult["updateTag"];
-  deleteTag: UseTagsResult["deleteTag"];
+  onAddTagCreator: UseTagListItemsResult["addTagCreator"];
+  onDeleteTagCreator: UseTagListItemsResult["deleteTagCreator"];
+  onAddTagData: UseTagListItemsResult["addTagData"];
+  onSelectTag: (tagId: string) => void;
+  onUpdateTag: UseTagsResult["updateTag"];
+  onDeleteTag: UseTagsResult["deleteTag"];
 } & ListProps;
 
 export const TagList: React.FC<Props> = ({
   tagListItems,
   selectedId,
-  addTagCreator,
-  deleteTagCreator,
-  addTagData,
-  selectTag,
-  updateTag,
-  deleteTag,
+  onAddTagCreator,
+  onDeleteTagCreator,
+  onAddTagData,
+  onSelectTag,
+  onUpdateTag,
+  onDeleteTag,
   ...styles
 }) => {
   return (
@@ -35,13 +35,13 @@ export const TagList: React.FC<Props> = ({
             mx={2}
             mb={1}
             tagListItem={tag}
-            onSelect={selectTag}
+            onSelect={onSelectTag}
             selected={selectedId === tag.id}
-            addTagCreator={addTagCreator}
-            deleteTagCreator={deleteTagCreator}
-            addTagData={addTagData}
-            updateTag={updateTag}
-            deleteTag={deleteTag}
+            onAddTagCreator={onAddTagCreator}
+            onDeleteTagCreator={onDeleteTagCreator}
+            onAddTagData={onAddTagData}
+            onUpdateTag={onUpdateTag}
+            onDeleteTag={onDeleteTag}
           />
         );
       })}

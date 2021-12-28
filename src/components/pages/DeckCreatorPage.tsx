@@ -22,16 +22,16 @@ export const DeckCreatorPage: React.FC<Props> = ({ userId }) => {
     const id = startLoading();
     try {
       await addDeck(newDeck);
-      endLoading(id);
       router.push("/decks");
     } catch (e) {
-      endLoading(id);
       console.error(e);
       toast({
         title: "エラー",
         description: "エラーが発生しました",
         status: "error",
       });
+    } finally {
+      endLoading(id);
     }
   };
 

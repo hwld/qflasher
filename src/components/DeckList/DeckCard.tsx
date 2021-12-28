@@ -1,17 +1,8 @@
-import {
-  Box,
-  BoxProps,
-  Button,
-  Flex,
-  Text,
-  Tooltip,
-  useToast,
-} from "@chakra-ui/react";
+import { Box, BoxProps, Button, Flex, Text, Tooltip } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdDelete, MdEdit, MdPlayArrow } from "react-icons/md";
 import { useConfirm } from "../../context/ConfirmContext";
-import { useLoadingStateAction } from "../../context/LoadingStateContext";
 import { DeckWithoutCards } from "../../types";
 import { DeckCardButton } from "./DeckCardButton";
 import { deckCardStyle } from "./useDeckCardStyle";
@@ -29,9 +20,7 @@ export const DeckCard: React.FC<Props> = ({
   ...styles
 }) => {
   const router = useRouter();
-  const toast = useToast();
   const confirm = useConfirm();
-  const { startLoading, endLoading } = useLoadingStateAction();
 
   const handlePlayDeck = () => {
     router.push({ pathname: "/decks/play", query: { id: deck.id } });
@@ -41,30 +30,8 @@ export const DeckCard: React.FC<Props> = ({
     router.push({ pathname: "/decks/edit", query: { id: deck.id } });
   };
 
-  const deleteDeck = async () => {
-    let id = startLoading();
-    try {
-      await onDeleteDeck(deck.id);
-    } catch (e) {
-      endLoading(id);
-      toast({
-        title: "エラー",
-        description: "エラーが発生しました",
-        status: "error",
-      });
-    } finally {
-      endLoading(id);
-    }
-  };
-
   const handleDelete = () => {
-    confirm({
-      onContinue: () => deleteDeck(),
-      title: "単語帳の削除",
-      body: "単語帳を削除しますか？",
-      continueText: "削除する",
-      cancelText: "キャンセル",
-    });
+    onDeleteDeck(deck.id);
   };
 
   return (

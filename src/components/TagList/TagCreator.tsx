@@ -5,26 +5,26 @@ import { UseTagListItemsResult } from "./useTagListItems";
 
 type Props = {
   creatorId: string;
-  addTagData: UseTagListItemsResult["addTagData"];
-  addTagCreator: UseTagListItemsResult["addTagCreator"];
-  deleteTagCreator: UseTagListItemsResult["deleteTagCreator"];
+  onAddTagData: UseTagListItemsResult["addTagData"];
+  onAddTagCreator: UseTagListItemsResult["addTagCreator"];
+  onDeleteTagCreator: UseTagListItemsResult["deleteTagCreator"];
 };
 
 export const TagCreator: React.FC<Props> = ({
   creatorId,
-  addTagData,
-  addTagCreator,
-  deleteTagCreator,
+  onAddTagData,
+  onAddTagCreator,
+  onDeleteTagCreator,
 }) => {
   const { startLoading, endLoading } = useLoadingStateAction();
 
   const completeCreate = async (tagName: string) => {
     if (tagName !== "") {
       let id = startLoading();
-      await addTagData({ name: tagName }, creatorId);
+      await onAddTagData({ name: tagName }, creatorId);
       endLoading(id);
     } else {
-      deleteTagCreator(creatorId);
+      onDeleteTagCreator(creatorId);
     }
   };
 
@@ -35,7 +35,7 @@ export const TagCreator: React.FC<Props> = ({
     if (key === "Enter") {
       await completeCreate(tagName);
       if (ctrlKey) {
-        addTagCreator();
+        onAddTagCreator();
       }
     }
   };

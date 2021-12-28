@@ -1,6 +1,5 @@
 import { Box, Flex, FlexProps, Progress } from "@chakra-ui/react";
 import React from "react";
-import { auth } from "../../firebase/config";
 import { useAuthState } from "../../hooks/useAuthState";
 import { Link } from "../Link";
 import { AccountMenu } from "./AccountMenu";
@@ -10,13 +9,13 @@ import { useHeaderStyle } from "./useHeaderStyle";
 type Props = { isLoading?: boolean; size: "sm" | "md" } & FlexProps;
 
 export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
-  const { user } = useAuthState();
+  const { user, signOut } = useAuthState();
   const { barHeight, progressHeight, logoWidth, accountIconSize } =
     useHeaderStyle(size);
 
   const handleSignOut = async () => {
     try {
-      await auth.signOut();
+      await signOut();
     } catch (e) {
       console.error(e);
     }

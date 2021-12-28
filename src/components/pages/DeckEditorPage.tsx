@@ -35,16 +35,16 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
     const id = startLoading();
     try {
       await updateDeck(newDeck, oldCards);
-      endLoading(id);
       router.push("/decks");
     } catch (e) {
-      endLoading(id);
       console.error(e);
       toast({
         title: "エラー",
         description: "エラーが発生しました",
         status: "error",
       });
+    } finally {
+      endLoading(id);
     }
   };
 

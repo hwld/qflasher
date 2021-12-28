@@ -8,20 +8,25 @@ import { useTagListItems } from "./TagList/useTagListItems";
 type Props = {
   selectedTagId: string | undefined;
   onSelectTagId: (id: string | undefined) => void;
-} & UseTagsResult;
+} & {
+  tags: UseTagsResult["tags"];
+  onAddTag: UseTagsResult["addTag"];
+  onUpdateTag: UseTagsResult["updateTag"];
+  onDeleteTag: UseTagsResult["deleteTag"];
+};
 
 export const TagsSideView: React.FC<Props> = ({
   selectedTagId,
   onSelectTagId,
   tags,
-  addTag,
-  updateTag,
-  deleteTag,
+  onAddTag,
+  onUpdateTag,
+  onDeleteTag,
 }) => {
   const isAllSelected = selectedTagId === undefined;
 
   const { tagListItems, addTagCreator, addTagData, deleteTagCreator } =
-    useTagListItems(tags, addTag);
+    useTagListItems(tags, onAddTag);
 
   const handleClickShowAll = () => {
     onSelectTagId(undefined);
@@ -35,7 +40,7 @@ export const TagsSideView: React.FC<Props> = ({
     if (id === selectedTagId) {
       onSelectTagId(undefined);
     }
-    deleteTag(id);
+    onDeleteTag(id);
   };
 
   return (
@@ -82,12 +87,12 @@ export const TagsSideView: React.FC<Props> = ({
         overflow="auto"
         tagListItems={tagListItems}
         selectedId={selectedTagId}
-        addTagData={addTagData}
-        addTagCreator={addTagCreator}
-        deleteTagCreator={deleteTagCreator}
-        selectTag={onSelectTagId}
-        updateTag={updateTag}
-        deleteTag={handleDeleteTag}
+        onAddTagData={addTagData}
+        onAddTagCreator={addTagCreator}
+        onDeleteTagCreator={deleteTagCreator}
+        onDeleteTag={handleDeleteTag}
+        onSelectTag={onSelectTagId}
+        onUpdateTag={onUpdateTag}
       />
     </Grid>
   );
