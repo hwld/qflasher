@@ -48,3 +48,16 @@ export const LoadingStateContextProvider: React.FC = ({ children }) => {
 export const useLoadingState = () => useContext(LoadingStateContext);
 export const useLoadingStateAction = () =>
   useContext(LoadingStateActionContext);
+
+export const useWithLoading = <_, T>(callback: (arg: T) => Promise<void>) => {
+  const { startLoading, endLoading } = useLoadingStateAction();
+
+  return useCallback(
+    async (arg: T) => {
+      let id = startLoading();
+      await callback(arg);
+      endLoading(id);
+    },
+    [callback, endLoading, startLoading]
+  );
+};
