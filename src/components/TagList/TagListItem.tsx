@@ -2,24 +2,23 @@ import Icon from "@chakra-ui/icon";
 import { Flex, ListItem, ListItemProps } from "@chakra-ui/layout";
 import React, { useMemo } from "react";
 import { AiFillTag } from "react-icons/ai";
-import { UseTagsResult } from "../../hooks/useTags";
 import { assertNever } from "../../utils/assertNever";
-import { TagCreator } from "./TagCreator";
-import { TagData } from "./TagData";
-import { TagListItemType, UseTagListItemsResult } from "./useTagListItems";
+import { TagCreator, TagCreatorProps } from "./TagCreator";
+import { TagData, TagDataProps } from "./TagData";
+import { TagListItemType } from "./useTagListItems";
 
 type Props = {
   tagListItem: TagListItemType;
   onSelect: (id: string) => void;
   selected: boolean;
-  onAddTagCreator: UseTagListItemsResult["addTagCreator"];
-  onDeleteTagCreator: UseTagListItemsResult["deleteTagCreator"];
-  onAddTagData: UseTagListItemsResult["addTagData"];
-  onUpdateTag: UseTagsResult["updateTag"];
-  onDeleteTag: UseTagsResult["deleteTag"];
+  onAddTagCreator: TagCreatorProps["onAddTagCreator"];
+  onDeleteTagCreator: TagCreatorProps["onDeleteTagCreator"];
+  onAddTagData: TagCreatorProps["onAddTagData"];
+  onUpdateTag: TagDataProps["onUpdateTag"];
+  onDeleteTag: TagDataProps["onDeleteTag"];
 };
 
-type TagListItemProps = Props & Omit<ListItemProps, keyof Props>;
+export type TagListItemProps = Props & Omit<ListItemProps, keyof Props>;
 
 export const TagListItem: React.FC<TagListItemProps> = ({
   tagListItem,

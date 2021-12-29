@@ -1,16 +1,14 @@
+import { collection, doc, orderBy, setDoc } from "@firebase/firestore";
 import {
   arrayRemove,
-  collection,
   deleteDoc,
   getDoc,
   getDocs,
-  orderBy,
+  query,
   serverTimestamp,
-  setDoc,
   updateDoc,
   where,
-} from "@firebase/firestore";
-import { doc, query } from "firebase/firestore";
+} from "firebase/firestore";
 import { useCallback, useMemo } from "react";
 import { db } from "../firebase/config";
 import { deckConverter, flagConverter } from "../firebase/firestoreConverters";
@@ -19,9 +17,9 @@ import { useFirestoreCollectionData } from "./useFirestoreCollectionData";
 
 export type UseTagsResult = {
   tags: Tag[];
-  addTag: (tag: Tag) => Promise<Tag>;
-  updateTag: (newTag: Tag) => Promise<void>;
-  deleteTag: (id: string) => Promise<void>;
+  addTag: (tag: Tag) => Promise<unknown>;
+  updateTag: (newTag: Tag) => Promise<unknown>;
+  deleteTag: (id: string) => Promise<unknown>;
 };
 
 export const useTags = (userId: string): UseTagsResult => {
@@ -56,8 +54,6 @@ export const useTags = (userId: string): UseTagsResult => {
         name: tag.name,
         createdAt: serverTimestamp(),
       });
-
-      return { ...tag };
     },
     [tagsRef]
   );

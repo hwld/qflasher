@@ -3,7 +3,7 @@ import {
   Flex,
   Tag as TagComponent,
   Text,
-  useToken,
+  useToken
 } from "@chakra-ui/react";
 import React, { useMemo, useState } from "react";
 import { Control, Controller, FieldError } from "react-hook-form";
@@ -14,18 +14,18 @@ import { Tag } from "../../types";
 import { CreatableSelect } from "./CreatableSelect";
 import { DeckFormFields } from "./useDeckForm";
 
-type Props = {
+export type TagSelectProps = {
   tags: Tag[];
   control: Control<DeckFormFields>;
   defaultTagIds?: string[];
   error?: FieldError;
-  onAddTag: UseTagsResult["addTag"];
+  onAddTag: (tag: Tag) => Promise<"success" | "error">;
   onDeleteTag: UseTagsResult["deleteTag"];
   onNextFocus?: () => void;
   onPrevFocus?: () => void;
 };
 
-export const TagsSelect: React.FC<Props> = ({
+export const TagsSelect: React.FC<TagSelectProps> = ({
   tags,
   control,
   defaultTagIds = [],
@@ -120,8 +120,10 @@ export const TagsSelect: React.FC<Props> = ({
             onCreateOption={async (name) => {
               setIsLoading(true);
               const newTag = { id: uuid(), name };
-              await onAddTag(newTag);
-              field.onChange([...field.value, newTag]);
+              const result = await onAddTag(newTag);
+              if (result === "success") {
+                field.onChange([...field.value, newTag]);
+              }
               setIsLoading(false);
             }}
           />

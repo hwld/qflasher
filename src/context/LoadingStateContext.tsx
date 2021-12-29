@@ -49,14 +49,16 @@ export const useLoadingState = () => useContext(LoadingStateContext);
 export const useLoadingStateAction = () =>
   useContext(LoadingStateActionContext);
 
-export const useWithLoading = <_, T>(callback: (arg: T) => Promise<void>) => {
+export const useWithLoading = <T, K>(callback: (arg: T) => Promise<K>) => {
   const { startLoading, endLoading } = useLoadingStateAction();
 
+  // callbackの戻り値をそのまま返す
   return useCallback(
     async (arg: T) => {
       let id = startLoading();
-      await callback(arg);
+      const result = await callback(arg);
       endLoading(id);
+      return result;
     },
     [callback, endLoading, startLoading]
   );

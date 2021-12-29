@@ -1,4 +1,4 @@
-import { Box, Center, Flex, Heading, Tag } from "@chakra-ui/react";
+import { Box, Center, Flex, Heading, Tag as ChakraTag } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React, { useCallback, useMemo, useState } from "react";
 import { AiFillTags, AiOutlineSearch } from "react-icons/ai";
@@ -41,7 +41,6 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
   };
 
   const deleteDeckOperation = useAppOperation(deleteDeck);
-
   const handleDeleteDeck = useCallback(
     async (deckId: string) => {
       confirm({
@@ -55,7 +54,11 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
     [confirm, deleteDeckOperation]
   );
 
-  const handleSelect = (name: DeckListSideMenuNames) => {
+  const handleAddTag = useAppOperation(addTag);
+  const handleUpdateTag = useAppOperation(updateTag);
+  const handleDeleteTag = useAppOperation(deleteTag);
+
+  const handleSelectMenu = (name: DeckListSideMenuNames) => {
     if (menuSelected === name) {
       selectMenu("none");
     } else {
@@ -99,7 +102,7 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
       <Flex>
         <SideMenu
           selected={menuSelected}
-          onSelect={handleSelect}
+          onSelect={handleSelectMenu}
           items={[
             { name: "tags", icon: AiFillTags },
             { name: "search", icon: AiOutlineSearch },
@@ -112,18 +115,18 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
                 selectedTagId={selectedTagId}
                 onSelectTagId={handleSelectTagId}
                 tags={tags}
-                onAddTag={addTag}
-                onUpdateTag={updateTag}
-                onDeleteTag={deleteTag}
+                onAddTag={handleAddTag}
+                onUpdateTag={handleUpdateTag}
+                onDeleteTag={handleDeleteTag}
               />
             )}
           </SideArea>
         )}
       </Flex>
       <Box flexGrow={1} overflow="auto">
-        <Tag m={3} size="lg" fontWeight="bold">
+        <ChakraTag m={3} size="lg" fontWeight="bold">
           {selectedTagName ? selectedTagName : "全てのデッキ"}
-        </Tag>
+        </ChakraTag>
         <Box my={{ base: 3, md: 5 }}>{content}</Box>
         <Fab tooltipLabel="追加" onClick={handleAddDeck}>
           <MdAdd size="70%" />

@@ -1,7 +1,7 @@
 import { useWithLoading } from "../context/LoadingStateContext";
 import { useWithErrorHandling } from "./useWithErrorHandling";
 
-type Operation<T> = (arg: T) => Promise<void>;
+type Operation<T> = (arg: T) => Promise<unknown>;
 type Option = { errorTitle: string; errorDescription: string };
 
 export const useAppOperation = <T, _>(

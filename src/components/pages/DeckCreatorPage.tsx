@@ -23,6 +23,9 @@ export const DeckCreatorPage: React.FC<Props> = ({ userId }) => {
     }
   );
 
+  const handleAddTag = useAppOperation(addTag);
+  const handleDeleteTag = useAppOperation(deleteTag);
+
   return (
     <Box>
       <Box my={{ base: 3, md: 5 }} maxW="800px" marginX="auto">
@@ -30,8 +33,8 @@ export const DeckCreatorPage: React.FC<Props> = ({ userId }) => {
           tags={tags}
           formId={formId}
           onSubmit={handleSubmit}
-          onAddTag={addTag}
-          onDeleteTag={deleteTag}
+          onAddTag={handleAddTag}
+          onDeleteTag={handleDeleteTag}
         />
       </Box>
       <Fab tooltipLabel="作成" type="submit" form={formId}>

@@ -1,21 +1,20 @@
 import { ListProps, UnorderedList } from "@chakra-ui/layout";
 import React from "react";
-import { UseTagsResult } from "../../hooks/useTags";
-import { TagListItem } from "./TagListItem";
-import { TagListItemType, UseTagListItemsResult } from "./useTagListItems";
+import { TagListItem, TagListItemProps } from "./TagListItem";
+import { TagListItemType } from "./useTagListItems";
 
-type Props = {
+export type TagListProps = {
   tagListItems: TagListItemType[];
   selectedId?: string;
-  onAddTagCreator: UseTagListItemsResult["addTagCreator"];
-  onDeleteTagCreator: UseTagListItemsResult["deleteTagCreator"];
-  onAddTagData: UseTagListItemsResult["addTagData"];
-  onSelectTag: (tagId: string) => void;
-  onUpdateTag: UseTagsResult["updateTag"];
-  onDeleteTag: UseTagsResult["deleteTag"];
+  onAddTagCreator: TagListItemProps["onAddTagCreator"];
+  onDeleteTagCreator: TagListItemProps["onDeleteTagCreator"];
+  onAddTagData: TagListItemProps["onAddTagData"];
+  onSelectTag: TagListItemProps["onSelect"];
+  onUpdateTag: TagListItemProps["onUpdateTag"];
+  onDeleteTag: TagListItemProps["onDeleteTag"];
 } & ListProps;
 
-export const TagList: React.FC<Props> = ({
+export const TagList: React.FC<TagListProps> = ({
   tagListItems,
   selectedId,
   onAddTagCreator,

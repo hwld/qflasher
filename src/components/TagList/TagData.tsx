@@ -3,12 +3,11 @@ import { Button } from "@chakra-ui/react";
 import React, { SyntheticEvent, useState } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { useConfirm } from "../../context/ConfirmContext";
-import { useLoadingStateAction } from "../../context/LoadingStateContext";
 import { UseTagsResult } from "../../hooks/useTags";
 import { Tag } from "../../types";
 import { EditableTagName, EditableTagNameProps } from "./EditableTagName";
 
-type Props = {
+export type TagDataProps = {
   tag: Tag;
   itemClassName: string;
   selected: boolean;
@@ -16,22 +15,19 @@ type Props = {
   onDeleteTag: UseTagsResult["deleteTag"];
 };
 
-export const TagData: React.FC<Props> = ({
+export const TagData: React.FC<TagDataProps> = ({
   tag,
   selected,
   itemClassName,
   onUpdateTag,
   onDeleteTag,
 }) => {
-  const { startLoading, endLoading } = useLoadingStateAction();
   const [editable, setEditable] = useState(false);
   const confirm = useConfirm();
 
   const completeUpdate = async (tagName: string) => {
     if (tagName !== "" && tag.name !== tagName) {
-      let id = startLoading();
       await onUpdateTag({ ...tag, name: tagName });
-      endLoading(id);
     }
     setEditable(false);
   };

@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
-import { UseTagsResult } from "../../hooks/useTags";
 import { Tag } from "../../types";
 import { TagData } from "./TagData";
 
@@ -11,13 +10,16 @@ export type TagListItemType = TagData | TagCreator;
 export type UseTagListItemsResult = {
   tagListItems: TagListItemType[];
   addTagCreator: () => void;
-  addTagData: (formTag: Omit<Tag, "id">, creatorId: string) => Promise<void>;
+  addTagData: (
+    formTag: Omit<Tag, "id">,
+    creatorId: string
+  ) => Promise<"success" | "error">;
   deleteTagCreator: (id: string) => void;
 };
 
 export const useTagListItems = (
   tags: Tag[],
-  addTag: UseTagsResult["addTag"]
+  addTag: (tag: Tag) => Promise<"success" | "error">
 ): UseTagListItemsResult => {
   const [tagCreators, setTagCreators] = useState<TagCreator[]>([]);
 
@@ -47,7 +49,7 @@ export const useTagListItems = (
 
   const addTagData = useCallback(
     async (formTag: Omit<Tag, "id">, creatorId: string) => {
-      await addTag({ ...formTag, id: creatorId });
+      return await addTag({ ...formTag, id: creatorId });
     },
     [addTag]
   );

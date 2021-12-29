@@ -1,28 +1,27 @@
 import React from "react";
-import { useLoadingStateAction } from "../../context/LoadingStateContext";
 import { EditableTagName, EditableTagNameProps } from "./EditableTagName";
 import { UseTagListItemsResult } from "./useTagListItems";
 
-type Props = {
+export type TagCreatorProps = {
   creatorId: string;
   onAddTagData: UseTagListItemsResult["addTagData"];
   onAddTagCreator: UseTagListItemsResult["addTagCreator"];
   onDeleteTagCreator: UseTagListItemsResult["deleteTagCreator"];
 };
 
-export const TagCreator: React.FC<Props> = ({
+export const TagCreator: React.FC<TagCreatorProps> = ({
   creatorId,
   onAddTagData,
   onAddTagCreator,
   onDeleteTagCreator,
 }) => {
-  const { startLoading, endLoading } = useLoadingStateAction();
-
   const completeCreate = async (tagName: string) => {
     if (tagName !== "") {
-      let id = startLoading();
-      await onAddTagData({ name: tagName }, creatorId);
-      endLoading(id);
+      // TODO: エラーが発生したらonDeleteTagCreatorを実行したい
+      const result = await onAddTagData({ name: tagName }, creatorId);
+      if (result === "error") {
+        onDeleteTagCreator(creatorId);
+      }
     } else {
       onDeleteTagCreator(creatorId);
     }

@@ -24,14 +24,17 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
   const useMyDeckResult = useMyDeck(userId, deckId);
   const formId = "updateDeckForm";
 
-  useLoadingEffect(useMyDeckResult.status === "loading");
-
   const handleUpdateDeck: DeckFormProps["onSubmit"] = useAppOperation(
     async ({ newDeck, oldCards }) => {
       await updateDeck(newDeck, oldCards);
       router.push("/decks");
     }
   );
+
+  const handleAddTag = useAppOperation(addTag);
+  const handleDeleteTag = useAppOperation(deleteTag);
+
+  useLoadingEffect(useMyDeckResult.status === "loading");
 
   switch (useMyDeckResult.status) {
     case "loading": {
@@ -52,8 +55,8 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
               defaultDeck={useMyDeckResult.deck}
               formId={formId}
               onSubmit={handleUpdateDeck}
-              onAddTag={addTag}
-              onDeleteTag={deleteTag}
+              onAddTag={handleAddTag}
+              onDeleteTag={handleDeleteTag}
             />
             <Fab tooltipLabel="更新" type="submit" form={formId}>
               <MdSave size="60%" />

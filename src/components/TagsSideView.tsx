@@ -2,20 +2,21 @@ import { Box, Button, Flex, Grid, Text } from "@chakra-ui/react";
 import React from "react";
 import { RiAddFill } from "react-icons/ri";
 import { UseTagsResult } from "../hooks/useTags";
-import { TagList } from "./TagList/TagList";
+import { Tag } from "../types";
+import { TagList, TagListProps } from "./TagList/TagList";
 import { useTagListItems } from "./TagList/useTagListItems";
 
-type Props = {
+export type TagsSideViewProps = {
   selectedTagId: string | undefined;
   onSelectTagId: (id: string | undefined) => void;
 } & {
   tags: UseTagsResult["tags"];
-  onAddTag: UseTagsResult["addTag"];
-  onUpdateTag: UseTagsResult["updateTag"];
-  onDeleteTag: UseTagsResult["deleteTag"];
+  onAddTag: (tag: Tag) => Promise<"success" | "error">;
+  onUpdateTag: TagListProps["onUpdateTag"];
+  onDeleteTag: TagListProps["onDeleteTag"];
 };
 
-export const TagsSideView: React.FC<Props> = ({
+export const TagsSideView: React.FC<TagsSideViewProps> = ({
   selectedTagId,
   onSelectTagId,
   tags,
