@@ -1,5 +1,6 @@
 import Icon from "@chakra-ui/icon";
-import { Flex, ListItem, ListItemProps } from "@chakra-ui/layout";
+import { BoxProps, Flex, ListItem } from "@chakra-ui/layout";
+import { Box } from "@chakra-ui/react";
 import React, { useMemo } from "react";
 import { AiFillTag } from "react-icons/ai";
 import { assertNever } from "../../utils/assertNever";
@@ -18,7 +19,7 @@ type Props = {
   onDeleteTag: TagDataProps["onDeleteTag"];
 };
 
-export type TagListItemProps = Props & Omit<ListItemProps, keyof Props>;
+export type TagListItemProps = Props & Omit<BoxProps, keyof Props>;
 
 export const TagListItem: React.FC<TagListItemProps> = ({
   tagListItem,
@@ -31,8 +32,6 @@ export const TagListItem: React.FC<TagListItemProps> = ({
   onDeleteTag,
   ...props
 }) => {
-  const itemClass = "tagListItem";
-
   const handleItemClick = () => {
     onSelect(tagListItem.id);
   };
@@ -44,7 +43,6 @@ export const TagListItem: React.FC<TagListItemProps> = ({
           <TagData
             tag={tagListItem}
             selected={selected}
-            itemClassName={itemClass}
             onUpdateTag={onUpdateTag}
             onDeleteTag={onDeleteTag}
           />
@@ -75,26 +73,26 @@ export const TagListItem: React.FC<TagListItemProps> = ({
   ]);
 
   return (
-    <ListItem
-      className="tagListItem"
-      rounded="md"
-      key={tagListItem.id}
-      aria-selected={selected}
-      _selected={{ bgColor: "whiteAlpha.400" }}
-      {...props}
-    >
-      <Flex
+    <Box role="group" {...props}>
+      <ListItem
         rounded="md"
-        p={1}
-        align="center"
-        _hover={{ bgColor: "whiteAlpha.300" }}
-        // 子要素がクリックされたときにactiveが適用されないようにする
-        sx={{ "&:active:not(:focus-within)": { bgColor: "whiteAlpha.200" } }}
-        onClick={handleItemClick}
+        key={tagListItem.id}
+        aria-selected={selected}
+        _selected={{ bgColor: "whiteAlpha.400" }}
       >
-        <Icon as={AiFillTag} mr={2} />
-        {content}
-      </Flex>
-    </ListItem>
+        <Flex
+          rounded="md"
+          p={1}
+          align="center"
+          _hover={{ bgColor: "whiteAlpha.300" }}
+          // 子要素がクリックされたときにactiveが適用されないようにする
+          sx={{ "&:active:not(:focus-within)": { bgColor: "whiteAlpha.200" } }}
+          onClick={handleItemClick}
+        >
+          <Icon as={AiFillTag} mr={2} />
+          {content}
+        </Flex>
+      </ListItem>
+    </Box>
   );
 };

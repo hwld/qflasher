@@ -1,4 +1,13 @@
-import { Box, Button, Flex, Grid, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Divider,
+  Flex,
+  FormLabel,
+  Grid,
+  Switch,
+  Text,
+} from "@chakra-ui/react";
 import React from "react";
 import { RiAddFill } from "react-icons/ri";
 import { UseTagsResult } from "../hooks/useTags";
@@ -45,7 +54,7 @@ export const TagsSideView: React.FC<TagsSideViewProps> = ({
   };
 
   return (
-    <Grid h="100%" templateRows="auto auto 1fr">
+    <Grid h="100%" templateRows="auto auto auto 1fr">
       <Flex bgColor="gray.500" h="30px" alignItems="center">
         <Box flexGrow={1} />
         <Button
@@ -61,29 +70,46 @@ export const TagsSideView: React.FC<TagsSideViewProps> = ({
           <RiAddFill size="100%" />
         </Button>
       </Flex>
-      <Box
+
+      <Flex
+        align="center"
         bgColor="whiteAlpha.200"
-        aria-selected={isAllSelected}
-        _selected={{ bgColor: "whiteAlpha.400" }}
-        m={3}
+        color="gray.100"
+        mt={3}
+        mx={3}
+        p={2}
         rounded="md"
         onClick={handleClickShowAll}
       >
-        <Box
-          _hover={{ bgColor: "whiteAlpha.300" }}
-          _active={{ bgColor: "whiteAlpha.200" }}
-          p={2}
+        <Switch
+          colorScheme={"green"}
+          id="all-decks"
+          isChecked={isAllSelected}
+        />
+        <FormLabel
+          color={isAllSelected ? "gray.50" : "gray.300"}
+          htmlFor="all-decks"
+          userSelect={"none"}
+          m={0}
+          ml={1}
+          fontWeight={"bold"}
         >
-          <Text
-            fontWeight="bold"
-            textAlign="center"
-            color={isAllSelected ? "gray.50" : "gray.300"}
-            userSelect="none"
-          >
-            全てのデッキ
-          </Text>
-        </Box>
-      </Box>
+          すべてのデッキを表示する
+        </FormLabel>
+      </Flex>
+      <Flex my={2} alignItems={"center"}>
+        <Text
+          ml={2}
+          fontWeight={"bold"}
+          overflowWrap={"unset"}
+          flexGrow={1}
+          flexShrink={0}
+          userSelect={"none"}
+        >
+          タグ一覧
+        </Text>
+        <Divider ml={2} bgColor={"gray.500"} />
+      </Flex>
       <TagList
         overflow="auto"
         tagListItems={tagListItems}

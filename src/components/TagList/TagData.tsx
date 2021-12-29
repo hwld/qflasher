@@ -9,7 +9,6 @@ import { EditableTagName, EditableTagNameProps } from "./EditableTagName";
 
 export type TagDataProps = {
   tag: Tag;
-  itemClassName: string;
   selected: boolean;
   onUpdateTag: UseTagsResult["updateTag"];
   onDeleteTag: UseTagsResult["deleteTag"];
@@ -18,7 +17,6 @@ export type TagDataProps = {
 export const TagData: React.FC<TagDataProps> = ({
   tag,
   selected,
-  itemClassName,
   onUpdateTag,
   onDeleteTag,
 }) => {
@@ -50,7 +48,8 @@ export const TagData: React.FC<TagDataProps> = ({
     setEditable(true);
   };
 
-  const handleDelete = () => {
+  const handleDelete = (e: SyntheticEvent) => {
+    e.stopPropagation();
     confirm({
       onContinue: () => onDeleteTag(tag.id),
       title: "タグの削除",
@@ -82,15 +81,7 @@ export const TagData: React.FC<TagDataProps> = ({
           >
             {tag.name}
           </Text>
-          <Flex
-            flexShrink={0}
-            // リストアイテムがホバーされたときだけ表示したい。
-            // mouseoverとmouseleaveをつかって状態を管理することもできたが、できるだけ状態をもたせたくなかった。
-            display="none"
-            sx={{
-              [`.${itemClassName}:hover &`]: { display: "flex" },
-            }}
-          >
+          <Flex flexShrink={0} display="none" _groupHover={{ display: "flex" }}>
             <Button
               rounded="md"
               boxSize="30px"

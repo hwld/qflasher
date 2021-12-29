@@ -3,7 +3,7 @@ import {
   Flex,
   Tag as TagComponent,
   Text,
-  useToken
+  useToken,
 } from "@chakra-ui/react";
 import React, { useMemo, useState } from "react";
 import { Control, Controller, FieldError } from "react-hook-form";

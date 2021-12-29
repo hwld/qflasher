@@ -31,7 +31,7 @@ export const TagList: React.FC<TagListProps> = ({
         return (
           <TagListItem
             key={tag.id}
-            mx={2}
+            mx={3}
             mb={1}
             tagListItem={tag}
             onSelect={onSelectTag}
