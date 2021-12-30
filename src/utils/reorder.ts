@@ -1,10 +1,10 @@
-export function reorder<T>(list: T[], startIndex: number, endIndex: number) {
+export function reorder<T>(list: T[], srcIndex: number, destIndex: number) {
   const result = [...list];
-  const [removed] = result.splice(startIndex, 1);
-  if (!removed) {
+  const [target] = result.splice(srcIndex, 1);
+  if (!target) {
     return result;
   }
-  result.splice(endIndex, 0, removed);
+  result.splice(destIndex, 0, target);
 
   return result;
 }
