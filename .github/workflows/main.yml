@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install dependeicies
+        run: |
+          yarn --frozen-lockfile --ignore-optional
+
+      - name: Build
+        env: 
+          NEXT_PUBLIC_API_KEY: ${{secrets.NEXT_PUBLIC_API_KEY}}
+          NEXT_PUBLIC_AUTH_DOMAIN: ${{secrets.NEXT_PUBLIC_AUTH_DOMAIN}}
+          NEXT_PUBLIC_PROJECT_ID: ${{secrets.NEXT_PUBLIC_PROJECT_ID}}
+          NEXT_PUBLIC_STORAGE_BUCKET: ${{secrets.NEXT_PUBLIC_STORAGE_BUCKET}}
+          NEXT_PUBLIC_MESSAGING_SENDER_ID: ${{secrets.NEXT_PUBLIC_MESSAGING_SENDER_ID}}
+          NEXT_PUBLIC_APP_ID: ${{secrets.NEXT_PUBLIC_APP_ID}}
+          NEXT_PUBLIC_MEASUREMENT_ID: ${{secrets.NEXT_PUBLIC_MEASUREMENT_ID}}
+        run: |
+          yarn build
+        
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: out
+          path: out
+  
+  deploy:
+    needs: [build]
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Download Artifact
+        uses: actions/download-artifact@v2
+        with: 
+          name: out
+          path: out
+        
+      - name: Deploy
+        uses: w9jds/firebase-action@v2.0.0
+        with:
+          args: deploy
+        env:
+          FIREBASE_TOKEN: ${{secrets.FIREBASE_TOKEN}}
+    
