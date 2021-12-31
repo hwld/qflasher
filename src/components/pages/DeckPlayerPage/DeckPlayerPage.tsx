@@ -3,8 +3,7 @@ import React, { useState } from "react";
 import { useLoadingEffect } from "../../../hooks/useLoadingEffect";
 import { useMyDeck } from "../../../hooks/useMyDeck";
 import { DeckPlayer } from "../../model/deck/DeckPlayer/DeckPlayer";
-import { DeckLoadingErrorPage } from "../DeckLoadingErrorPage/DeckLoadingErrorPage";
-import { NotFoundDeckPage } from "../NotFoundDeckPage/NotFoundDeckPage";
+import { ErrorMessageBox } from "../../ui/ErrorMessageBox";
 import { PlaySettingPage } from "../PlaySettingPage/PlaySettingPage";
 
 type DeckPlayerPageProps = { deckId: string; userId: string };
@@ -41,9 +40,23 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
     }
     case "error": {
       if (useMyDeckResult.error === "not-found") {
-        return <NotFoundDeckPage />;
+        return (
+          <ErrorMessageBox
+            mx="auto"
+            mt={10}
+            header="エラー"
+            description="デッキが存在しません。"
+          />
+        );
       }
-      return <DeckLoadingErrorPage />;
+      return (
+        <ErrorMessageBox
+          mx="auto"
+          mt={10}
+          header="エラー"
+          description="デッキの読み込みに失敗しましfた。"
+        />
+      );
     }
     case "success": {
       if (!hasCompletedSetting) {

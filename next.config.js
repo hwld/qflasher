@@ -2,8 +2,9 @@
 module.exports = {
   reactStrictMode: true,
   trailingSlash: true,
-  exportPathMap: async function () {
+  exportPathMap: async function (defaultPathMap) {
     return {
+      ...defaultPathMap,
       "/": { page: "/decks" },
       "/decks": { page: "/decks" },
       "/decks/create": { page: "/decks/create" },

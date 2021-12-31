@@ -8,9 +8,8 @@ import { useLoadingEffect } from "../../../hooks/useLoadingEffect";
 import { useMyDeck } from "../../../hooks/useMyDeck";
 import { useTags } from "../../../hooks/useTags";
 import { DeckForm, DeckFormProps } from "../../model/deck/DeckForm/DeckForm";
+import { ErrorMessageBox } from "../../ui/ErrorMessageBox";
 import { Fab } from "../../ui/Fab";
-import { DeckLoadingErrorPage } from "../DeckLoadingErrorPage/DeckLoadingErrorPage";
-import { NotFoundDeckPage } from "../NotFoundDeckPage/NotFoundDeckPage";
 
 type DeckEditPageProps = { deckId: string; userId: string };
 
@@ -42,9 +41,23 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
     }
     case "error": {
       if (useMyDeckResult.error === "not-found") {
-        return <NotFoundDeckPage />;
+        return (
+          <ErrorMessageBox
+            mx="auto"
+            mt={10}
+            header="エラー"
+            description="デッキが存在しません。"
+          />
+        );
       }
-      return <DeckLoadingErrorPage />;
+      return (
+        <ErrorMessageBox
+          mx="auto"
+          mt={10}
+          header="エラー"
+          description="デッキの読み込みに失敗しましfた。"
+        />
+      );
     }
     case "success": {
       return (
