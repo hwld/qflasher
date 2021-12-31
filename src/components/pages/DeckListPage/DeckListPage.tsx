@@ -12,6 +12,7 @@ import { useLoadingEffect } from "../../../hooks/useLoadingEffect";
 import { useTags } from "../../../hooks/useTags";
 import { DeckList } from "../../model/deck/DeckList/DeckList";
 import { Fab } from "../../ui/Fab";
+import { SearchBar } from "../../ui/SearchBar/SearchBar";
 import { SideArea } from "../../ui/SideArea";
 import { SideMenu } from "../../ui/SideMenu/SideMenu";
 import { TagsSideView } from "../../ui/TagsSideView";
@@ -29,6 +30,11 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
   const [selectedTagId, setSelectedTagId] = useState<string | undefined>();
   const useDeckListResult = useDeckList(userId);
   const { deleteDeck } = useDeckOperation(userId);
+  const [searchText, setSearchText] = useState("");
+
+  const handleChangeSearchText = (text: string) => {
+    setSearchText(text);
+  };
 
   const selectedTagName = tags.find((t) => t.id === selectedTagId)?.name;
 
@@ -79,10 +85,13 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
         return undefined;
       }
       case "success": {
+        const viewDecks = useDeckListResult.decks.filter((decks) =>
+          decks.name.includes(searchText)
+        );
         return (
           <DeckList
             selectedTagId={selectedTagId}
-            decks={useDeckListResult.decks}
+            decks={viewDecks}
             onDelete={handleDeleteDeck}
           />
         );
@@ -90,6 +99,7 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
     }
   }, [
     handleDeleteDeck,
+    searchText,
     selectedTagId,
     useDeckListResult.decks,
     useDeckListResult.status,
@@ -123,10 +133,16 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
           </SideArea>
         )}
       </Flex>
-      <Box flexGrow={1} overflow="auto">
+      <Box flexGrow={1} overflowY={"scroll"}>
         <ChakraTag m={3} size="lg" fontWeight="bold">
           {selectedTagName ? selectedTagName : "全てのデッキ"}
         </ChakraTag>
+        <SearchBar
+          w={"60%"}
+          mx={"auto"}
+          text={searchText}
+          onChange={handleChangeSearchText}
+        />
         <Box my={{ base: 3, md: 5 }}>{content}</Box>
         <Fab tooltipLabel="追加" onClick={handleAddDeck}>
           <MdAdd size="70%" />
