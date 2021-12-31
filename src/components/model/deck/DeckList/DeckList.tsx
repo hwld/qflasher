@@ -1,4 +1,4 @@
-import { Grid } from "@chakra-ui/layout";
+import { Grid, GridProps } from "@chakra-ui/layout";
 import { useBreakpointValue } from "@chakra-ui/media-query";
 import React from "react";
 import { DeckWithoutCards } from "../../../../types";
@@ -9,12 +9,13 @@ type Props = {
   decks: DeckWithoutCards[];
   selectedTagId: string | undefined;
   onDelete: (id: string) => Promise<void>;
-};
+} & GridProps;
 
 export const DeckList: React.FC<Props> = ({
   decks,
   selectedTagId,
   onDelete,
+  ...props
 }) => {
   const decksView = selectedTagId
     ? decks.filter((d) => d.tagIds.includes(selectedTagId))
@@ -30,6 +31,7 @@ export const DeckList: React.FC<Props> = ({
       }px)`}
       gap={5}
       justifyContent="center"
+      {...props}
     >
       {decksView.map((deck) => {
         return (

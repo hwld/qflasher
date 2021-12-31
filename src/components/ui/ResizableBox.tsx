@@ -2,9 +2,20 @@ import { Box, Flex } from "@chakra-ui/layout";
 import { MouseEventHandler } from "hoist-non-react-statics/node_modules/@types/react";
 import React, { useEffect, useRef } from "react";
 
-type Props = { width: number; setWidth: (w: number) => void };
+type Props = {
+  width: number;
+  onChangeWidth: (w: number) => void;
+  maxW?: string;
+  minW?: string;
+};
 
-export const SideArea: React.FC<Props> = ({ children, width, setWidth }) => {
+export const ResizableBox: React.FC<Props> = ({
+  children,
+  width,
+  onChangeWidth,
+  maxW = 700,
+  minW = 300,
+}) => {
   const handleRef = useRef<HTMLDivElement>(null);
 
   const currentWidth = useRef(0);
@@ -22,7 +33,8 @@ export const SideArea: React.FC<Props> = ({ children, width, setWidth }) => {
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isMouseDown.current) {
-        setWidth(currentWidth.current + (e.clientX - startX.current));
+        console.log(onChangeWidth);
+        onChangeWidth(currentWidth.current + (e.clientX - startX.current));
       }
     };
     const handleMouseUp = () => {
@@ -40,17 +52,23 @@ export const SideArea: React.FC<Props> = ({ children, width, setWidth }) => {
   }, []);
 
   return (
-    <Flex position="relative" boxShadow="xl" bgColor="gray.700">
-      <Box ref={handleRef} minW="300px" maxW="700px" h="100%" w={`${width}px`}>
-        {children}
-      </Box>
+    <Flex
+      ref={handleRef}
+      w={`${width}px`}
+      h="100%"
+      minW={minW}
+      maxW={maxW}
+      bgColor={"gray.700"}
+      position={"relative"}
+    >
+      <Box flexGrow={1}>{children}</Box>
       <Box
-        position="absolute"
+        position={"absolute"}
+        w={"5px"}
+        h={"100%"}
+        top={0}
         right={0}
-        bgColor="transparent"
-        w="5px"
-        h="100%"
-        cursor="ew-resize"
+        cursor={"ew-resize"}
         onMouseDown={handleMouseDown}
       />
     </Flex>

@@ -1,7 +1,7 @@
-import { Box, Center, Flex, Heading, Tag as ChakraTag } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
-import React, { useCallback, useMemo, useState } from "react";
-import { AiFillTags, AiOutlineSearch } from "react-icons/ai";
+import React, { useCallback, useState } from "react";
+import { AiFillTags } from "react-icons/ai";
 import { MdAdd } from "react-icons/md";
 import { useAppState } from "../../../context/AppStateContext";
 import { useConfirm } from "../../../context/ConfirmContext";
@@ -10,12 +10,10 @@ import { useDeckList } from "../../../hooks/useDeckList";
 import { useDeckOperation } from "../../../hooks/useDeckOperation";
 import { useLoadingEffect } from "../../../hooks/useLoadingEffect";
 import { useTags } from "../../../hooks/useTags";
-import { DeckList } from "../../model/deck/DeckList/DeckList";
 import { Fab } from "../../ui/Fab";
-import { SearchBar } from "../../ui/SearchBar/SearchBar";
-import { SideArea } from "../../ui/SideArea";
 import { SideMenu } from "../../ui/SideMenu/SideMenu";
 import { TagsSideView } from "../../ui/TagsSideView";
+import { DeckListPageMain } from "./DeckListPageMain";
 
 type DeckListPageProps = { userId: string };
 export type DeckListSideMenuNames = "tags" | "search" | "none";
@@ -28,15 +26,19 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
     useAppState();
   const { tags, addTag, updateTag, deleteTag } = useTags(userId);
   const [selectedTagId, setSelectedTagId] = useState<string | undefined>();
+  const selectedTagName = tags.find((t) => t.id === selectedTagId)?.name;
+  const [searchText, setSearchText] = useState("");
   const useDeckListResult = useDeckList(userId);
   const { deleteDeck } = useDeckOperation(userId);
-  const [searchText, setSearchText] = useState("");
+
+  const deleteDeckOperation = useAppOperation(deleteDeck);
+  const handleAddTag = useAppOperation(addTag);
+  const handleUpdateTag = useAppOperation(updateTag);
+  const handleDeleteTag = useAppOperation(deleteTag);
 
   const handleChangeSearchText = (text: string) => {
     setSearchText(text);
   };
-
-  const selectedTagName = tags.find((t) => t.id === selectedTagId)?.name;
 
   const handleSelectTagId = (id: string | undefined) => {
     setSelectedTagId(id);
@@ -46,7 +48,6 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
     router.push("/decks/create");
   };
 
-  const deleteDeckOperation = useAppOperation(deleteDeck);
   const handleDeleteDeck = useCallback(
     async (deckId: string) => {
       confirm({
@@ -60,10 +61,6 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
     [confirm, deleteDeckOperation]
   );
 
-  const handleAddTag = useAppOperation(addTag);
-  const handleUpdateTag = useAppOperation(updateTag);
-  const handleDeleteTag = useAppOperation(deleteTag);
-
   const handleSelectMenu = (name: DeckListSideMenuNames) => {
     if (menuSelected === name) {
       selectMenu("none");
@@ -72,55 +69,20 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
     }
   };
 
-  const content = useMemo(() => {
-    switch (useDeckListResult.status) {
-      case "error": {
-        return (
-          <Center>
-            <Heading>読み込みに失敗しました</Heading>
-          </Center>
-        );
-      }
-      case "loading": {
-        return undefined;
-      }
-      case "success": {
-        const viewDecks = useDeckListResult.decks.filter((decks) =>
-          decks.name.includes(searchText)
-        );
-        return (
-          <DeckList
-            selectedTagId={selectedTagId}
-            decks={viewDecks}
-            onDelete={handleDeleteDeck}
-          />
-        );
-      }
-    }
-  }, [
-    handleDeleteDeck,
-    searchText,
-    selectedTagId,
-    useDeckListResult.decks,
-    useDeckListResult.status,
-  ]);
-
   useLoadingEffect(useDeckListResult.status === "loading");
 
   return (
     <Flex h="100%">
-      <Flex>
-        <SideMenu
-          selected={menuSelected}
-          onSelect={handleSelectMenu}
-          items={[
-            { name: "tags", icon: AiFillTags },
-            { name: "search", icon: AiOutlineSearch },
-          ]}
-        />
-        {menuSelected !== "none" && (
-          <SideArea width={sideAreaWidth} setWidth={setSideAreaWidth}>
-            {menuSelected === "tags" && (
+      <SideMenu
+        selected={menuSelected}
+        onSelect={handleSelectMenu}
+        contentWidth={sideAreaWidth}
+        onChangeContentWitdh={setSideAreaWidth}
+        items={[
+          {
+            name: "tags",
+            icon: AiFillTags,
+            content: (
               <TagsSideView
                 selectedTagId={selectedTagId}
                 onSelectTagId={handleSelectTagId}
@@ -129,21 +91,19 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
                 onUpdateTag={handleUpdateTag}
                 onDeleteTag={handleDeleteTag}
               />
-            )}
-          </SideArea>
-        )}
-      </Flex>
+            ),
+          },
+        ]}
+      />
       <Box flexGrow={1} overflowY={"scroll"}>
-        <ChakraTag m={3} size="lg" fontWeight="bold">
-          {selectedTagName ? selectedTagName : "全てのデッキ"}
-        </ChakraTag>
-        <SearchBar
-          w={"60%"}
-          mx={"auto"}
-          text={searchText}
-          onChange={handleChangeSearchText}
+        <DeckListPageMain
+          deckListData={useDeckListResult}
+          searchText={searchText}
+          selectedTagId={selectedTagId}
+          selectedTagName={selectedTagName}
+          onChangeSearchText={handleChangeSearchText}
+          onDeleteDeck={handleDeleteDeck}
         />
-        <Box my={{ base: 3, md: 5 }}>{content}</Box>
         <Fab tooltipLabel="追加" onClick={handleAddDeck}>
           <MdAdd size="70%" />
         </Fab>
