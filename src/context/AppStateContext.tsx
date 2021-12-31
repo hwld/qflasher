@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import { DeckListSideMenuNames } from "../components/pages/DeckListPage";
+import { DeckListSideMenuNames } from "../components/pages/DeckListPage/DeckListPage";
 import { ConfirmContextProvider } from "./ConfirmContext";
 import { LoadingStateContextProvider } from "./LoadingStateContext";
 
