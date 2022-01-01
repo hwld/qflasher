@@ -1,3 +1,8 @@
+import { DeckFormFields } from "@/components/model/deck/DeckForm";
+import { CreatableSelect } from "@/components/ui/CreatableSelect";
+import { useConfirm } from "@/context/ConfirmContext";
+import { UseTagsResult } from "@/hooks/useTags";
+import { Tag } from "@/types";
 import {
   Button,
   Flex,
@@ -8,11 +13,6 @@ import {
 import React, { useMemo, useState } from "react";
 import { Control, Controller, FieldError } from "react-hook-form";
 import { v4 as uuid } from "uuid";
-import { useConfirm } from "../../../../context/ConfirmContext";
-import { UseTagsResult } from "../../../../hooks/useTags";
-import { Tag } from "../../../../types";
-import { CreatableSelect } from "../../../ui/CreatableSelect";
-import { DeckFormFields } from "../../deck/DeckForm/useDeckForm";
 
 export type TagSelectProps = {
   tags: Tag[];

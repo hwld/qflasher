@@ -1,3 +1,4 @@
+import { DeckFormFields } from "@/components/model/deck/DeckForm";
 import { Box, Input as ChakraInput, InputProps, Text } from "@chakra-ui/react";
 import {
   Control,
@@ -5,7 +6,6 @@ import {
   ControllerProps,
   FieldError,
 } from "react-hook-form";
-import { DeckFormFields } from "./useDeckForm";
 
 type PropsWithoutInput = {
   control: Control<DeckFormFields>;

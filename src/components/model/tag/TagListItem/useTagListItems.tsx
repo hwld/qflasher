@@ -1,6 +1,6 @@
+import { Tag } from "@/types";
 import { useCallback, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
-import { Tag } from "../../../../types";
 
 type TagData = { type: "tagData" } & Tag;
 type TagCreator = { type: "tagCreator"; id: string };

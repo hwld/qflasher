@@ -1,7 +1,10 @@
+import {
+  TagListItem,
+  TagListItemProps,
+  TagListItemType,
+} from "@/components/model/tag/TagListItem";
 import { ListProps, UnorderedList } from "@chakra-ui/layout";
 import React from "react";
-import { TagListItem, TagListItemProps } from "../TagListItem/TagListItem";
-import { TagListItemType } from "../TagListItem/useTagListItems";
 
 export type TagListProps = {
   tagListItems: TagListItemType[];

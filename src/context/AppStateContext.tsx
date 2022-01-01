@@ -1,7 +1,7 @@
+import { DeckListSideMenuNames } from "@/components/pages/DeckListPage/DeckListPage";
+import { ConfirmContextProvider } from "@/context/ConfirmContext";
+import { LoadingStateContextProvider } from "@/context/LoadingStateContext";
 import React, { createContext, useContext, useState } from "react";
-import { DeckListSideMenuNames } from "../components/pages/DeckListPage/DeckListPage";
-import { ConfirmContextProvider } from "./ConfirmContext";
-import { LoadingStateContextProvider } from "./LoadingStateContext";
 
 type AppState = {
   menuSelected: DeckListSideMenuNames;

@@ -1,10 +1,10 @@
+import { DeckPlayer } from "@/components/model/deck/DeckPlayer";
+import { PlaySettingPage } from "@/components/pages/PlaySettingPage";
+import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
+import { useLoadingEffect } from "@/hooks/useLoadingEffect";
+import { useMyDeck } from "@/hooks/useMyDeck";
 import { Center, Grid, Text, useBreakpointValue } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { useLoadingEffect } from "../../../hooks/useLoadingEffect";
-import { useMyDeck } from "../../../hooks/useMyDeck";
-import { DeckPlayer } from "../../model/deck/DeckPlayer/DeckPlayer";
-import { ErrorMessageBox } from "../../ui/ErrorMessageBox";
-import { PlaySettingPage } from "../PlaySettingPage/PlaySettingPage";
 
 type DeckPlayerPageProps = { deckId: string; userId: string };
 

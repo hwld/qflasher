@@ -1,10 +1,12 @@
+import {
+  deckCardStyle,
+  DeckListItemButton,
+} from "@/components/model/deck/DeckListItem";
+import { DeckWithoutCards } from "@/types";
 import { Box, BoxProps, Button, Flex, Text, Tooltip } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdDelete, MdEdit, MdPlayArrow } from "react-icons/md";
-import { DeckWithoutCards } from "../../../../types";
-import { DeckListItemButton } from "./DeckListItemButton";
-import { deckCardStyle } from "./useDeckListItemStyle";
 
 type Props = {
   style: deckCardStyle;

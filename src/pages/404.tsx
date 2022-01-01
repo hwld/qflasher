@@ -1,5 +1,5 @@
+import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import React from "react";
-import { ErrorMessageBox } from "../components/ui/ErrorMessageBox";
 
 export const NotFoundPage: React.FC = () => {
   return (

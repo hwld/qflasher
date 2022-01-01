@@ -1,8 +1,8 @@
+import { SignInForm } from "@/components/ui/SignInForm";
+import { useAuthState } from "@/hooks/useAuthState";
+import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { Center } from "@chakra-ui/layout";
 import React, { ReactElement } from "react";
-import { useAuthState } from "../../hooks/useAuthState";
-import { useLoadingEffect } from "../../hooks/useLoadingEffect";
-import { SignInForm } from "./SignInForm/SignInForm";
 
 export type AuthRequiredPageProps = {
   children: (uesrId: string) => ReactElement;

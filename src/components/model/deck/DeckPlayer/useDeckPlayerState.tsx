@@ -1,8 +1,8 @@
+import { DeckPlayConfig } from "@/components/pages/DeckPlayerPage";
+import { Deck, FlashCard } from "@/types";
+import { assertNever } from "@/utils/assertNever";
+import { shuffle } from "@/utils/shuffle";
 import { Reducer, useReducer } from "react";
-import { Deck, FlashCard } from "../../../../types";
-import { assertNever } from "../../../../utils/assertNever";
-import { shuffle } from "../../../../utils/shuffle";
-import { DeckPlayConfig } from "../../../pages/DeckPlayerPage/DeckPlayerPage";
 
 type State = {
   initialCards: FlashCard[];

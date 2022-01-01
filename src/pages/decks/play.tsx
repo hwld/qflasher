@@ -1,9 +1,9 @@
+import { DeckPlayerPage } from "@/components/pages/DeckPlayerPage";
+import { AuthRequiredPage } from "@/components/ui/AuthRequiredPage";
+import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
-import { DeckPlayerPage } from "../../components/pages/DeckPlayerPage/DeckPlayerPage";
-import { AuthRequiredPage } from "../../components/ui/AuthRequiredPage";
-import { useLoadingEffect } from "../../hooks/useLoadingEffect";
 
 const Play: NextPage = () => {
   const router = useRouter();

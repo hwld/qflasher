@@ -1,11 +1,11 @@
+import { AppTemplate } from "@/components/ui/AppTemplate";
+import { AppStateContextProvider } from "@/context/AppStateContext";
+import { theme } from "@/theme/theme";
 import { ChakraProvider } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import React from "react";
-import { AppTemplate } from "../components/ui/AppTemplate";
-import { AppStateContextProvider } from "../context/AppStateContext";
 import "../theme/scrollbar.css";
-import { theme } from "../theme/theme";
 
 // SSRを使用せずにstatic html exportを使用するので、next devでSSRされないようにする
 const NoSSR: React.FC = ({ children }) => {

@@ -1,6 +1,9 @@
+import {
+  EditableTagName,
+  EditableTagNameProps,
+  UseTagListItemsResult,
+} from "@/components/model/tag/TagListItem";
 import React from "react";
-import { EditableTagName, EditableTagNameProps } from "./EditableTagName";
-import { UseTagListItemsResult } from "./useTagListItems";
 
 export type TagCreatorProps = {
   creatorId: string;

@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, useOutsideClick } from "@chakra-ui/react";
 import {
   forwardRef,
   StylesProvider,
@@ -16,7 +16,6 @@ import React, {
 import { GroupBase, MenuProps } from "react-select";
 import { CreatableProps } from "react-select/creatable";
 import Select from "react-select/src/Select";
-import { useOutsideClick } from "../../hooks/useOutsideClick";
 
 // chakra-react-selectの型が合っていなかったので
 // https://github.com/JedWatson/react-select/blob/master/packages/react-select/src/Creatable.tsx

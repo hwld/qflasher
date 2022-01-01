@@ -1,5 +1,5 @@
-import { useWithLoading } from "../context/LoadingStateContext";
-import { useWithErrorHandling } from "./useWithErrorHandling";
+import { useWithLoading } from "@/context/LoadingStateContext";
+import { useWithErrorHandling } from "@/hooks/useWithErrorHandling";
 
 type Operation<T> = (arg: T) => Promise<unknown>;
 type Option = { errorTitle: string; errorDescription: string };

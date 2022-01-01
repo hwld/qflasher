@@ -1,7 +1,7 @@
+import { OneSideFlashCardItem } from "@/components/model/flashCard/FlashCardStackItem";
+import { FlashCard } from "@/types";
 import { Box, BoxProps } from "@chakra-ui/react";
 import React from "react";
-import { FlashCard } from "../../../../types";
-import { OneSideFlashCardItem } from "./OneSideFlashCardItem";
 
 type Props = {
   size: "sm" | "md";

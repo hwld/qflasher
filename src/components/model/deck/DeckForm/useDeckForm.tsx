@@ -1,6 +1,6 @@
+import { Deck, FlashCard, Tag } from "@/types";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
-import { Deck, FlashCard, Tag } from "../../../../types";
 
 export type DeckFormFields = {
   name: string;

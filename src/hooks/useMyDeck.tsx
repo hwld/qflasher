@@ -1,10 +1,10 @@
+import { db } from "@/firebase/config";
+import { cardConverter, deckConverter } from "@/firebase/firestoreConverters";
+import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
+import { useFirestoreDocData } from "@/hooks/useFirestoreDocData";
+import { Deck } from "@/types";
 import { collection, doc, orderBy, query } from "firebase/firestore";
 import { Reducer, useEffect, useMemo, useReducer } from "react";
-import { db } from "../firebase/config";
-import { cardConverter, deckConverter } from "../firebase/firestoreConverters";
-import { Deck } from "../types";
-import { useFirestoreCollectionData } from "./useFirestoreCollectionData";
-import { useFirestoreDocData } from "./useFirestoreDocData";
 
 type UseMyDeckResult =
   | { status: "loading" }

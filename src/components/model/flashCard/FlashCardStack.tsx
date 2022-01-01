@@ -1,9 +1,10 @@
-import { Box, BoxProps } from "@chakra-ui/react";
+import {
+  FlashCardStackItem,
+  ResultItem,
+} from "@/components/model/flashCard/FlashCardStackItem";
+import { FlashCard } from "@/types";
+import { Box, BoxProps, Progress } from "@chakra-ui/react";
 import React from "react";
-import { FlashCard } from "../../../../types";
-import { Progress } from "../../../ui/Progress";
-import { FlashCardStackItem } from "../FlashCardStackItem/FlashCardStackItem";
-import { ResultItem } from "../FlashCardStackItem/ResultItem";
 
 type Props = {
   size: "sm" | "md";

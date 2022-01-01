@@ -1,8 +1,8 @@
+import { ResizableBox } from "@/components/ui/ResizableBox";
+import { SideMenuItem } from "@/components/ui/SideMenu";
 import { Box } from "@chakra-ui/layout";
 import { Flex } from "@chakra-ui/react";
 import { ReactNode } from "react";
-import { ResizableBox } from "../ResizableBox";
-import { SideMenuItem } from "./SideMenuItem";
 
 type Props<T extends string> = {
   items: { name: T; icon: React.ElementType; content: ReactNode }[];

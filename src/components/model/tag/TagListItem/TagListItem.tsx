@@ -1,12 +1,16 @@
+import {
+  TagCreatorItem,
+  TagCreatorProps,
+  TagDataItem,
+  TagDataProps,
+  TagListItemType,
+} from "@/components/model/tag/TagListItem";
+import { assertNever } from "@/utils/assertNever";
 import Icon from "@chakra-ui/icon";
 import { BoxProps, Flex, ListItem } from "@chakra-ui/layout";
 import { Box } from "@chakra-ui/react";
 import React, { useMemo } from "react";
 import { AiFillTag } from "react-icons/ai";
-import { assertNever } from "../../../../utils/assertNever";
-import { TagCreatorItem, TagCreatorProps } from "./TagCreatorItem";
-import { TagDataItem, TagDataProps } from "./TagDataItem";
-import { TagListItemType } from "./useTagListItems";
 
 type Props = {
   tagListItem: TagListItemType;

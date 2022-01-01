@@ -1,11 +1,13 @@
+import {
+  DeckFormFields,
+  DeckFormInput,
+} from "@/components/model/deck/DeckForm";
+import { CardEditorHeader } from "@/components/model/flashCard/FlashCardEditor";
+import { FlashCard } from "@/types";
 import { Box, BoxProps, Stack } from "@chakra-ui/react";
 import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { Control, FormState } from "react-hook-form";
-import { FlashCard } from "../../../../types";
-import { DeckFormInput } from "../../deck/DeckForm/DeckFormInput";
-import { DeckFormFields } from "../../deck/DeckForm/useDeckForm";
-import { CardEditorHeader } from "./FlashCardEditorHeader";
 
 type Props = {
   index: number;

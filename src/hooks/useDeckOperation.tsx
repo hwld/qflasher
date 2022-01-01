@@ -1,3 +1,6 @@
+import { db } from "@/firebase/config";
+import { cardConverter, deckConverter } from "@/firebase/firestoreConverters";
+import { Deck, FlashCard } from "@/types";
 import {
   collection,
   deleteDoc,
@@ -8,9 +11,6 @@ import {
   writeBatch,
 } from "firebase/firestore";
 import { useCallback, useMemo } from "react";
-import { db } from "../firebase/config";
-import { cardConverter, deckConverter } from "../firebase/firestoreConverters";
-import { Deck, FlashCard } from "../types";
 
 export type DeckOperation = {
   addDeck: (deck: Deck) => Promise<void>;

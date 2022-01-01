@@ -1,15 +1,15 @@
+import { DeckForm, DeckFormProps } from "@/components/model/deck/DeckForm";
+import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
+import { Fab } from "@/components/ui/Fab";
+import { useAppOperation } from "@/hooks/useAppOperation";
+import { useDeckOperation } from "@/hooks/useDeckOperation";
+import { useLoadingEffect } from "@/hooks/useLoadingEffect";
+import { useMyDeck } from "@/hooks/useMyDeck";
+import { useTags } from "@/hooks/useTags";
 import { Box } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdSave } from "react-icons/md";
-import { useAppOperation } from "../../../hooks/useAppOperation";
-import { useDeckOperation } from "../../../hooks/useDeckOperation";
-import { useLoadingEffect } from "../../../hooks/useLoadingEffect";
-import { useMyDeck } from "../../../hooks/useMyDeck";
-import { useTags } from "../../../hooks/useTags";
-import { DeckForm, DeckFormProps } from "../../model/deck/DeckForm/DeckForm";
-import { ErrorMessageBox } from "../../ui/ErrorMessageBox";
-import { Fab } from "../../ui/Fab";
 
 type DeckEditPageProps = { deckId: string; userId: string };
 

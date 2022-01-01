@@ -1,6 +1,6 @@
+import { reorder } from "@/utils/reorder";
 import { useCallback, useState } from "react";
 import { v4 as uuid } from "uuid";
-import { reorder } from "../../../../utils/reorder";
 
 export const useCardIds = (initialIds: string[]) => {
   const [cardIds, setCardIds] = useState(initialIds);

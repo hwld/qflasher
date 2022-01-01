@@ -1,15 +1,17 @@
+import {
+  DeckFormInput,
+  useCardIds,
+  useDeckForm,
+} from "@/components/model/deck/DeckForm";
+import { FlashCardEditor } from "@/components/model/flashCard/FlashCardEditor";
+import { TagSelectProps, TagsSelect } from "@/components/model/tag/TagsSelect";
+import { useDebounce } from "@/hooks/useDebounce";
+import { Deck, FlashCard, Tag } from "@/types";
 import { Box, Text } from "@chakra-ui/layout";
 import { Button, Icon, useToast } from "@chakra-ui/react";
 import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { MdAdd } from "react-icons/md";
-import { useDebounce } from "../../../../hooks/useDebounce";
-import { Deck, FlashCard, Tag } from "../../../../types";
-import { FlashCardEditor } from "../../flashCard/FlashCardEditor/FlashCardEditor";
-import { TagSelectProps, TagsSelect } from "../../tag/TagSelect/TagsSelect";
-import { DeckFormInput } from "./DeckFormInput";
-import { useCardIds } from "./useCardIds";
-import { useDeckForm } from "./useDeckForm";
 
 export type DeckFormProps = {
   tags: Tag[];

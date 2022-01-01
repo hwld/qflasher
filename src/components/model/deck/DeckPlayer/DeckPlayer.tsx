@@ -1,10 +1,12 @@
+import {
+  OperationBar,
+  useDeckPlayerState,
+} from "@/components/model/deck/DeckPlayer";
+import { FlashCardStack } from "@/components/model/flashCard/FlashCardStack";
+import { DeckPlayConfig } from "@/components/pages/DeckPlayerPage";
+import { Deck } from "@/types";
 import { Grid, GridProps } from "@chakra-ui/react";
 import React from "react";
-import { Deck } from "../../../../types";
-import { DeckPlayConfig } from "../../../pages/DeckPlayerPage/DeckPlayerPage";
-import { FlashCardStack } from "../../flashCard/FlashCardStack/FlashCardStack";
-import { OperationBar } from "./OperationBar";
-import { useDeckPlayerState } from "./useDeckPlayerState";
 
 type Props = {
   deck: Deck;

@@ -1,9 +1,11 @@
+import {
+  DeckListItem,
+  useDeckCardStyle,
+} from "@/components/model/deck/DeckListItem";
+import { DeckWithoutCards } from "@/types";
 import { Grid, GridProps } from "@chakra-ui/layout";
 import { useBreakpointValue } from "@chakra-ui/media-query";
 import React from "react";
-import { DeckWithoutCards } from "../../../../types";
-import { DeckListItem } from "../DeckListItem/DeckListItem";
-import { useDeckCardStyle } from "../DeckListItem/useDeckListItemStyle";
 
 type Props = {
   decks: DeckWithoutCards[];

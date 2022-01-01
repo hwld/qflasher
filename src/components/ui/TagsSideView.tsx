@@ -1,3 +1,7 @@
+import { TagList, TagListProps } from "@/components/model/tag/TagList";
+import { useTagListItems } from "@/components/model/tag/TagListItem";
+import { UseTagsResult } from "@/hooks/useTags";
+import { Tag } from "@/types";
 import {
   Box,
   Button,
@@ -10,10 +14,6 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { RiAddFill } from "react-icons/ri";
-import { UseTagsResult } from "../../hooks/useTags";
-import { Tag } from "../../types";
-import { TagList, TagListProps } from "../model/tag/TagList/TagList";
-import { useTagListItems } from "../model/tag/TagListItem/useTagListItems";
 
 export type TagsSideViewProps = {
   selectedTagId: string | undefined;

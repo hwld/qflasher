@@ -1,5 +1,5 @@
+import { FirestoreDeck, FirestoreFlashCard, FirestoreTag } from "@/types";
 import { FirestoreDataConverter } from "firebase/firestore";
-import { FirestoreDeck, FirestoreFlashCard, FirestoreTag } from "../types";
 
 export const deckConverter: FirestoreDataConverter<FirestoreDeck> = {
   fromFirestore: (snapshot, option) => {

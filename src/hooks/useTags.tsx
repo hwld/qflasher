@@ -1,3 +1,7 @@
+import { db } from "@/firebase/config";
+import { deckConverter, flagConverter } from "@/firebase/firestoreConverters";
+import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
+import { Tag } from "@/types";
 import { collection, doc, orderBy, setDoc } from "@firebase/firestore";
 import {
   arrayRemove,
@@ -10,10 +14,6 @@ import {
   where,
 } from "firebase/firestore";
 import { useCallback, useMemo } from "react";
-import { db } from "../firebase/config";
-import { deckConverter, flagConverter } from "../firebase/firestoreConverters";
-import { Tag } from "../types";
-import { useFirestoreCollectionData } from "./useFirestoreCollectionData";
 
 export type UseTagsResult = {
   tags: Tag[];

@@ -1,7 +1,7 @@
+import { GoogleSignInButton } from "@/components/ui/SignInForm";
+import { useAuthState } from "@/hooks/useAuthState";
 import { Box, BoxProps } from "@chakra-ui/react";
 import React from "react";
-import { useAuthState } from "../../../hooks/useAuthState";
-import { GoogleSignInButton } from "./GoogleSignInButton";
 
 type Props = BoxProps;
 

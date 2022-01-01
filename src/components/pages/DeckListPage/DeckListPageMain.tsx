@@ -1,8 +1,8 @@
+import { DeckList } from "@/components/model/deck/DeckList";
+import { SearchBar } from "@/components/ui/SearchBar";
+import { DeckListData } from "@/hooks/useDeckList";
 import { Box, Center, Heading } from "@chakra-ui/layout";
 import { Tag } from "@chakra-ui/react";
-import { DeckListData } from "../../../hooks/useDeckList";
-import { DeckList } from "../../model/deck/DeckList/DeckList";
-import { SearchBar } from "../../ui/SearchBar/SearchBar";
 
 type Props = {
   deckListData: DeckListData;

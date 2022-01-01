@@ -1,10 +1,8 @@
-import { Box, Flex, FlexProps, Progress } from "@chakra-ui/react";
+import { AppLogo } from "@/components/ui/AppLogo";
+import { AccountMenu, useHeaderStyle } from "@/components/ui/Header";
+import { useAuthState } from "@/hooks/useAuthState";
+import { Box, Flex, FlexProps, Link, Progress } from "@chakra-ui/react";
 import React from "react";
-import { useAuthState } from "../../../hooks/useAuthState";
-import { AppLogo } from "../AppLogo";
-import { Link } from "../Link";
-import { AccountMenu } from "./AccountMenu";
-import { useHeaderStyle } from "./useHeaderStyle";
 
 type Props = { isLoading?: boolean; size: "sm" | "md" } & FlexProps;
 

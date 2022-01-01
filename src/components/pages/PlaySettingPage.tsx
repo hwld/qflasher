@@ -1,3 +1,4 @@
+import { DeckPlayConfig } from "@/components/pages/DeckPlayerPage";
 import {
   Box,
   Button,
@@ -6,7 +7,6 @@ import {
   useBreakpointValue,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { DeckPlayConfig } from "../DeckPlayerPage/DeckPlayerPage";
 
 type Props = {
   onComplete: (config: DeckPlayConfig) => void;

@@ -1,11 +1,14 @@
+import {
+  EditableTagName,
+  EditableTagNameProps,
+} from "@/components/model/tag/TagListItem";
+import { useConfirm } from "@/context/ConfirmContext";
+import { UseTagsResult } from "@/hooks/useTags";
+import { Tag } from "@/types";
 import { Box, Flex, Text } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/react";
 import React, { SyntheticEvent, useState } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
-import { useConfirm } from "../../../../context/ConfirmContext";
-import { UseTagsResult } from "../../../../hooks/useTags";
-import { Tag } from "../../../../types";
-import { EditableTagName, EditableTagNameProps } from "./EditableTagName";
 
 export type TagDataProps = {
   tag: Tag;

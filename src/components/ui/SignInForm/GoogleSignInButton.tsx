@@ -1,7 +1,7 @@
+import { GoogleIcon } from "@/components/ui/SignInForm";
 import { Button, ButtonProps } from "@chakra-ui/button";
 import { Box, Text } from "@chakra-ui/layout";
 import React from "react";
-import { GoogleIcon } from "./GoogleIcon";
 
 type Props = {} & ButtonProps;
 
