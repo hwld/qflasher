@@ -3,6 +3,10 @@ import {
   EditableTagNameProps,
   UseTagListItemsResult,
 } from "@/components/model/tag/TagListItem";
+import {
+  TagListItemBase,
+  TagListItemLayoutProps,
+} from "@/components/model/tag/TagListItem/TagListItemBase";
 import React from "react";
 
 export type TagCreatorProps = {
@@ -10,17 +14,17 @@ export type TagCreatorProps = {
   onAddTagData: UseTagListItemsResult["addTagData"];
   onAddTagCreator: UseTagListItemsResult["addTagCreator"];
   onDeleteTagCreator: UseTagListItemsResult["deleteTagCreator"];
-};
+} & TagListItemLayoutProps;
 
 export const TagCreatorItem: React.FC<TagCreatorProps> = ({
   creatorId,
   onAddTagData,
   onAddTagCreator,
   onDeleteTagCreator,
+  ...props
 }) => {
   const completeCreate = async (tagName: string) => {
     if (tagName !== "") {
-      // TODO: エラーが発生したらonDeleteTagCreatorを実行したい
       const result = await onAddTagData({ name: tagName }, creatorId);
       if (result === "error") {
         onDeleteTagCreator(creatorId);
@@ -46,5 +50,9 @@ export const TagCreatorItem: React.FC<TagCreatorProps> = ({
     completeCreate(tagName);
   };
 
-  return <EditableTagName onKeyDown={handleKeyDown} onBlur={handleBlur} />;
+  return (
+    <TagListItemBase {...props}>
+      <EditableTagName onKeyDown={handleKeyDown} onBlur={handleBlur} />
+    </TagListItemBase>
+  );
 };

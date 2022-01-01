@@ -2,6 +2,10 @@ import {
   EditableTagName,
   EditableTagNameProps,
 } from "@/components/model/tag/TagListItem";
+import {
+  TagListItemBase,
+  TagListItemLayoutProps,
+} from "@/components/model/tag/TagListItem/TagListItemBase";
 import { useConfirm } from "@/context/ConfirmContext";
 import { UseTagsResult } from "@/hooks/useTags";
 import { Tag } from "@/types";
@@ -13,18 +17,25 @@ import { MdDelete, MdEdit } from "react-icons/md";
 export type TagDataProps = {
   tag: Tag;
   selected: boolean;
+  onSelectTag: (id: string) => void;
   onUpdateTag: UseTagsResult["updateTag"];
   onDeleteTag: UseTagsResult["deleteTag"];
-};
+} & TagListItemLayoutProps;
 
 export const TagDataItem: React.FC<TagDataProps> = ({
   tag,
   selected,
+  onSelectTag,
   onUpdateTag,
   onDeleteTag,
+  ...props
 }) => {
-  const [editable, setEditable] = useState(false);
   const confirm = useConfirm();
+  const [editable, setEditable] = useState(false);
+
+  const handleClickItem = () => {
+    onSelectTag(tag.id);
+  };
 
   const completeUpdate = async (tagName: string) => {
     if (tagName !== "" && tag.name !== tagName) {
@@ -63,7 +74,11 @@ export const TagDataItem: React.FC<TagDataProps> = ({
   };
 
   return (
-    <>
+    <TagListItemBase
+      {...props}
+      selected={selected}
+      onClickItem={handleClickItem}
+    >
       {editable ? (
         <EditableTagName
           defaultTagName={tag.name}
@@ -110,6 +125,6 @@ export const TagDataItem: React.FC<TagDataProps> = ({
           <Box h="30px" />
         </>
       )}
-    </>
+    </TagListItemBase>
   );
 };
