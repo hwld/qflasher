@@ -2,6 +2,8 @@ import { DeckListSideMenuNames } from "@/components/pages/DeckListPage/DeckListP
 import { ConfirmContextProvider } from "@/context/ConfirmContext";
 import { LoadingStateContextProvider } from "@/context/LoadingStateContext";
 import React, { createContext, useContext, useState } from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 type AppState = {
   menuSelected: DeckListSideMenuNames;
@@ -30,9 +32,11 @@ export const AppStateContextProvider: React.FC = ({ children }) => {
         setSideAreaWidth,
       }}
     >
-      <LoadingStateContextProvider>
-        <ConfirmContextProvider>{children}</ConfirmContextProvider>
-      </LoadingStateContextProvider>
+      <DndProvider backend={HTML5Backend}>
+        <LoadingStateContextProvider>
+          <ConfirmContextProvider>{children}</ConfirmContextProvider>
+        </LoadingStateContextProvider>
+      </DndProvider>
     </AppStateContext.Provider>
   );
 };

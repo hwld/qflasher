@@ -29,12 +29,13 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
   const selectedTagName = tags.find((t) => t.id === selectedTagId)?.name;
   const [searchText, setSearchText] = useState("");
   const useDeckListResult = useDeckList(userId);
-  const { deleteDeck } = useDeckOperation(userId);
+  const { deleteDeck, attachTag } = useDeckOperation(userId);
 
   const deleteDeckOperation = useAppOperation(deleteDeck);
   const handleAddTag = useAppOperation(addTag);
   const handleUpdateTag = useAppOperation(updateTag);
   const handleDeleteTag = useAppOperation(deleteTag);
+  const handleTagDeck = useAppOperation(attachTag);
 
   const handleChangeSearchText = (text: string) => {
     setSearchText(text);
@@ -103,6 +104,7 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
           selectedTagName={selectedTagName}
           onChangeSearchText={handleChangeSearchText}
           onDeleteDeck={handleDeleteDeck}
+          onTagDeck={handleTagDeck}
         />
         <Fab tooltipLabel="追加" onClick={handleAddDeck}>
           <MdAdd size="70%" />

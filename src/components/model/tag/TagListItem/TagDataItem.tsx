@@ -7,6 +7,7 @@ import {
   TagListItemLayoutProps,
 } from "@/components/model/tag/TagListItem/TagListItemBase";
 import { useConfirm } from "@/context/ConfirmContext";
+import { useTagDrag } from "@/hooks/useTagDnD";
 import { UseTagsResult } from "@/hooks/useTags";
 import { Tag } from "@/types";
 import { Box, Flex, Text } from "@chakra-ui/layout";
@@ -32,6 +33,13 @@ export const TagDataItem: React.FC<TagDataProps> = ({
 }) => {
   const confirm = useConfirm();
   const [editable, setEditable] = useState(false);
+  const [_, dragRef] = useTagDrag(
+    () => ({
+      item: () => ({ id: tag.id }),
+      canDrag: () => !editable,
+    }),
+    [editable]
+  );
 
   const handleClickItem = () => {
     onSelectTag(tag.id);
@@ -75,6 +83,7 @@ export const TagDataItem: React.FC<TagDataProps> = ({
 
   return (
     <TagListItemBase
+      ref={dragRef}
       {...props}
       selected={selected}
       onClickItem={handleClickItem}

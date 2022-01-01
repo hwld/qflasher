@@ -2,20 +2,23 @@ import { db } from "@/firebase/config";
 import { cardConverter, deckConverter } from "@/firebase/firestoreConverters";
 import { Deck, FlashCard } from "@/types";
 import {
+  arrayUnion,
   collection,
   deleteDoc,
   doc,
   getDoc,
   getDocs,
   serverTimestamp,
+  updateDoc,
   writeBatch,
 } from "firebase/firestore";
 import { useCallback, useMemo } from "react";
 
 export type DeckOperation = {
-  addDeck: (deck: Deck) => Promise<void>;
-  updateDeck: (newDeck: Deck, oldCards: FlashCard[]) => Promise<void>;
-  deleteDeck: (id: string) => Promise<void>;
+  addDeck: (deck: Deck) => Promise<unknown>;
+  updateDeck: (newDeck: Deck, oldCards: FlashCard[]) => Promise<unknown>;
+  deleteDeck: (id: string) => Promise<unknown>;
+  attachTag: (arg: { deckId: string; tagId: string }) => Promise<unknown>;
 };
 
 export const useDeckOperation = (userId: string): DeckOperation => {
@@ -124,5 +127,19 @@ export const useDeckOperation = (userId: string): DeckOperation => {
     [decksRef]
   );
 
-  return { addDeck, updateDeck, deleteDeck };
+  const attachTag = useCallback(
+    async ({ deckId, tagId }: { deckId: string; tagId: string }) => {
+      const deckRef = doc(decksRef, deckId);
+      const deck = (await getDoc(deckRef)).data();
+
+      if (!deck) {
+        throw new Error("存在しないデッキを参照しました");
+      }
+
+      await updateDoc(deckRef, { tagIds: arrayUnion(tagId) });
+    },
+    [decksRef]
+  );
+
+  return { addDeck, updateDeck, deleteDeck, attachTag };
 };

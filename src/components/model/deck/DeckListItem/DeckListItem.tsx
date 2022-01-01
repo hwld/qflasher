@@ -2,25 +2,37 @@ import {
   deckCardStyle,
   DeckListItemButton,
 } from "@/components/model/deck/DeckListItem";
+import { DeckOperation } from "@/hooks/useDeckOperation";
+import { useTagDrop } from "@/hooks/useTagDnD";
 import { DeckWithoutCards } from "@/types";
 import { Box, BoxProps, Button, Flex, Text, Tooltip } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdDelete, MdEdit, MdPlayArrow } from "react-icons/md";
 
-type Props = {
+export type DeckListItemProps = {
   style: deckCardStyle;
   deck: DeckWithoutCards;
   onDeleteDeck: (id: string) => Promise<void>;
+  onTagDeck: DeckOperation["attachTag"];
 } & BoxProps;
 
-export const DeckListItem: React.FC<Props> = ({
+export const DeckListItem: React.FC<DeckListItemProps> = ({
   style: { ringWidth, cardWidth, height, nameFontSize, metaFontSize },
   deck,
   onDeleteDeck,
+  onTagDeck,
   ...styles
 }) => {
   const router = useRouter();
+  const [{ hovered }, dropRef] = useTagDrop(() => ({
+    drop: (item) => {
+      onTagDeck({ deckId: deck.id, tagId: item.id });
+    },
+    collect: (monitor) => {
+      return { hovered: monitor.isOver() };
+    },
+  }));
 
   const handlePlayDeck = () => {
     router.push({ pathname: "/decks/play", query: { id: deck.id } });
@@ -37,6 +49,8 @@ export const DeckListItem: React.FC<Props> = ({
   return (
     <Flex
       {...styles}
+      opacity={hovered ? 0.5 : 1}
+      ref={dropRef}
       align="center"
       w={`${ringWidth + cardWidth}px`}
       h={`${height}px`}

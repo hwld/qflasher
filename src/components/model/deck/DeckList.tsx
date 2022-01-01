@@ -1,5 +1,6 @@
 import {
   DeckListItem,
+  DeckListItemProps,
   useDeckCardStyle,
 } from "@/components/model/deck/DeckListItem";
 import { DeckWithoutCards } from "@/types";
@@ -7,16 +8,18 @@ import { Grid, GridProps } from "@chakra-ui/layout";
 import { useBreakpointValue } from "@chakra-ui/media-query";
 import React from "react";
 
-type Props = {
+export type DeckListProps = {
   decks: DeckWithoutCards[];
   selectedTagId: string | undefined;
-  onDelete: (id: string) => Promise<void>;
+  onDeleteDeck: DeckListItemProps["onDeleteDeck"];
+  onTagDeck: DeckListItemProps["onTagDeck"];
 } & GridProps;
 
-export const DeckList: React.FC<Props> = ({
+export const DeckList: React.FC<DeckListProps> = ({
   decks,
   selectedTagId,
-  onDelete,
+  onDeleteDeck,
+  onTagDeck,
   ...props
 }) => {
   const decksView = selectedTagId
@@ -41,7 +44,8 @@ export const DeckList: React.FC<Props> = ({
             key={deck.id}
             style={cardStyle}
             deck={deck}
-            onDeleteDeck={onDelete}
+            onDeleteDeck={onDeleteDeck}
+            onTagDeck={onTagDeck}
           />
         );
       })}

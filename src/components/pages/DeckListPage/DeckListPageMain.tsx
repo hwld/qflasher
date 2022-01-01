@@ -1,4 +1,4 @@
-import { DeckList } from "@/components/model/deck/DeckList";
+import { DeckList, DeckListProps } from "@/components/model/deck/DeckList";
 import { SearchBar } from "@/components/ui/SearchBar";
 import { DeckListData } from "@/hooks/useDeckList";
 import { Box, Center, Heading } from "@chakra-ui/layout";
@@ -10,7 +10,8 @@ type Props = {
   selectedTagId: string | undefined;
   selectedTagName: string | undefined;
   onChangeSearchText: (text: string) => void;
-  onDeleteDeck: (id: string) => Promise<void>;
+  onDeleteDeck: DeckListProps["onDeleteDeck"];
+  onTagDeck: DeckListProps["onTagDeck"];
 };
 
 export const DeckListPageMain: React.FC<Props> = ({
@@ -20,6 +21,7 @@ export const DeckListPageMain: React.FC<Props> = ({
   selectedTagName,
   onChangeSearchText,
   onDeleteDeck,
+  onTagDeck,
 }) => {
   switch (deckListData.status) {
     case "error": {
@@ -51,7 +53,8 @@ export const DeckListPageMain: React.FC<Props> = ({
             mt={4}
             selectedTagId={selectedTagId}
             decks={viewDecks}
-            onDelete={onDeleteDeck}
+            onDeleteDeck={onDeleteDeck}
+            onTagDeck={onTagDeck}
           />
         </Box>
       );

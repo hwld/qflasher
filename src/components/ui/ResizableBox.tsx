@@ -33,7 +33,6 @@ export const ResizableBox: React.FC<Props> = ({
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isMouseDown.current) {
-        console.log(onChangeWidth);
         onChangeWidth(currentWidth.current + (e.clientX - startX.current));
       }
     };
