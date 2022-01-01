@@ -59,9 +59,10 @@ export const TagsSideView: React.FC<TagsSideViewProps> = ({
         <Box flexGrow={1} />
         <Button
           boxSize="25px"
-          bgColor="blackAlpha.400"
-          _hover={{ bgColor: "blackAlpha.500" }}
-          _active={{ bgColor: "blackAlpha.600" }}
+          bgColor="orange.300"
+          color={"gray.700"}
+          _hover={{ bgColor: "orange.400" }}
+          _active={{ bgColor: "orange.500" }}
           mr={1}
           minW="none"
           p={0}

@@ -2,8 +2,9 @@ import {
   FlashCardStackItem,
   ResultItem,
 } from "@/components/model/flashCard/FlashCardStackItem";
+import { Progress } from "@/components/ui/Progress";
 import { FlashCard } from "@/types";
-import { Box, BoxProps, Progress } from "@chakra-ui/react";
+import { Box, BoxProps } from "@chakra-ui/react";
 import React from "react";
 
 type Props = {

@@ -1,7 +1,7 @@
+import { TagsSideView } from "@/components/model/tag/TagsSideView";
 import { DeckListPageMain } from "@/components/pages/DeckListPage";
 import { Fab } from "@/components/ui/Fab";
 import { SideMenu } from "@/components/ui/SideMenu";
-import { TagsSideView } from "@/components/ui/TagsSideView";
 import { useAppState } from "@/context/AppStateContext";
 import { useConfirm } from "@/context/ConfirmContext";
 import { useAppOperation } from "@/hooks/useAppOperation";

@@ -37,7 +37,7 @@ export const DeckPlayer: React.FC<Props> = ({
   return (
     <Grid templateRows="1fr auto" {...styles}>
       <FlashCardStack
-        maxW="800px"
+        maxW="1000px"
         w="100%"
         mx="auto"
         size={size}

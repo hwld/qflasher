@@ -21,7 +21,7 @@ export const useHeaderStyle = (size: "sm" | "md"): HeaderStyle => {
     case "md": {
       barHeight = 60;
       progressHeight = 5;
-      logoWidth = 200;
+      logoWidth = 300;
       accountIconSize = 40;
       break;
     }
