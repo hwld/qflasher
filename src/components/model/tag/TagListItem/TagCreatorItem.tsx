@@ -26,7 +26,7 @@ export const TagCreatorItem: React.FC<TagCreatorProps> = ({
   const completeCreate = async (tagName: string) => {
     if (tagName !== "") {
       const result = await onAddTagData({ name: tagName }, creatorId);
-      if (result === "error") {
+      if (result.type === "error") {
         onDeleteTagCreator(creatorId);
       }
     } else {

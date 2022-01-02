@@ -9,6 +9,7 @@ import { useDeckList } from "@/hooks/useDeckList";
 import { useDeckOperation } from "@/hooks/useDeckOperation";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { useTags } from "@/hooks/useTags";
+import { useWithAppSuccessHandler } from "@/hooks/useWithAppSuccessHandler";
 import { Box, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React, { useCallback, useState } from "react";
@@ -35,7 +36,11 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
   const handleAddTag = useAppOperation(addTag);
   const handleUpdateTag = useAppOperation(updateTag);
   const handleDeleteTag = useAppOperation(deleteTag);
-  const handleTagDeck = useAppOperation(attachTag);
+  const taggingOperation = useAppOperation(attachTag);
+  const handleTagDeck = useWithAppSuccessHandler(
+    taggingOperation,
+    () => `タグをデッキに追加しました`
+  );
 
   const handleChangeSearchText = (text: string) => {
     setSearchText(text);

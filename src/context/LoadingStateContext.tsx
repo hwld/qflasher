@@ -1,3 +1,4 @@
+import { Operation } from "@/types";
 import {
   createContext,
   useCallback,
@@ -49,14 +50,16 @@ export const useLoadingState = () => useContext(LoadingStateContext);
 export const useLoadingStateAction = () =>
   useContext(LoadingStateActionContext);
 
-export const useWithLoading = <T, K>(callback: (arg: T) => Promise<K>) => {
+export const useWithLoading = <T extends unknown[], K>(
+  callback: Operation<T, K>
+): Operation<T, K> => {
   const { startLoading, endLoading } = useLoadingStateAction();
 
   // callbackの戻り値をそのまま返す
   return useCallback(
-    async (arg: T) => {
+    async (...args) => {
       let id = startLoading();
-      const result = await callback(arg);
+      const result = await callback(...args);
       endLoading(id);
       return result;
     },

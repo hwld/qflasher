@@ -1,3 +1,4 @@
+import { Result } from "@/hooks/useWithResult";
 import { Tag } from "@/types";
 import { useCallback, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
@@ -12,13 +13,13 @@ export type UseTagListItemsResult = {
   addTagData: (
     formTag: Omit<Tag, "id">,
     creatorId: string
-  ) => Promise<"success" | "error">;
+  ) => Promise<Result<unknown>>;
   deleteTagCreator: (id: string) => void;
 };
 
 export const useTagListItems = (
   tags: Tag[],
-  addTag: (tag: Tag) => Promise<"success" | "error">
+  addTag: (tag: Tag) => Promise<Result<unknown>>
 ): UseTagListItemsResult => {
   const [tagCreators, setTagCreators] = useState<TagCreator[]>([]);
 

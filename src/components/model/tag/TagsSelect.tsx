@@ -2,6 +2,7 @@ import { DeckFormFields } from "@/components/model/deck/DeckForm";
 import { CreatableSelect } from "@/components/ui/CreatableSelect";
 import { useConfirm } from "@/context/ConfirmContext";
 import { UseTagsResult } from "@/hooks/useTags";
+import { Result } from "@/hooks/useWithResult";
 import { Tag } from "@/types";
 import {
   Button,
@@ -19,7 +20,7 @@ export type TagSelectProps = {
   control: Control<DeckFormFields>;
   defaultTagIds?: string[];
   error?: FieldError;
-  onAddTag: (tag: Tag) => Promise<"success" | "error">;
+  onAddTag: (tag: Tag) => Promise<Result<unknown>>;
   onDeleteTag: UseTagsResult["deleteTag"];
   onNextFocus?: () => void;
   onPrevFocus?: () => void;
@@ -121,7 +122,7 @@ export const TagsSelect: React.FC<TagSelectProps> = ({
               setIsLoading(true);
               const newTag = { id: uuid(), name };
               const result = await onAddTag(newTag);
-              if (result === "success") {
+              if (result.type === "success") {
                 field.onChange([...field.value, newTag]);
               }
               setIsLoading(false);

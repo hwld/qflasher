@@ -4,7 +4,7 @@ import {
 } from "@/components/model/deck/DeckListItem";
 import { DeckOperation } from "@/hooks/useDeckOperation";
 import { useTagDrop } from "@/hooks/useTagDnD";
-import { DeckWithoutCards } from "@/types";
+import { DeckWithoutCards, OperationWithResult } from "@/types";
 import { Box, BoxProps, Button, Flex, Text, Tooltip } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
@@ -14,7 +14,7 @@ export type DeckListItemProps = {
   style: deckCardStyle;
   deck: DeckWithoutCards;
   onDeleteDeck: (id: string) => Promise<void>;
-  onTagDeck: DeckOperation["attachTag"];
+  onTagDeck: OperationWithResult<DeckOperation["attachTag"]>;
 } & BoxProps;
 
 export const DeckListItem: React.FC<DeckListItemProps> = ({
@@ -26,8 +26,8 @@ export const DeckListItem: React.FC<DeckListItemProps> = ({
 }) => {
   const router = useRouter();
   const [{ hovered }, dropRef] = useTagDrop(() => ({
-    drop: (item) => {
-      onTagDeck({ deckId: deck.id, tagId: item.id });
+    drop: (tag) => {
+      onTagDeck(deck.id, tag.id);
     },
     collect: (monitor) => {
       return { hovered: monitor.isOver() };

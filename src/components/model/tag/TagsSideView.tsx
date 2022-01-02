@@ -1,6 +1,7 @@
 import { TagList, TagListProps } from "@/components/model/tag/TagList";
 import { useTagListItems } from "@/components/model/tag/TagListItem";
 import { UseTagsResult } from "@/hooks/useTags";
+import { Result } from "@/hooks/useWithResult";
 import { Tag } from "@/types";
 import {
   Box,
@@ -20,7 +21,7 @@ export type TagsSideViewProps = {
   onSelectTagId: (id: string | undefined) => void;
 } & {
   tags: UseTagsResult["tags"];
-  onAddTag: (tag: Tag) => Promise<"success" | "error">;
+  onAddTag: (tag: Tag) => Promise<Result<unknown>>;
   onUpdateTag: TagListProps["onUpdateTag"];
   onDeleteTag: TagListProps["onDeleteTag"];
 };
