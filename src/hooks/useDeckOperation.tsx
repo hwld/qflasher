@@ -1,5 +1,9 @@
 import { db } from "@/firebase/config";
-import { cardConverter, deckConverter } from "@/firebase/firestoreConverters";
+import {
+  cardConverter,
+  deckConverter,
+  tagConverter,
+} from "@/firebase/firestoreConverters";
 import { Deck, FlashCard } from "@/types";
 import {
   arrayUnion,
@@ -21,7 +25,7 @@ export type DeckOperation = {
   attachTag: (
     deckId: string,
     tagId: string
-  ) => Promise<{ deckId: string; tagId: string }>;
+  ) => Promise<{ deckName: string; tagName: string; alreadyExisted: boolean }>;
 };
 
 export const useDeckOperation = (userId: string): DeckOperation => {
@@ -134,16 +138,27 @@ export const useDeckOperation = (userId: string): DeckOperation => {
     async (deckId: string, tagId: string) => {
       const deckRef = doc(decksRef, deckId);
       const deck = (await getDoc(deckRef)).data();
+      const tag = (
+        await getDoc(
+          doc(db, `users/${userId}/tags/${tagId}`).withConverter(tagConverter)
+        )
+      ).data();
 
       if (!deck) {
         throw new Error("存在しないデッキを参照しました");
       }
 
+      if (!tag) {
+        throw new Error("存在しないタグを参照しました");
+      }
+
+      const alreadyExisted = deck.tagIds.includes(tagId);
+
       await updateDoc(deckRef, { tagIds: arrayUnion(tagId) });
 
-      return { deckId, tagId };
+      return { deckName: deck.name, tagName: tag.name, alreadyExisted };
     },
-    [decksRef]
+    [decksRef, userId]
   );
 
   return { addDeck, updateDeck, deleteDeck, attachTag };

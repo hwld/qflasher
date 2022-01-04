@@ -46,12 +46,12 @@ export const cardConverter: FirestoreDataConverter<FirestoreFlashCard> = {
   },
 };
 
-export const flagConverter: FirestoreDataConverter<FirestoreTag> = {
+export const tagConverter: FirestoreDataConverter<FirestoreTag> = {
   fromFirestore: (snapshot, options) => {
-    const flag = snapshot.data(options)!;
-    return { id: flag.id, name: flag.name, createdAt: flag.createdAt };
+    const tag = snapshot.data(options)!;
+    return { id: tag.id, name: tag.name, createdAt: tag.createdAt };
   },
-  toFirestore: (flag) => {
-    return { id: flag.id, name: flag.name, createdAt: flag.createdAt };
+  toFirestore: (tag) => {
+    return { id: tag.id, name: tag.name, createdAt: tag.createdAt };
   },
 };

@@ -2,9 +2,8 @@ import {
   deckCardStyle,
   DeckListItemButton,
 } from "@/components/model/deck/DeckListItem";
-import { DeckOperation } from "@/hooks/useDeckOperation";
 import { useTagDrop } from "@/hooks/useTagDnD";
-import { DeckWithoutCards, OperationWithResult } from "@/types";
+import { DeckWithoutCards } from "@/types";
 import { Box, BoxProps, Button, Flex, Text, Tooltip } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
@@ -14,7 +13,7 @@ export type DeckListItemProps = {
   style: deckCardStyle;
   deck: DeckWithoutCards;
   onDeleteDeck: (id: string) => Promise<void>;
-  onTagDeck: OperationWithResult<DeckOperation["attachTag"]>;
+  onTagDeck: (deckId: string, tagId: string) => unknown;
 } & BoxProps;
 
 export const DeckListItem: React.FC<DeckListItemProps> = ({

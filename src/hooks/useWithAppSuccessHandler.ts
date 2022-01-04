@@ -1,11 +1,16 @@
-import { Operation, OperationWithResult } from "@/types";
+import { Operation, WithResult } from "@/types";
 import { useToast } from "@chakra-ui/react";
-import { useCallback } from "react";
+import { ReactNode, useCallback } from "react";
 
-export const useWithAppSuccessHandler = <T extends unknown[], K>(
-  callback: OperationWithResult<Operation<T, K>>,
-  getMessage: (item: K) => string
-): OperationWithResult<Operation<T, K>> => {
+type UseWithAppSuccessHandlerOption<R> = {
+  getMessage: (item: R) => ReactNode;
+  isWarning?: (item: R) => boolean;
+};
+
+export const useWithAppSuccessHandler = <A extends unknown[], R>(
+  callback: WithResult<Operation<A, R>>,
+  { getMessage, isWarning = () => false }: UseWithAppSuccessHandlerOption<R>
+): WithResult<Operation<A, R>> => {
   const toast = useToast();
 
   return useCallback(
@@ -13,10 +18,13 @@ export const useWithAppSuccessHandler = <T extends unknown[], K>(
       const result = await callback(...args);
       if (result.type === "success") {
         const message = getMessage(result.item);
-        toast({ description: message, status: "success" });
+        toast({
+          description: message,
+          status: isWarning(result.item) ? "warning" : "success",
+        });
       }
       return result;
     },
-    [callback, getMessage, toast]
+    [callback, getMessage, isWarning, toast]
   );
 };
