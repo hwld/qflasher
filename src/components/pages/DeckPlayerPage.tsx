@@ -1,11 +1,10 @@
+import { DeckPlayer } from "@/components/model/deck/DeckPlayer";
+import { PlaySettingPage } from "@/components/pages/PlaySettingPage";
+import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
+import { useLoadingEffect } from "@/hooks/useLoadingEffect";
+import { useMyDeck } from "@/hooks/useMyDeck";
 import { Center, Grid, Text, useBreakpointValue } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { useLoadingEffect } from "../../hooks/useLoadingEffect";
-import { useMyDeck } from "../../hooks/useMyDeck";
-import { DeckPlayer } from "../DeckPlayer";
-import { DeckLoadingErrorPage } from "./DeckLoadingErrorPage";
-import { NotFoundDeckPage } from "./NotFoundDeckPage";
-import { PlaySettingPage } from "./PlaySettingPage";
 
 type DeckPlayerPageProps = { deckId: string; userId: string };
 
@@ -41,9 +40,23 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
     }
     case "error": {
       if (useMyDeckResult.error === "not-found") {
-        return <NotFoundDeckPage />;
+        return (
+          <ErrorMessageBox
+            mx="auto"
+            mt={10}
+            header="エラー"
+            description="デッキが存在しません。"
+          />
+        );
       }
-      return <DeckLoadingErrorPage />;
+      return (
+        <ErrorMessageBox
+          mx="auto"
+          mt={10}
+          header="エラー"
+          description="デッキの読み込みに失敗しましfた。"
+        />
+      );
     }
     case "success": {
       if (!hasCompletedSetting) {

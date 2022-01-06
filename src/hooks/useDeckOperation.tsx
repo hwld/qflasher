@@ -1,21 +1,31 @@
+import { db } from "@/firebase/config";
 import {
+  cardConverter,
+  deckConverter,
+  tagConverter,
+} from "@/firebase/firestoreConverters";
+import { Deck, FlashCard } from "@/types";
+import {
+  arrayUnion,
   collection,
   deleteDoc,
   doc,
   getDoc,
   getDocs,
   serverTimestamp,
+  updateDoc,
   writeBatch,
 } from "firebase/firestore";
 import { useCallback, useMemo } from "react";
-import { db } from "../firebase/config";
-import { cardConverter, deckConverter } from "../firebase/firestoreConverters";
-import { Deck, FlashCard } from "../types";
 
 export type DeckOperation = {
-  addDeck: (deck: Deck) => Promise<void>;
-  updateDeck: (newDeck: Deck, oldCards: FlashCard[]) => Promise<void>;
-  deleteDeck: (id: string) => Promise<void>;
+  addDeck: (deck: Deck) => Promise<unknown>;
+  updateDeck: (newDeck: Deck, oldCards: FlashCard[]) => Promise<unknown>;
+  deleteDeck: (id: string) => Promise<unknown>;
+  attachTag: (
+    deckId: string,
+    tagId: string
+  ) => Promise<{ deckName: string; tagName: string; alreadyExisted: boolean }>;
 };
 
 export const useDeckOperation = (userId: string): DeckOperation => {
@@ -24,7 +34,7 @@ export const useDeckOperation = (userId: string): DeckOperation => {
     [userId]
   );
 
-  const addDeck = useCallback(
+  const addDeck: DeckOperation["addDeck"] = useCallback(
     async (deck: Omit<Deck, "id">) => {
       // バッチ書き込みは最大500ドキュメントにしか書き込めないから、後でなんとかしたい
       const batch = writeBatch(db);
@@ -60,7 +70,7 @@ export const useDeckOperation = (userId: string): DeckOperation => {
     [decksRef]
   );
 
-  const deleteDeck = useCallback(
+  const deleteDeck: DeckOperation["deleteDeck"] = useCallback(
     async (id: string) => {
       const deckDoc = doc(decksRef, id);
       await deleteDoc(deckDoc);
@@ -77,7 +87,7 @@ export const useDeckOperation = (userId: string): DeckOperation => {
     [decksRef]
   );
 
-  const updateDeck = useCallback(
+  const updateDeck: DeckOperation["updateDeck"] = useCallback(
     async (newDeck: Deck, oldCards: FlashCard[]) => {
       const batch = writeBatch(db);
 
@@ -124,5 +134,32 @@ export const useDeckOperation = (userId: string): DeckOperation => {
     [decksRef]
   );
 
-  return { addDeck, updateDeck, deleteDeck };
+  const attachTag: DeckOperation["attachTag"] = useCallback(
+    async (deckId: string, tagId: string) => {
+      const deckRef = doc(decksRef, deckId);
+      const deck = (await getDoc(deckRef)).data();
+      const tag = (
+        await getDoc(
+          doc(db, `users/${userId}/tags/${tagId}`).withConverter(tagConverter)
+        )
+      ).data();
+
+      if (!deck) {
+        throw new Error("存在しないデッキを参照しました");
+      }
+
+      if (!tag) {
+        throw new Error("存在しないタグを参照しました");
+      }
+
+      const alreadyExisted = deck.tagIds.includes(tagId);
+
+      await updateDoc(deckRef, { tagIds: arrayUnion(tagId) });
+
+      return { deckName: deck.name, tagName: tag.name, alreadyExisted };
+    },
+    [decksRef, userId]
+  );
+
+  return { addDeck, updateDeck, deleteDeck, attachTag };
 };

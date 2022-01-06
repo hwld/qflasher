@@ -1,19 +1,16 @@
-import { useWithLoading } from "../context/LoadingStateContext";
-import { useWithErrorHandling } from "./useWithErrorHandling";
+import { useWithLoading } from "@/context/LoadingStateContext";
+import {
+  ErrorMessage,
+  useWithAppErrorHandler,
+} from "@/hooks/useWithAppErrorHandler";
+import { useWithResult } from "@/hooks/useWithResult";
+import { Operation } from "@/types";
 
-type Operation<T> = (arg: T) => Promise<unknown>;
-type Option = { errorTitle: string; errorDescription: string };
-
-export const useAppOperation = <T, _>(
-  operation: Operation<T>,
-  option: Option = {
-    errorTitle: "エラー",
-    errorDescription: "エラーが発生しました",
-  }
+export const useAppOperation = <A extends unknown[], R>(
+  operation: Operation<A, R>,
+  message?: ErrorMessage
 ) => {
-  const withErrorHandling = useWithErrorHandling(operation, {
-    title: option.errorTitle,
-    description: option.errorDescription,
-  });
-  return useWithLoading(withErrorHandling);
+  const withResult = useWithResult(operation);
+  const withErrorHandler = useWithAppErrorHandler(withResult, message);
+  return useWithLoading(withErrorHandler);
 };

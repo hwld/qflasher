@@ -1,9 +1,9 @@
+import { db } from "@/firebase/config";
+import { deckConverter } from "@/firebase/firestoreConverters";
+import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
+import { DeckWithoutCards } from "@/types";
 import { collection, orderBy, query } from "firebase/firestore";
 import { useMemo } from "react";
-import { db } from "../firebase/config";
-import { deckConverter } from "../firebase/firestoreConverters";
-import { DeckWithoutCards } from "../types";
-import { useFirestoreCollectionData } from "./useFirestoreCollectionData";
 
 export type DeckListData =
   | { status: "loading"; decks: undefined }

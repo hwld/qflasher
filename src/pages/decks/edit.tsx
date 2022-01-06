@@ -1,9 +1,9 @@
+import { DeckEditPage } from "@/components/pages/DeckEditorPage";
+import { AuthRequiredPage } from "@/components/ui/AuthRequiredPage";
+import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import type { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
-import { AuthRequiredPage } from "../../components/AuthRequiredPage";
-import { DeckEditPage } from "../../components/pages/DeckEditorPage";
-import { useLoadingEffect } from "../../hooks/useLoadingEffect";
 
 const Edit: NextPage = () => {
   const router = useRouter();

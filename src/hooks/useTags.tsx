@@ -1,3 +1,7 @@
+import { db } from "@/firebase/config";
+import { deckConverter, tagConverter } from "@/firebase/firestoreConverters";
+import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
+import { Tag } from "@/types";
 import { collection, doc, orderBy, setDoc } from "@firebase/firestore";
 import {
   arrayRemove,
@@ -10,10 +14,6 @@ import {
   where,
 } from "firebase/firestore";
 import { useCallback, useMemo } from "react";
-import { db } from "../firebase/config";
-import { deckConverter, flagConverter } from "../firebase/firestoreConverters";
-import { Tag } from "../types";
-import { useFirestoreCollectionData } from "./useFirestoreCollectionData";
 
 export type UseTagsResult = {
   tags: Tag[];
@@ -24,7 +24,7 @@ export type UseTagsResult = {
 
 export const useTags = (userId: string): UseTagsResult => {
   const tagsRef = useMemo(
-    () => collection(db, `users/${userId}/tags`).withConverter(flagConverter),
+    () => collection(db, `users/${userId}/tags`).withConverter(tagConverter),
     [userId]
   );
   const tagsQuery = useMemo(

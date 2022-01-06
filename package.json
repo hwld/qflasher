@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && next export",
+    "build": "next build && next export && cp out/404/index.html out/404.html",
     "deploy": "firebase deploy --only hosting",
     "start": "next start",
     "lint": "next lint",
@@ -22,6 +22,8 @@
     "next": "11.1.2",
     "react": "17.0.2",
     "react-beautiful-dnd": "^13.1.0",
+    "react-dnd": "^14.0.4",
+    "react-dnd-html5-backend": "^14.0.2",
     "react-dom": "17.0.2",
     "react-hook-form": "^7.15.4",
     "react-icons": "^4.3.1",
@@ -38,6 +40,6 @@
     "eslint-config-prettier": "^8.3.0",
     "jest": "^27.4.5",
     "ts-jest": "^27.1.2",
-    "typescript": "4.4.2"
+    "typescript": "^4.5.4"
   }
 }

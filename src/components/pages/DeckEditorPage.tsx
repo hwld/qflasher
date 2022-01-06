@@ -1,16 +1,15 @@
+import { DeckForm, DeckFormProps } from "@/components/model/deck/DeckForm";
+import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
+import { Fab } from "@/components/ui/Fab";
+import { useAppOperation } from "@/hooks/useAppOperation";
+import { useDeckOperation } from "@/hooks/useDeckOperation";
+import { useLoadingEffect } from "@/hooks/useLoadingEffect";
+import { useMyDeck } from "@/hooks/useMyDeck";
+import { useTags } from "@/hooks/useTags";
 import { Box } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdSave } from "react-icons/md";
-import { useAppOperation } from "../../hooks/useAppOperation";
-import { useDeckOperation } from "../../hooks/useDeckOperation";
-import { useLoadingEffect } from "../../hooks/useLoadingEffect";
-import { useMyDeck } from "../../hooks/useMyDeck";
-import { useTags } from "../../hooks/useTags";
-import { DeckForm, DeckFormProps } from "../DeckForm";
-import { Fab } from "../Fab";
-import { DeckLoadingErrorPage } from "./DeckLoadingErrorPage";
-import { NotFoundDeckPage } from "./NotFoundDeckPage";
 
 type DeckEditPageProps = { deckId: string; userId: string };
 
@@ -42,9 +41,23 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
     }
     case "error": {
       if (useMyDeckResult.error === "not-found") {
-        return <NotFoundDeckPage />;
+        return (
+          <ErrorMessageBox
+            mx="auto"
+            mt={10}
+            header="エラー"
+            description="デッキが存在しません。"
+          />
+        );
       }
-      return <DeckLoadingErrorPage />;
+      return (
+        <ErrorMessageBox
+          mx="auto"
+          mt={10}
+          header="エラー"
+          description="デッキの読み込みに失敗しましfた。"
+        />
+      );
     }
     case "success": {
       return (

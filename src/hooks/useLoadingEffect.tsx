@@ -1,5 +1,5 @@
+import { useLoadingStateAction } from "@/context/LoadingStateContext";
 import { useEffect, useRef } from "react";
-import { useLoadingStateAction } from "../context/LoadingStateContext";
 
 export const useLoadingEffect = (isLoading: boolean) => {
   const { startLoading, endLoading } = useLoadingStateAction();

@@ -1,12 +1,12 @@
+import { DeckForm, DeckFormProps } from "@/components/model/deck/DeckForm";
+import { Fab } from "@/components/ui/Fab";
+import { useAppOperation } from "@/hooks/useAppOperation";
+import { useDeckOperation } from "@/hooks/useDeckOperation";
+import { useTags } from "@/hooks/useTags";
 import { Box } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
 import { MdSave } from "react-icons/md";
-import { useAppOperation } from "../../hooks/useAppOperation";
-import { useDeckOperation } from "../../hooks/useDeckOperation";
-import { useTags } from "../../hooks/useTags";
-import { DeckForm, DeckFormProps } from "../DeckForm";
-import { Fab } from "../Fab";
 
 type Props = { userId: string };
 

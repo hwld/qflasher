@@ -11,7 +11,7 @@
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
    inkscape:version="1.1 (c68e22c387, 2021-05-23)"
-   sodipodi:docname="logo.svg"
+   sodipodi:docname="logo2.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -30,9 +30,9 @@
      units="px"
      inkscape:snap-smooth-nodes="false"
      inkscape:object-nodes="true"
-     inkscape:zoom="0.37059484"
-     inkscape:cx="906.65052"
-     inkscape:cy="538.32375"
+     inkscape:zoom="0.74118968"
+     inkscape:cx="391.26287"
+     inkscape:cy="132.89446"
      inkscape:window-width="1920"
      inkscape:window-height="1017"
      inkscape:window-x="1912"
@@ -2090,15 +2090,15 @@
          y="155.43141" /></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:132.848px;line-height:1.25;font-family:'Franklin Gothic Heavy';-inkscape-font-specification:'Franklin Gothic Heavy, ';stroke-width:0.332119"
-       x="251.39149"
-       y="42.066723"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:89.5563px;line-height:1.25;font-family:'Franklin Gothic Heavy';-inkscape-font-specification:'Franklin Gothic Heavy, ';stroke-width:0.22389"
+       x="266.64902"
+       y="31.182312"
        id="text41163"><tspan
-         sodipodi:role="line"
          id="tspan41161"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Franklin Gothic Heavy';-inkscape-font-specification:'Franklin Gothic Heavy, ';fill:#ffffff;stroke-width:0.332119"
-         x="251.39149"
-         y="42.066723">Qflasher</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Franklin Gothic Heavy';-inkscape-font-specification:'Franklin Gothic Heavy, ';fill:#ffffff;stroke-width:0.22389"
+         x="266.64902"
+         y="31.182312"
+         sodipodi:role="line">Qflasher</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:105.833px;line-height:1.25;font-family:'Microsoft YaHei UI';-inkscape-font-specification:'Microsoft YaHei UI';stroke-width:0.264583"
