@@ -83,6 +83,7 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
         items={[
           {
             name: "tags",
+            label: "タグ一覧",
             icon: AiFillTags,
             content: (
               <TagsSideView
@@ -107,7 +108,7 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
           onDeleteDeck={handleDeleteDeck}
           onTagDeck={handleTagDeck}
         />
-        <Fab tooltipLabel="追加" onClick={handleAddDeck}>
+        <Fab tooltipLabel="デッキの追加" onClick={handleAddDeck}>
           <MdAdd size="70%" />
         </Fab>
       </Box>

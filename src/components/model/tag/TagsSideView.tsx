@@ -12,6 +12,7 @@ import {
   Grid,
   Switch,
   Text,
+  Tooltip,
 } from "@chakra-ui/react";
 import React from "react";
 import { RiAddFill } from "react-icons/ri";
@@ -58,19 +59,22 @@ export const TagsSideView: React.FC<TagsSideViewProps> = ({
     <Grid h="100%" templateRows="auto auto auto 1fr">
       <Flex bgColor="gray.500" h="30px" alignItems="center">
         <Box flexGrow={1} />
-        <Button
-          boxSize="25px"
-          bgColor="orange.300"
-          color={"gray.700"}
-          _hover={{ bgColor: "orange.400" }}
-          _active={{ bgColor: "orange.500" }}
-          mr={1}
-          minW="none"
-          p={0}
-          onClick={handleClickAdd}
-        >
-          <RiAddFill size="100%" />
-        </Button>
+        <Tooltip label="タグの追加">
+          <Button
+            boxSize="25px"
+            bgColor="orange.300"
+            color={"gray.700"}
+            _hover={{ bgColor: "orange.400" }}
+            _active={{ bgColor: "orange.500" }}
+            mr={1}
+            minW="none"
+            p={0}
+            rounded={"full"}
+            onClick={handleClickAdd}
+          >
+            <RiAddFill size="90%" />
+          </Button>
+        </Tooltip>
       </Flex>
 
       <Flex

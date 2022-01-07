@@ -5,7 +5,12 @@ import { Flex } from "@chakra-ui/react";
 import { ReactNode } from "react";
 
 type Props<T extends string> = {
-  items: { name: T; icon: React.ElementType; content: ReactNode }[];
+  items: {
+    name: T;
+    label: string;
+    icon: React.ElementType;
+    content: ReactNode;
+  }[];
   selected: T;
   contentWidth: number;
   onSelect: (name: T) => void;
@@ -29,6 +34,7 @@ export const SideMenu = <T extends string>({
             <SideMenuItem
               key={i}
               name={item.name}
+              label={item.label}
               icon={item.icon}
               selected={selected === item.name}
               onSelect={onSelect}
