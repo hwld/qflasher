@@ -1,35 +1,63 @@
+import { Tag } from "@/types";
 import {
   DragSourceHookSpec,
   DropTargetHookSpec,
   useDrag,
+  useDragLayer,
   useDrop,
 } from "react-dnd";
 
-const Tag = "tag";
-type TagItem = { id: string };
+const TagType = "tag";
 
 const useTagDrag = <DropResult, CollectedProps>(
-  spec: () => Omit<
-    DragSourceHookSpec<TagItem, DropResult, CollectedProps>,
-    "type"
-  >,
+  spec: () => Omit<DragSourceHookSpec<Tag, DropResult, CollectedProps>, "type">,
   deps?: unknown[]
 ) => {
-  return useDrag<TagItem, DropResult, CollectedProps>(() => {
-    return { type: Tag, ...spec() };
+  return useDrag<Tag, DropResult, CollectedProps>(() => {
+    return { type: TagType, ...spec() };
   }, deps);
 };
 
 const useTagDrop = <DropResult, CollectedProps>(
   spec: () => Omit<
-    DropTargetHookSpec<TagItem, DropResult, CollectedProps>,
+    DropTargetHookSpec<Tag, DropResult, CollectedProps>,
     "accept"
   >,
   deps?: unknown[]
 ) => {
-  return useDrop<TagItem, DropResult, CollectedProps>(() => {
-    return { accept: Tag, ...spec() };
+  return useDrop<Tag, DropResult, CollectedProps>(() => {
+    return { accept: TagType, ...spec() };
   }, deps);
 };
 
-export { useTagDrag, useTagDrop };
+const useDraggingTag = () => {
+  const { data, itemType, currentOffset, isDragging } = useDragLayer(
+    (monitor) => ({
+      data: monitor.getItem(),
+      itemType: monitor.getItemType(),
+      currentOffset: monitor.getClientOffset(),
+      isDragging: monitor.isDragging(),
+    })
+  );
+
+  if (!isDragging || itemType !== TagType || !currentOffset) {
+    return null;
+  }
+
+  //
+  if (
+    !(
+      data &&
+      data.id &&
+      data.name &&
+      typeof data.id === "string" &&
+      typeof data.name === "string"
+    )
+  ) {
+    return null;
+  }
+
+  return { tag: data as Tag, currentOffset };
+};
+
+export { useTagDrag, useTagDrop, useDraggingTag };

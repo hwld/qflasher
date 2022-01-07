@@ -12,7 +12,8 @@ import { UseTagsResult } from "@/hooks/useTags";
 import { Tag } from "@/types";
 import { Box, Flex, Text } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/react";
-import React, { SyntheticEvent, useState } from "react";
+import React, { SyntheticEvent, useEffect, useState } from "react";
+import { getEmptyImage } from "react-dnd-html5-backend";
 import { MdDelete, MdEdit } from "react-icons/md";
 
 export type TagDataProps = {
@@ -33,9 +34,9 @@ export const TagDataItem: React.FC<TagDataProps> = ({
 }) => {
   const confirm = useConfirm();
   const [editable, setEditable] = useState(false);
-  const [_, dragRef] = useTagDrag(
+  const [_, dragRef, preview] = useTagDrag(
     () => ({
-      item: () => ({ id: tag.id }),
+      item: () => tag,
       canDrag: () => !editable,
     }),
     [editable]
@@ -80,6 +81,11 @@ export const TagDataItem: React.FC<TagDataProps> = ({
       cancelText: "キャンセル",
     });
   };
+
+  useEffect(() => {
+    preview(getEmptyImage(), { captureDraggingState: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <TagListItemBase
