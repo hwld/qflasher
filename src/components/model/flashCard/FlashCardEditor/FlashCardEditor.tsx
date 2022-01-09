@@ -36,12 +36,24 @@ export const FlashCardEditor: React.FC<Props> = ({
   const questionError = cardErrors?.[index]?.question;
   const answerError = cardErrors?.[index]?.answer;
 
+  const handleKeyDownTemplate = (e: KeyboardEvent, handler: () => void) => {
+    if (e.ctrlKey && e.key === "x") {
+      onDelete(id);
+      return;
+    }
+    handler();
+  };
+
   const handleKeyDownQuestion: KeyboardEventHandler = (e) => {
-    onKeyDownInQuestion(id, e);
+    handleKeyDownTemplate(e, () => {
+      onKeyDownInQuestion(id, e);
+    });
   };
 
   const handleKeyDownAnswer: KeyboardEventHandler = (e) => {
-    onKeyDownInAnswer(id, e);
+    handleKeyDownTemplate(e, () => {
+      onKeyDownInAnswer(id, e);
+    });
   };
 
   const handleDelete = () => {
