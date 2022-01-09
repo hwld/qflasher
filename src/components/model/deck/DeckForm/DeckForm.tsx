@@ -49,6 +49,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
 
   const {
     control,
+    reset,
     focusDeckName,
     focusTagSelect,
     focusQuestion,
@@ -243,6 +244,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
                     boxShadow="dark-lg"
                     index={i}
                     formControl={control}
+                    resetForm={reset}
                     cardErrors={errors.cards}
                     key={id}
                     id={id}
