@@ -1,6 +1,7 @@
 import { DeckPlayerPage } from "@/components/pages/DeckPlayerPage";
 import { AuthRequiredPage } from "@/components/ui/AuthRequiredPage";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
+import { isDeckId } from "@/utils/isDeckId";
 import { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
@@ -17,7 +18,7 @@ const Play: NextPage = () => {
     return null;
   }
 
-  if (typeof id !== "string" || id === "") {
+  if (!isDeckId(id)) {
     router.push("/");
     return null;
   }
