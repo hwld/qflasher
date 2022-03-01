@@ -21,9 +21,13 @@ const Edit: NextPage = () => {
     return null;
   }
 
-  const deckEditPage = (userId: string) => (
-    <DeckEditPage deckId={id} userId={userId} />
-  );
+  const deckEditPage = (userId: string) => {
+    if (!isDeckId(id)) {
+      return <></>;
+    }
+    return <DeckEditPage deckId={id} userId={userId} />;
+  };
+
   return <AuthRequiredPage>{deckEditPage}</AuthRequiredPage>;
 };
 

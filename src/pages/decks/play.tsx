@@ -20,12 +20,15 @@ const Play: NextPage = () => {
 
   if (!isDeckId(id)) {
     router.push("/");
-    return null;
   }
 
-  const page = (userId: string) => (
-    <DeckPlayerPage deckId={id} userId={userId} />
-  );
+  const page = (userId: string) => {
+    if (!isDeckId(id)) {
+      return <></>;
+    }
+    return <DeckPlayerPage deckId={id} userId={userId} />;
+  };
+
   return <AuthRequiredPage>{page}</AuthRequiredPage>;
 };
 
