@@ -121,7 +121,7 @@ export const DeckListItem: React.FC<DeckListItemProps> = ({
           <Flex>
             <Tooltip label="暗記">
               <Button
-                boxSize="60px"
+                boxSize={{ base: "40px", md: "60px" }}
                 rounded="full"
                 colorScheme="green"
                 bgColor="green.300"

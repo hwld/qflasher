@@ -17,7 +17,7 @@ export const Fab: React.FC<Props> = ({ children, tooltipLabel, ...props }) => {
           bottom="20px"
           right="20px"
           padding={0}
-          boxSize="70px"
+          boxSize={{ base: "50px", md: "70px" }}
           rounded="full"
           boxShadow="dark-lg"
           {...props}

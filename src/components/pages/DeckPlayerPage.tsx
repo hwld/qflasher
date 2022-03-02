@@ -77,6 +77,7 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
             mt={5}
             mx="auto"
             w="90%"
+            maxW="800px"
             size={deckPlayerSize}
             deck={useMyDeckResult.deck}
             config={config}

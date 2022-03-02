@@ -28,7 +28,12 @@ export const SideMenu = <T extends string>({
 
   return (
     <Flex>
-      <Box w="60px" h="100%" bgColor="gray.600" boxShadow="xl">
+      <Box
+        w={{ base: "40px", md: "60px" }}
+        h="100%"
+        bgColor="gray.600"
+        boxShadow="xl"
+      >
         {items.map((item, i) => {
           return (
             <SideMenuItem

@@ -56,7 +56,7 @@ export const OneSideFlashCardItem: React.FC<Props> = ({
           fontWeight="bold"
           wordBreak="break-all"
           textAlign="center"
-          opacity={isBackground ? 0.2 : 1}
+          opacity={isBackground ? 0 : 1}
         >
           {text}
         </Text>
@@ -64,7 +64,7 @@ export const OneSideFlashCardItem: React.FC<Props> = ({
       <Flex w="100%">
         <Text
           color="gray.300"
-          opacity={isBackground ? 0.2 : 1}
+          opacity={isBackground ? 0 : 1}
           fontSize={metaFontSize}
         >
           {type === "question" ? "質問" : "答え"}
