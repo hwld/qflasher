@@ -2,6 +2,7 @@ import { auth } from "@/firebase/config";
 import {
   GoogleAuthProvider,
   onAuthStateChanged,
+  signInAnonymously,
   signInWithPopup,
   User,
 } from "firebase/auth";
@@ -11,6 +12,7 @@ export const useAuthState = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error>();
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, {
       next: (user) => {
@@ -27,13 +29,17 @@ export const useAuthState = () => {
     return unsubscribe;
   }, []);
 
-  const signIn = () => {
+  const signInWithGoogle = () => {
     return signInWithPopup(auth, new GoogleAuthProvider());
+  };
+
+  const signInAnonymous = () => {
+    return signInAnonymously(auth);
   };
 
   const signOut = () => {
     return auth.signOut();
   };
 
-  return { user, loading, error, signIn, signOut };
+  return { user, loading, error, signInWithGoogle, signInAnonymous, signOut };
 };

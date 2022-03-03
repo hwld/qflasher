@@ -51,6 +51,8 @@ export const DeckListPageMain: React.FC<Props> = ({
           />
           <DeckList
             mt={4}
+            mx="auto"
+            maxW="1500px"
             selectedTagId={selectedTagId}
             decks={viewDecks}
             onDeleteDeck={onDeleteDeck}
