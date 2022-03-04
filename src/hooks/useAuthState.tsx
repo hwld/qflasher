@@ -1,5 +1,6 @@
 import { auth } from "@/firebase/config";
 import {
+  deleteUser as deleteAccount,
   GoogleAuthProvider,
   onAuthStateChanged,
   signInAnonymously,
@@ -12,6 +13,8 @@ export const useAuthState = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error>();
+
+  console.log(user);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, {
@@ -37,9 +40,25 @@ export const useAuthState = () => {
     return signInAnonymously(auth);
   };
 
+  const deleteUser = () => {
+    const user = auth.currentUser;
+    if (user) {
+      return deleteAccount(user);
+    }
+    return Promise.reject();
+  };
+
   const signOut = () => {
     return auth.signOut();
   };
 
-  return { user, loading, error, signInWithGoogle, signInAnonymous, signOut };
+  return {
+    user,
+    loading,
+    error,
+    signInWithGoogle,
+    signInAnonymous,
+    signOut,
+    deleteUser,
+  };
 };

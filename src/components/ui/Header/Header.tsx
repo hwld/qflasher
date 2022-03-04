@@ -7,17 +7,9 @@ import React from "react";
 type Props = { isLoading?: boolean; size: "sm" | "md" } & FlexProps;
 
 export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
-  const { user, signOut } = useAuthState();
+  const { user } = useAuthState();
   const { barHeight, progressHeight, logoWidth, accountIconSize } =
     useHeaderStyle(size);
-
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-    } catch (e) {
-      console.error(e);
-    }
-  };
 
   return (
     <>
@@ -35,12 +27,7 @@ export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
           <Link href="/decks">
             <AppLogo w={`${logoWidth}px`} />
           </Link>
-          {user && (
-            <AccountMenu
-              onSignOut={handleSignOut}
-              boxSize={`${accountIconSize}px`}
-            />
-          )}
+          {user && <AccountMenu boxSize={`${accountIconSize}px`} />}
         </Flex>
         <Progress
           colorScheme="green"
