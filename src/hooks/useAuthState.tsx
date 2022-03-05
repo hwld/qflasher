@@ -14,8 +14,6 @@ export const useAuthState = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error>();
 
-  console.log(user);
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, {
       next: (user) => {

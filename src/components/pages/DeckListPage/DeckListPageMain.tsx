@@ -2,7 +2,7 @@ import { DeckList, DeckListProps } from "@/components/model/deck/DeckList";
 import { SearchBar } from "@/components/ui/SearchBar";
 import { DeckListData } from "@/hooks/useDeckList";
 import { Box, Center, Heading } from "@chakra-ui/layout";
-import { Tag } from "@chakra-ui/react";
+import { Tag, useBreakpointValue } from "@chakra-ui/react";
 
 type Props = {
   deckListData: DeckListData;
@@ -23,6 +23,8 @@ export const DeckListPageMain: React.FC<Props> = ({
   onDeleteDeck,
   onTagDeck,
 }) => {
+  const tagSize = useBreakpointValue({ base: "md", md: "lg" });
+
   switch (deckListData.status) {
     case "error": {
       return (
@@ -40,11 +42,12 @@ export const DeckListPageMain: React.FC<Props> = ({
       );
       return (
         <Box>
-          <Tag m={3} size="lg" fontWeight="bold">
+          <Tag m={{ base: 2, md: 3 }} size={tagSize} fontWeight="bold">
             {selectedTagName ? selectedTagName : "全てのデッキ"}
           </Tag>
           <SearchBar
-            w={"60%"}
+            w={"90%"}
+            maxW={"600px"}
             mx={"auto"}
             text={searchText}
             onChange={onChangeSearchText}

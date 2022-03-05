@@ -13,7 +13,7 @@ export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
 
   return (
     <>
-      <Box position="fixed" zIndex="1">
+      <Box position="fixed" zIndex="sticky">
         <Flex
           bgGradient="linear(to-r, green.400 70%, green.500)"
           w="100vw"
@@ -27,10 +27,11 @@ export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
           <Link href="/decks">
             <AppLogo w={`${logoWidth}px`} />
           </Link>
-          {user && <AccountMenu boxSize={`${accountIconSize}px`} />}
+          {user && <AccountMenu boxSize={`${accountIconSize}px`} user={user} />}
         </Flex>
         <Progress
-          colorScheme="green"
+          hasStripe
+          colorScheme="orange"
           height={`${progressHeight}px`}
           isIndeterminate={isLoading}
         />
