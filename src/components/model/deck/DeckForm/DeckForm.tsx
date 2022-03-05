@@ -49,7 +49,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
 
   const {
     control,
-    reset,
+    resetField,
     focusDeckName,
     focusTagSelect,
     focusQuestion,
@@ -73,8 +73,14 @@ export const DeckForm: React.FC<DeckFormProps> = ({
       return;
     }
   };
-
   const addCardEditorWithDebounce = useDebounce(50, addCardEditor);
+
+  const handleDeleteCard = (id: string) => {
+    // なぜか全部のフィールドをリセットしてたので、カードを一枚削除すると全部のデータが消えてた
+    // 今回は一番最後のフィールドのみをリセットする
+    resetField(`cards.${cardIds.length - 1}`);
+    deleteCardId(id);
+  };
 
   const submit = ({ name, cards, tagIds, cardLength }: Omit<Deck, "id">) => {
     if (cards.length === 0) {
@@ -244,7 +250,6 @@ export const DeckForm: React.FC<DeckFormProps> = ({
                     boxShadow="dark-lg"
                     index={i}
                     formControl={control}
-                    resetForm={reset}
                     cardErrors={errors.cards}
                     key={id}
                     id={id}
@@ -252,7 +257,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
                     onFocusQuestion={focusQuestion}
                     onKeyDownInQuestion={handleKeyDownInQuestion}
                     onKeyDownInAnswer={handleKeyDownInAnswer}
-                    onDelete={deleteCardId}
+                    onDelete={handleDeleteCard}
                   />
                 );
               })}

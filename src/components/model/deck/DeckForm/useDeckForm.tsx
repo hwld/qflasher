@@ -15,7 +15,7 @@ type UseDeckFormArg = {
 export const useDeckForm = ({ formCardIds }: UseDeckFormArg) => {
   const {
     control,
-    reset,
+    resetField,
     setFocus,
     handleSubmit: innerHandleSubmit,
     trigger: triggerValidation,
@@ -85,7 +85,7 @@ export const useDeckForm = ({ formCardIds }: UseDeckFormArg) => {
 
   return {
     control,
-    reset,
+    resetField,
     focusDeckName,
     focusTagSelect,
     focusQuestion,

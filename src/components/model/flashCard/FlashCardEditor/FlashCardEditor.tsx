@@ -7,13 +7,12 @@ import { FlashCard } from "@/types";
 import { Box, BoxProps, Stack } from "@chakra-ui/react";
 import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { Control, FormState, UseFormReset } from "react-hook-form";
+import { Control, FormState } from "react-hook-form";
 
 type Props = {
   index: number;
   id: string;
   formControl: Control<DeckFormFields, object>;
-  resetForm: UseFormReset<DeckFormFields>;
   cardErrors: FormState<DeckFormFields>["errors"]["cards"];
   defaultValue?: FlashCard;
   onFocusQuestion: (id: string) => void;
@@ -26,7 +25,6 @@ export const FlashCardEditor: React.FC<Props> = ({
   index,
   id,
   formControl,
-  resetForm,
   cardErrors,
   defaultValue = { id: "", question: "", answer: "" },
   onFocusQuestion,
@@ -39,9 +37,6 @@ export const FlashCardEditor: React.FC<Props> = ({
   const answerError = cardErrors?.[index]?.answer;
 
   const deleteCard = () => {
-    // カードを削除するとindexがひとつずれて、最後のカードの情報が内部に残ってしまうので
-    // 削除する前に一度リセットする。
-    resetForm();
     onDelete(id);
   };
 
