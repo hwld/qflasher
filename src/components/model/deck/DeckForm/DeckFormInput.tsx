@@ -1,4 +1,4 @@
-import { DeckFormFields } from "@/components/model/deck/DeckForm";
+import { DeckFormFields } from "@/components/model/deck/DeckForm/useDeckForm";
 import { Box, Input as ChakraInput, InputProps, Text } from "@chakra-ui/react";
 import {
   Control,

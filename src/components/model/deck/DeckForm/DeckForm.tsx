@@ -1,8 +1,5 @@
-import {
-  DeckFormInput,
-  useCardIds,
-  useDeckForm,
-} from "@/components/model/deck/DeckForm";
+import { DeckFormInput } from "@/components/model/deck/DeckForm";
+import { useDeckForm } from "@/components/model/deck/DeckForm/useDeckForm";
 import { FlashCardEditor } from "@/components/model/flashCard/FlashCardEditor";
 import { TagSelectProps, TagsSelect } from "@/components/model/tag/TagsSelect";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -33,36 +30,26 @@ export const DeckForm: React.FC<DeckFormProps> = ({
 }) => {
   const toast = useToast();
 
-  // questionやanswerはreact-hook-formで管理する
   const {
-    cardIds,
-    addCardId,
-    deleteCardId,
-    reorderCardIds,
+    control,
+    cardFields,
+    errors,
+    appendCardField,
+    removeCardField,
+    moveCardField,
     isFirstCard,
     isLastCard,
     firstCardId,
-    prevCardId,
-    nextCardId,
     lastCardId,
-  } = useCardIds(defaultDeck.cards.map((c) => c.id));
-
-  const {
-    control,
-    resetField,
-    focusDeckName,
-    focusTagSelect,
-    focusQuestion,
-    focusAnswer,
-    handleSubmit,
+    nextCardId,
+    prevCardId,
+    focus,
     triggerValidation,
-    errors,
-  } = useDeckForm({
-    formCardIds: cardIds,
-  });
+    handleSubmit,
+  } = useDeckForm(defaultDeck, tags);
 
   const addCardEditor = () => {
-    const result = addCardId();
+    const result = appendCardField();
     if (result.type === "error") {
       toast({
         title: "エラー",
@@ -76,10 +63,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
   const addCardEditorWithDebounce = useDebounce(50, addCardEditor);
 
   const handleDeleteCard = (id: string) => {
-    // なぜか全部のフィールドをリセットしてたので、カードを一枚削除すると全部のデータが消えてた
-    // 今回は一番最後のフィールドのみをリセットする
-    resetField(`cards.${cardIds.length - 1}`);
-    deleteCardId(id);
+    removeCardField(id);
   };
 
   const submit = ({ name, cards, tagIds, cardLength }: Omit<Deck, "id">) => {
@@ -112,21 +96,21 @@ export const DeckForm: React.FC<DeckFormProps> = ({
   const handleKeyDownInName: KeyboardEventHandler = (event) => {
     handleKeyDownTemplate(event, () => {
       if (event.key === "Enter") {
-        focusTagSelect();
+        focus("tags");
         return;
       }
     });
   };
 
   const handleFocusNextToSelect = () => {
-    if (cardIds.length === 0) {
+    if (cardFields.length === 0) {
       addCardEditor();
     } else {
-      focusQuestion(firstCardId());
+      focus("question", firstCardId());
     }
   };
   const handleFocusPrevSelect = () => {
-    focusDeckName();
+    focus("deckName");
   };
 
   const handleKeyDownInQuestion = (
@@ -136,15 +120,15 @@ export const DeckForm: React.FC<DeckFormProps> = ({
     handleKeyDownTemplate(event, () => {
       if (event.key === "Enter" && event.shiftKey) {
         if (isFirstCard(cardId)) {
-          focusTagSelect();
+          focus("tags");
         } else {
-          focusAnswer(prevCardId(cardId));
+          focus("answer", prevCardId(cardId));
         }
         return;
       }
 
       if (event.key === "Enter") {
-        focusAnswer(cardId);
+        focus("answer", cardId);
         return;
       }
     });
@@ -156,7 +140,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
   ) => {
     handleKeyDownTemplate(event, () => {
       if (event.key === "Enter" && event.shiftKey) {
-        focusQuestion(cardId);
+        focus("question", cardId);
         return;
       }
 
@@ -164,7 +148,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
         if (isLastCard(cardId)) {
           addCardEditorWithDebounce();
         } else {
-          focusQuestion(nextCardId(cardId));
+          focus("question", nextCardId(cardId));
         }
         return;
       }
@@ -180,14 +164,14 @@ export const DeckForm: React.FC<DeckFormProps> = ({
       return;
     }
 
-    reorderCardIds(result.source.index, result.destination.index);
+    moveCardField(result.source.index, result.destination.index);
   };
 
   useEffect(() => {
-    if (cardIds.length === 0) {
-      focusDeckName();
+    if (cardFields.length === 0) {
+      focus("deckName");
     } else {
-      focusQuestion(lastCardId());
+      focus("question", lastCardId());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -242,7 +226,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
         <Droppable droppableId="cardEditors">
           {(provided) => (
             <Box {...provided.droppableProps} ref={provided.innerRef}>
-              {cardIds.map((id, i) => {
+              {cardFields.map((field, i) => {
                 return (
                   <FlashCardEditor
                     mt={2}
@@ -251,10 +235,9 @@ export const DeckForm: React.FC<DeckFormProps> = ({
                     index={i}
                     formControl={control}
                     cardErrors={errors.cards}
-                    key={id}
-                    id={id}
-                    defaultValue={defaultDeck.cards.find((c) => c.id === id)}
-                    onFocusQuestion={focusQuestion}
+                    key={field.id}
+                    id={field.cardId}
+                    onFocusField={focus}
                     onKeyDownInQuestion={handleKeyDownInQuestion}
                     onKeyDownInAnswer={handleKeyDownInAnswer}
                     onDelete={handleDeleteCard}

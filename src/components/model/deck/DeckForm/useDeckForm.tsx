@@ -1,58 +1,96 @@
 import { Deck, FlashCard, Tag } from "@/types";
+import { first, isFirst, isLast, last, next, prev } from "@/utils/array";
 import { useCallback } from "react";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
+import { v4 as uuid } from "uuid";
 
 export type DeckFormFields = {
   name: string;
-  cards: Omit<FlashCard, "id">[] | undefined;
+  cards: (Omit<FlashCard, "id"> & { cardId: string })[] | undefined;
   tags: Tag[];
 };
 
-type UseDeckFormArg = {
-  formCardIds: string[];
-};
+export const useDeckForm = (defaultDeck: Deck, allTags: Tag[]) => {
+  const defaultFields: DeckFormFields = {
+    name: defaultDeck.name,
+    cards: defaultDeck.cards.map((c) => ({ ...c, cardId: c.id })),
+    tags: defaultDeck.tagIds.map((id) => {
+      const tag = allTags.find((tag) => tag.id === id);
+      if (!tag) {
+        throw new Error("");
+      }
+      return tag;
+    }),
+  };
 
-export const useDeckForm = ({ formCardIds }: UseDeckFormArg) => {
   const {
     control,
-    resetField,
     setFocus,
-    handleSubmit: innerHandleSubmit,
     trigger: triggerValidation,
     formState: { errors },
+    handleSubmit: innerHandleSubmit,
   } = useForm<DeckFormFields>({
     mode: "onChange",
+    defaultValues: defaultFields,
+  });
+
+  const {
+    // 文字が入力されてもappend,remove,moveが実行されないとcardFieldsには反映されない?
+    // 入力で変更を反映させたければuseWatchを使う
+    fields: cardFields,
+    append,
+    remove,
+    move: moveCardField,
+  } = useFieldArray({
+    control,
+    name: "cards",
   });
 
   const handleSubmit = useCallback(
     (callback: (deck: Omit<Deck, "id">) => void) => {
-      return innerHandleSubmit((fields: DeckFormFields) => {
-        let cards: FlashCard[];
-
-        if (!fields.cards) {
-          cards = [];
-        } else {
-          const cardFields = fields.cards;
-          // cardIdの順番とfieldsのcardの順番は対応している。
-          cards = formCardIds.map((id, index) => {
-            const field = cardFields[index];
-            if (!field) {
-              throw new Error("存在しないfieldです");
-            }
-
-            return { id, question: field.question, answer: field.answer };
-          });
-        }
+      return innerHandleSubmit((fields) => {
+        let cards: FlashCard[] =
+          fields.cards?.map(({ cardId, question, answer }, i) => ({
+            id: cardId,
+            question,
+            answer,
+          })) ?? [];
 
         callback({
           name: fields.name,
           cards,
           tagIds: fields.tags.map((t) => t.id),
-          cardLength: cards.length,
+          cardLength: fields.cards?.length ?? 0,
         });
       });
     },
-    [formCardIds, innerHandleSubmit]
+    [innerHandleSubmit]
+  );
+
+  const appendCardField = useCallback(():
+    | { type: "error"; message: string }
+    | { type: "success" } => {
+    if (cardFields.length === 10) {
+      return { type: "error", message: "カードは100枚までしか作れません。" };
+    }
+
+    append({ answer: "", cardId: uuid(), question: "" });
+    return { type: "success" };
+  }, [append, cardFields.length]);
+
+  const findCardIndex = useCallback(
+    (cardId: string) => {
+      return cardFields.findIndex((c) => c.cardId === cardId);
+    },
+    [cardFields]
+  );
+
+  const removeCardField = useCallback(
+    (cardId: string) => {
+      const index = findCardIndex(cardId);
+      remove(index);
+    },
+    [findCardIndex, remove]
   );
 
   const focusDeckName = useCallback(() => {
@@ -64,34 +102,107 @@ export const useDeckForm = ({ formCardIds }: UseDeckFormArg) => {
   }, [setFocus]);
 
   const focusQuestion = useCallback(
-    (targetId: string) => {
-      const index = formCardIds.findIndex((id) => id === targetId);
+    (cardId: string) => {
+      const index = findCardIndex(cardId);
       if (index === -1) return;
-
       setFocus(`cards.${index}.question`);
     },
-    [formCardIds, setFocus]
+    [findCardIndex, setFocus]
   );
 
   const focusAnswer = useCallback(
-    (targetId: string) => {
-      const index = formCardIds.findIndex((id) => id === targetId);
+    (cardId: string) => {
+      const index = findCardIndex(cardId);
       if (index === -1) return;
-
       setFocus(`cards.${index}.answer`);
     },
-    [formCardIds, setFocus]
+    [findCardIndex, setFocus]
+  );
+
+  // 補完でリテラル型を表示させるために繰り返し書いた
+  function focus(target: "deckName" | "tags"): void;
+  function focus(target: "question" | "answer", cardId: string): void;
+  function focus(
+    target: "deckName" | "tags" | "question" | "answer",
+    cardId?: string
+  ): void {
+    if (target === "deckName") {
+      focusDeckName();
+    } else if (target === "tags") {
+      focusTagSelect();
+    } else if (target === "question" && cardId !== undefined) {
+      focusQuestion(cardId);
+    } else if (target === "answer" && cardId !== undefined) {
+      focusAnswer(cardId);
+    }
+  }
+
+  const isFirstCard = useCallback(
+    (id: string): boolean => isFirst(cardFields, "cardId", id),
+    [cardFields]
+  );
+
+  const isLastCard = useCallback(
+    (id: string): boolean => isLast(cardFields, "cardId", id),
+    [cardFields]
+  );
+
+  const firstCardId = useCallback((): string => {
+    const id = first(cardFields, "cardId");
+    if (!id) {
+      throw new Error("先頭の要素が見つかりませんでした");
+    }
+    return id;
+  }, [cardFields]);
+
+  const lastCardId = useCallback(() => {
+    const id = last(cardFields, "cardId");
+    if (!id) {
+      throw new Error("末尾の要素が見つかりませんでした");
+    }
+    return id;
+  }, [cardFields]);
+
+  const prevCardId = useCallback(
+    (id: string): string => {
+      const cardId = prev(cardFields, "cardId", id);
+      if (!cardId) {
+        throw new Error("指定された要素の前の要素が見つかりませんでした");
+      }
+      return cardId;
+    },
+    [cardFields]
+  );
+
+  const nextCardId = useCallback(
+    (id: string) => {
+      const cardId = next(cardFields, "cardId", id);
+      if (!cardId) {
+        throw new Error("指定された要素の次の要素が見つかりませんでした");
+      }
+      return cardId;
+    },
+    [cardFields]
   );
 
   return {
     control,
-    resetField,
-    focusDeckName,
-    focusTagSelect,
-    focusQuestion,
-    focusAnswer,
+    errors,
+    cardFields,
+    focus,
+
+    isFirstCard,
+    isLastCard,
+    firstCardId,
+    lastCardId,
+    prevCardId,
+    nextCardId,
+
+    appendCardField,
+    removeCardField,
+    moveCardField,
+
     handleSubmit,
     triggerValidation,
-    errors,
   };
 };

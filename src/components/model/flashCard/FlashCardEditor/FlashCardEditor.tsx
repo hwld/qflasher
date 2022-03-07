@@ -1,9 +1,9 @@
+import { DeckFormInput } from "@/components/model/deck/DeckForm";
 import {
   DeckFormFields,
-  DeckFormInput,
-} from "@/components/model/deck/DeckForm";
+  useDeckForm,
+} from "@/components/model/deck/DeckForm/useDeckForm";
 import { CardEditorHeader } from "@/components/model/flashCard/FlashCardEditor";
-import { FlashCard } from "@/types";
 import { Box, BoxProps, Stack } from "@chakra-ui/react";
 import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
 import { Draggable } from "react-beautiful-dnd";
@@ -14,8 +14,7 @@ type Props = {
   id: string;
   formControl: Control<DeckFormFields, object>;
   cardErrors: FormState<DeckFormFields>["errors"]["cards"];
-  defaultValue?: FlashCard;
-  onFocusQuestion: (id: string) => void;
+  onFocusField: ReturnType<typeof useDeckForm>["focus"];
   onKeyDownInQuestion: (id: string, event: KeyboardEvent<Element>) => void;
   onKeyDownInAnswer: (id: string, event: KeyboardEvent<Element>) => void;
   onDelete: (id: string) => void;
@@ -26,8 +25,7 @@ export const FlashCardEditor: React.FC<Props> = ({
   id,
   formControl,
   cardErrors,
-  defaultValue = { id: "", question: "", answer: "" },
-  onFocusQuestion,
+  onFocusField,
   onKeyDownInQuestion,
   onKeyDownInAnswer,
   onDelete,
@@ -61,7 +59,7 @@ export const FlashCardEditor: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    onFocusQuestion(id);
+    onFocusField("question", id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -88,7 +86,6 @@ export const FlashCardEditor: React.FC<Props> = ({
                 name={`cards.${index}.question`}
                 error={questionError}
                 controllerProps={{
-                  defaultValue: defaultValue.question,
                   rules: {
                     required: {
                       value: true,
@@ -108,7 +105,6 @@ export const FlashCardEditor: React.FC<Props> = ({
                 name={`cards.${index}.answer`}
                 error={answerError}
                 controllerProps={{
-                  defaultValue: defaultValue.answer,
                   rules: {
                     required: {
                       value: true,
