@@ -1,5 +1,5 @@
 import {
-  deckCardStyle,
+  DeckCardStyle,
   DeckListItemButton,
 } from "@/components/model/deck/DeckListItem";
 import { useTagDrop } from "@/hooks/useTagDnD";
@@ -10,14 +10,21 @@ import React from "react";
 import { MdDelete, MdEdit, MdPlayArrow } from "react-icons/md";
 
 export type DeckListItemProps = {
-  style: deckCardStyle;
+  style: DeckCardStyle;
   deck: DeckWithoutCards;
   onDeleteDeck: (id: string) => Promise<void>;
   onTagDeck: (deckId: string, tagId: string) => unknown;
 } & BoxProps;
 
 export const DeckListItem: React.FC<DeckListItemProps> = ({
-  style: { ringWidth, cardWidth, height, nameFontSize, metaFontSize },
+  style: {
+    ringWidth,
+    cardWidth,
+    height,
+    nameFontSize,
+    metaFontSize,
+    playButtonSize,
+  },
   deck,
   onDeleteDeck,
   onTagDeck,
@@ -121,7 +128,7 @@ export const DeckListItem: React.FC<DeckListItemProps> = ({
           <Flex>
             <Tooltip label="暗記">
               <Button
-                boxSize={{ base: "40px", md: "60px" }}
+                boxSize={playButtonSize}
                 rounded="full"
                 colorScheme="green"
                 bgColor="green.300"
