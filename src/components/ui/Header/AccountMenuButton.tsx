@@ -6,21 +6,14 @@ import {
   MenuButtonProps,
 } from "@chakra-ui/react";
 import { User } from "firebase/auth";
-import { forwardRef, useState } from "react";
+import { forwardRef } from "react";
+import { BiErrorCircle } from "react-icons/bi";
 import { FaUserSecret } from "react-icons/fa";
 
 type Props = { user: User } & MenuButtonProps;
 
 export const AccountMenuButton = forwardRef<HTMLButtonElement, Props>(
   function Component({ user, ...styles }, ref) {
-    const [iconUrl, setIconUrl] = useState(user.photoURL);
-    const [alt, setAlt] = useState("icon");
-
-    const handleError = () => {
-      setIconUrl("");
-      setAlt("");
-    };
-
     return (
       <MenuButton
         ref={ref}
@@ -42,12 +35,14 @@ export const AccountMenuButton = forwardRef<HTMLButtonElement, Props>(
         p={0}
         {...styles}
       >
-        {iconUrl ? (
+        {user.photoURL ? (
           <Image
             boxSize={"100%"}
-            src={iconUrl}
-            alt={alt}
-            onError={handleError}
+            src={user.photoURL}
+            fallback={
+              <Icon as={BiErrorCircle} boxSize="70%" fill={"red.500"} />
+            }
+            alt={"accountIcon"}
           />
         ) : (
           <Icon as={FaUserSecret} boxSize="60%" fill="gray.700" />
