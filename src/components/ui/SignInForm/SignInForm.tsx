@@ -42,9 +42,9 @@ export const SignInForm: React.FC<Props> = ({ children, ...styles }) => {
           fontSize="xl"
           fontWeight={"bold"}
           px={5}
-          py={2}
+          pt={1}
           backgroundColor="gray.700"
-          rounded={"xl"}
+          rounded={"lg"}
         >
           Sign in
         </Text>

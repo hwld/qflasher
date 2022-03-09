@@ -19,6 +19,7 @@ export interface UseOutsideClickProps {
    * Function invoked when a click is triggered outside the referenced element.
    */
   handler?: (e: Event) => void;
+  useCapture?: boolean;
 }
 
 /**
@@ -26,7 +27,7 @@ export interface UseOutsideClickProps {
  * when a user clicks outside them.
  */
 export function useOutsideClick(props: UseOutsideClickProps) {
-  const { ref, handler, enabled = true } = props;
+  const { ref, handler, enabled = true, useCapture = false } = props;
   const savedHandler = useCallbackRef(handler);
 
   const stateRef = useRef({
@@ -65,10 +66,10 @@ export function useOutsideClick(props: UseOutsideClickProps) {
     };
 
     const doc = getOwnerDocument(ref.current);
-    doc.addEventListener("mousedown", onPointerDown);
-    doc.addEventListener("mouseup", onMouseUp);
-    doc.addEventListener("touchstart", onPointerDown);
-    doc.addEventListener("touchend", onTouchEnd);
+    doc.addEventListener("mousedown", onPointerDown, useCapture);
+    doc.addEventListener("mouseup", onMouseUp, useCapture);
+    doc.addEventListener("touchstart", onPointerDown, useCapture);
+    doc.addEventListener("touchend", onTouchEnd, useCapture);
 
     return () => {
       doc.removeEventListener("mousedown", onPointerDown);
@@ -76,7 +77,7 @@ export function useOutsideClick(props: UseOutsideClickProps) {
       doc.removeEventListener("touchstart", onPointerDown);
       doc.removeEventListener("touchend", onTouchEnd);
     };
-  }, [handler, ref, savedHandler, state, enabled]);
+  }, [handler, ref, savedHandler, state, enabled, useCapture]);
 }
 
 function isValidEvent(event: any, ref: React.RefObject<HTMLElement>) {
