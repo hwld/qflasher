@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/layout";
+import { Box, Flex, FlexProps } from "@chakra-ui/layout";
 import { MouseEventHandler } from "hoist-non-react-statics/node_modules/@types/react";
 import React, { useEffect, useRef } from "react";
 
@@ -7,7 +7,7 @@ type Props = {
   onChangeWidth: (w: number) => void;
   maxW?: string;
   minW?: string;
-};
+} & FlexProps;
 
 export const ResizableBox: React.FC<Props> = ({
   children,
@@ -15,6 +15,7 @@ export const ResizableBox: React.FC<Props> = ({
   onChangeWidth,
   maxW = 700,
   minW = 300,
+  ...styles
 }) => {
   const handleRef = useRef<HTMLDivElement>(null);
 
@@ -59,6 +60,7 @@ export const ResizableBox: React.FC<Props> = ({
       maxW={maxW}
       bgColor={"gray.700"}
       position={"relative"}
+      {...styles}
     >
       <Box flexGrow={1}>{children}</Box>
       <Box

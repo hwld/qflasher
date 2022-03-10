@@ -61,6 +61,7 @@ export const TagsSelect: React.FC<TagSelectProps> = ({
         return (
           <CreatableSelect
             isMulti
+            closeMenuOnSelect={false}
             options={options}
             {...field}
             onNextFocus={onNextFocus}

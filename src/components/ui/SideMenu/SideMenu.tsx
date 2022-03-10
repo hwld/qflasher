@@ -1,8 +1,8 @@
 import { ResizableBox } from "@/components/ui/ResizableBox";
 import { SideMenuItem } from "@/components/ui/SideMenu";
 import { Box } from "@chakra-ui/layout";
-import { Flex } from "@chakra-ui/react";
-import { ReactNode } from "react";
+import { Flex, useBreakpointValue } from "@chakra-ui/react";
+import { ReactNode, useMemo } from "react";
 
 type Props<T extends string> = {
   items: {
@@ -25,11 +25,47 @@ export const SideMenu = <T extends string>({
   onChangeContentWitdh,
 }: Props<T>) => {
   const selectedItem = items.find((item) => item.name === selected);
+  const mobileBarWidth = "40px";
+  // useBreakPointを使用するとbaseとmd以外のサイズも渡ってくるので制限するためにこっちを使う
+  const breakPoint = useBreakpointValue({ base: "base", md: "md" } as const);
+
+  const sideMenuArea = useMemo(() => {
+    if (!selectedItem) {
+      return null;
+    }
+
+    switch (breakPoint) {
+      case "base": {
+        return (
+          <Box
+            bgColor={"gray.700"}
+            position="absolute"
+            zIndex="modal"
+            left={mobileBarWidth}
+            w={`calc(100vw - ${mobileBarWidth})`}
+            h="100%"
+          >
+            {selectedItem.content}
+          </Box>
+        );
+      }
+      case "md": {
+        return (
+          <ResizableBox
+            width={contentWidth}
+            onChangeWidth={onChangeContentWitdh}
+          >
+            {selectedItem.content}
+          </ResizableBox>
+        );
+      }
+    }
+  }, [breakPoint, contentWidth, onChangeContentWitdh, selectedItem]);
 
   return (
-    <Flex>
+    <Flex position={"relative"}>
       <Box
-        w={{ base: "40px", md: "60px" }}
+        w={{ base: mobileBarWidth, md: "60px" }}
         h="100%"
         bgColor="gray.600"
         boxShadow="xl"
@@ -47,11 +83,7 @@ export const SideMenu = <T extends string>({
           );
         })}
       </Box>
-      {selectedItem ? (
-        <ResizableBox width={contentWidth} onChangeWidth={onChangeContentWitdh}>
-          {selectedItem.content}
-        </ResizableBox>
-      ) : null}
+      {sideMenuArea}
     </Flex>
   );
 };

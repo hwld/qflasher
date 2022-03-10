@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:firebase": "firebase emulators:start",
     "build": "next build && next export && cp out/404/index.html out/404.html",
     "deploy": "firebase deploy --only hosting",
     "start": "next start",

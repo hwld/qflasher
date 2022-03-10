@@ -1,4 +1,5 @@
-import { Box, useOutsideClick } from "@chakra-ui/react";
+import { useOutsideClick } from "@/hooks/useOutsideClick";
+import { Box, useMergeRefs } from "@chakra-ui/react";
 import {
   forwardRef,
   StylesProvider,
@@ -14,84 +15,89 @@ import React, {
   useState,
 } from "react";
 import { GroupBase, MenuProps } from "react-select";
-import { CreatableProps } from "react-select/creatable";
+import { CreatableProps as InnerCreatableProps } from "react-select/creatable";
 import Select from "react-select/src/Select";
+
+type CreatableProps<
+  Option = unknown,
+  IsMulti extends boolean = false,
+  Group extends GroupBase<Option> = GroupBase<Option>
+> = InnerCreatableProps<Option, IsMulti, Group> & {
+  onNextFocus?: () => void;
+  onPrevFocus?: () => void;
+} & RefAttributes<Select<Option, IsMulti, Group>>;
+
+type CreatableRef<
+  Option = unknown,
+  IsMulti extends boolean = false,
+  Group extends GroupBase<Option> = GroupBase<Option>
+> =
+  | ((instance: Select<Option, IsMulti, Group> | null) => void)
+  | MutableRefObject<Select<Option, IsMulti, Group> | null>
+  | null;
 
 // chakra-react-selectの型が合っていなかったので
 // https://github.com/JedWatson/react-select/blob/master/packages/react-select/src/Creatable.tsx
 // をコピペで持ってきた
 // コンポーネントに as CreatableSelectをつけないとOptionがunknownと推論されてしまう。
-
 type CreatableSelect = <
   Option = unknown,
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>
 >(
-  props: CreatableProps<Option, IsMulti, Group> & {
-    onNextFocus?: () => void;
-    onPrevFocus?: () => void;
-  } & RefAttributes<Select<Option, IsMulti, Group>>
+  props: CreatableProps<Option, IsMulti, Group>
 ) => ReactElement;
 
-const Menu: React.FC<MenuProps & { onCloseMenu: () => void }> = (props) => {
+const Menu: React.FC<MenuProps & { onCloseMenu: () => void }> = ({
+  onCloseMenu,
+  children,
+  innerRef,
+  innerProps,
+}) => {
   // chakra-react-selectが内部で使用する
   const menuStyles = useMultiStyleConfig("Menu", {});
   const ref = useRef<HTMLDivElement>(null);
+  const mergedRef = useMergeRefs(ref, innerRef);
 
   useOutsideClick({
     enabled: ref.current !== null,
     ref: ref,
-    handler: props.onCloseMenu,
+    handler: onCloseMenu,
+    useCapture: false,
   });
 
   return (
     <Box
-      ref={ref}
+      ref={mergedRef}
       position="absolute"
       w="100%"
       zIndex={1}
       mt={1}
       overflow="hidden"
-      {...props.innerProps}
+      {...innerProps}
     >
-      <StylesProvider value={menuStyles}>{props.children}</StylesProvider>
+      <StylesProvider value={menuStyles}>{children}</StylesProvider>
     </Box>
   );
 };
 
 export const CreatableSelect = forwardRef(
   <Option, IsMulti extends boolean, Group extends GroupBase<Option>>(
-    {
-      onNextFocus,
-      onPrevFocus,
-      ...props
-    }: CreatableProps<Option, IsMulti, Group> & {
-      onNextFocus?: () => void;
-      onPrevFocus?: () => void;
-    },
-    ref:
-      | ((instance: Select<Option, IsMulti, Group> | null) => void)
-      | MutableRefObject<Select<Option, IsMulti, Group> | null>
-      | null
+    props: CreatableProps<Option, IsMulti, Group>,
+    ref: CreatableRef<Option, IsMulti, Group>
   ) => {
+    const { onNextFocus, onPrevFocus, ...other } = props;
     const [menuIsOpen, setMenuIsOpen] = useState<boolean | undefined>(
       undefined
     );
-    const enteredForFocus = useRef<boolean>(false);
 
-    const CustomMenu = useCallback((props: MenuProps) => {
-      const closeMenu = () => {
-        setMenuIsOpen(undefined);
-      };
-      return <Menu {...props} onCloseMenu={closeMenu} />;
-    }, []);
-
-    const customComponents = {
-      ...props.components,
-      Menu: CustomMenu,
+    const openMenu = () => {
+      setMenuIsOpen(true);
     };
 
-    const openMenu = () => setMenuIsOpen(true);
+    const closeMenu = useCallback(() => {
+      setMenuIsOpen(undefined);
+    }, []);
 
     // Selectのkeydownをhookするためにキャプチャフェーズでハンドリングする
     const handleKeyDownCapture = (
@@ -101,7 +107,6 @@ export const CreatableSelect = forwardRef(
         event.stopPropagation();
         event.preventDefault();
         setMenuIsOpen(undefined);
-        enteredForFocus.current = true;
 
         if (!event.shiftKey) {
           onNextFocus?.();
@@ -111,22 +116,16 @@ export const CreatableSelect = forwardRef(
       }
     };
 
-    const handleMenuOpen = () => {
-      openMenu();
-    };
+    const CustomMenu = useCallback(
+      (props: MenuProps) => {
+        return <Menu {...props} onCloseMenu={closeMenu} />;
+      },
+      [closeMenu]
+    );
 
-    const handleFocus = () => {
-      openMenu();
-    };
-
-    const handleBlur = () => {
-      // フォーカス移動のためにキーが押されたあとにblurが発生したらmenuを閉じる
-      if (enteredForFocus.current) {
-        setMenuIsOpen(undefined);
-      } else {
-        openMenu();
-      }
-      enteredForFocus.current = false;
+    const customComponents = {
+      ...other.components,
+      Menu: CustomMenu,
     };
 
     return (
@@ -134,11 +133,11 @@ export const CreatableSelect = forwardRef(
         <CreatableSelectBase
           // menuIsOpenがundefinedでもmenuが表示されることがあってよくわからない
           menuIsOpen={menuIsOpen}
-          {...(props as any)}
+          {...(other as any)}
           ref={ref}
-          onMenuOpen={handleMenuOpen}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
+          onMenuOpen={openMenu}
+          onMenuClose={closeMenu}
+          onFocus={openMenu}
           components={customComponents}
         />
       </Box>

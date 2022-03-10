@@ -9,18 +9,18 @@ import {
 import { v4 as uuid } from "uuid";
 
 type LoadingState = { isLoading: boolean };
-type LoadingStateAction = {
+type LoadingAction = {
   startLoading: () => string;
   endLoading: (id: string) => void;
 };
 
 const LoadingStateContext = createContext<LoadingState>({ isLoading: false });
-const LoadingStateActionContext = createContext<LoadingStateAction>({
+const LoadingActionContext = createContext<LoadingAction>({
   startLoading: () => "",
   endLoading: () => {},
 });
 
-export const LoadingStateContextProvider: React.FC = ({ children }) => {
+export const LoadingProvider: React.FC = ({ children }) => {
   const [loadingIds, setLoadingIds] = useState<string[]>([]);
 
   const isLoading = useMemo(() => {
@@ -39,21 +39,20 @@ export const LoadingStateContextProvider: React.FC = ({ children }) => {
 
   return (
     <LoadingStateContext.Provider value={{ isLoading }}>
-      <LoadingStateActionContext.Provider value={{ startLoading, endLoading }}>
+      <LoadingActionContext.Provider value={{ startLoading, endLoading }}>
         {children}
-      </LoadingStateActionContext.Provider>
+      </LoadingActionContext.Provider>
     </LoadingStateContext.Provider>
   );
 };
 
 export const useLoadingState = () => useContext(LoadingStateContext);
-export const useLoadingStateAction = () =>
-  useContext(LoadingStateActionContext);
+export const useLoadingAction = () => useContext(LoadingActionContext);
 
 export const useWithLoading = <T extends unknown[], K>(
   callback: Operation<T, K>
 ): Operation<T, K> => {
-  const { startLoading, endLoading } = useLoadingStateAction();
+  const { startLoading, endLoading } = useLoadingAction();
 
   // callbackの戻り値をそのまま返す
   return useCallback(

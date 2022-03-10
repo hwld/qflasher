@@ -1,38 +1,28 @@
-import { TextProps } from "@chakra-ui/react";
+import { LayoutProps, TypographyProps } from "@chakra-ui/react";
 
-export type deckCardStyle = {
-  ringWidth: number;
-  cardWidth: number;
-  height: number;
-  nameFontSize: TextProps["fontSize"];
-  metaFontSize: TextProps["fontSize"];
-};
+export type DeckCardStyle = ReturnType<typeof useDeckCardStyle>;
 
-export const useDeckCardStyle = (size: "sm" | "md"): deckCardStyle => {
-  let ringWidth;
-  let cardWidth;
-  let height;
-  let nameFontSize: TextProps["fontSize"];
-  let metaFontSize: TextProps["fontSize"];
+export const useDeckCardStyle = (size: "sm" | "md") => {
+  let ringWidth: number;
+  let cardWidth: number;
+  let height: number;
+  let nameFontSize: TypographyProps["fontSize"];
+  let metaFontSize: TypographyProps["fontSize"];
+  let playButtonSize: LayoutProps["boxSize"];
 
-  switch (size) {
-    case "sm": {
-      ringWidth = 25;
-      cardWidth = 275;
-      height = 145;
-      nameFontSize = "sm";
-      metaFontSize = "xs";
-      break;
-    }
-    case "md": {
-      ringWidth = 50;
-      cardWidth = 300;
-      height = 185;
-      nameFontSize = "md";
-      metaFontSize = "sm";
-      break;
-    }
-  }
+  ringWidth = 25;
+  cardWidth = 275;
+  height = 145;
+  nameFontSize = "md";
+  metaFontSize = "sm";
+  playButtonSize = "40px";
 
-  return { ringWidth, cardWidth, height, nameFontSize, metaFontSize };
+  return {
+    ringWidth,
+    cardWidth,
+    height,
+    nameFontSize,
+    metaFontSize,
+    playButtonSize,
+  };
 };
