@@ -2,8 +2,8 @@ import { TagsSideView } from "@/components/model/tag/TagsSideView";
 import { DeckListPageMain } from "@/components/pages/DeckListPage";
 import { Fab } from "@/components/ui/Fab";
 import { SideMenu } from "@/components/ui/SideMenu";
-import { useAppState } from "@/context/AppStateContext";
 import { useConfirm } from "@/context/ConfirmContext";
+import { useSideMenu, useSideMenuWidth } from "@/context/SideMenuContext";
 import { useAppOperation } from "@/hooks/useAppOperation";
 import { useAttachTagOperation } from "@/hooks/useAttachTagOperation";
 import { useDeckList } from "@/hooks/useDeckList";
@@ -23,8 +23,9 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
   const router = useRouter();
   const confirm = useConfirm();
 
-  const { menuSelected, selectMenu, sideAreaWidth, setSideAreaWidth } =
-    useAppState();
+  const sideAreaWidth = useSideMenuWidth();
+  const { menuSelected, selectMenu, changeWidth } = useSideMenu();
+
   const { tags, addTag, updateTag, deleteTag } = useTags(userId);
   const [selectedTagId, setSelectedTagId] = useState<string | undefined>();
   const selectedTagName = tags.find((t) => t.id === selectedTagId)?.name;
@@ -79,7 +80,7 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
         selected={menuSelected}
         onSelect={handleSelectMenu}
         contentWidth={sideAreaWidth}
-        onChangeContentWitdh={setSideAreaWidth}
+        onChangeContentWitdh={changeWidth}
         items={[
           {
             name: "tags",

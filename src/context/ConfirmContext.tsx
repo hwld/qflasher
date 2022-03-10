@@ -30,7 +30,7 @@ type ConfirmState = {
   cancelText: string;
   onContinue: () => void;
 };
-export const ConfirmContextProvider: React.FC = ({ children }) => {
+export const ConfirmProvider: React.FC = ({ children }) => {
   const [
     { isOpen, title, body, continueText, cancelText, onContinue },
     setConfirmState,

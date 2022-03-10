@@ -1,5 +1,5 @@
 import { AppTemplate } from "@/components/ui/AppTemplate";
-import { AppStateContextProvider } from "@/context/AppStateContext";
+import { AppStateProvider } from "@/context/AppStateContext";
 import { theme } from "@/theme/theme";
 import { ChakraProvider } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
@@ -30,9 +30,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="initial-scale=1.0,width=device-width" />
       </Head>
       <ChakraProvider theme={theme}>
-        <AppStateContextProvider>
+        <AppStateProvider>
           <AppTemplate>{getProvider(<Component {...pageProps} />)}</AppTemplate>
-        </AppStateContextProvider>
+        </AppStateProvider>
       </ChakraProvider>
     </NoSSR>
   );
