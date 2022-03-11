@@ -14,8 +14,8 @@ export const Fab: React.FC<Props> = ({ children, tooltipLabel, ...props }) => {
           _hover={{ bgColor: "orange.400" }}
           _active={{ bgColor: "orange.500" }}
           color="gray.700"
-          bottom="20px"
-          right="20px"
+          bottom={{ base: "10px", md: "20px" }}
+          right={{ base: "10px", md: "20px" }}
           padding={0}
           boxSize={{ base: "50px", md: "70px" }}
           rounded="full"
