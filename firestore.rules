@@ -29,7 +29,7 @@ service cloud.firestore {
   }
 
   function isValidDeck(deck,id){
-    return deck.size() == 5
+    return deck.size() == 6
     && 'id' in deck
     && deck.id is string
     && deck.id == id
@@ -44,6 +44,8 @@ service cloud.firestore {
     && deck.cardLength > 0 && deck.cardLength <= 100
     && 'createdAt' in deck
     && deck.createdAt is timestamp
+    && 'published' in deck
+    && deck.published is bool
   }
 
   function isAuth(userId){

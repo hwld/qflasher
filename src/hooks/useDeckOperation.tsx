@@ -47,6 +47,7 @@ export const useDeckOperation = (userId: string): DeckOperation => {
         cardLength: deck.cards.length,
         tagIds: deck.tagIds,
         createdAt: serverTimestamp(),
+        published: deck.published,
       });
 
       // cardsの書き込み
@@ -104,6 +105,7 @@ export const useDeckOperation = (userId: string): DeckOperation => {
         cardLength: newDeck.cardLength,
         tagIds: newDeck.tagIds,
         createdAt: deck.createdAt,
+        published: newDeck.published,
       });
 
       // カードの削除

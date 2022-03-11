@@ -8,11 +8,12 @@ export type DeckFormFields = {
   name: string;
   cards: (Omit<FlashCard, "id"> & { cardId: string })[] | undefined;
   tags: Tag[];
+  published: boolean;
 };
 
 export const useDeckForm = (defaultDeck: Deck, allTags: Tag[]) => {
   const defaultFields: DeckFormFields = {
-    name: defaultDeck.name,
+    ...defaultDeck,
     cards: defaultDeck.cards.map((c) => ({ ...c, cardId: c.id })),
     tags: defaultDeck.tagIds.map((id) => {
       const tag = allTags.find((tag) => tag.id === id);
@@ -61,6 +62,7 @@ export const useDeckForm = (defaultDeck: Deck, allTags: Tag[]) => {
           cards,
           tagIds: fields.tags.map((t) => t.id),
           cardLength: fields.cards?.length ?? 0,
+          published: fields.published,
         });
       });
     },

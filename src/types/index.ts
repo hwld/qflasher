@@ -7,6 +7,7 @@ export type Deck = {
   cards: FlashCard[];
   tagIds: string[];
   cardLength: number;
+  published: boolean;
 };
 export type DeckWithoutCards = Omit<Deck, "cards">;
 export type FirestoreDeck = DeckWithoutCards & { createdAt: Timestamp };

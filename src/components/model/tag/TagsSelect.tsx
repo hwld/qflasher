@@ -5,6 +5,8 @@ import { UseTagsResult } from "@/hooks/useTags";
 import { Result } from "@/hooks/useWithResult";
 import { Tag } from "@/types";
 import {
+  Box,
+  BoxProps,
   Button,
   Flex,
   Tag as TagComponent,
@@ -24,7 +26,7 @@ export type TagSelectProps = {
   onDeleteTag: UseTagsResult["deleteTag"];
   onNextFocus?: () => void;
   onPrevFocus?: () => void;
-};
+} & BoxProps;
 
 export const TagsSelect: React.FC<TagSelectProps> = ({
   tags,
@@ -34,6 +36,7 @@ export const TagsSelect: React.FC<TagSelectProps> = ({
   onDeleteTag,
   onNextFocus,
   onPrevFocus,
+  ...styles
 }) => {
   const confirm = useConfirm();
   const [isLoading, setIsLoading] = useState(false);
@@ -54,84 +57,86 @@ export const TagsSelect: React.FC<TagSelectProps> = ({
   );
 
   return (
-    <Controller
-      control={control}
-      name="tags"
-      render={({ field }) => {
-        return (
-          <CreatableSelect
-            isMulti
-            closeMenuOnSelect={false}
-            options={options}
-            {...field}
-            onNextFocus={onNextFocus}
-            onPrevFocus={onPrevFocus}
-            value={field.value?.map((f) => ({ value: f.id, label: f.name }))}
-            onChange={(options) => {
-              field.onChange(
-                options.map((opt) => ({ id: opt.value, name: opt.label }))
-              );
-            }}
-            isLoading={isLoading}
-            formatOptionLabel={(option, { context }) => {
-              if (
-                context === "menu" &&
-                (option as typeof option & { __isNew__?: boolean }).__isNew__
-              ) {
-                return (
-                  <Flex>
-                    <Text>新規作成:</Text>
-                    <TagComponent ml={3}>{option.label}</TagComponent>
-                  </Flex>
+    <Box {...styles}>
+      <Controller
+        control={control}
+        name="tags"
+        render={({ field }) => {
+          return (
+            <CreatableSelect
+              isMulti
+              closeMenuOnSelect={false}
+              options={options}
+              {...field}
+              onNextFocus={onNextFocus}
+              onPrevFocus={onPrevFocus}
+              value={field.value?.map((f) => ({ value: f.id, label: f.name }))}
+              onChange={(options) => {
+                field.onChange(
+                  options.map((opt) => ({ id: opt.value, name: opt.label }))
                 );
-              } else if (context === "menu") {
-                return (
-                  <Flex justify="space-between" align="center" w="100%">
-                    <TagComponent h="24px">{option.label}</TagComponent>
-                    <Button
-                      size="sm"
-                      colorScheme="red"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        confirm({
-                          onContinue: () => onDeleteTag(option.value),
-                          title: "タグの削除",
-                          body: "タグを削除しますか？",
-                          continueText: "削除する",
-                          cancelText: "キャンセル",
-                        });
-                      }}
-                    >
-                      削除
-                    </Button>
-                  </Flex>
-                );
-              }
-              return option.label;
-            }}
-            // formatOptionLabelでスタイリングするためにここで値だけを返す
-            formatCreateLabel={(name) => name}
-            noOptionsMessage={() => "タグが存在しません"}
-            styles={{
-              placeholder: (provided) => ({ ...provided, color: gray300 }),
-              noOptionsMessage: (provided) => ({
-                ...provided,
-                color: gray300,
-              }),
-            }}
-            onCreateOption={async (name) => {
-              setIsLoading(true);
-              const newTag = { id: uuid(), name };
-              const result = await onAddTag(newTag);
-              if (result.type === "success") {
-                field.onChange([...field.value, newTag]);
-              }
-              setIsLoading(false);
-            }}
-          />
-        );
-      }}
-      defaultValue={defaultTags}
-    />
+              }}
+              isLoading={isLoading}
+              formatOptionLabel={(option, { context }) => {
+                if (
+                  context === "menu" &&
+                  (option as typeof option & { __isNew__?: boolean }).__isNew__
+                ) {
+                  return (
+                    <Flex>
+                      <Text>新規作成:</Text>
+                      <TagComponent ml={3}>{option.label}</TagComponent>
+                    </Flex>
+                  );
+                } else if (context === "menu") {
+                  return (
+                    <Flex justify="space-between" align="center" w="100%">
+                      <TagComponent h="24px">{option.label}</TagComponent>
+                      <Button
+                        size="sm"
+                        colorScheme="red"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          confirm({
+                            onContinue: () => onDeleteTag(option.value),
+                            title: "タグの削除",
+                            body: "タグを削除しますか？",
+                            continueText: "削除する",
+                            cancelText: "キャンセル",
+                          });
+                        }}
+                      >
+                        削除
+                      </Button>
+                    </Flex>
+                  );
+                }
+                return option.label;
+              }}
+              // formatOptionLabelでスタイリングするためにここで値だけを返す
+              formatCreateLabel={(name) => name}
+              noOptionsMessage={() => "タグが存在しません"}
+              styles={{
+                placeholder: (provided) => ({ ...provided, color: gray300 }),
+                noOptionsMessage: (provided) => ({
+                  ...provided,
+                  color: gray300,
+                }),
+              }}
+              onCreateOption={async (name) => {
+                setIsLoading(true);
+                const newTag = { id: uuid(), name };
+                const result = await onAddTag(newTag);
+                if (result.type === "success") {
+                  field.onChange([...field.value, newTag]);
+                }
+                setIsLoading(false);
+              }}
+            />
+          );
+        }}
+        defaultValue={defaultTags}
+      />
+    </Box>
   );
 };

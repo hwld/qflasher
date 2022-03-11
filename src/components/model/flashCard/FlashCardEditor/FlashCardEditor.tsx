@@ -1,10 +1,11 @@
 import { DeckFormInput } from "@/components/model/deck/DeckForm";
+import { DeckFormBox } from "@/components/model/deck/DeckForm/DeckFormBox";
 import {
   DeckFormFields,
   useDeckForm,
 } from "@/components/model/deck/DeckForm/useDeckForm";
 import { CardEditorHeader } from "@/components/model/flashCard/FlashCardEditor";
-import { Box, BoxProps, Stack } from "@chakra-ui/react";
+import { BoxProps, Stack } from "@chakra-ui/react";
 import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { Control, FormState } from "react-hook-form";
@@ -67,10 +68,7 @@ export const FlashCardEditor: React.FC<Props> = ({
     <Draggable draggableId={id} index={index}>
       {(provider) => {
         return (
-          <Box
-            padding={5}
-            pt={3}
-            bgColor="gray.700"
+          <DeckFormBox
             {...styles}
             ref={provider.innerRef}
             {...provider.draggableProps}
@@ -120,7 +118,7 @@ export const FlashCardEditor: React.FC<Props> = ({
                 placeholder="答え"
               />
             </Stack>
-          </Box>
+          </DeckFormBox>
         );
       }}
     </Draggable>

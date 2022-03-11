@@ -1,13 +1,15 @@
 import { DeckFormInput } from "@/components/model/deck/DeckForm";
+import { DeckFormBox } from "@/components/model/deck/DeckForm/DeckFormBox";
 import { useDeckForm } from "@/components/model/deck/DeckForm/useDeckForm";
 import { FlashCardEditor } from "@/components/model/flashCard/FlashCardEditor";
 import { TagSelectProps, TagsSelect } from "@/components/model/tag/TagsSelect";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Deck, FlashCard, Tag } from "@/types";
 import { Box, Text } from "@chakra-ui/layout";
-import { Button, Icon, useToast } from "@chakra-ui/react";
+import { Button, Checkbox, Icon, useToast } from "@chakra-ui/react";
 import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
+import { Controller } from "react-hook-form";
 import { MdAdd } from "react-icons/md";
 
 export type DeckFormProps = {
@@ -22,7 +24,14 @@ export type DeckFormProps = {
 
 export const DeckForm: React.FC<DeckFormProps> = ({
   tags,
-  defaultDeck = { id: "", name: "", cards: [], tagIds: [], cardLength: 0 },
+  defaultDeck = {
+    id: "",
+    name: "",
+    cards: [],
+    tagIds: [],
+    cardLength: 0,
+    published: false,
+  },
   formId,
   onSubmit,
   onAddTag,
@@ -66,7 +75,13 @@ export const DeckForm: React.FC<DeckFormProps> = ({
     removeCardField(id);
   };
 
-  const submit = ({ name, cards, tagIds, cardLength }: Omit<Deck, "id">) => {
+  const submit = ({
+    name,
+    cards,
+    tagIds,
+    cardLength,
+    published,
+  }: Omit<Deck, "id">) => {
     if (cards.length === 0) {
       addCardEditor();
       triggerValidation();
@@ -80,6 +95,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
         cards,
         tagIds,
         cardLength,
+        published,
       },
       oldCards: defaultDeck.cards,
     });
@@ -180,11 +196,9 @@ export const DeckForm: React.FC<DeckFormProps> = ({
     <Box>
       {/* Enterが入力されてもsubmitが発生しないように独立させる。 */}
       <form id={formId} onSubmit={handleSubmit(submit)}></form>
-      <Box bgColor="gray.700" padding={5} borderRadius="md" boxShadow="dark-lg">
-        <Text fontWeight="bold" fontSize="xl">
-          デッキ名
-        </Text>
+      <DeckFormBox title="デッキ名">
         <DeckFormInput
+          mt={3}
           control={control}
           name="name"
           error={errors.name}
@@ -192,36 +206,46 @@ export const DeckForm: React.FC<DeckFormProps> = ({
             defaultValue: defaultDeck.name,
             rules: {
               required: { value: true, message: "文字を入力してください" },
-              maxLength: { value: 50, message: "50文字以下で入力してください" },
+              maxLength: {
+                value: 50,
+                message: "50文字以下で入力してください",
+              },
             },
           }}
           placeholder="デッキ名"
           onKeyDown={handleKeyDownInName}
-          mt={3}
         />
-      </Box>
-      <Box
-        mt={2}
-        bgColor="gray.700"
-        padding={5}
-        borderRadius="md"
-        boxShadow="dark-lg"
-      >
-        <Text fontWeight="bold" fontSize="xl">
-          タグ
-        </Text>
+      </DeckFormBox>
+      <DeckFormBox mt={2} title="その他の設定">
         <Box mt={3}>
-          <TagsSelect
+          <Controller
             control={control}
-            tags={tags}
-            defaultTagIds={defaultDeck.tagIds}
-            onAddTag={onAddTag}
-            onDeleteTag={onDeleteTag}
-            onNextFocus={handleFocusNextToSelect}
-            onPrevFocus={handleFocusPrevSelect}
+            name="published"
+            render={({ field: { value, ...fields } }) => (
+              <Checkbox
+                colorScheme={"green"}
+                isChecked={value}
+                defaultChecked={defaultDeck.published}
+                {...fields}
+              >
+                デッキを公開する
+              </Checkbox>
+            )}
           />
         </Box>
-      </Box>
+      </DeckFormBox>
+      <DeckFormBox mt={2} title="タグ">
+        <TagsSelect
+          mt={3}
+          control={control}
+          tags={tags}
+          defaultTagIds={defaultDeck.tagIds}
+          onAddTag={onAddTag}
+          onDeleteTag={onDeleteTag}
+          onNextFocus={handleFocusNextToSelect}
+          onPrevFocus={handleFocusPrevSelect}
+        />
+      </DeckFormBox>
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="cardEditors">
           {(provided) => (
@@ -230,8 +254,6 @@ export const DeckForm: React.FC<DeckFormProps> = ({
                 return (
                   <FlashCardEditor
                     mt={2}
-                    borderRadius="md"
-                    boxShadow="dark-lg"
                     index={i}
                     formControl={control}
                     cardErrors={errors.cards}
@@ -250,7 +272,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
         </Droppable>
       </DragDropContext>
       <Button
-        mt={2}
+        mt={3}
         w="100%"
         h="50px"
         borderRadius="md"

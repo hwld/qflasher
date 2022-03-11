@@ -85,6 +85,7 @@ export const useMyDeck = (userId: string, deckId: string): UseMyDeckResult => {
       tagIds: deckInfo.tagIds,
       cardLength: deckInfo!.cardLength,
       cards: cardsResult.value,
+      published: deckInfo.published,
     };
     dispatch({ type: "success", deck });
   }, [cardsResult, deckInfoResult]);

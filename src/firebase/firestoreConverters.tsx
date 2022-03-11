@@ -10,6 +10,7 @@ export const deckConverter: FirestoreDataConverter<FirestoreDeck> = {
       cardLength: deck.cardLength,
       tagIds: deck.tagIds,
       createdAt: deck.createdAt,
+      published: deck.published,
     };
   },
   toFirestore: (deck) => {
@@ -20,6 +21,7 @@ export const deckConverter: FirestoreDataConverter<FirestoreDeck> = {
       cardLength: deck.cardLength,
       tagIds: deck.tagIds,
       createdAt: deck.createdAt,
+      published: deck.published,
     };
     return firestoreDeck;
   },
