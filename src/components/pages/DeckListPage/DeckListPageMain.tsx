@@ -37,7 +37,7 @@ export const DeckListPageMain: React.FC<Props> = ({
       return null;
     }
     case "success": {
-      const viewDecks = deckListData.decks.filter((decks) =>
+      const viewDecks = deckListData.data.filter((decks) =>
         decks.name.includes(searchText)
       );
       return (

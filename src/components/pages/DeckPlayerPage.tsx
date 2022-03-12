@@ -70,7 +70,7 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
               fontSize={{ base: "lg", md: "2xl" }}
               textAlign="center"
             >
-              {useMyDeckResult.deck.name}
+              {useMyDeckResult.data.name}
             </Text>
           </Center>
           <DeckPlayer
@@ -79,7 +79,7 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
             w="90%"
             maxW="800px"
             size={deckPlayerSize}
-            deck={useMyDeckResult.deck}
+            deck={useMyDeckResult.data}
             config={config}
           />
         </Grid>

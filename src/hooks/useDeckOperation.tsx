@@ -2,13 +2,13 @@ import { db } from "@/firebase/config";
 import {
   cardConverter,
   deckConverter,
+  privateFieldOnDeckConverter,
   tagConverter,
 } from "@/firebase/firestoreConverters";
 import { Deck, FlashCard } from "@/types";
 import {
   arrayUnion,
   collection,
-  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -45,16 +45,24 @@ export const useDeckOperation = (userId: string): DeckOperation => {
         id: deckDoc.id,
         name: deck.name,
         cardLength: deck.cards.length,
-        tagIds: deck.tagIds,
         createdAt: serverTimestamp(),
         published: deck.published,
+      });
+
+      // tagIdsの書き込み
+      const privateRef = doc(deckDoc, "private", "1").withConverter(
+        privateFieldOnDeckConverter
+      );
+      batch.set(privateRef, {
+        uid: userId,
+        tagIds: deck.tagIds,
+        deckId: deckDoc.id,
       });
 
       // cardsの書き込み
       const cardsRef = collection(deckDoc, "cards").withConverter(
         cardConverter
       );
-
       deck.cards.forEach((c, index) => {
         // cardはDeckFormで作成した時点でidを識別する必要があるため、firestoreのautoIdは使用しない。
         const cardDoc = doc(cardsRef, c.id);
@@ -68,22 +76,28 @@ export const useDeckOperation = (userId: string): DeckOperation => {
 
       await batch.commit();
     },
-    [decksRef]
+    [decksRef, userId]
   );
 
   const deleteDeck: DeckOperation["deleteDeck"] = useCallback(
     async (id: string) => {
+      const batch = writeBatch(db);
       const deckDoc = doc(decksRef, id);
-      await deleteDoc(deckDoc);
+      batch.delete(deckDoc);
 
-      // deckが削除されたらcardsは見えないので削除処理は投げっぱなしにする
+      const privateDoc = doc(deckDoc, "private/1").withConverter(
+        privateFieldOnDeckConverter
+      );
+      batch.delete(privateDoc);
 
       const cardsRef = collection(deckDoc, "cards").withConverter(
         cardConverter
       );
       (await getDocs(cardsRef)).forEach(({ ref }) => {
-        deleteDoc(ref);
+        batch.delete(ref);
       });
+
+      await batch.commit();
     },
     [decksRef]
   );
@@ -103,9 +117,18 @@ export const useDeckOperation = (userId: string): DeckOperation => {
         id: deckRef.id,
         name: newDeck.name,
         cardLength: newDeck.cardLength,
-        tagIds: newDeck.tagIds,
         createdAt: deck.createdAt,
         published: newDeck.published,
+      });
+
+      // プライベートフィールドの更新
+      const privateDoc = doc(deckRef, "private/1").withConverter(
+        privateFieldOnDeckConverter
+      );
+      batch.set(privateDoc, {
+        uid: userId,
+        tagIds: newDeck.tagIds,
+        deckId: deckRef.id,
       });
 
       // カードの削除
@@ -133,13 +156,18 @@ export const useDeckOperation = (userId: string): DeckOperation => {
 
       await batch.commit();
     },
-    [decksRef]
+    [decksRef, userId]
   );
 
   const attachTag: DeckOperation["attachTag"] = useCallback(
     async (deckId: string, tagId: string) => {
       const deckRef = doc(decksRef, deckId);
       const deck = (await getDoc(deckRef)).data();
+      const privateRef = doc(deckRef, "private/1").withConverter(
+        privateFieldOnDeckConverter
+      );
+      const privateField = (await getDoc(privateRef)).data();
+
       const tag = (
         await getDoc(
           doc(db, `users/${userId}/tags/${tagId}`).withConverter(tagConverter)
@@ -149,14 +177,16 @@ export const useDeckOperation = (userId: string): DeckOperation => {
       if (!deck) {
         throw new Error("存在しないデッキを参照しました");
       }
-
+      if (!privateField) {
+        throw new Error("存在しないフィールドを参照しました");
+      }
       if (!tag) {
         throw new Error("存在しないタグを参照しました");
       }
 
-      const alreadyExisted = deck.tagIds.includes(tagId);
+      const alreadyExisted = privateField.tagIds.includes(tagId);
 
-      await updateDoc(deckRef, { tagIds: arrayUnion(tagId) });
+      await updateDoc(privateRef, { tagIds: arrayUnion(tagId) });
 
       return { deckName: deck.name, tagName: tag.name, alreadyExisted };
     },

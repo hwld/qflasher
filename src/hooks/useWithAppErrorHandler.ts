@@ -16,7 +16,7 @@ export const useWithAppErrorHandler = <A extends unknown[], R>(
   return useCallback(
     async (...args) => {
       const result = await callback(...args);
-      if (result.type === "error") {
+      if (result.status === "error") {
         toast({ title, description, status: "error" });
       }
       return result;

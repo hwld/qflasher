@@ -1,17 +1,15 @@
+import { Result } from "@/types";
 import { FirestoreError, onSnapshot, Query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
-type CollectionData<T> =
-  | { status: "loading"; value: undefined; error: undefined }
-  | { status: "success"; value: T[]; error: undefined }
-  | { status: "error"; value: undefined; error: FirestoreError };
+type CollectionData<T> = Result<T[], FirestoreError>;
 
 export const useFirestoreCollectionData = <T,>(
   query: Query<T>
 ): CollectionData<T> => {
   const [data, setData] = useState<CollectionData<T>>({
     status: "loading",
-    value: undefined,
+    data: undefined,
     error: undefined,
   });
 
@@ -20,17 +18,17 @@ export const useFirestoreCollectionData = <T,>(
       next: (snap) => {
         setData({
           status: "success",
-          value: snap.docs.map((d) => d.data()),
+          data: snap.docs.map((d) => d.data()),
           error: undefined,
         });
       },
       error: (error) => {
-        setData({ status: "error", value: undefined, error });
+        setData({ status: "error", data: undefined, error });
       },
     });
 
     return () => {
-      setData({ status: "loading", value: undefined, error: undefined });
+      setData({ status: "loading", data: undefined, error: undefined });
       unsubscribe();
     };
   }, [query]);

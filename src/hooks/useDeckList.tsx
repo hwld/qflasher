@@ -1,38 +1,72 @@
 import { db } from "@/firebase/config";
-import { deckConverter } from "@/firebase/firestoreConverters";
+import {
+  deckConverter,
+  privateFieldOnDeckConverter,
+} from "@/firebase/firestoreConverters";
 import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
-import { DeckWithoutCards } from "@/types";
-import { collection, orderBy, query } from "firebase/firestore";
+import { DeckWithoutCards, Result } from "@/types";
+import {
+  collection,
+  collectionGroup,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 import { useMemo } from "react";
 
-export type DeckListData =
-  | { status: "loading"; decks: undefined }
-  | { status: "error"; decks: undefined }
-  | { status: "success"; decks: DeckWithoutCards[] };
+export type DeckListData = Result<DeckWithoutCards[]>;
 
-export const useDeckList = (userId: string) => {
+export const useDeckList = (userId: string): DeckListData => {
+  const decksRef = useMemo(() => {
+    return collection(db, `users/${userId}/decks`);
+  }, [userId]);
   const decksQuery = useMemo(
     () =>
       query(
-        collection(db, `users/${userId}/decks`).withConverter(deckConverter),
+        decksRef.withConverter(deckConverter),
         orderBy("createdAt", "desc")
       ),
-    [userId]
+    [decksRef]
   );
+  const privatesRef = useMemo(() => {
+    return query(
+      collectionGroup(db, "private").withConverter(privateFieldOnDeckConverter),
+      where("uid", "==", userId)
+    );
+  }, [userId]);
 
   const deckListResult = useFirestoreCollectionData(decksQuery);
+  const privatesResult = useFirestoreCollectionData(privatesRef);
 
-  const data: DeckListData = useMemo(() => {
-    switch (deckListResult.status) {
-      case "loading":
-      case "error": {
-        return { status: deckListResult.status, decks: undefined };
-      }
-      case "success": {
-        return { status: "success", decks: deckListResult.value };
-      }
+  const deckList = useMemo((): Result<DeckWithoutCards[]> => {
+    if (
+      deckListResult.status === "loading" ||
+      privatesResult.status === "loading"
+    ) {
+      return { status: "loading", data: undefined, error: undefined };
     }
-  }, [deckListResult.status, deckListResult.value]);
 
-  return data;
+    if (
+      deckListResult.status === "error" ||
+      privatesResult.status === "error"
+    ) {
+      return { status: "error", data: undefined, error: undefined };
+    }
+
+    // ここに到達した時点でどちらも読み込みが成功している
+    const data = deckListResult.data.map((deck): DeckWithoutCards => {
+      const tagIds =
+        privatesResult.data.find((p) => p.deckId === deck.id)?.tagIds ?? [];
+      return { ...deck, tagIds };
+    });
+
+    return { status: "success", data, error: undefined };
+  }, [
+    deckListResult.data,
+    deckListResult.status,
+    privatesResult.data,
+    privatesResult.status,
+  ]);
+
+  return deckList;
 };

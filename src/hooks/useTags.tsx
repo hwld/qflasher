@@ -1,16 +1,24 @@
 import { db } from "@/firebase/config";
-import { deckConverter, tagConverter } from "@/firebase/firestoreConverters";
+import {
+  privateFieldOnDeckConverter,
+  tagConverter,
+} from "@/firebase/firestoreConverters";
 import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
 import { Tag } from "@/types";
-import { collection, doc, orderBy, setDoc } from "@firebase/firestore";
+import {
+  collection,
+  collectionGroup,
+  doc,
+  orderBy,
+  setDoc,
+  writeBatch,
+} from "@firebase/firestore";
 import {
   arrayRemove,
-  deleteDoc,
   getDoc,
   getDocs,
   query,
   serverTimestamp,
-  updateDoc,
   where,
 } from "firebase/firestore";
 import { useCallback, useMemo } from "react";
@@ -27,24 +35,23 @@ export const useTags = (userId: string): UseTagsResult => {
     () => collection(db, `users/${userId}/tags`).withConverter(tagConverter),
     [userId]
   );
+
   const tagsQuery = useMemo(
     () => query(tagsRef, orderBy("createdAt", "desc")),
     [tagsRef]
   );
-  const decksQuery = useMemo(
-    () =>
-      query(
-        collection(db, `users/${userId}/decks`).withConverter(deckConverter),
-        orderBy("createdAt", "desc")
-      ),
-    [userId]
-  );
+
+  const privateRef = useMemo(() => {
+    return collectionGroup(db, "private").withConverter(
+      privateFieldOnDeckConverter
+    );
+  }, []);
 
   const tagsData = useFirestoreCollectionData(tagsQuery);
 
   const tags: Tag[] = useMemo(() => {
-    return tagsData.value ?? [];
-  }, [tagsData.value]);
+    return tagsData.data ?? [];
+  }, [tagsData.data]);
 
   const addTag = useCallback(
     async (tag: Tag) => {
@@ -77,18 +84,26 @@ export const useTags = (userId: string): UseTagsResult => {
 
   const deleteTag = useCallback(
     async (id: string) => {
-      const tagRef = doc(tagsRef, id);
-      await deleteDoc(tagRef);
+      const batch = writeBatch(db);
 
-      const decksSnapshot = await getDocs(
-        query(decksQuery, where("tagIds", "array-contains", id))
+      const tagRef = doc(tagsRef, id);
+      batch.delete(tagRef);
+
+      const privatesSnapshot = await getDocs(
+        query(
+          privateRef,
+          where("uid", "==", userId),
+          where("tagIds", "array-contains", id)
+        )
       );
-      const promises = decksSnapshot.docs.map((deckDoc) => {
-        return updateDoc(deckDoc.ref, { tagIds: arrayRemove(id) });
+
+      privatesSnapshot.docs.map((privateField) => {
+        batch.update(privateField.ref, { tagIds: arrayRemove(id) });
       });
-      await Promise.all(promises);
+
+      await batch.commit();
     },
-    [decksQuery, tagsRef]
+    [privateRef, tagsRef, userId]
   );
 
   return { tags, addTag, updateTag, deleteTag };

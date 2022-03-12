@@ -16,11 +16,11 @@ export const useWithAppSuccessHandler = <A extends unknown[], R>(
   return useCallback(
     async (...args) => {
       const result = await callback(...args);
-      if (result.type === "success") {
-        const message = getMessage(result.item);
+      if (result.status === "success") {
+        const message = getMessage(result.data);
         toast({
           description: message,
-          status: isWarning(result.item) ? "warning" : "success",
+          status: isWarning(result.data) ? "warning" : "success",
         });
       }
       return result;
