@@ -16,7 +16,7 @@ const Index: NextPage = () => {
     }
     if (userResult.data) {
       // ログインしている場合
-      router.push("/decks");
+      router.push("/decks/my");
     } else {
       // ログインしていない場合
       router.push("/404");

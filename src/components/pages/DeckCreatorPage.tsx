@@ -19,7 +19,7 @@ export const DeckCreatorPage: React.FC<Props> = ({ userId }) => {
   const handleSubmit: DeckFormProps["onSubmit"] = useAppOperation(
     async ({ newDeck }) => {
       await addDeck(newDeck);
-      router.push("/decks");
+      router.push("/decks/my");
     }
   );
 

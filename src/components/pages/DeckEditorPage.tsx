@@ -26,7 +26,7 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
   const handleUpdateDeck: DeckFormProps["onSubmit"] = useAppOperation(
     async ({ newDeck, oldCards }) => {
       await updateDeck(newDeck, oldCards);
-      router.push("/decks");
+      router.push("/decks/my");
     }
   );
 

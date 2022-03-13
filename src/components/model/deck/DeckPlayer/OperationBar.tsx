@@ -82,7 +82,7 @@ export const OperationBar: React.FC<Props> = ({
   };
 
   const handleBack = () => {
-    router.push("/decks");
+    router.push("/decks/my");
   };
 
   return (
