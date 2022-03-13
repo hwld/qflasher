@@ -3,16 +3,37 @@ import { GoogleSignInButton } from "@/components/ui/SignInForm";
 import { AnonymousSignInButton } from "@/components/ui/SignInForm/AnonymousSignInButton";
 import { useAppOperation } from "@/hooks/useAppOperation";
 import { useAuthState } from "@/hooks/useAuthState";
+import { Result } from "@/types";
 import { Box, BoxProps, Flex, Text } from "@chakra-ui/react";
+import { UserCredential } from "firebase/auth";
 import React from "react";
 
-type Props = BoxProps;
+type Props = { afterSignIn?: () => void } & BoxProps;
 
-export const SignInForm: React.FC<Props> = ({ children, ...styles }) => {
+export const SignInForm: React.FC<Props> = ({
+  children,
+  afterSignIn,
+  ...styles
+}) => {
   const { signInWithGoogle, signInAnonymous } = useAuthState();
 
   const googleSignIn = useAppOperation(signInWithGoogle);
   const anonymousSignIn = useAppOperation(signInAnonymous);
+
+  const handleSignIn = async (
+    callback: () => Promise<Result<UserCredential>>
+  ) => {
+    const result = await callback();
+    if (result.status === "success") {
+      afterSignIn?.();
+    }
+  };
+  const handleGoogleSignIn = async () => {
+    handleSignIn(googleSignIn);
+  };
+  const handleAnonumousSignIn = async () => {
+    handleSignIn(anonymousSignIn);
+  };
 
   return (
     <Box
@@ -46,8 +67,8 @@ export const SignInForm: React.FC<Props> = ({ children, ...styles }) => {
         >
           Sign in
         </Text>
-        <GoogleSignInButton onClick={googleSignIn} mt={14} />
-        <AnonymousSignInButton mt={5} onClick={anonymousSignIn} mb={14} />
+        <GoogleSignInButton onClick={handleGoogleSignIn} mt={14} />
+        <AnonymousSignInButton mt={5} onClick={handleAnonumousSignIn} mb={14} />
       </Flex>
     </Box>
   );
