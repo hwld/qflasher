@@ -1,15 +1,32 @@
 import { AppLogo } from "@/components/ui/AppLogo";
 import { AccountMenu, useHeaderStyle } from "@/components/ui/Header";
+import { SignInForm } from "@/components/ui/SignInForm";
 import { useAuthState } from "@/hooks/useAuthState";
-import { Box, Flex, FlexProps, Link, Progress } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  FlexProps,
+  Link,
+  Modal,
+  ModalCloseButton,
+  ModalContent,
+  ModalOverlay,
+  Progress,
+  useBreakpointValue,
+  useDisclosure,
+} from "@chakra-ui/react";
 import React from "react";
 
 type Props = { isLoading?: boolean; size: "sm" | "md" } & FlexProps;
 
 export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
-  const { user } = useAuthState();
+  const { userResult } = useAuthState();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { barHeight, progressHeight, logoWidth, accountIconSize } =
     useHeaderStyle(size);
+  const formSize = useBreakpointValue({ base: "xs", md: "md" } as const);
+  const buttonSize = useBreakpointValue({ base: "sm", md: "md" } as const);
 
   return (
     <>
@@ -24,10 +41,33 @@ export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
           pl={{ base: 1, md: 5 }}
           {...styles}
         >
-          <Link href="/decks">
+          <Link href="/">
             <AppLogo w={`${logoWidth}px`} />
           </Link>
-          {user && <AccountMenu boxSize={`${accountIconSize}px`} user={user} />}
+          {userResult.data ? (
+            <AccountMenu
+              boxSize={`${accountIconSize}px`}
+              user={userResult.data}
+            />
+          ) : (
+            <Button
+              size={buttonSize}
+              bgColor={"orange.300"}
+              _hover={{ bgColor: "orange.400" }}
+              _active={{ bgColor: "orange.500" }}
+              color="gray.700"
+              onClick={() => onOpen()}
+            >
+              ログイン
+            </Button>
+          )}
+          <Modal isOpen={isOpen} onClose={onClose} size={formSize}>
+            <ModalOverlay></ModalOverlay>
+            <ModalContent>
+              <ModalCloseButton color={"white"} size="lg" />
+              <SignInForm />
+            </ModalContent>
+          </Modal>
         </Flex>
         <Progress
           hasStripe
