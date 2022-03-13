@@ -1,4 +1,5 @@
 import { auth } from "@/firebase/config";
+import { Result } from "@/types";
 import {
   deleteUser as deleteAccount,
   GoogleAuthProvider,
@@ -9,20 +10,22 @@ import {
 } from "firebase/auth";
 import { useEffect, useState } from "react";
 
+type UserResult = Result<User | null>;
+
 export const useAuthState = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error>();
+  const [userResult, setUserResult] = useState<UserResult>({
+    status: "loading",
+    data: undefined,
+    error: undefined,
+  });
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, {
       next: (user) => {
-        setUser(user);
-        setLoading(false);
+        setUserResult({ status: "success", data: user, error: undefined });
       },
       error: (error) => {
-        setError(error);
-        setLoading(false);
+        setUserResult({ status: "error", data: undefined, error: undefined });
       },
       complete: () => {},
     });
@@ -51,9 +54,7 @@ export const useAuthState = () => {
   };
 
   return {
-    user,
-    loading,
-    error,
+    userResult,
     signInWithGoogle,
     signInAnonymous,
     signOut,

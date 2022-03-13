@@ -16,8 +16,6 @@ export const SignInForm: React.FC<Props> = ({ children, ...styles }) => {
 
   return (
     <Box
-      w="90%"
-      maxW="400px"
       h="400px"
       bgColor="gray.700"
       boxShadow="dark-lg"

@@ -11,18 +11,18 @@ export type AuthRequiredPageProps = {
 export const AuthRequiredPage: React.VFC<AuthRequiredPageProps> = ({
   children,
 }) => {
-  const { user, loading } = useAuthState();
+  const { userResult } = useAuthState();
 
-  useLoadingEffect(loading);
+  useLoadingEffect(userResult.status === "loading");
 
-  if (loading) {
+  if (userResult.status === "loading") {
     return null;
-  } else if (user) {
-    return children(user.uid);
+  } else if (userResult.data) {
+    return children(userResult.data.uid);
   } else {
     return (
       <Center mx="auto">
-        <SignInForm mt={10} />
+        <SignInForm mt={10} w="90%" maxW="400px" />
       </Center>
     );
   }
