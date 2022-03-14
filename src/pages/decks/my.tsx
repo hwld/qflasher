@@ -1,10 +1,18 @@
 import { DeckListPage } from "@/components/pages/DeckListPage";
-import { AuthRequiredPage } from "@/components/ui/AuthRequiredPage";
+import { useAuthState } from "@/hooks/useAuthState";
+import { useRequireSignIn } from "@/hooks/useRequireSignIn";
 import { NextPage } from "next";
 
 const MyDecks: NextPage = () => {
-  const page = (userId: string) => <DeckListPage userId={userId} />;
-  return <AuthRequiredPage>{page}</AuthRequiredPage>;
+  const { userResult } = useAuthState();
+
+  useRequireSignIn({ userResult });
+
+  if (userResult.data) {
+    return <DeckListPage userId={userResult.data.uid} />;
+  } else {
+    return null;
+  }
 };
 
 export default MyDecks;

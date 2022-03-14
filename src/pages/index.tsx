@@ -12,7 +12,7 @@ const Index: NextPage = () => {
   useLoadingEffect(userResult.status === "loading");
 
   useEffect(() => {
-    if (userResult.status === "loading" || userResult.status === "error") {
+    if (userResult.status === "loading") {
       return;
     }
     if (userResult.data) {

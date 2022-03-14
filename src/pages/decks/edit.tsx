@@ -1,6 +1,7 @@
 import { DeckEditPage } from "@/components/pages/DeckEditorPage";
-import { AuthRequiredPage } from "@/components/ui/AuthRequiredPage";
+import { useAuthState } from "@/hooks/useAuthState";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
+import { useRequireSignIn } from "@/hooks/useRequireSignIn";
 import { routes } from "@/routes";
 import { isDeckId } from "@/utils/isDeckId";
 import type { NextPage } from "next";
@@ -9,27 +10,20 @@ import React from "react";
 
 const Edit: NextPage = () => {
   const router = useRouter();
+  const { userResult } = useAuthState();
   const id = router.query.id;
 
   useLoadingEffect(!router.isReady);
+  useRequireSignIn({ userResult });
 
-  if (!router.isReady) {
+  if (!userResult.data || !router.isReady) {
     return null;
-  }
-
-  if (!isDeckId(id)) {
+  } else if (!isDeckId(id)) {
     router.push(routes.rootPage);
     return null;
+  } else {
+    return <DeckEditPage deckId={id} userId={userResult.data.uid} />;
   }
-
-  const deckEditPage = (userId: string) => {
-    if (!isDeckId(id)) {
-      return <></>;
-    }
-    return <DeckEditPage deckId={id} userId={userId} />;
-  };
-
-  return <AuthRequiredPage>{deckEditPage}</AuthRequiredPage>;
 };
 
 export default Edit;

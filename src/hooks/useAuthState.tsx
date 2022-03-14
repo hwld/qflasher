@@ -8,9 +8,9 @@ import {
   signInWithPopup,
   User,
 } from "firebase/auth";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-type UserResult = Result<User | null>;
+export type UserResult = Result<User | null>;
 
 export const useAuthState = () => {
   const [userResult, setUserResult] = useState<UserResult>({
@@ -33,25 +33,25 @@ export const useAuthState = () => {
     return unsubscribe;
   }, []);
 
-  const signInWithGoogle = () => {
+  const signInWithGoogle = useCallback(() => {
     return signInWithPopup(auth, new GoogleAuthProvider());
-  };
+  }, []);
 
-  const signInAnonymous = () => {
+  const signInAnonymous = useCallback(() => {
     return signInAnonymously(auth);
-  };
+  }, []);
 
-  const deleteUser = () => {
+  const deleteUser = useCallback(() => {
     const user = auth.currentUser;
     if (user) {
       return deleteAccount(user);
     }
     return Promise.reject();
-  };
+  }, []);
 
-  const signOut = () => {
+  const signOut = useCallback(() => {
     return auth.signOut();
-  };
+  }, []);
 
   return {
     userResult,

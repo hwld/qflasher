@@ -1,6 +1,7 @@
 import { DeckPlayerPage } from "@/components/pages/DeckPlayerPage";
-import { AuthRequiredPage } from "@/components/ui/AuthRequiredPage";
+import { useAuthState } from "@/hooks/useAuthState";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
+import { useRequireSignIn } from "@/hooks/useRequireSignIn";
 import { routes } from "@/routes";
 import { isDeckId } from "@/utils/isDeckId";
 import { NextPage } from "next";
@@ -9,28 +10,20 @@ import React from "react";
 
 const Play: NextPage = () => {
   const router = useRouter();
+  const { userResult } = useAuthState();
   const id = router.query.id;
 
-  // 準備ができるまでロード状態にする
   useLoadingEffect(!router.isReady);
+  useRequireSignIn({ userResult });
 
-  // ルーターの準備ができるまで何も表示しない
-  if (!router.isReady) {
+  if (!userResult.data || !router.isReady) {
     return null;
-  }
-
-  if (!isDeckId(id)) {
+  } else if (!isDeckId(id)) {
     router.push(routes.rootPage);
+    return null;
+  } else {
+    return <DeckPlayerPage deckId={id} userId={userResult.data.uid} />;
   }
-
-  const page = (userId: string) => {
-    if (!isDeckId(id)) {
-      return <></>;
-    }
-    return <DeckPlayerPage deckId={id} userId={userId} />;
-  };
-
-  return <AuthRequiredPage>{page}</AuthRequiredPage>;
 };
 
 export default Play;
