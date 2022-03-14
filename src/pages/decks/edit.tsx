@@ -1,5 +1,6 @@
 import { DeckEditPage } from "@/components/pages/DeckEditorPage";
 import { useAuthState } from "@/hooks/useAuthState";
+import { useInitLoadingEffect } from "@/hooks/useInitLoadingEffect";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { useRequireSignIn } from "@/hooks/useRequireSignIn";
 import { routes } from "@/routes";
@@ -9,12 +10,14 @@ import { useRouter } from "next/dist/client/router";
 import React from "react";
 
 const Edit: NextPage = () => {
-  const router = useRouter();
   const { userResult } = useAuthState();
+  useRequireSignIn({ userResult });
+
+  const router = useRouter();
   const id = router.query.id;
 
   useLoadingEffect(!router.isReady);
-  useRequireSignIn({ userResult });
+  useInitLoadingEffect();
 
   if (!userResult.data || !router.isReady) {
     return null;
