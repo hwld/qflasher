@@ -1,6 +1,7 @@
 import { AppLogo } from "@/components/ui/AppLogo";
 import { AccountMenu, useHeaderStyle } from "@/components/ui/Header";
 import { SignInForm } from "@/components/ui/SignInForm";
+import { useHeaderState } from "@/context/HeaderContext";
 import { useAuthState } from "@/hooks/useAuthState";
 import { routes } from "@/routes";
 import {
@@ -22,15 +23,9 @@ import React, { useMemo } from "react";
 type Props = {
   isLoading?: boolean;
   size: "sm" | "md";
-  hiddenSignInButton?: boolean;
 } & FlexProps;
 
-export const Header: React.FC<Props> = ({
-  isLoading,
-  size,
-  hiddenSignInButton = false,
-  ...styles
-}) => {
+export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
   const { userResult } = useAuthState();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { barHeight, progressHeight, logoWidth, accountIconSize } =
@@ -38,8 +33,10 @@ export const Header: React.FC<Props> = ({
   const formSize = useBreakpointValue({ base: "xs", md: "md" } as const);
   const buttonSize = useBreakpointValue({ base: "sm", md: "md" } as const);
 
+  const { showSignInButton } = useHeaderState();
+
   const signInButton = useMemo(() => {
-    return hiddenSignInButton ? null : (
+    return showSignInButton ? (
       <Button
         size={buttonSize}
         bgColor={"orange.300"}
@@ -50,8 +47,8 @@ export const Header: React.FC<Props> = ({
       >
         ログイン
       </Button>
-    );
-  }, [buttonSize, hiddenSignInButton, onOpen]);
+    ) : null;
+  }, [buttonSize, showSignInButton, onOpen]);
 
   const userInfo = useMemo(() => {
     if (userResult.status === "loading") {

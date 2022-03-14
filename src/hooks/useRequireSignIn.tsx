@@ -8,6 +8,7 @@ type UseRequireSignInArg = { userResult: UserResult };
 export const useRequireSignIn = ({ userResult }: UseRequireSignInArg) => {
   const router = useRouter();
 
+  // リダイレクト処理
   useEffect(() => {
     if (userResult.status === "loading") {
       return;
