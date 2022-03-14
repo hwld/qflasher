@@ -17,17 +17,53 @@ import {
   useBreakpointValue,
   useDisclosure,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useMemo } from "react";
 
-type Props = { isLoading?: boolean; size: "sm" | "md" } & FlexProps;
+type Props = {
+  isLoading?: boolean;
+  size: "sm" | "md";
+  hiddenSignInButton?: boolean;
+} & FlexProps;
 
-export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
+export const Header: React.FC<Props> = ({
+  isLoading,
+  size,
+  hiddenSignInButton = false,
+  ...styles
+}) => {
   const { userResult } = useAuthState();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { barHeight, progressHeight, logoWidth, accountIconSize } =
     useHeaderStyle(size);
   const formSize = useBreakpointValue({ base: "xs", md: "md" } as const);
   const buttonSize = useBreakpointValue({ base: "sm", md: "md" } as const);
+
+  const signInButton = useMemo(() => {
+    return hiddenSignInButton ? null : (
+      <Button
+        size={buttonSize}
+        bgColor={"orange.300"}
+        _hover={{ bgColor: "orange.400" }}
+        _active={{ bgColor: "orange.500" }}
+        color="gray.700"
+        onClick={() => onOpen()}
+      >
+        ログイン
+      </Button>
+    );
+  }, [buttonSize, hiddenSignInButton, onOpen]);
+
+  const userInfo = useMemo(() => {
+    if (userResult.status === "loading") {
+      return null;
+    }
+
+    return userResult.data ? (
+      <AccountMenu boxSize={`${accountIconSize}px`} user={userResult.data} />
+    ) : (
+      signInButton
+    );
+  }, [accountIconSize, signInButton, userResult.data, userResult.status]);
 
   return (
     <>
@@ -45,23 +81,7 @@ export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
           <Link href={routes.rootPage}>
             <AppLogo w={`${logoWidth}px`} />
           </Link>
-          {userResult.data ? (
-            <AccountMenu
-              boxSize={`${accountIconSize}px`}
-              user={userResult.data}
-            />
-          ) : (
-            <Button
-              size={buttonSize}
-              bgColor={"orange.300"}
-              _hover={{ bgColor: "orange.400" }}
-              _active={{ bgColor: "orange.500" }}
-              color="gray.700"
-              onClick={() => onOpen()}
-            >
-              ログイン
-            </Button>
-          )}
+          {userInfo}
           <Modal isOpen={isOpen} onClose={onClose} size={formSize}>
             <ModalOverlay></ModalOverlay>
             <ModalContent>

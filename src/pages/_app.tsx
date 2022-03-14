@@ -31,6 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <ChakraProvider theme={theme}>
         <AppStateProvider>
+          {/* ちらつきを防ぐために全画面でヘッダーを共有したかったのでAppTemplateはここに書いた */}
           <AppTemplate>{getProvider(<Component {...pageProps} />)}</AppTemplate>
         </AppStateProvider>
       </ChakraProvider>

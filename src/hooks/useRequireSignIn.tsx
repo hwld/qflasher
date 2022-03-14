@@ -13,7 +13,7 @@ export const useRequireSignIn = ({ userResult }: UseRequireSignInArg) => {
       return;
     } else if (!userResult.data) {
       //ログインしていなければリダイレクト
-      router.push(routes.notFoundPage);
+      router.push(routes.signInPage);
     }
   }, [router, userResult.data, userResult.status]);
 };
