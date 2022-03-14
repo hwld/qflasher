@@ -3,6 +3,7 @@ import { Fab } from "@/components/ui/Fab";
 import { useAppOperation } from "@/hooks/useAppOperation";
 import { useDeckOperation } from "@/hooks/useDeckOperation";
 import { useTags } from "@/hooks/useTags";
+import { routes } from "@/routes";
 import { Box } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
@@ -19,7 +20,7 @@ export const DeckCreatorPage: React.FC<Props> = ({ userId }) => {
   const handleSubmit: DeckFormProps["onSubmit"] = useAppOperation(
     async ({ newDeck }) => {
       await addDeck(newDeck);
-      router.push("/decks/my");
+      router.push(routes.myDecksPage);
     }
   );
 

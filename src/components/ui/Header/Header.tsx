@@ -2,6 +2,7 @@ import { AppLogo } from "@/components/ui/AppLogo";
 import { AccountMenu, useHeaderStyle } from "@/components/ui/Header";
 import { SignInForm } from "@/components/ui/SignInForm";
 import { useAuthState } from "@/hooks/useAuthState";
+import { routes } from "@/routes";
 import {
   Box,
   Button,
@@ -41,7 +42,7 @@ export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
           pl={{ base: 1, md: 5 }}
           {...styles}
         >
-          <Link href="/">
+          <Link href={routes.rootPage}>
             <AppLogo w={`${logoWidth}px`} />
           </Link>
           {userResult.data ? (

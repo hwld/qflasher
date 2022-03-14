@@ -5,11 +5,6 @@ module.exports = {
   exportPathMap: async function (defaultPathMap) {
     return {
       ...defaultPathMap,
-      "/": { page: "/" },
-      "/decks/my": { page: "/decks/my" },
-      "/decks/create": { page: "/decks/create" },
-      "/decks/edit": { page: "/decks/edit" },
-      "/decks/play": { page: "/decks/play" },
     };
   },
 };

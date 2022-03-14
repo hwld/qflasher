@@ -1,3 +1,4 @@
+import { routes } from "@/routes";
 import { Box, Button, Flex, FlexProps, Heading, Text } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 
@@ -10,7 +11,7 @@ export const ErrorMessageBox: React.FC<Props> = ({
   const router = useRouter();
 
   const handleBack = () => {
-    router.push("/");
+    router.push(routes.rootPage);
   };
 
   return (

@@ -3,6 +3,7 @@ import {
   DeckListItemButton,
 } from "@/components/model/deck/DeckListItem";
 import { useTagDrop } from "@/hooks/useTagDnD";
+import { routes } from "@/routes";
 import { DeckWithoutCards } from "@/types";
 import { Box, BoxProps, Button, Flex, Text, Tooltip } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
@@ -41,11 +42,11 @@ export const DeckListItem: React.FC<DeckListItemProps> = ({
   }));
 
   const handlePlayDeck = () => {
-    router.push({ pathname: "/decks/play", query: { id: deck.id } });
+    router.push({ pathname: routes.playDeckPage, query: { id: deck.id } });
   };
 
   const handleUpdateDeck = () => {
-    router.push({ pathname: "/decks/edit", query: { id: deck.id } });
+    router.push({ pathname: routes.editDeckPage, query: { id: deck.id } });
   };
 
   const handleDelete = () => {

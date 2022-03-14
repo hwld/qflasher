@@ -6,6 +6,7 @@ import { useDeckOperation } from "@/hooks/useDeckOperation";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { useMyDeck } from "@/hooks/useMyDeck";
 import { useTags } from "@/hooks/useTags";
+import { routes } from "@/routes";
 import { Box } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
@@ -26,7 +27,7 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
   const handleUpdateDeck: DeckFormProps["onSubmit"] = useAppOperation(
     async ({ newDeck, oldCards }) => {
       await updateDeck(newDeck, oldCards);
-      router.push("/decks/my");
+      router.push(routes.myDecksPage);
     }
   );
 

@@ -1,3 +1,4 @@
+import { routes } from "@/routes";
 import {
   Box,
   BoxProps,
@@ -82,7 +83,7 @@ export const OperationBar: React.FC<Props> = ({
   };
 
   const handleBack = () => {
-    router.push("/decks/my");
+    router.push(routes.myDecksPage);
   };
 
   return (

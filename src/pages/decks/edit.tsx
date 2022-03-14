@@ -1,6 +1,7 @@
 import { DeckEditPage } from "@/components/pages/DeckEditorPage";
 import { AuthRequiredPage } from "@/components/ui/AuthRequiredPage";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
+import { routes } from "@/routes";
 import { isDeckId } from "@/utils/isDeckId";
 import type { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
@@ -17,7 +18,7 @@ const Edit: NextPage = () => {
   }
 
   if (!isDeckId(id)) {
-    router.push("/");
+    router.push(routes.rootPage);
     return null;
   }
 

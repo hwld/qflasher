@@ -10,6 +10,7 @@ import { useDeckList } from "@/hooks/useDeckList";
 import { useDeckOperation } from "@/hooks/useDeckOperation";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { useTags } from "@/hooks/useTags";
+import { routes } from "@/routes";
 import { Box, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/dist/client/router";
 import React, { useCallback, useState } from "react";
@@ -48,7 +49,7 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
   };
 
   const handleAddDeck = () => {
-    router.push("/decks/create");
+    router.push(routes.createDeckPage);
   };
 
   const handleDeleteDeck = useCallback(
