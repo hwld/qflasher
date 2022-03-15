@@ -14,11 +14,10 @@ type LoadingAction = {
   endLoading: (id: string) => void;
 };
 
-const LoadingStateContext = createContext<LoadingState>({ isLoading: false });
-const LoadingActionContext = createContext<LoadingAction>({
-  startLoading: () => "",
-  endLoading: () => {},
-});
+const LoadingStateContext = createContext<LoadingState | undefined>(undefined);
+const LoadingActionContext = createContext<LoadingAction | undefined>(
+  undefined
+);
 
 export const LoadingProvider: React.FC = ({ children }) => {
   const [loadingIds, setLoadingIds] = useState<string[]>([]);
@@ -46,8 +45,20 @@ export const LoadingProvider: React.FC = ({ children }) => {
   );
 };
 
-export const useLoadingState = () => useContext(LoadingStateContext);
-export const useLoadingAction = () => useContext(LoadingActionContext);
+export const useLoadingState = () => {
+  const context = useContext(LoadingStateContext);
+  if (!context) {
+    throw new Error("useLoadingState must be used within a LoadingProvider.");
+  }
+  return context;
+};
+export const useLoadingAction = () => {
+  const context = useContext(LoadingActionContext);
+  if (!context) {
+    throw new Error("useLoadingAction must be used within a LoadingProvider.");
+  }
+  return context;
+};
 
 export const useWithLoading = <T extends unknown[], K>(
   callback: Operation<T, K>

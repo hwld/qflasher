@@ -12,8 +12,10 @@ import {
   Dispatch,
   ReactNode,
   SetStateAction,
+  SyntheticEvent,
   useCallback,
   useContext,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -54,8 +56,14 @@ export const ConfirmProvider: React.FC = ({ children }) => {
     onContinue();
   }, [handleClose, onContinue]);
 
+  const stopPropagation = useCallback((e: SyntheticEvent) => {
+    e.stopPropagation();
+  }, []);
+
+  const value = useMemo(() => ({ setConfirmState }), []);
+
   return (
-    <ConfirmContext.Provider value={{ setConfirmState: setConfirmState }}>
+    <ConfirmContext.Provider value={value}>
       {children}
       <AlertDialog
         leastDestructiveRef={ref}
@@ -64,11 +72,11 @@ export const ConfirmProvider: React.FC = ({ children }) => {
         isCentered
       >
         <AlertDialogOverlay
-          onClick={(e) => e.stopPropagation()}
-          onMouseDown={(e) => e.stopPropagation()}
-          onMouseUp={(e) => e.stopPropagation}
-          onTouchStart={(e) => e.stopPropagation()}
-          onTouchEnd={(e) => e.stopPropagation()}
+          onClick={stopPropagation}
+          onMouseDown={stopPropagation}
+          onMouseUp={stopPropagation}
+          onTouchStart={stopPropagation}
+          onTouchEnd={stopPropagation}
         >
           <AlertDialogContent>
             <AlertDialogHeader>{title}</AlertDialogHeader>
