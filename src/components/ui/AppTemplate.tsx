@@ -1,5 +1,6 @@
 import { Header } from "@/components/ui/Header";
 import { useLoadingState } from "@/context/LoadingStateContext";
+import { usePageLoading } from "@/hooks/usePageLoading";
 import { Box, Grid, useBreakpointValue } from "@chakra-ui/react";
 import React from "react";
 
@@ -7,6 +8,9 @@ export const AppTemplate: React.FC = ({ children }) => {
   const { isLoading } = useLoadingState();
   const size =
     useBreakpointValue<"sm" | "md">({ base: "sm", md: "md" }) ?? "md";
+
+  usePageLoading();
+
   return (
     <Grid
       templateRows="auto 1fr"

@@ -1,5 +1,4 @@
 import { useAuthState } from "@/hooks/useAuthState";
-import { useInitLoadingEffect } from "@/hooks/useInitLoadingEffect";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { routes } from "@/routes";
 import { Box } from "@chakra-ui/react";
@@ -11,7 +10,6 @@ const Index: NextPage = () => {
   const router = useRouter();
   const { userResult } = useAuthState();
   useLoadingEffect(userResult.status === "loading");
-  useInitLoadingEffect();
 
   useEffect(() => {
     if (userResult.status === "loading") {

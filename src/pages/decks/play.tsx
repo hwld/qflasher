@@ -1,6 +1,5 @@
 import { DeckPlayerPage } from "@/components/pages/DeckPlayerPage";
 import { useAuthState } from "@/hooks/useAuthState";
-import { useInitLoadingEffect } from "@/hooks/useInitLoadingEffect";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { useRequireSignIn } from "@/hooks/useRequireSignIn";
 import { routes } from "@/routes";
@@ -17,7 +16,6 @@ const Play: NextPage = () => {
   const id = router.query.id;
 
   useLoadingEffect(!router.isReady);
-  useInitLoadingEffect();
 
   if (!userResult.data || !router.isReady) {
     return null;
