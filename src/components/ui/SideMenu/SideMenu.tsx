@@ -65,7 +65,7 @@ export const SideMenu = <T extends string>({
   return (
     <Flex position={"relative"}>
       <Box
-        w={{ base: mobileBarWidth, md: "60px" }}
+        w={{ base: mobileBarWidth, md: "50px" }}
         h="100%"
         bgColor="gray.600"
         boxShadow="xl"

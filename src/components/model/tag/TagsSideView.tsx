@@ -61,14 +61,13 @@ export const TagsSideView: React.FC<TagsSideViewProps> = ({
         <Tooltip label="タグの追加">
           <Button
             boxSize="25px"
-            bgColor="orange.300"
-            color={"gray.700"}
-            _hover={{ bgColor: "orange.400" }}
-            _active={{ bgColor: "orange.500" }}
+            variant={"outline"}
+            borderColor="orange.300"
+            color={"orange.300"}
             mr={1}
             minW="none"
             p={0}
-            rounded={"full"}
+            rounded={"sm"}
             onClick={handleClickAdd}
           >
             <RiAddFill size="90%" />

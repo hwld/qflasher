@@ -116,7 +116,7 @@ export const TagDataItem: React.FC<TagDataProps> = ({
           </Text>
           <Flex flexShrink={0} display="none" _groupHover={{ display: "flex" }}>
             <Button
-              rounded="md"
+              rounded="sm"
               boxSize="30px"
               minW="none"
               mr={1}
@@ -127,7 +127,7 @@ export const TagDataItem: React.FC<TagDataProps> = ({
               <MdEdit size="70%" />
             </Button>
             <Button
-              rounded="md"
+              rounded="sm"
               boxSize="30px"
               minW="none"
               p={0}

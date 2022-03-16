@@ -80,8 +80,8 @@ export const DeckListItem: React.FC<DeckListItemProps> = ({
         rounded="2xl"
         direction="column"
         justify="space-between"
-        p={3}
-        paddingLeft={5}
+        py={2}
+        px={3}
         boxShadow="dark-lg"
       >
         <Flex justify="space-between" grow={1} minH={0}>
