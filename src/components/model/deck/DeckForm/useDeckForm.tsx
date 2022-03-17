@@ -99,6 +99,10 @@ export const useDeckForm = (defaultDeck: Deck, allTags: Tag[]) => {
     setFocus("name");
   }, [setFocus]);
 
+  const focusPublished = useCallback(() => {
+    setFocus("published");
+  }, [setFocus]);
+
   const focusTagSelect = useCallback(() => {
     setFocus("tags");
   }, [setFocus]);
@@ -122,14 +126,16 @@ export const useDeckForm = (defaultDeck: Deck, allTags: Tag[]) => {
   );
 
   // 補完でリテラル型を表示させるために繰り返し書いた
-  function focus(target: "deckName" | "tags"): void;
+  function focus(target: "deckName" | "tags" | "published"): void;
   function focus(target: "question" | "answer", cardId: string): void;
   function focus(
-    target: "deckName" | "tags" | "question" | "answer",
+    target: "deckName" | "tags" | "question" | "answer" | "published",
     cardId?: string
   ): void {
     if (target === "deckName") {
       focusDeckName();
+    } else if (target === "published") {
+      focusPublished();
     } else if (target === "tags") {
       focusTagSelect();
     } else if (target === "question" && cardId !== undefined) {

@@ -112,8 +112,20 @@ export const DeckForm: React.FC<DeckFormProps> = ({
   const handleKeyDownInName: KeyboardEventHandler = (event) => {
     handleKeyDownTemplate(event, () => {
       if (event.key === "Enter") {
-        focus("tags");
+        focus("published");
         return;
+      }
+    });
+  };
+
+  const handleKeyDownInPublished: KeyboardEventHandler = (event) => {
+    handleKeyDownTemplate(event, () => {
+      if (event.key === "Enter") {
+        if (event.shiftKey) {
+          focus("deckName");
+        } else {
+          focus("tags");
+        }
       }
     });
   };
@@ -126,7 +138,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
     }
   };
   const handleFocusPrevSelect = () => {
-    focus("deckName");
+    focus("published");
   };
 
   const handleKeyDownInQuestion = (
@@ -216,6 +228,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
           onKeyDown={handleKeyDownInName}
         />
       </DeckFormBox>
+
       <DeckFormBox mt={2} title="その他の設定">
         <Box mt={3}>
           <Controller
@@ -227,6 +240,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
                 isChecked={value}
                 defaultChecked={defaultDeck.published}
                 {...fields}
+                onKeyDown={handleKeyDownInPublished}
               >
                 デッキを公開する
               </Checkbox>
@@ -234,6 +248,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
           />
         </Box>
       </DeckFormBox>
+
       <DeckFormBox mt={2} title="タグ">
         <TagsSelect
           mt={3}
@@ -246,6 +261,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
           onPrevFocus={handleFocusPrevSelect}
         />
       </DeckFormBox>
+
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="cardEditors">
           {(provided) => (
@@ -271,6 +287,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
           )}
         </Droppable>
       </DragDropContext>
+
       <Button
         mt={3}
         w="100%"
