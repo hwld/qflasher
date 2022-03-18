@@ -1,8 +1,10 @@
 import { DeckList, DeckListProps } from "@/components/model/deck/DeckList";
 import { SearchBar } from "@/components/ui/SearchBar";
 import { DeckListData } from "@/hooks/useDeckList";
-import { Center, Heading, Stack } from "@chakra-ui/layout";
-import { Tag, useBreakpointValue } from "@chakra-ui/react";
+import { routes } from "@/routes";
+import { Center, Flex, Heading, Stack } from "@chakra-ui/layout";
+import { Button, Tag, useBreakpointValue } from "@chakra-ui/react";
+import NextLink from "next/link";
 
 type Props = {
   deckListData: DeckListData;
@@ -51,9 +53,22 @@ export const DeckListPageMain: React.FC<Props> = ({
             mx={"auto"}
           >
             <Stack spacing={5}>
-              <Tag size={tagSize} fontWeight="bold" alignSelf={"flex-start"}>
-                {selectedTagName ? selectedTagName : "全てのデッキ"}
-              </Tag>
+              <Flex justify={"space-between"}>
+                <Tag size={tagSize} fontWeight="bold" alignSelf={"flex-start"}>
+                  {selectedTagName ? selectedTagName : "全てのデッキ"}
+                </Tag>
+                <NextLink href={routes.publicDecksPage} passHref>
+                  <Button
+                    as={"a"}
+                    variant={"outline"}
+                    borderColor="orange.300"
+                    color={"orange.300"}
+                    fontSize="sm"
+                  >
+                    公開されているデッキを見に行く
+                  </Button>
+                </NextLink>
+              </Flex>
               <SearchBar text={searchText} onChange={onChangeSearchText} />
             </Stack>
           </Stack>
