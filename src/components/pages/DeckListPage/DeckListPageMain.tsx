@@ -1,7 +1,7 @@
 import { DeckList, DeckListProps } from "@/components/model/deck/DeckList";
 import { SearchBar } from "@/components/ui/SearchBar";
 import { DeckListData } from "@/hooks/useDeckList";
-import { Box, Center, Heading } from "@chakra-ui/layout";
+import { Center, Heading, Stack } from "@chakra-ui/layout";
 import { Tag, useBreakpointValue } from "@chakra-ui/react";
 
 type Props = {
@@ -41,27 +41,29 @@ export const DeckListPageMain: React.FC<Props> = ({
         decks.name.includes(searchText)
       );
       return (
-        <Box>
-          <Tag m={{ base: 2, md: 3 }} size={tagSize} fontWeight="bold">
-            {selectedTagName ? selectedTagName : "全てのデッキ"}
-          </Tag>
-          <SearchBar
+        <Stack mt={5} spacing={5}>
+          <Stack
             w={"90%"}
             maxW={"600px"}
+            bgColor={"gray.600"}
+            p={5}
+            rounded={"md"}
             mx={"auto"}
-            text={searchText}
-            onChange={onChangeSearchText}
-          />
+          >
+            <Stack spacing={5}>
+              <Tag size={tagSize} fontWeight="bold" alignSelf={"flex-start"}>
+                {selectedTagName ? selectedTagName : "全てのデッキ"}
+              </Tag>
+              <SearchBar text={searchText} onChange={onChangeSearchText} />
+            </Stack>
+          </Stack>
           <DeckList
-            mt={4}
-            mx="auto"
-            maxW="1500px"
             selectedTagId={selectedTagId}
             decks={viewDecks}
             onDeleteDeck={onDeleteDeck}
             onTagDeck={onTagDeck}
           />
-        </Box>
+        </Stack>
       );
     }
   }
