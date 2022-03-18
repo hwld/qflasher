@@ -1,5 +1,6 @@
 import { AppLogo } from "@/components/ui/AppLogo";
 import { AccountMenu, useHeaderStyle } from "@/components/ui/Header";
+import { Link } from "@/components/ui/Link";
 import { SignInForm } from "@/components/ui/SignInForm";
 import { useHeaderState } from "@/context/HeaderContext";
 import { useAuthState } from "@/hooks/useAuthState";
@@ -9,7 +10,6 @@ import {
   Button,
   Flex,
   FlexProps,
-  Link,
   Modal,
   ModalCloseButton,
   ModalContent,
@@ -75,7 +75,7 @@ export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
           pl={{ base: 1, md: 5 }}
           {...styles}
         >
-          <Link href={routes.rootPage}>
+          <Link _hover={{ opacity: 0.7 }} href={routes.rootPage}>
             <AppLogo w={`${logoWidth}px`} />
           </Link>
           {userInfo}

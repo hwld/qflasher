@@ -8,9 +8,7 @@ type Props = NextLinkProps & ChakraLinkProps;
 export const Link: React.FC<Props> = ({ href, children, ...styles }) => {
   return (
     <NextLink href={href} passHref>
-      <ChakraLink _hover={{ opacity: 0.7 }} {...styles}>
-        {children}
-      </ChakraLink>
+      <ChakraLink {...styles}>{children}</ChakraLink>
     </NextLink>
   );
 };
