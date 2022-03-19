@@ -58,6 +58,8 @@ export const cardConverter: FirestoreDataConverter<FirestoreFlashCard> = {
       index: card.index,
       question: card.question,
       answer: card.answer,
+      uid: card.uid,
+      published: card.published,
     };
     return data;
   },
@@ -68,6 +70,8 @@ export const cardConverter: FirestoreDataConverter<FirestoreFlashCard> = {
       index: card.index,
       question: card.question,
       answer: card.answer,
+      uid: card.uid,
+      published: card.published,
     };
     return firestoreCard;
   },

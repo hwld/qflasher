@@ -69,6 +69,8 @@ export const useDeckOperation = (userId: string): DeckOperation => {
         const cardDoc = doc(cardsRef, c.id);
         batch.set(cardDoc, {
           id: c.id,
+          uid: userId,
+          published: deck.published,
           deckId: deckDoc.id,
           index,
           question: c.question,
@@ -109,9 +111,9 @@ export const useDeckOperation = (userId: string): DeckOperation => {
       const batch = writeBatch(db);
 
       const deckRef = doc(decksRef, newDeck.id);
-      const deck = (await getDoc(deckRef)).data();
+      const oldDeck = (await getDoc(deckRef)).data();
 
-      if (!deck) {
+      if (!oldDeck) {
         throw new Error("存在しないデッキを更新しようとしました");
       }
 
@@ -120,7 +122,7 @@ export const useDeckOperation = (userId: string): DeckOperation => {
         uid: userId,
         name: newDeck.name,
         cardLength: newDeck.cardLength,
-        createdAt: deck.createdAt,
+        createdAt: oldDeck.createdAt,
         published: newDeck.published,
       });
 
@@ -151,6 +153,8 @@ export const useDeckOperation = (userId: string): DeckOperation => {
         );
         batch.set(cardRef, {
           id,
+          uid: userId,
+          published: newDeck.published,
           deckId: deckRef.id,
           index,
           question,

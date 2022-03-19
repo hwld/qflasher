@@ -21,7 +21,12 @@ export type PrivateFieldOnDeck = {
 };
 
 export type FlashCard = { id: string; question: string; answer: string };
-export type FirestoreFlashCard = FlashCard & { index: number; deckId: string };
+export type FirestoreFlashCard = FlashCard & {
+  index: number;
+  deckId: string;
+  uid: string;
+  published: boolean;
+};
 
 export type Tag = { id: string; name: string };
 export type FirestoreTag = Tag & { createdAt: Timestamp };
