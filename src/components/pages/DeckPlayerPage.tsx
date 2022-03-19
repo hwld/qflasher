@@ -1,12 +1,12 @@
 import { DeckPlayer } from "@/components/model/deck/DeckPlayer";
 import { PlaySettingPage } from "@/components/pages/PlaySettingPage";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
+import { useDeck } from "@/hooks/useDeck";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
-import { useMyDeck } from "@/hooks/useMyDeck";
 import { Center, Grid, Text, useBreakpointValue } from "@chakra-ui/react";
 import React, { useState } from "react";
 
-type DeckPlayerPageProps = { deckId: string; userId: string };
+type DeckPlayerPageProps = { deckId: string; userId: string | undefined };
 
 export type DeckPlayConfig = {
   initialFront: "question" | "answer";
@@ -24,22 +24,23 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
     initialFront: "question",
     isOrderRandom: false,
   });
-  const useMyDeckResult = useMyDeck(userId, deckId);
 
-  useLoadingEffect(useMyDeckResult.status === "loading");
+  const useDeckResult = useDeck(userId, deckId);
+
+  useLoadingEffect(useDeckResult.status === "loading");
 
   const handleCompleteSetting = (config: DeckPlayConfig) => {
     setHasCompletedSetting(true);
     setConfig(config);
   };
 
-  switch (useMyDeckResult.status) {
+  switch (useDeckResult.status) {
     case "loading": {
       // useLoadingEffectによってローディング状態が表示されている
       return null;
     }
     case "error": {
-      if (useMyDeckResult.error === "not-found") {
+      if (useDeckResult.error === "not-found") {
         return (
           <ErrorMessageBox
             mx="auto"
@@ -70,7 +71,7 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
               fontSize={{ base: "lg", md: "2xl" }}
               textAlign="center"
             >
-              {useMyDeckResult.data.name}
+              {useDeckResult.data.name}
             </Text>
           </Center>
           <DeckPlayer
@@ -79,7 +80,7 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
             w="90%"
             maxW="800px"
             size={deckPlayerSize}
-            deck={useMyDeckResult.data}
+            deck={useDeckResult.data}
             config={config}
           />
         </Grid>

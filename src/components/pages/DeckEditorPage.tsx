@@ -21,7 +21,7 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
   const router = useRouter();
   const { tags, addTag, deleteTag } = useTags(userId);
   const { updateDeck } = useDeckOperation(userId);
-  const useMyDeckResult = useMyDeck(userId, deckId);
+  const useMyDeckResult = useMyDeck({ userId, deckId });
   const formId = "updateDeckForm";
 
   const handleUpdateDeck: DeckFormProps["onSubmit"] = useAppOperation(

@@ -4,9 +4,10 @@ import {
   deckConverter,
   privateFieldOnDeckConverter,
 } from "@/firebase/firestoreConverters";
+import { UseDeckResult } from "@/hooks/useDeck";
 import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
 import { useFirestoreDocData } from "@/hooks/useFirestoreDocData";
-import { Deck, Result } from "@/types";
+import { Deck } from "@/types";
 import {
   collection,
   collectionGroup,
@@ -17,9 +18,12 @@ import {
 } from "firebase/firestore";
 import { useMemo } from "react";
 
-type UseMyDeckResult = Result<Deck, "not-found" | "unknown">;
+type UseMyDeckArgs = { userId: string | undefined; deckId: string };
 
-export const useMyDeck = (userId: string, deckId: string): UseMyDeckResult => {
+export const useMyDeck = ({
+  userId = "noUser",
+  deckId,
+}: UseMyDeckArgs): UseDeckResult => {
   const deckRef = useMemo(() => {
     return doc(db, `users/${userId}/decks/${deckId}`).withConverter(
       deckConverter
@@ -46,8 +50,7 @@ export const useMyDeck = (userId: string, deckId: string): UseMyDeckResult => {
   const cardsResult = useFirestoreCollectionData(cardsQuery);
 
   // deckDocとcardDoc[]からDeckを作成する
-  // なんでuseMemoじゃないんだろう
-  const deck = useMemo((): UseMyDeckResult => {
+  const deck = useMemo((): UseDeckResult => {
     //　どちらかがエラーだったらエラーにセットする
     if (
       deckInfoResult.status === "error" ||
