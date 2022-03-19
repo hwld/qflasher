@@ -20,7 +20,7 @@ const Index: NextPage = () => {
       router.push(routes.myDecksPage);
     } else {
       // ログインしていない場合
-      router.push(routes.signInPage);
+      router.push(routes.publicDecksPage);
     }
   }, [router, userResult.data, userResult.status]);
 

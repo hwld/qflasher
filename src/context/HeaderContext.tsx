@@ -3,6 +3,7 @@ import {
   Dispatch,
   SetStateAction,
   useContext,
+  useMemo,
   useState,
 } from "react";
 
@@ -20,15 +21,13 @@ export const HeaderStateProvider: React.FC = ({ children }) => {
   // 共有したかったため、こういった実装にした。
   const [showSignInButton, setShowSignInButton] = useState(false);
 
+  const value = useMemo(
+    () => ({ showSignInButton, setShowSignInButton }),
+    [showSignInButton]
+  );
+
   return (
-    <HeaderContext.Provider
-      value={{
-        showSignInButton,
-        setShowSignInButton,
-      }}
-    >
-      {children}
-    </HeaderContext.Provider>
+    <HeaderContext.Provider value={value}>{children}</HeaderContext.Provider>
   );
 };
 

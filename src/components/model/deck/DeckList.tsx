@@ -3,24 +3,28 @@ import {
   DeckListItemProps,
   useDeckCardStyle,
 } from "@/components/model/deck/DeckListItem";
+import { PlayOnlyDeckListItem } from "@/components/model/deck/DeckListItem/PlayOnlyDeckListItem";
 import { DeckWithoutCards } from "@/types";
-import { Grid, GridProps } from "@chakra-ui/layout";
+import { Grid } from "@chakra-ui/layout";
 import { useBreakpointValue } from "@chakra-ui/media-query";
-import React from "react";
+import React, { useMemo } from "react";
 
 export type DeckListProps = {
   decks: DeckWithoutCards[];
-  selectedTagId: string | undefined;
-  onDeleteDeck: DeckListItemProps["onDeleteDeck"];
-  onTagDeck: DeckListItemProps["onTagDeck"];
-} & GridProps;
+  selectedTagId?: string;
+} & (
+  | {
+      onDeleteDeck: DeckListItemProps["onDeleteDeck"];
+      onTagDeck: DeckListItemProps["onTagDeck"];
+      playOnly?: false;
+    }
+  | { playOnly: true }
+);
 
-export const DeckList: React.FC<DeckListProps> = ({
+export const DeckList: React.VFC<DeckListProps> = ({
   decks,
   selectedTagId,
-  onDeleteDeck,
-  onTagDeck,
-  ...props
+  ...others
 }) => {
   const decksView = selectedTagId
     ? decks.filter((d) => d.tagIds.includes(selectedTagId))
@@ -29,6 +33,30 @@ export const DeckList: React.FC<DeckListProps> = ({
     useBreakpointValue<"sm" | "md">({ base: "sm", md: "md" }) ?? "md";
   const cardStyle = useDeckCardStyle(cardSize);
 
+  const deckItems = useMemo(() => {
+    return decksView.map((deck) => {
+      if (others.playOnly) {
+        return (
+          <PlayOnlyDeckListItem
+            key={deck.id}
+            deck={deck}
+            cardStyle={cardStyle}
+          />
+        );
+      } else {
+        return (
+          <DeckListItem
+            key={deck.id}
+            cardStyle={cardStyle}
+            deck={deck}
+            onDeleteDeck={others.onDeleteDeck}
+            onTagDeck={others.onTagDeck}
+          />
+        );
+      }
+    });
+  }, [cardStyle, decksView, others]);
+
   return (
     <Grid
       templateColumns={`repeat(auto-fill,${
@@ -36,19 +64,8 @@ export const DeckList: React.FC<DeckListProps> = ({
       }px)`}
       gap={5}
       justifyContent="center"
-      {...props}
     >
-      {decksView.map((deck) => {
-        return (
-          <DeckListItem
-            key={deck.id}
-            style={cardStyle}
-            deck={deck}
-            onDeleteDeck={onDeleteDeck}
-            onTagDeck={onTagDeck}
-          />
-        );
-      })}
+      {deckItems}
     </Grid>
   );
 };

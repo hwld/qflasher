@@ -6,7 +6,7 @@ import { useConfirm } from "@/context/ConfirmContext";
 import { useSideMenu, useSideMenuWidth } from "@/context/SideMenuContext";
 import { useAppOperation } from "@/hooks/useAppOperation";
 import { useAttachTagOperation } from "@/hooks/useAttachTagOperation";
-import { useDeckList } from "@/hooks/useDeckList";
+import { useMyDeckList } from "@/hooks/useMyDeckList";
 import { useDeckOperation } from "@/hooks/useDeckOperation";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { useTags } from "@/hooks/useTags";
@@ -31,7 +31,7 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
   const [selectedTagId, setSelectedTagId] = useState<string | undefined>();
   const selectedTagName = tags.find((t) => t.id === selectedTagId)?.name;
   const [searchText, setSearchText] = useState("");
-  const useDeckListResult = useDeckList(userId);
+  const useDeckListResult = useMyDeckList(userId);
   const { deleteDeck, attachTag } = useDeckOperation(userId);
 
   const deleteDeckOperation = useAppOperation(deleteDeck);

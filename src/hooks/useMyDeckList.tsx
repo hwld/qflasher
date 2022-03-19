@@ -16,7 +16,7 @@ import { useMemo } from "react";
 
 export type DeckListData = Result<DeckWithoutCards[]>;
 
-export const useDeckList = (userId: string): DeckListData => {
+export const useMyDeckList = (userId: string): DeckListData => {
   const decksRef = useMemo(() => {
     return collection(db, `users/${userId}/decks`);
   }, [userId]);
