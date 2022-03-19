@@ -25,6 +25,7 @@ export const useAuthState = () => {
         setUserResult({ status: "success", data: user, error: undefined });
       },
       error: (error) => {
+        console.error(error);
         setUserResult({ status: "error", data: undefined, error: undefined });
       },
       complete: () => {},

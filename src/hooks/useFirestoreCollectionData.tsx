@@ -23,6 +23,7 @@ export const useFirestoreCollectionData = <T,>(
         });
       },
       error: (error) => {
+        console.error(error);
         setData({ status: "error", data: undefined, error });
       },
     });
