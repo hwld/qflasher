@@ -70,11 +70,14 @@ service cloud.firestore {
   }
 
   function isAuth(userId){
-    return request.auth != null && request.auth.uid == userId
+    return request.auth != null && request.auth.uid == userId;
   }
 
+  function isPublic() {
+    return resource.data.published == true;
+  }
   function isAuthField(){
-    return request.auth != null && resource.data.uid == request.auth.uid
+    return request.auth != null && resource.data.uid == request.auth.uid;
   }
 
   match /databases/{database}/documents {
@@ -82,8 +85,19 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    match /{path=**}/decks/{deckId} {
+      allow get: if (isAuthField() || isPublic()) && exists(request.path);
+      allow list: if (isAuthField() || isPublic())
+    }
+    
+    match /{path=**}/cards/{cardId} {
+      allow get: if (isAuthField() || isPublic()) && exists(request.path);
+      allow list: if (isAuthField() || isPublic())
+    }
+
     match /{path=**}/private/{one} {
-      allow read: if isAuthField();
+      allow get: if isAuthField() && exists(request.path);
+      allow list: if isAuthField();
     }
 
     match /users/{userId} {

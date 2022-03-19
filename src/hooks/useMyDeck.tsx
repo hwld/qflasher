@@ -29,9 +29,10 @@ export const useMyDeck = (userId: string, deckId: string): UseMyDeckResult => {
   const privatesRef = useMemo(() => {
     return query(
       collectionGroup(db, "private").withConverter(privateFieldOnDeckConverter),
-      where("uid", "==", userId)
+      where("uid", "==", userId),
+      where("deckId", "==", deckId)
     );
-  }, [userId]);
+  }, [deckId, userId]);
 
   const cardsQuery = useMemo(() => {
     return query(
@@ -68,15 +69,13 @@ export const useMyDeck = (userId: string, deckId: string): UseMyDeckResult => {
     }
 
     // firestoreのルールでドキュメントが存在しない場合にはエラーを出すようにしているので、
-    // ここに到達したときにはvalueはundefinedではないはず
+    // ここに到達したときにはdataはundefinedではないはず
     if (!deckInfoResult.data) {
       throw new Error("Succeeded with non-existent deckInfo.");
     }
 
     const deckInfo = deckInfoResult.data;
-
-    const tagIds =
-      privatesResult.data.find((p) => p.deckId === deckInfo.id)?.tagIds ?? [];
+    const tagIds = privatesResult.data[0]?.tagIds ?? [];
 
     const deck: Deck = {
       id: deckInfo.id,
