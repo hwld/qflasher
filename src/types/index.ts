@@ -2,6 +2,7 @@ import { Timestamp } from "firebase/firestore";
 
 export type Deck = {
   id: string;
+  uid: string;
   name: string;
   cards: FlashCard[];
   tagIds: string[];

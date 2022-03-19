@@ -11,6 +11,7 @@ export const deckConverter: FirestoreDataConverter<FirestoreDeck> = {
     const deck = snapshot.data(option)!;
     const data: FirestoreDeck = {
       id: deck.id,
+      uid: deck.uid,
       name: deck.name,
       cardLength: deck.cardLength,
       createdAt: deck.createdAt,
@@ -22,6 +23,7 @@ export const deckConverter: FirestoreDataConverter<FirestoreDeck> = {
     // deckの型ではプロパティがオプショナルになるのでFirestoreDeckにプロパティが追加されたときにエラーにならないので手動で型をつける
     const firestoreDeck: { [T in keyof FirestoreDeck]: typeof deck[T] } = {
       id: deck.id,
+      uid: deck.uid,
       name: deck.name,
       cardLength: deck.cardLength,
       createdAt: deck.createdAt,

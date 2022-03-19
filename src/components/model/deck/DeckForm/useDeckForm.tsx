@@ -48,7 +48,7 @@ export const useDeckForm = (defaultDeck: Deck, allTags: Tag[]) => {
   });
 
   const handleSubmit = useCallback(
-    (callback: (deck: Omit<Deck, "id">) => void) => {
+    (callback: (deck: Omit<Deck, "id" | "uid">) => void) => {
       return innerHandleSubmit((fields) => {
         let cards: FlashCard[] =
           fields.cards?.map(({ cardId, question, answer }, i) => ({

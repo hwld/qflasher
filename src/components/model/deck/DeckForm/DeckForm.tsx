@@ -13,6 +13,7 @@ import { Controller } from "react-hook-form";
 import { MdAdd } from "react-icons/md";
 
 export type DeckFormProps = {
+  userId: string;
   tags: Tag[];
   defaultDeck?: Deck;
   formId: string;
@@ -23,9 +24,11 @@ export type DeckFormProps = {
 };
 
 export const DeckForm: React.FC<DeckFormProps> = ({
+  userId,
   tags,
   defaultDeck = {
     id: "",
+    uid: userId,
     name: "",
     cards: [],
     tagIds: [],
@@ -81,7 +84,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
     tagIds,
     cardLength,
     published,
-  }: Omit<Deck, "id">) => {
+  }: Omit<Deck, "id" | "uid">) => {
     if (cards.length === 0) {
       addCardEditor();
       triggerValidation();
@@ -91,6 +94,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
     onSubmit({
       newDeck: {
         id: defaultDeck.id,
+        uid: defaultDeck.uid,
         name,
         cards,
         tagIds,

@@ -31,6 +31,7 @@ export const DeckCreatorPage: React.FC<Props> = ({ userId }) => {
     <Box>
       <Box my={{ base: 3, md: 5 }} maxW="800px" marginX="auto">
         <DeckForm
+          userId={userId}
           tags={tags}
           formId={formId}
           onSubmit={handleSubmit}

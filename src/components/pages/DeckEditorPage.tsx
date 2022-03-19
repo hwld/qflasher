@@ -65,6 +65,7 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
         <Box>
           <Box my={{ base: 3, md: 5 }} maxW="800px" marginX="auto">
             <DeckForm
+              userId={userId}
               tags={tags}
               defaultDeck={useMyDeckResult.data}
               formId={formId}
