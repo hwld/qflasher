@@ -53,7 +53,7 @@ export const DeckListPageMain: React.FC<Props> = ({
             mx={"auto"}
           >
             <Stack spacing={5}>
-              <Flex justify={"space-between"}>
+              <Flex justify={"space-between"} flexWrap={"wrap"} gridGap={3}>
                 <Tag size={tagSize} fontWeight="bold" alignSelf={"flex-start"}>
                   {selectedTagName ? selectedTagName : "全てのデッキ"}
                 </Tag>
