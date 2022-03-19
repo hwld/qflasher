@@ -4,7 +4,7 @@ import {
 } from "@/components/model/deck/DeckListItem";
 import { DeckListItemBase } from "@/components/model/deck/DeckListItem/DeckListItemBase";
 import { useTagDrop } from "@/hooks/useTagDnD";
-import { routes } from "@/routes";
+import { Routes, routes } from "@/routes";
 import { DeckWithoutCards } from "@/types";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
@@ -13,6 +13,7 @@ import { MdDelete, MdEdit } from "react-icons/md";
 export type DeckListItemProps = {
   cardStyle: DeckCardStyle;
   deck: DeckWithoutCards;
+  returnRoutes: Routes;
   onDeleteDeck: (id: string) => Promise<void>;
   onTagDeck: (deckId: string, tagId: string) => unknown;
 };
@@ -22,6 +23,7 @@ export const DeckListItem: React.FC<DeckListItemProps> = ({
   deck,
   onDeleteDeck,
   onTagDeck,
+  returnRoutes,
 }) => {
   const router = useRouter();
   const [{ hovered }, dropRef] = useTagDrop(() => ({
@@ -34,7 +36,10 @@ export const DeckListItem: React.FC<DeckListItemProps> = ({
   }));
 
   const handlePlayDeck = () => {
-    router.push({ pathname: routes.playDeckPage, query: { id: deck.id } });
+    router.push({
+      pathname: routes.playDeckPage,
+      query: { id: deck.id, returnTo: returnRoutes },
+    });
   };
 
   const handleUpdateDeck = () => {

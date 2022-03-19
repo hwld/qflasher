@@ -1,4 +1,4 @@
-import { routes } from "@/routes";
+import { isRoute, routes } from "@/routes";
 import {
   Box,
   BoxProps,
@@ -83,7 +83,12 @@ export const OperationBar: React.FC<Props> = ({
   };
 
   const handleBack = () => {
-    router.push(routes.myDecksPage);
+    const returnTo = router.query.returnTo;
+    if (typeof returnTo === "string" && isRoute(returnTo)) {
+      router.push(returnTo);
+    } else {
+      router.push(routes.rootPage);
+    }
   };
 
   return (

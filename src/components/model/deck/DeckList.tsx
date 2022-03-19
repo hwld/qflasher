@@ -4,6 +4,7 @@ import {
   useDeckCardStyle,
 } from "@/components/model/deck/DeckListItem";
 import { PlayOnlyDeckListItem } from "@/components/model/deck/DeckListItem/PlayOnlyDeckListItem";
+import { Routes } from "@/routes";
 import { DeckWithoutCards } from "@/types";
 import { Grid } from "@chakra-ui/layout";
 import { useBreakpointValue } from "@chakra-ui/media-query";
@@ -12,6 +13,7 @@ import React, { useMemo } from "react";
 export type DeckListProps = {
   decks: DeckWithoutCards[];
   selectedTagId?: string;
+  returnRoute: Routes;
 } & (
   | {
       onDeleteDeck: DeckListItemProps["onDeleteDeck"];
@@ -24,6 +26,7 @@ export type DeckListProps = {
 export const DeckList: React.VFC<DeckListProps> = ({
   decks,
   selectedTagId,
+  returnRoute,
   ...others
 }) => {
   const decksView = selectedTagId
@@ -41,6 +44,7 @@ export const DeckList: React.VFC<DeckListProps> = ({
             key={deck.id}
             deck={deck}
             cardStyle={cardStyle}
+            returnRoutes={returnRoute}
           />
         );
       } else {
@@ -49,13 +53,14 @@ export const DeckList: React.VFC<DeckListProps> = ({
             key={deck.id}
             cardStyle={cardStyle}
             deck={deck}
+            returnRoutes={returnRoute}
             onDeleteDeck={others.onDeleteDeck}
             onTagDeck={others.onTagDeck}
           />
         );
       }
     });
-  }, [cardStyle, decksView, others]);
+  }, [cardStyle, decksView, others, returnRoute]);
 
   return (
     <Grid

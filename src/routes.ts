@@ -8,3 +8,9 @@ export const routes = {
   signInPage: "/signIn",
   notFoundPage: "/404",
 } as const;
+
+export type Routes = typeof routes[keyof typeof routes];
+
+export const isRoute = (route: string) => {
+  return (Object.values(routes) as string[]).includes(route);
+};

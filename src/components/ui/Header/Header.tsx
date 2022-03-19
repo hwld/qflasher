@@ -83,7 +83,7 @@ export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
             <ModalOverlay></ModalOverlay>
             <ModalContent>
               <ModalCloseButton color={"white"} size="lg" />
-              <SignInForm />
+              <SignInForm afterSignIn={onClose} />
             </ModalContent>
           </Modal>
         </Flex>

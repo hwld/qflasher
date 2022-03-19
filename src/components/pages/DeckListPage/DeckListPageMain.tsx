@@ -76,6 +76,7 @@ export const DeckListPageMain: React.FC<Props> = ({
           <DeckList
             selectedTagId={selectedTagId}
             decks={viewDecks}
+            returnRoute={routes.myDecksPage}
             onDeleteDeck={onDeleteDeck}
             onTagDeck={onTagDeck}
           />
