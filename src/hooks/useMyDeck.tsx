@@ -80,7 +80,6 @@ export const useMyDeck = (userId: string, deckId: string): UseMyDeckResult => {
 
     const deck: Deck = {
       id: deckInfo.id,
-      uid: deckInfo.uid,
       name: deckInfo.name,
       tagIds: tagIds,
       cardLength: deckInfo!.cardLength,

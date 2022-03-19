@@ -54,6 +54,7 @@ export const cardConverter: FirestoreDataConverter<FirestoreFlashCard> = {
     const card = snapshot.data(options)!;
     const data: FirestoreFlashCard = {
       id: card.id,
+      deckId: card.deckId,
       index: card.index,
       question: card.question,
       answer: card.answer,
@@ -63,6 +64,7 @@ export const cardConverter: FirestoreDataConverter<FirestoreFlashCard> = {
   toFirestore: (card) => {
     const firestoreCard: { [T in keyof FirestoreFlashCard]: typeof card[T] } = {
       id: card.id,
+      deckId: card.deckId,
       index: card.index,
       question: card.question,
       answer: card.answer,

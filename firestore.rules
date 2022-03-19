@@ -12,11 +12,14 @@ service cloud.firestore {
     && tag.createdAt is timestamp
   }
 
-  function isValidCard(card,id){
-    return card.size() == 4
+  function isValidCard(card,id,deckId){
+    return card.size() == 5
     && 'id' in card
     && card.id is string
     && card.id == id
+    && 'deckId' in card
+    && card.deckId is string
+    && card.deckId == deckId
     && 'question' in card
     && card.question is string
     && card.question.size() > 0 && card.question.size() <= 100
@@ -103,8 +106,8 @@ service cloud.firestore {
         }
 
         match /cards/{cardId} {
-          allow create: if isAuth(userId) && isValidCard(request.resource.data, cardId);
-          allow update: if isAuth(userId) && isValidCard(request.resource.data, cardId);
+          allow create: if isAuth(userId) && isValidCard(request.resource.data, cardId, deckId);
+          allow update: if isAuth(userId) && isValidCard(request.resource.data, cardId, deckId);
           allow delete: if isAuth(userId);
 
           allow get: if isAuth(userId) && exists(request.path);

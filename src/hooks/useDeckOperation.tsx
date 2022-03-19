@@ -69,6 +69,7 @@ export const useDeckOperation = (userId: string): DeckOperation => {
         const cardDoc = doc(cardsRef, c.id);
         batch.set(cardDoc, {
           id: c.id,
+          deckId: deckDoc.id,
           index,
           question: c.question,
           answer: c.answer,
@@ -150,6 +151,7 @@ export const useDeckOperation = (userId: string): DeckOperation => {
         );
         batch.set(cardRef, {
           id,
+          deckId: deckRef.id,
           index,
           question,
           answer,

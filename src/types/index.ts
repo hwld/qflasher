@@ -2,7 +2,6 @@ import { Timestamp } from "firebase/firestore";
 
 export type Deck = {
   id: string;
-  uid: string;
   name: string;
   cards: FlashCard[];
   tagIds: string[];
@@ -11,6 +10,7 @@ export type Deck = {
 };
 export type DeckWithoutCards = Omit<Deck, "cards">;
 export type FirestoreDeck = Omit<DeckWithoutCards, "tagIds"> & {
+  uid: string;
   createdAt: Timestamp;
 };
 
@@ -21,7 +21,7 @@ export type PrivateFieldOnDeck = {
 };
 
 export type FlashCard = { id: string; question: string; answer: string };
-export type FirestoreFlashCard = FlashCard & { index: number };
+export type FirestoreFlashCard = FlashCard & { index: number; deckId: string };
 
 export type Tag = { id: string; name: string };
 export type FirestoreTag = Tag & { createdAt: Timestamp };

@@ -28,7 +28,6 @@ export const DeckForm: React.FC<DeckFormProps> = ({
   tags,
   defaultDeck = {
     id: "",
-    uid: userId,
     name: "",
     cards: [],
     tagIds: [],
@@ -94,7 +93,6 @@ export const DeckForm: React.FC<DeckFormProps> = ({
     onSubmit({
       newDeck: {
         id: defaultDeck.id,
-        uid: defaultDeck.uid,
         name,
         cards,
         tagIds,
