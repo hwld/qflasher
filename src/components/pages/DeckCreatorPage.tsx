@@ -5,7 +5,7 @@ import { useDeckOperation } from "@/hooks/useDeckOperation";
 import { useTags } from "@/hooks/useTags";
 import { routes } from "@/routes";
 import { Box } from "@chakra-ui/react";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import React from "react";
 import { MdSave } from "react-icons/md";
 

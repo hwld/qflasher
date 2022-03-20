@@ -1,6 +1,6 @@
 import { routes } from "@/routes";
 import { Box, Button, Flex, FlexProps, Heading, Text } from "@chakra-ui/react";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 
 type Props = { header: string; description: string } & FlexProps;
 export const ErrorMessageBox: React.FC<Props> = ({

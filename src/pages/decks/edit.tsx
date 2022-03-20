@@ -5,7 +5,7 @@ import { useRequireSignIn } from "@/hooks/useRequireSignIn";
 import { routes } from "@/routes";
 import { isDeckId } from "@/utils/isDeckId";
 import type { NextPage } from "next";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import React from "react";
 
 const Edit: NextPage = () => {

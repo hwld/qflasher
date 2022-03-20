@@ -7,7 +7,7 @@ import {
   FlexProps,
   Tooltip,
 } from "@chakra-ui/react";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { GrPowerCycle } from "react-icons/gr";
 import {

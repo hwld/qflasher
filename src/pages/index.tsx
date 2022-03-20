@@ -3,7 +3,7 @@ import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { routes } from "@/routes";
 import { Box } from "@chakra-ui/react";
 import { NextPage } from "next";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 const Index: NextPage = () => {

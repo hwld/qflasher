@@ -1,6 +1,6 @@
 import { UserResult } from "@/hooks/useAuthState";
 import { routes } from "@/routes";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 type UseRequireSignInArg = { userResult: UserResult };

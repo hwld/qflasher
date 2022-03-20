@@ -6,7 +6,7 @@ import { DeckListItemBase } from "@/components/model/deck/DeckListItem/DeckListI
 import { useTagDrop } from "@/hooks/useTagDnD";
 import { Routes, routes } from "@/routes";
 import { DeckWithoutCards } from "@/types";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 import React from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 

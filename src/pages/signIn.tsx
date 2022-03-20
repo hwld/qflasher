@@ -3,7 +3,7 @@ import { useAuthState } from "@/hooks/useAuthState";
 import { routes } from "@/routes";
 import { Alert, AlertIcon, Flex } from "@chakra-ui/react";
 import { NextPage } from "next";
-import { useRouter } from "next/dist/client/router";
+import { useRouter } from "next/router";
 
 const SignInPage: NextPage = () => {
   const router = useRouter();
