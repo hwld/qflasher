@@ -1,6 +1,7 @@
 import { useMyDeck } from "@/hooks/useMyDeck";
 import { usePublicDeck } from "@/hooks/usePublicDeck";
 import { Deck, Result } from "@/types";
+import { displayErrors } from "@/utils/displayError";
 import { useMemo } from "react";
 
 export type UseDeckResult = Result<Deck, "not-found" | "unknown">;
@@ -19,6 +20,7 @@ export const useDeck = (userId: string | undefined, deckId: string) => {
       return { status: "loading", data: undefined, error: undefined };
     }
     if (myDeck.status === "error" && publicDeck.status === "error") {
+      displayErrors(myDeck.error, publicDeck.error);
       return { status: "error", data: undefined, error: "unknown" };
     }
     if (myDeck.status === "success" && publicDeck.status === "success") {

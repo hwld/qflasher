@@ -2,6 +2,7 @@ import { db } from "@/firebase/config";
 import { deckConverter } from "@/firebase/firestoreConverters";
 import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
 import { DeckWithoutCards, Result } from "@/types";
+import { displayErrors } from "@/utils/displayError";
 import { collectionGroup, orderBy, query, where } from "firebase/firestore";
 import { useMemo } from "react";
 
@@ -21,6 +22,7 @@ export const usePublicDeckList = (): Result<DeckWithoutCards[]> => {
       return deckListResult;
     }
     if (deckListResult.status === "error") {
+      displayErrors(deckListResult.error);
       return { status: "error", data: undefined, error: undefined };
     }
 

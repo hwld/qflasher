@@ -5,6 +5,7 @@ import {
 } from "@/firebase/firestoreConverters";
 import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
 import { DeckWithoutCards, Result } from "@/types";
+import { displayErrors } from "@/utils/displayError";
 import {
   collection,
   collectionGroup,
@@ -50,6 +51,7 @@ export const useMyDeckList = (userId: string): DeckListData => {
       deckListResult.status === "error" ||
       privatesResult.status === "error"
     ) {
+      displayErrors(deckListResult.error, privatesResult.error);
       return { status: "error", data: undefined, error: undefined };
     }
 

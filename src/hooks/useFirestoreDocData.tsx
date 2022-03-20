@@ -23,7 +23,6 @@ export const useFirestoreDocData = <T,>(
         setData({ status: "success", data: snap.data(), error: undefined });
       },
       error: (error) => {
-        console.error(error);
         setData({ status: "error", data: undefined, error: error });
       },
     });
