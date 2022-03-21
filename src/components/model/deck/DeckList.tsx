@@ -6,7 +6,7 @@ import {
 import { PlayOnlyDeckListItem } from "@/components/model/deck/DeckListItem/PlayOnlyDeckListItem";
 import { Routes } from "@/routes";
 import { DeckWithoutCards } from "@/types";
-import { Grid } from "@chakra-ui/layout";
+import { FlexProps, Grid } from "@chakra-ui/layout";
 import { useBreakpointValue } from "@chakra-ui/media-query";
 import React, { useMemo } from "react";
 
@@ -14,6 +14,7 @@ export type DeckListProps = {
   decks: DeckWithoutCards[];
   selectedTagId?: string;
   returnRoute: Routes;
+  justifyContent?: FlexProps["justify"];
 } & (
   | {
       onDeleteDeck: DeckListItemProps["onDeleteDeck"];
@@ -27,6 +28,7 @@ export const DeckList: React.VFC<DeckListProps> = ({
   decks,
   selectedTagId,
   returnRoute,
+  justifyContent = "center",
   ...others
 }) => {
   const decksView = selectedTagId
@@ -68,7 +70,8 @@ export const DeckList: React.VFC<DeckListProps> = ({
         cardStyle.ringWidth + cardStyle.cardWidth
       }px)`}
       gap={5}
-      justifyContent="center"
+      w="100%"
+      justifyContent={justifyContent}
     >
       {deckItems}
     </Grid>

@@ -1,10 +1,18 @@
 import { DeckList } from "@/components/model/deck/DeckList";
+import { AppLogo } from "@/components/ui/AppLogo";
 import { usePublicDeckList } from "@/hooks/usePublicDeckList";
 import { routes } from "@/routes";
-import { Center, Flex, Heading } from "@chakra-ui/react";
+import {
+  Center,
+  Flex,
+  Heading,
+  useBreakpointValue,
+  VStack,
+} from "@chakra-ui/react";
 
 export const PublicDeckListPage: React.FC = () => {
   const publicDecks = usePublicDeckList();
+  const logoWidth = useBreakpointValue({ base: "70%", md: "50%" });
 
   switch (publicDecks.status) {
     case "error": {
@@ -19,13 +27,36 @@ export const PublicDeckListPage: React.FC = () => {
     }
     case "success": {
       return (
-        <Flex mt={"10"} mx={"auto"} maxW={"1300px"} flexDir="column">
-          <DeckList
-            decks={publicDecks.data}
-            playOnly
-            returnRoute={routes.publicDecksPage}
-          />
-        </Flex>
+        <VStack
+          mt={3}
+          mx={"auto"}
+          w="90%"
+          maxW={"1300px"}
+          spacing={10}
+          align="flex-start"
+        >
+          <Flex
+            w={"100%"}
+            bgGradient={"linear(to-br, green.400 75%, orange.300 75%)"}
+            flexGrow={1}
+            justify="center"
+            align={"center"}
+            py={{ base: "16", md: "20" }}
+            rounded="md"
+          >
+            <AppLogo width={logoWidth} />
+          </Flex>
+
+          <VStack spacing={5} align={"flex-start"} w="100%">
+            <Heading>新着</Heading>
+            <DeckList
+              decks={publicDecks.data}
+              playOnly
+              returnRoute={routes.publicDecksPage}
+              justifyContent="flex-start"
+            />
+          </VStack>
+        </VStack>
       );
     }
   }
