@@ -34,6 +34,20 @@
     },
     {
       "collectionGroup": "decks",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        {
+          "fieldPath": "published",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "decks",
       "queryScope": "COLLECTION",
       "fields": [
         {
@@ -53,6 +67,20 @@
         {
           "fieldPath": "deckId",
           "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "uid",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "private",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        {
+          "fieldPath": "tagIds",
+          "arrayConfig": "CONTAINS"
         },
         {
           "fieldPath": "uid",
