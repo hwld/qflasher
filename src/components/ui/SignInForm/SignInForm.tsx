@@ -4,7 +4,13 @@ import { AnonymousSignInButton } from "@/components/ui/SignInForm/AnonymousSignI
 import { useAppOperation } from "@/hooks/useAppOperation";
 import { useAuthState } from "@/hooks/useAuthState";
 import { Result } from "@/types";
-import { Box, BoxProps, Flex, Text } from "@chakra-ui/react";
+import {
+  Box,
+  BoxProps,
+  Flex,
+  Text,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 import { UserCredential } from "firebase/auth";
 import React from "react";
 
@@ -16,6 +22,7 @@ export const SignInForm: React.FC<Props> = ({
   ...styles
 }) => {
   const { signInWithGoogle, signInAnonymous } = useAuthState();
+  const logoWidth = useBreakpointValue({ base: "70%", md: "80%" });
 
   const googleSignIn = useAppOperation(signInWithGoogle);
   const anonymousSignIn = useAppOperation(signInAnonymous);
@@ -37,6 +44,7 @@ export const SignInForm: React.FC<Props> = ({
 
   return (
     <Box
+      w="100%"
       h="400px"
       bgColor="gray.700"
       boxShadow="dark-lg"
@@ -52,7 +60,7 @@ export const SignInForm: React.FC<Props> = ({
         justify="center"
         align={"center"}
       >
-        <AppLogo width={{ base: "70%", md: "80%" }} />
+        <AppLogo width={logoWidth} />
       </Flex>
       <Flex mx="auto" pos={"relative"} flexDir="column" align={"center"}>
         <Text

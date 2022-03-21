@@ -24,7 +24,6 @@ export const AccountMenu: React.FC<Props> = ({ user, ...styles }) => {
   const { signOut, deleteUser } = useAuthState();
 
   const handleGoMyDeskPage = () => {
-    console.log("?");
     router.push(routes.myDecksPage);
   };
 
