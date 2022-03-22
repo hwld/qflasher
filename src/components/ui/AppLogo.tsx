@@ -10,22 +10,6 @@ export const AppLogo: React.VFC<{ width?: string | number }> = ({
     aria-label="App Logo"
   >
     <defs>
-      <linearGradient id="b">
-        <stop
-          style={{
-            stopColor: "#616161",
-            stopOpacity: 1,
-          }}
-          offset={0}
-        />
-        <stop
-          style={{
-            stopColor: "#4d4d4d",
-            stopOpacity: 1,
-          }}
-          offset={1}
-        />
-      </linearGradient>
       <linearGradient id="a">
         <stop
           style={{
@@ -44,53 +28,13 @@ export const AppLogo: React.VFC<{ width?: string | number }> = ({
       </linearGradient>
       <linearGradient
         xlinkHref="#a"
-        id="g"
+        id="b"
         x1={422.152}
         y1={463.175}
         x2={599.599}
         y2={461.744}
         gradientUnits="userSpaceOnUse"
         gradientTransform="matrix(.26458 0 0 .26458 -240.242 -76.749)"
-      />
-      <linearGradient
-        xlinkHref="#a"
-        id="f"
-        gradientUnits="userSpaceOnUse"
-        x1={422.152}
-        y1={463.175}
-        x2={599.599}
-        y2={461.744}
-        gradientTransform="matrix(.61578 0 0 .61578 -204.177 -108.184)"
-      />
-      <linearGradient
-        xlinkHref="#b"
-        id="e"
-        x1={107.025}
-        y1={131.509}
-        x2={186.284}
-        y2={131.257}
-        gradientUnits="userSpaceOnUse"
-        gradientTransform="matrix(1.91498 0 0 2.32734 -147.802 -108.184)"
-      />
-      <linearGradient
-        xlinkHref="#a"
-        id="c"
-        x1={77.82}
-        y1={186.16}
-        x2={93.526}
-        y2={185.268}
-        gradientUnits="userSpaceOnUse"
-        gradientTransform="matrix(2.32734 0 0 2.32734 -183.517 -235.075)"
-      />
-      <linearGradient
-        xlinkHref="#a"
-        id="d"
-        x1={-200.376}
-        y1={-71.602}
-        x2={-207.173}
-        y2={-70.168}
-        gradientUnits="userSpaceOnUse"
-        gradientTransform="matrix(-1.6065 -1.68395 1.71586 -1.57237 -183.517 -235.075)"
       />
     </defs>
     <g
@@ -101,9 +45,10 @@ export const AppLogo: React.VFC<{ width?: string | number }> = ({
       <path
         style={{
           color: "#000",
-          fill: "url(#c)",
+          fill: "#90ff90",
           strokeWidth: 0.0644089,
           strokeDasharray: "0,.708498",
+          fillOpacity: 1,
         }}
         d="M35.016 158.518c-20.61 0-39.365 18.754-39.365 39.365 0 20.61 18.754 39.365 39.365 39.364 20.61 0 39.365-18.754 39.365-39.364 0-20.611-18.754-39.365-39.365-39.365z"
         transform="matrix(.47992 0 0 .47992 3.336 -65.912)"
@@ -121,9 +66,10 @@ export const AppLogo: React.VFC<{ width?: string | number }> = ({
       <path
         style={{
           color: "#000",
-          fill: "url(#d)",
+          fill: "#90ff90",
           strokeWidth: 0.0631404,
           strokeDasharray: "0,.694543",
+          fillOpacity: 1,
         }}
         d="m-.964 236.96-5.063-5.307a3.289 3.289 0 0 1 .159-4.725l22.406-20.532a3.452 3.452 0 0 1 4.82.162l5.064 5.307a3.289 3.289 0 0 1-.159 4.725L3.857 237.122a3.452 3.452 0 0 1-4.82-.161z"
         transform="matrix(.47992 0 0 .47992 3.336 -65.912)"
@@ -131,9 +77,10 @@ export const AppLogo: React.VFC<{ width?: string | number }> = ({
       <path
         style={{
           color: "#000",
-          fill: "url(#e)",
+          fill: "#616161",
           strokeWidth: 0.0774698,
           strokeDasharray: "0,.852168",
+          fillOpacity: 1,
         }}
         d="M48.534 137.338H197.24c7.814 0 14.104 7.645 14.104 17.141v82.07c0 9.497-6.29 17.142-14.104 17.142H48.534c-7.814 0-14.104-7.645-14.104-17.141v-82.071c0-9.496 6.29-17.141 14.104-17.141z"
         transform="matrix(.47992 0 0 .47992 3.336 -65.912)"
@@ -141,9 +88,10 @@ export const AppLogo: React.VFC<{ width?: string | number }> = ({
       <path
         style={{
           color: "#000",
-          fill: "url(#f)",
+          fill: "#90ff90",
           strokeWidth: 0.0814622,
           strokeDasharray: "0,.896082",
+          fillOpacity: 1,
         }}
         d="M63.998 164.673c-6.509 0-11.749 5.24-11.749 11.749s5.24 11.749 11.75 11.749h121.604c6.509 0 11.749-5.24 11.749-11.749 0-6.51-5.24-11.75-11.75-11.75zm0 38.184a11.724 11.724 0 0 0-11.749 11.75c0 6.51 5.24 11.75 11.75 11.75h90.468c6.509 0 11.75-5.24 11.75-11.75 0-6.509-5.241-11.75-11.75-11.75z"
         transform="matrix(.47992 0 0 .47992 3.336 -65.912)"
