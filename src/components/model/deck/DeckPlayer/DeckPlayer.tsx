@@ -5,7 +5,7 @@ import {
 import { FlashCardStack } from "@/components/model/flashCard/FlashCardStack";
 import { DeckPlayConfig } from "@/components/pages/DeckPlayerPage";
 import { Deck } from "@/types";
-import { Grid, GridProps } from "@chakra-ui/react";
+import { BoxProps, Grid, GridProps } from "@chakra-ui/react";
 import React from "react";
 
 type Props = {
@@ -34,11 +34,27 @@ export const DeckPlayer: React.FC<Props> = ({
     handleReplayWrong,
   } = useDeckPlayerState(deck, config);
 
+  let buttonSize: BoxProps["boxSize"];
+  let barHeight: BoxProps["height"];
+  switch (size) {
+    case "sm": {
+      buttonSize = "50px";
+      barHeight = "70px";
+      break;
+    }
+    case "md": {
+      buttonSize = "70px";
+      barHeight = "90px";
+      break;
+    }
+  }
+
   return (
     <Grid templateRows="1fr auto" {...styles}>
       <FlashCardStack
         maxW="1000px"
         w="100%"
+        h={`calc(100% - (${barHeight} + 20px))`}
         mx="auto"
         size={size}
         initialFront={config.initialFront}
@@ -49,8 +65,13 @@ export const DeckPlayer: React.FC<Props> = ({
         topFront={front}
       />
       <OperationBar
-        my={5}
-        size={size}
+        buttonSize={buttonSize}
+        barHeight={barHeight}
+        bgColor="gray.700"
+        pos="fixed"
+        bottom={0}
+        left={0}
+        right={0}
         isEnd={cardStack.length === 0}
         wrongAnswerCount={wrongCards.length}
         onTurnOver={handleTurnOver}
@@ -58,7 +79,6 @@ export const DeckPlayer: React.FC<Props> = ({
         onWrong={handleWrong}
         onReplayWrong={handleReplayWrong}
         onReplayAll={handleReplayAll}
-        justify="center"
       />
     </Grid>
   );

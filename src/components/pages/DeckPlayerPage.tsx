@@ -64,12 +64,23 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
         return <PlaySettingPage onComplete={handleCompleteSetting} />;
       }
       return (
-        <Grid templateRows="auto 1fr" h="100%">
-          <Center mt={5} maxW="700px" mx="auto">
+        <Grid templateRows="auto 1fr" h="100%" w="100%">
+          <Center
+            bgColor={"gray.700"}
+            py={{ base: 1, md: 3 }}
+            w="100%"
+            overflow={"hidden"}
+          >
             <Text
+              flexShrink={1}
               fontWeight="bold"
               fontSize={{ base: "lg", md: "2xl" }}
+              w={"90%"}
+              maxW="1000px"
               textAlign="center"
+              whiteSpace={"nowrap"}
+              overflow="hidden"
+              textOverflow={"ellipsis"}
             >
               {useDeckResult.data.name}
             </Text>
