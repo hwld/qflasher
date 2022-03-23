@@ -54,7 +54,8 @@ export const DeckPlayer: React.FC<Props> = ({
       <FlashCardStack
         maxW="1000px"
         w="100%"
-        h={`calc(100% - (${barHeight} + 20px))`}
+        // TODO: (100vh-barHeight-10px)からスマホ対応のためにブラウザのアドレスバーを引いた高さを設定する
+        h={"70%"}
         mx="auto"
         size={size}
         initialFront={config.initialFront}
