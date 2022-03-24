@@ -27,7 +27,7 @@ const Play: NextPage = () => {
   if (!router.isReady) {
     return null;
   } else if (!isDeckId(id)) {
-    router.push(routes.rootPage);
+    router.replace(routes.rootPage);
     return null;
   } else {
     return (

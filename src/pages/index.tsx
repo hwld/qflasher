@@ -17,10 +17,10 @@ const Index: NextPage = () => {
     }
     if (userResult.data) {
       // ログインしている場合
-      router.push(routes.myDecksPage);
+      router.replace(routes.myDecksPage);
     } else {
       // ログインしていない場合
-      router.push(routes.publicDecksPage);
+      router.replace(routes.publicDecksPage);
     }
   }, [router, userResult.data, userResult.status]);
 
