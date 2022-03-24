@@ -40,7 +40,7 @@ export const DeckPlayer: React.FC<Props> = ({
         maxW="1000px"
         w="100%"
         mx="auto"
-        my={5}
+        mb={3}
         size={size}
         initialFront={config.initialFront}
         totalCardsCount={totalCardsCount}
@@ -51,7 +51,6 @@ export const DeckPlayer: React.FC<Props> = ({
       />
       <OperationBar
         size={size}
-        bgColor="gray.700"
         isEnd={cardStack.length === 0}
         wrongAnswerCount={wrongCards.length}
         onTurnOver={handleTurnOver}

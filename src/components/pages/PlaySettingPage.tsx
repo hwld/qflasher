@@ -25,44 +25,43 @@ export const PlaySettingPage: React.FC<Props> = ({ onComplete }) => {
   };
 
   return (
-    <Box>
-      <Flex
-        my={{ base: 3, md: 5 }}
-        flexDir="column"
-        maxW="800px"
-        m="auto"
-        alignItems="center"
+    <Flex
+      my={{ base: 3, md: 5 }}
+      flexDir="column"
+      w="95%"
+      maxW="800px"
+      mx="auto"
+      alignItems="center"
+    >
+      <Box
+        p={{ base: 3, md: 5 }}
+        mb={{ base: 2, md: 3 }}
+        bgColor="gray.700"
+        w="100%"
+        rounded="md"
       >
-        <Box p={{ base: 3, md: 5 }} bgColor="gray.700" w="100%" rounded="md">
-          <Checkbox
-            size={checkBoxSize}
-            colorScheme="green"
-            isChecked={isAnswerFirst}
-            onChange={({ target: { checked } }) => setIsAnswerFirst(checked)}
-          >
-            答え → 質問の順で表示する
-          </Checkbox>
-        </Box>
-        <Box
-          mt={3}
-          p={{ base: 3, md: 5 }}
-          bgColor="gray.700"
-          w="100%"
-          rounded="md"
+        <Checkbox
+          size={checkBoxSize}
+          colorScheme="green"
+          isChecked={isAnswerFirst}
+          onChange={({ target: { checked } }) => setIsAnswerFirst(checked)}
         >
-          <Checkbox
-            size={checkBoxSize}
-            colorScheme="green"
-            isChecked={isOrderRandom}
-            onChange={({ target: { checked } }) => setIsOrderRandom(checked)}
-          >
-            順番をランダムにする
-          </Checkbox>
-        </Box>
-        <Button mt={5} onClick={handleClick} colorScheme="green">
-          暗記を始める
-        </Button>
-      </Flex>
-    </Box>
+          答え → 質問の順で表示する
+        </Checkbox>
+      </Box>
+      <Box p={{ base: 3, md: 5 }} bgColor="gray.700" w="100%" rounded="md">
+        <Checkbox
+          size={checkBoxSize}
+          colorScheme="green"
+          isChecked={isOrderRandom}
+          onChange={({ target: { checked } }) => setIsOrderRandom(checked)}
+        >
+          順番をランダムにする
+        </Checkbox>
+      </Box>
+      <Button mt={5} onClick={handleClick} colorScheme="green">
+        暗記を始める
+      </Button>
+    </Flex>
   );
 };
