@@ -5,7 +5,7 @@ import {
 import { FlashCardStack } from "@/components/model/flashCard/FlashCardStack";
 import { DeckPlayConfig } from "@/components/pages/DeckPlayerPage";
 import { Deck } from "@/types";
-import { BoxProps, Grid, GridProps } from "@chakra-ui/react";
+import { Grid, GridProps } from "@chakra-ui/react";
 import React from "react";
 
 type Props = {
@@ -34,29 +34,13 @@ export const DeckPlayer: React.FC<Props> = ({
     handleReplayWrong,
   } = useDeckPlayerState(deck, config);
 
-  let buttonSize: BoxProps["boxSize"];
-  let barHeight: BoxProps["height"];
-  switch (size) {
-    case "sm": {
-      buttonSize = "50px";
-      barHeight = "70px";
-      break;
-    }
-    case "md": {
-      buttonSize = "70px";
-      barHeight = "90px";
-      break;
-    }
-  }
-
   return (
     <Grid templateRows="1fr auto" {...styles}>
       <FlashCardStack
         maxW="1000px"
         w="100%"
-        // TODO: (100vh-barHeight-10px)からスマホ対応のためにブラウザのアドレスバーを引いた高さを設定する
-        h={"70%"}
         mx="auto"
+        my={5}
         size={size}
         initialFront={config.initialFront}
         totalCardsCount={totalCardsCount}
@@ -66,13 +50,8 @@ export const DeckPlayer: React.FC<Props> = ({
         topFront={front}
       />
       <OperationBar
-        buttonSize={buttonSize}
-        barHeight={barHeight}
+        size={size}
         bgColor="gray.700"
-        pos="fixed"
-        bottom={0}
-        left={0}
-        right={0}
         isEnd={cardStack.length === 0}
         wrongAnswerCount={wrongCards.length}
         onTurnOver={handleTurnOver}

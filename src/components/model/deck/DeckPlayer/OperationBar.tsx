@@ -18,8 +18,7 @@ import {
 } from "react-icons/md";
 
 type Props = {
-  buttonSize: BoxProps["boxSize"];
-  barHeight: BoxProps["height"];
+  size: "md" | "sm";
   isEnd: boolean;
   wrongAnswerCount: number;
   onTurnOver: () => void;
@@ -30,8 +29,7 @@ type Props = {
 } & FlexProps;
 
 export const OperationBar: React.FC<Props> = ({
-  buttonSize,
-  barHeight,
+  size,
   isEnd,
   wrongAnswerCount,
   onTurnOver,
@@ -45,6 +43,20 @@ export const OperationBar: React.FC<Props> = ({
   const [isOpen, setIsOpen] = useState(false);
 
   const iconSize = "50%";
+  let buttonSize: BoxProps["boxSize"];
+  let barHeight: BoxProps["height"];
+  switch (size) {
+    case "sm": {
+      buttonSize = "50px";
+      barHeight = "70px";
+      break;
+    }
+    case "md": {
+      buttonSize = "70px";
+      barHeight = "90px";
+      break;
+    }
+  }
 
   const handleRight = () => {
     // TODO 仮

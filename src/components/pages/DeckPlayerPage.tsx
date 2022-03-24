@@ -86,7 +86,6 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
             </Text>
           </Center>
           <DeckPlayer
-            mt={5}
             mx="auto"
             w="90%"
             maxW="800px"
