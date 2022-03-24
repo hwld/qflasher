@@ -3,20 +3,20 @@ import {
   useDeckPlayerState,
 } from "@/components/model/deck/DeckPlayer";
 import { FlashCardStack } from "@/components/model/flashCard/FlashCardStack";
-import { DeckPlayConfig } from "@/components/pages/DeckPlayerPage";
+import { DeckPlaySettings } from "@/components/pages/DeckPlayerPage";
 import { Deck } from "@/types";
 import { Grid, GridProps } from "@chakra-ui/react";
 import React from "react";
 
 type Props = {
   deck: Deck;
-  config: DeckPlayConfig;
+  settings: DeckPlaySettings;
   size: "sm" | "md";
 } & GridProps;
 
 export const DeckPlayer: React.FC<Props> = ({
   deck,
-  config,
+  settings,
   size,
   ...styles
 }) => {
@@ -32,7 +32,7 @@ export const DeckPlayer: React.FC<Props> = ({
     handleWrong,
     handleReplayAll,
     handleReplayWrong,
-  } = useDeckPlayerState(deck, config);
+  } = useDeckPlayerState(deck, settings);
 
   return (
     <Grid templateRows="1fr auto" {...styles}>
@@ -42,7 +42,7 @@ export const DeckPlayer: React.FC<Props> = ({
         mx="auto"
         mb={3}
         size={size}
-        initialFront={config.initialFront}
+        initialFront={settings.initialFront}
         totalCardsCount={totalCardsCount}
         rightAnswersCount={rightAnswerCount}
         cards={cardStack}

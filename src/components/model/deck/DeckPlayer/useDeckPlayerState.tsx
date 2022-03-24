@@ -1,4 +1,4 @@
-import { DeckPlayConfig } from "@/components/pages/DeckPlayerPage";
+import { DeckPlaySettings } from "@/components/pages/DeckPlayerPage";
 import { Deck, FlashCard } from "@/types";
 import { assertNever } from "@/utils/assertNever";
 import { shuffle } from "@/utils/shuffle";
@@ -6,7 +6,7 @@ import { Reducer, useReducer } from "react";
 
 type State = {
   initialCards: FlashCard[];
-  config: DeckPlayConfig;
+  settings: DeckPlaySettings;
   cardStack: FlashCard[];
   rightAnswerCount: number;
   wrongCards: FlashCard[];
@@ -24,7 +24,7 @@ const buildCardStack = (cards: FlashCard[], isOrderRandom: boolean) => {
 const reducer: Reducer<State, Action> = (state, action) => {
   const {
     initialCards,
-    config,
+    settings,
     cardStack,
     rightAnswerCount,
     wrongCards,
@@ -46,7 +46,7 @@ const reducer: Reducer<State, Action> = (state, action) => {
         cardStack: cardStack.slice(0, -1),
         progress:
           ((totalCardsCount - (cardStack.length - 1)) / totalCardsCount) * 100,
-        front: config.initialFront,
+        front: settings.initialFront,
       };
     }
     case "wrong": {
@@ -61,29 +61,29 @@ const reducer: Reducer<State, Action> = (state, action) => {
         cardStack: cardStack.slice(0, -1),
         progress:
           ((totalCardsCount - (cardStack.length - 1)) / totalCardsCount) * 100,
-        front: config.initialFront,
+        front: settings.initialFront,
       };
     }
     case "replayAll": {
       return {
         ...state,
-        cardStack: buildCardStack(initialCards, config.isOrderRandom),
+        cardStack: buildCardStack(initialCards, settings.isOrderRandom),
         rightAnswerCount: 0,
         wrongCards: [],
         totalCardsCount: initialCards.length,
         progress: 0,
-        front: config.initialFront,
+        front: settings.initialFront,
       };
     }
     case "replayWrong": {
       return {
         ...state,
-        cardStack: buildCardStack(wrongCards, config.isOrderRandom),
+        cardStack: buildCardStack(wrongCards, settings.isOrderRandom),
         rightAnswerCount: 0,
         wrongCards: [],
         totalCardsCount: wrongCards.length,
         progress: 0,
-        front: config.initialFront,
+        front: settings.initialFront,
       };
     }
     default: {
@@ -92,16 +92,16 @@ const reducer: Reducer<State, Action> = (state, action) => {
   }
 };
 
-export const useDeckPlayerState = (deck: Deck, config: DeckPlayConfig) => {
+export const useDeckPlayerState = (deck: Deck, settings: DeckPlaySettings) => {
   const [state, dispatch] = useReducer(reducer, {
     initialCards: deck.cards,
-    config,
-    cardStack: buildCardStack(deck.cards, config.isOrderRandom),
+    settings,
+    cardStack: buildCardStack(deck.cards, settings.isOrderRandom),
     rightAnswerCount: 0,
     wrongCards: [],
     totalCardsCount: deck.cards.length,
     progress: 0,
-    front: config.initialFront,
+    front: settings.initialFront,
   });
 
   const handleTurnOver = () => {

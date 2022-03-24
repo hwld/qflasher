@@ -1,5 +1,5 @@
 import { DeckPlayer } from "@/components/model/deck/DeckPlayer";
-import { PlaySettingPage } from "@/components/pages/PlaySettingPage";
+import { PlaySettingPage } from "@/components/pages/PlaySettingPage/PlaySettingPage";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { useDeck } from "@/hooks/useDeck";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
@@ -8,7 +8,7 @@ import React, { useState } from "react";
 
 type DeckPlayerPageProps = { deckId: string; userId: string | undefined };
 
-export type DeckPlayConfig = {
+export type DeckPlaySettings = {
   initialFront: "question" | "answer";
   isOrderRandom: boolean;
 };
@@ -20,7 +20,7 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
   const deckPlayerSize =
     useBreakpointValue<"sm" | "md">({ base: "sm", md: "md" }) ?? "md";
   const [hasCompletedSetting, setHasCompletedSetting] = useState(false);
-  const [config, setConfig] = useState<DeckPlayConfig>({
+  const [settings, setSettings] = useState<DeckPlaySettings>({
     initialFront: "question",
     isOrderRandom: false,
   });
@@ -29,9 +29,9 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
 
   useLoadingEffect(useDeckResult.status === "loading");
 
-  const handleCompleteSetting = (config: DeckPlayConfig) => {
+  const handleCompleteSetting = (settings: DeckPlaySettings) => {
     setHasCompletedSetting(true);
-    setConfig(config);
+    setSettings(settings);
   };
 
   switch (useDeckResult.status) {
@@ -92,7 +92,7 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
             maxW="800px"
             size={deckPlayerSize}
             deck={useDeckResult.data}
-            config={config}
+            settings={settings}
           />
         </Grid>
       );
