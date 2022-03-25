@@ -61,7 +61,12 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
     }
     case "success": {
       if (!hasCompletedSetting) {
-        return <PlaySettingPage onComplete={handleCompleteSetting} />;
+        return (
+          <PlaySettingPage
+            deck={useDeckResult.data}
+            onComplete={handleCompleteSetting}
+          />
+        );
       }
       return (
         <Grid templateRows="auto 1fr" h="100%" w="100%">

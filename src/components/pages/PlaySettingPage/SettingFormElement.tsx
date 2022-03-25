@@ -1,5 +1,5 @@
 import { SettingForm } from "@/components/pages/PlaySettingPage/PlaySettingPage";
-import { Box, Checkbox, CheckboxProps } from "@chakra-ui/react";
+import { Checkbox, CheckboxProps } from "@chakra-ui/react";
 import { ChangeEvent } from "react";
 
 type Props = {
@@ -22,15 +22,17 @@ export const SettingFormElement: React.VFC<Props> = ({
   };
 
   return (
-    <Box p={{ base: 3, md: 5 }} bgColor="gray.700" w="100%" rounded="md">
-      <Checkbox
-        size={checkBoxSize}
-        colorScheme="green"
-        isChecked={setting.value}
-        onChange={handleChange}
-      >
-        {setting.text}
-      </Checkbox>
-    </Box>
+    <Checkbox
+      p={{ base: 3, md: 5 }}
+      bgColor="gray.700"
+      w="100%"
+      rounded="md"
+      size={checkBoxSize}
+      colorScheme="green"
+      isChecked={setting.value}
+      onChange={handleChange}
+    >
+      {setting.text}
+    </Checkbox>
   );
 };

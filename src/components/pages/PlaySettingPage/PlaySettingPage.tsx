@@ -1,10 +1,12 @@
 import { DeckPlaySettings } from "@/components/pages/DeckPlayerPage";
 import { SettingFormElement } from "@/components/pages/PlaySettingPage/SettingFormElement";
+import { Deck } from "@/types";
 import { objectKeys } from "@/utils/ObjectKeys";
-import { Button, Stack, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Button, Stack, Text, useBreakpointValue } from "@chakra-ui/react";
 import React, { useState } from "react";
 
 type Props = {
+  deck: Deck;
   onComplete: (settings: DeckPlaySettings) => void;
 };
 
@@ -14,7 +16,7 @@ export type SettingForm = {
   isOrderRandom: SettingFormData;
 };
 
-export const PlaySettingPage: React.FC<Props> = ({ onComplete }) => {
+export const PlaySettingPage: React.FC<Props> = ({ deck, onComplete }) => {
   const checkBoxSize = useBreakpointValue({ base: "sm", md: "lg" }) ?? "lg";
   const [settings, setSettings] = useState<SettingForm>({
     isAnswerFirst: { value: false, text: "答え → 質問の順で表示する" },
@@ -40,34 +42,45 @@ export const PlaySettingPage: React.FC<Props> = ({ onComplete }) => {
 
   return (
     <Stack
-      my={{ base: 3, md: 5 }}
+      mb={{ base: 3, md: 5 }}
       spacing={5}
       flexDir="column"
-      w="95%"
-      maxW="800px"
-      mx="auto"
+      align={"center"}
     >
-      <Stack spacing={3} h="100%">
-        {objectKeys(settings).map((name) => {
-          return (
-            <SettingFormElement
-              key={name}
-              name={name}
-              setting={settings[name]}
-              checkBoxSize={checkBoxSize}
-              onChange={handleChangeSettings}
-            />
-          );
-        })}
+      <Box bgColor={"gray.600"} w="100%" py={{ base: 14, md: 20 }}>
+        <Stack w="93%" maxW="800px" mx="auto">
+          <Text
+            fontSize={{ base: "xl", md: "4xl" }}
+            fontWeight="bold"
+            whiteSpace={"nowrap"}
+            overflow="hidden"
+            textOverflow={"ellipsis"}
+          >
+            {deck.name}
+          </Text>
+          <Text fontSize={{ base: "md", md: "lg" }}>
+            枚数: {deck.cardLength}
+          </Text>
+        </Stack>
+      </Box>
+      <Stack w="93%" maxW="800px" mx="auto" spacing={5}>
+        <Stack spacing={3} h="100%">
+          {objectKeys(settings).map((name) => {
+            return (
+              <SettingFormElement
+                key={name}
+                name={name}
+                setting={settings[name]}
+                checkBoxSize={checkBoxSize}
+                onChange={handleChangeSettings}
+              />
+            );
+          })}
+        </Stack>
+        <Button onClick={handleClick} colorScheme="green" alignSelf={"center"}>
+          暗記を始める
+        </Button>
       </Stack>
-      <Button
-        mt={5}
-        onClick={handleClick}
-        colorScheme="green"
-        alignSelf={"center"}
-      >
-        暗記を始める
-      </Button>
     </Stack>
   );
 };
