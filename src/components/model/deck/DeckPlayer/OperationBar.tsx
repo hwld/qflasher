@@ -1,18 +1,13 @@
+import { OperationButton } from "@/components/model/deck/DeckPlayer/OperationButton";
+import { OperationButtonContainer } from "@/components/model/deck/DeckPlayer/OperationButtonContainer";
 import { isRoute, routes } from "@/routes";
-import {
-  Box,
-  BoxProps,
-  Button,
-  Flex,
-  FlexProps,
-  Tooltip,
-} from "@chakra-ui/react";
+import { BoxProps, Flex, FlexProps } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { GrPowerCycle } from "react-icons/gr";
 import {
   MdArrowBack,
   MdClear,
+  MdLoop,
   MdPanoramaFishEye,
   MdReplay,
 } from "react-icons/md";
@@ -97,93 +92,75 @@ export const OperationBar: React.FC<Props> = ({
   return (
     <Flex align="center" justify={"center"} h={barHeight} {...styles}>
       {isEnd ? (
-        <>
-          <Box boxSize={buttonSize}>
-            <Tooltip label="一覧へ移動する">
-              <Button
-                p={0}
-                colorScheme="green"
-                boxSize="100%"
-                onClick={handleBack}
-              >
-                <MdArrowBack size={iconSize} />
-              </Button>
-            </Tooltip>
-          </Box>
-
-          {wrongAnswerCount !== 0 && (
-            <Box boxSize={buttonSize} mx={3}>
-              <Tooltip label="間違えた問題を再暗記">
-                <Button
-                  p={0}
-                  colorScheme="red"
-                  boxSize="100%"
-                  onClick={handleReplayWrong}
-                >
-                  <MdReplay size={iconSize} />
-                </Button>
-              </Tooltip>
-            </Box>
-          )}
-
-          <Box boxSize={buttonSize} mx={wrongAnswerCount === 0 ? 3 : 0}>
-            <Tooltip label="すべての問題を再暗記">
-              <Button
-                p={0}
-                colorScheme="blue"
-                boxSize="100%"
-                onClick={handleReplayAll}
-              >
-                <MdReplay size={iconSize} />
-              </Button>
-            </Tooltip>
-          </Box>
-        </>
+        <OperationButtonContainer
+          buttonSize={buttonSize}
+          left={
+            <OperationButton
+              label="一覧へ移動する"
+              icon={MdArrowBack}
+              iconSize={iconSize}
+              onClick={handleBack}
+              colorScheme="orange"
+            />
+          }
+          center={
+            <OperationButton
+              label="すべての問題を再暗記"
+              icon={MdReplay}
+              iconSize={iconSize}
+              onClick={handleReplayAll}
+              colorScheme="green"
+            />
+          }
+          right={
+            wrongAnswerCount >= 1 && (
+              <OperationButton
+                label="間違えた問題を再暗記"
+                icon={MdReplay}
+                iconSize={iconSize}
+                onClick={handleReplayWrong}
+                colorScheme="red"
+              />
+            )
+          }
+        />
       ) : (
-        <>
-          <Box boxSize={buttonSize}>
-            {isOpen && (
-              <Tooltip label="正解">
-                <Button
-                  p={0}
-                  colorScheme="blue"
-                  boxSize="100%"
-                  rounded="full"
-                  onClick={handleRight}
-                >
-                  <MdPanoramaFishEye size={iconSize} />
-                </Button>
-              </Tooltip>
-            )}
-          </Box>
-          <Box boxSize={buttonSize} mx={3}>
-            <Tooltip label="裏返す">
-              <Button
-                p={0}
-                colorScheme="green"
-                boxSize="100%"
-                onClick={handleTurnOver}
-              >
-                <GrPowerCycle size={iconSize} />
-              </Button>
-            </Tooltip>
-          </Box>
-          <Box boxSize={buttonSize}>
-            {isOpen && (
-              <Tooltip label="不正解">
-                <Button
-                  p={0}
-                  colorScheme="red"
-                  boxSize="100%"
-                  rounded="full"
-                  onClick={handleWrong}
-                >
-                  <MdClear size={iconSize} />
-                </Button>
-              </Tooltip>
-            )}
-          </Box>
-        </>
+        <OperationButtonContainer
+          buttonSize={buttonSize}
+          left={
+            isOpen && (
+              <OperationButton
+                label="正解"
+                icon={MdPanoramaFishEye}
+                iconSize={iconSize}
+                onClick={handleRight}
+                colorScheme="blue"
+                rounded={"full"}
+              />
+            )
+          }
+          center={
+            <OperationButton
+              label="裏返す"
+              icon={MdLoop}
+              iconSize={iconSize}
+              onClick={handleTurnOver}
+              colorScheme="green"
+            />
+          }
+          right={
+            isOpen && (
+              <OperationButton
+                label="不正解"
+                icon={MdClear}
+                iconSize={iconSize}
+                onClick={handleWrong}
+                colorScheme="red"
+                rounded={"full"}
+              />
+            )
+          }
+        />
       )}
     </Flex>
   );
