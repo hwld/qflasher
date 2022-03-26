@@ -40,7 +40,6 @@ export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
     accountIconSize,
     formSize,
     signInButtonSize,
-    backButtonSize,
   } = useHeaderStyle(size);
 
   const { showSignInButton } = useHeaderState();
@@ -91,7 +90,10 @@ export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
         >
           <HStack spacing={{ base: 1, md: 5 }}>
             <IconButton
-              size={backButtonSize}
+              // sizeでは幅と高さが異なる場合があるのでboxSizeで指定する
+              boxSize={{ base: "8", md: "12" }}
+              minW={0}
+              flexGrow={0}
               icon={
                 <Icon
                   as={MdOutlineArrowBackIosNew}

@@ -7,10 +7,8 @@ type HeaderStyle = {
   accountIconSize: number;
   formSize: string | undefined;
   signInButtonSize: string | undefined;
-  backButtonSize: string | undefined;
 };
 export const useHeaderStyle = (size: "sm" | "md"): HeaderStyle => {
-  const backButtonSize = useBreakpointValue({ base: "sm", md: "md" } as const);
   const formSize = useBreakpointValue({ base: "xs", md: "md" } as const);
   const signInButtonSize = useBreakpointValue({
     base: "sm",
@@ -46,6 +44,5 @@ export const useHeaderStyle = (size: "sm" | "md"): HeaderStyle => {
     accountIconSize,
     formSize,
     signInButtonSize,
-    backButtonSize,
   };
 };
