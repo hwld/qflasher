@@ -18,8 +18,10 @@ export const AppTemplate: React.FC = ({ children }) => {
       setScreenHeight(window.innerHeight);
     };
     window.addEventListener("resize", handler);
+    window.addEventListener("orientationchange", handler);
     return () => {
       window.removeEventListener("reset", handler);
+      window.removeEventListener("orientationchange", handler);
     };
   }, []);
 

@@ -41,6 +41,7 @@ export const FlashCardStack: React.FC<Props> = ({
       bgColor="gray.700"
       rounded="3xl"
       overflow="hidden"
+      zIndex={1}
       {...styles}
     >
       {cards.length !== 0 ? (
