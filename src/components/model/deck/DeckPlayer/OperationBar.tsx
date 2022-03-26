@@ -99,7 +99,7 @@ export const OperationBar: React.FC<Props> = ({
       {isEnd ? (
         <>
           <Box boxSize={buttonSize}>
-            <Tooltip label="戻る">
+            <Tooltip label="一覧へ移動する">
               <Button
                 p={0}
                 colorScheme="green"

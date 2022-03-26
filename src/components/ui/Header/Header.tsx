@@ -1,6 +1,6 @@
+import { AppLogo } from "@/components/ui/AppLogo";
 import { AccountMenu, useHeaderStyle } from "@/components/ui/Header";
 import { Link } from "@/components/ui/Link";
-import { AppLogo } from "@/components/ui/AppLogo";
 import { SignInForm } from "@/components/ui/SignInForm";
 import { useHeaderState } from "@/context/HeaderContext";
 import { useAuthState } from "@/hooks/useAuthState";
@@ -10,15 +10,19 @@ import {
   Button,
   Flex,
   FlexProps,
+  HStack,
+  Icon,
+  IconButton,
   Modal,
   ModalCloseButton,
   ModalContent,
   ModalOverlay,
   Progress,
-  useBreakpointValue,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React, { useMemo } from "react";
+import { MdOutlineArrowBackIosNew } from "react-icons/md";
 
 type Props = {
   isLoading?: boolean;
@@ -27,28 +31,34 @@ type Props = {
 
 export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
   const { userResult } = useAuthState();
+  const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { barHeight, progressHeight, logoWidth, accountIconSize } =
-    useHeaderStyle(size);
-  const formSize = useBreakpointValue({ base: "xs", md: "md" } as const);
-  const buttonSize = useBreakpointValue({ base: "sm", md: "md" } as const);
+  const {
+    barHeight,
+    progressHeight,
+    logoWidth,
+    accountIconSize,
+    formSize,
+    signInButtonSize,
+    backButtonSize,
+  } = useHeaderStyle(size);
 
   const { showSignInButton } = useHeaderState();
 
   const signInButton = useMemo(() => {
     return showSignInButton ? (
       <Button
-        size={buttonSize}
+        size={signInButtonSize}
         bgColor={"orange.300"}
         _hover={{ bgColor: "orange.400" }}
         _active={{ bgColor: "orange.500" }}
         color="gray.700"
-        onClick={() => onOpen()}
+        onClick={onOpen}
       >
         ログイン
       </Button>
     ) : null;
-  }, [buttonSize, showSignInButton, onOpen]);
+  }, [showSignInButton, signInButtonSize, onOpen]);
 
   const userInfo = useMemo(() => {
     if (userResult.status === "loading") {
@@ -61,6 +71,10 @@ export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
       signInButton
     );
   }, [accountIconSize, signInButton, userResult.data, userResult.status]);
+
+  const handleBack = () => {
+    router.back();
+  };
 
   return (
     <>
@@ -75,17 +89,24 @@ export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
           pl={{ base: 1, md: 5 }}
           {...styles}
         >
-          <Link _hover={{ opacity: 0.7 }} href={routes.rootPage}>
-            <AppLogo width={`${logoWidth}px`} />
-          </Link>
+          <HStack spacing={{ base: 1, md: 5 }}>
+            <IconButton
+              size={backButtonSize}
+              icon={
+                <Icon
+                  as={MdOutlineArrowBackIosNew}
+                  boxSize="80%"
+                  color={"gray.100"}
+                />
+              }
+              aria-label="戻る"
+              onClick={handleBack}
+            />
+            <Link _hover={{ opacity: 0.7 }} href={routes.rootPage}>
+              <AppLogo width={`${logoWidth}px`} />
+            </Link>
+          </HStack>
           {userInfo}
-          <Modal isOpen={isOpen} onClose={onClose} size={formSize}>
-            <ModalOverlay></ModalOverlay>
-            <ModalContent>
-              <ModalCloseButton color={"white"} size="lg" />
-              <SignInForm afterSignIn={onClose} />
-            </ModalContent>
-          </Modal>
         </Flex>
         <Progress
           hasStripe
@@ -95,6 +116,13 @@ export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
         />
       </Box>
       <Box h={`${barHeight + progressHeight}px`} flexShrink={0} />
+      <Modal isOpen={isOpen} onClose={onClose} size={formSize}>
+        <ModalOverlay></ModalOverlay>
+        <ModalContent>
+          <ModalCloseButton color={"white"} size="lg" />
+          <SignInForm afterSignIn={onClose} />
+        </ModalContent>
+      </Modal>
     </>
   );
 };

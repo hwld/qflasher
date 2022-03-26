@@ -1,10 +1,22 @@
+import { useBreakpointValue } from "@chakra-ui/react";
+
 type HeaderStyle = {
   barHeight: number;
   progressHeight: number;
   logoWidth: number;
   accountIconSize: number;
+  formSize: string | undefined;
+  signInButtonSize: string | undefined;
+  backButtonSize: string | undefined;
 };
 export const useHeaderStyle = (size: "sm" | "md"): HeaderStyle => {
+  const backButtonSize = useBreakpointValue({ base: "sm", md: "md" } as const);
+  const formSize = useBreakpointValue({ base: "xs", md: "md" } as const);
+  const signInButtonSize = useBreakpointValue({
+    base: "sm",
+    md: "md",
+  } as const);
+
   let barHeight;
   let progressHeight;
   let logoWidth;
@@ -27,5 +39,13 @@ export const useHeaderStyle = (size: "sm" | "md"): HeaderStyle => {
     }
   }
 
-  return { barHeight, progressHeight, logoWidth, accountIconSize };
+  return {
+    barHeight,
+    progressHeight,
+    logoWidth,
+    accountIconSize,
+    formSize,
+    signInButtonSize,
+    backButtonSize,
+  };
 };
