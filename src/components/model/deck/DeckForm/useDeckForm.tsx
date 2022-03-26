@@ -72,7 +72,7 @@ export const useDeckForm = (defaultDeck: Deck, allTags: Tag[]) => {
   const appendCardField = useCallback(():
     | { type: "error"; message: string }
     | { type: "success" } => {
-    if (cardFields.length === 10) {
+    if (cardFields.length === 100) {
       return { type: "error", message: "カードは100枚までしか作れません。" };
     }
 
