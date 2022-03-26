@@ -1,11 +1,7 @@
 {
   "hosting": {
     "public": "out",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ]
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
   },
   "firestore": {
     "rules": "firestore.rules",
@@ -13,6 +9,7 @@
   },
   "emulators": {
     "firestore": {
+      "host": "0.0.0.0",
       "port": 8080
     },
     "ui": {
@@ -20,6 +17,7 @@
       "port": 4000
     },
     "auth": {
+      "host": "0.0.0.0",
       "port": 9099
     },
     "hosting": {

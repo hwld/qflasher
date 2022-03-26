@@ -32,7 +32,7 @@ export const CardEditorHeader: React.FC<Props> = ({
           </Box>
         </Flex>
       )}
-      <Flex flex={1} justify="end">
+      <Flex flex={1} justify="flex-end">
         <Tooltip label="削除">
           <Button
             ml={5}

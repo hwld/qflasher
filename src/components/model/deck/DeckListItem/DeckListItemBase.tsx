@@ -80,7 +80,7 @@ export const DeckListItemBase = forwardRef<
           </Flex>
         </Flex>
 
-        <Flex shrink={0} align="end" justify="space-between">
+        <Flex shrink={0} align="flex-end" justify="space-between">
           <Flex direction="column">
             <Text
               flexGrow={0}
