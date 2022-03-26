@@ -207,7 +207,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
   }, []);
 
   return (
-    <Box>
+    <Box mx={3}>
       {/* Enterが入力されてもsubmitが発生しないように独立させる。 */}
       <form id={formId} onSubmit={handleSubmit(submit)}></form>
       <DeckFormBox title="デッキ名">
