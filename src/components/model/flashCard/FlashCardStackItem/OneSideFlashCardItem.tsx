@@ -47,6 +47,7 @@ export const OneSideFlashCardItem: React.FC<Props> = ({
         backfaceVisibility: "hidden",
         WebkitBackfaceVisibility: "hidden",
       }}
+      transform="translateX(0)"
       {...styleProps}
     >
       <Flex flex="auto" justify="center" align="center" w="100%">
