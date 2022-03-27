@@ -20,8 +20,11 @@ export const PlayOnlyDeckListItem: React.FC<PlayOnlyDeckListItemProps> = ({
 
   const handlePlayDeck = () => {
     router.push({
-      pathname: routes.playDeckPage,
-      query: { id: deck.id, returnTo: returnRoutes },
+      pathname: routes.playSettingPage,
+      query: {
+        id: deck.id,
+        returnTo: returnRoutes,
+      },
     });
   };
 

@@ -1,17 +1,9 @@
 import { PublicDeckListPage } from "@/components/pages/PublicDeckListPage";
-import { useHeaderState } from "@/context/HeaderContext";
+import { useSignInButton } from "@/hooks/useSignInButton";
 import { NextPage } from "next";
-import { useEffect } from "react";
 
 const PublicDecks: NextPage = () => {
-  const { setShowSignInButton } = useHeaderState();
-
-  useEffect(() => {
-    setShowSignInButton(true);
-    return () => {
-      setShowSignInButton(false);
-    };
-  }, [setShowSignInButton]);
+  useSignInButton();
 
   return <PublicDeckListPage />;
 };

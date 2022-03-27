@@ -1,7 +1,4 @@
-import {
-  DeckPlayerPage,
-  DeckPlaySettings,
-} from "@/components/pages/DeckPlayerPage";
+import { PlaySettingPage } from "@/components/pages/PlaySettingPage/PlaySettingPage";
 import { useAuthState } from "@/hooks/useAuthState";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { useSignInButton } from "@/hooks/useSignInButton";
@@ -9,19 +6,14 @@ import { routes } from "@/routes";
 import { isDeckId } from "@/utils/isDeckId";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React from "react";
 
-const Play: NextPage = () => {
+const PlaySetting: NextPage = () => {
+  const router = useRouter();
+  const deckId = router.query.id;
   const { userResult } = useAuthState();
 
-  const router = useRouter();
-  // TODO
-  const { deckId, redirectTo, ...settings } = router.query as unknown as {
-    deckId: string;
-    redirectTo?: string;
-  } & DeckPlaySettings;
-
   const loading = !router.isReady || userResult.status === "loading";
+
   useLoadingEffect(loading);
   useSignInButton();
 
@@ -32,13 +24,12 @@ const Play: NextPage = () => {
     return null;
   } else {
     return (
-      <DeckPlayerPage
+      <PlaySettingPage
         deckId={deckId}
-        userId={userResult.data?.uid ?? undefined}
-        settings={settings}
+        userId={userResult.data?.uid && undefined}
       />
     );
   }
 };
 
-export default Play;
+export default PlaySetting;

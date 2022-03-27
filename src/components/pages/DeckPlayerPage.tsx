@@ -1,12 +1,15 @@
 import { DeckPlayer } from "@/components/model/deck/DeckPlayer";
-import { PlaySettingPage } from "@/components/pages/PlaySettingPage/PlaySettingPage";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { useDeck } from "@/hooks/useDeck";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { Center, Grid, Text, useBreakpointValue } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React from "react";
 
-type DeckPlayerPageProps = { deckId: string; userId: string | undefined };
+type DeckPlayerPageProps = {
+  deckId: string;
+  userId: string | undefined;
+  settings: DeckPlaySettings;
+};
 
 export type DeckPlaySettings = {
   initialFront: "question" | "answer";
@@ -16,23 +19,14 @@ export type DeckPlaySettings = {
 export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
   deckId,
   userId,
+  settings,
 }) => {
   const deckPlayerSize =
     useBreakpointValue<"sm" | "md">({ base: "sm", md: "md" }) ?? "md";
-  const [hasCompletedSetting, setHasCompletedSetting] = useState(false);
-  const [settings, setSettings] = useState<DeckPlaySettings>({
-    initialFront: "question",
-    isOrderRandom: false,
-  });
 
   const useDeckResult = useDeck(userId, deckId);
 
   useLoadingEffect(useDeckResult.status === "loading");
-
-  const handleCompleteSetting = (settings: DeckPlaySettings) => {
-    setHasCompletedSetting(true);
-    setSettings(settings);
-  };
 
   switch (useDeckResult.status) {
     case "loading": {
@@ -60,14 +54,6 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
       );
     }
     case "success": {
-      if (!hasCompletedSetting) {
-        return (
-          <PlaySettingPage
-            deck={useDeckResult.data}
-            onComplete={handleCompleteSetting}
-          />
-        );
-      }
       return (
         <Grid templateRows="auto 1fr" h="100%" w="100%">
           <Center

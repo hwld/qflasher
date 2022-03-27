@@ -1,13 +1,16 @@
 import { DeckPlaySettings } from "@/components/pages/DeckPlayerPage";
 import { SettingFormElement } from "@/components/pages/PlaySettingPage/SettingFormElement";
-import { Deck } from "@/types";
+import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
+import { useDeck } from "@/hooks/useDeck";
+import { routes } from "@/routes";
 import { objectKeys } from "@/utils/ObjectKeys";
 import { Box, Button, Stack, Text, useBreakpointValue } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 type Props = {
-  deck: Deck;
-  onComplete: (settings: DeckPlaySettings) => void;
+  userId: string | undefined;
+  deckId: string;
 };
 
 export type SettingFormData = { value: boolean; text: string };
@@ -16,12 +19,14 @@ export type SettingForm = {
   isOrderRandom: SettingFormData;
 };
 
-export const PlaySettingPage: React.FC<Props> = ({ deck, onComplete }) => {
-  const checkBoxSize = useBreakpointValue({ base: "sm", md: "lg" }) ?? "lg";
+export const PlaySettingPage: React.FC<Props> = ({ userId, deckId }) => {
+  const router = useRouter();
+  const useDeckResult = useDeck(userId, deckId);
   const [settings, setSettings] = useState<SettingForm>({
     isAnswerFirst: { value: false, text: "答え → 質問の順で表示する" },
     isOrderRandom: { value: false, text: "順番をランダムにする" },
   });
+  const checkBoxSize = useBreakpointValue({ base: "sm", md: "lg" }) ?? "lg";
 
   const handleChangeSettings = (name: keyof SettingForm, value: boolean) => {
     setSettings((settings): SettingForm => {
@@ -34,53 +39,89 @@ export const PlaySettingPage: React.FC<Props> = ({ deck, onComplete }) => {
   };
 
   const handleClick = () => {
-    onComplete({
+    const setting: DeckPlaySettings = {
       initialFront: settings.isAnswerFirst.value ? "answer" : "question",
       isOrderRandom: settings.isOrderRandom.value,
+    };
+    router.push(routes.playDeckPage, {
+      query: { deckId, redirectTo: router.query.redirectTo, ...setting },
     });
   };
 
-  return (
-    <Stack
-      mb={{ base: 3, md: 5 }}
-      spacing={5}
-      flexDir="column"
-      align={"center"}
-    >
-      <Box bgColor={"gray.600"} w="100%" py={{ base: 14, md: 20 }}>
-        <Stack w="93%" maxW="800px" mx="auto">
-          <Text
-            fontSize={{ base: "xl", md: "4xl" }}
-            fontWeight="bold"
-            whiteSpace={"nowrap"}
-            overflow="hidden"
-            textOverflow={"ellipsis"}
-          >
-            {deck.name}
-          </Text>
-          <Text fontSize={{ base: "md", md: "lg" }}>
-            枚数: {deck.cardLength}
-          </Text>
+  // TODO 共有できる？
+  switch (useDeckResult.status) {
+    case "loading": {
+      return null;
+    }
+    case "error": {
+      if (useDeckResult.error === "not-found") {
+        return (
+          <ErrorMessageBox
+            mx="auto"
+            mt={10}
+            header="エラー"
+            description="デッキが存在しません。"
+          />
+        );
+      }
+      return (
+        <ErrorMessageBox
+          mx="auto"
+          mt={10}
+          header="エラー"
+          description="デッキの読み込みに失敗しましfた。"
+        />
+      );
+    }
+    case "success": {
+      const deck = useDeckResult.data;
+      return (
+        <Stack
+          mb={{ base: 3, md: 5 }}
+          spacing={5}
+          flexDir="column"
+          align={"center"}
+        >
+          <Box bgColor={"gray.600"} w="100%" py={{ base: 14, md: 20 }}>
+            <Stack w="93%" maxW="800px" mx="auto">
+              <Text
+                fontSize={{ base: "xl", md: "4xl" }}
+                fontWeight="bold"
+                whiteSpace={"nowrap"}
+                overflow="hidden"
+                textOverflow={"ellipsis"}
+              >
+                {deck.name}
+              </Text>
+              <Text fontSize={{ base: "md", md: "lg" }}>
+                枚数: {deck.cardLength}
+              </Text>
+            </Stack>
+          </Box>
+          <Stack w="93%" maxW="800px" mx="auto" spacing={5}>
+            <Stack spacing={3} h="100%">
+              {objectKeys(settings).map((name) => {
+                return (
+                  <SettingFormElement
+                    key={name}
+                    name={name}
+                    setting={settings[name]}
+                    checkBoxSize={checkBoxSize}
+                    onChange={handleChangeSettings}
+                  />
+                );
+              })}
+            </Stack>
+            <Button
+              onClick={handleClick}
+              colorScheme="green"
+              alignSelf={"center"}
+            >
+              暗記を始める
+            </Button>
+          </Stack>
         </Stack>
-      </Box>
-      <Stack w="93%" maxW="800px" mx="auto" spacing={5}>
-        <Stack spacing={3} h="100%">
-          {objectKeys(settings).map((name) => {
-            return (
-              <SettingFormElement
-                key={name}
-                name={name}
-                setting={settings[name]}
-                checkBoxSize={checkBoxSize}
-                onChange={handleChangeSettings}
-              />
-            );
-          })}
-        </Stack>
-        <Button onClick={handleClick} colorScheme="green" alignSelf={"center"}>
-          暗記を始める
-        </Button>
-      </Stack>
-    </Stack>
-  );
+      );
+    }
+  }
 };

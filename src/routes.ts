@@ -4,6 +4,7 @@ export const routes = {
   publicDecksPage: "/decks/public",
   createDeckPage: "/decks/create",
   editDeckPage: "/decks/edit",
+  playSettingPage: "/decks/play-setting",
   playDeckPage: "/decks/play",
   signInPage: "/signIn",
   notFoundPage: "/404",
