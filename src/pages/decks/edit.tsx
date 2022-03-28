@@ -1,4 +1,5 @@
 import { DeckEditPage } from "@/components/pages/DeckEditorPage";
+import { Redirect } from "@/components/ui/Redirect";
 import { useAuthState } from "@/hooks/useAuthState";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { useRequireSignIn } from "@/hooks/useRequireSignIn";
@@ -20,8 +21,7 @@ const Edit: NextPage = () => {
   if (!userResult.data || !router.isReady) {
     return null;
   } else if (!isDeckId(id)) {
-    router.replace(routes.rootPage);
-    return null;
+    return <Redirect href={routes.rootPage} />;
   } else {
     return <DeckEditPage deckId={id} userId={userResult.data.uid} />;
   }

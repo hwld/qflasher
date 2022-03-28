@@ -1,4 +1,5 @@
 import { PlaySettingPage } from "@/components/pages/PlaySettingPage/PlaySettingPage";
+import { Redirect } from "@/components/ui/Redirect";
 import { useAuthState } from "@/hooks/useAuthState";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { useSignInButton } from "@/hooks/useSignInButton";
@@ -20,8 +21,7 @@ const PlaySetting: NextPage = () => {
   if (loading) {
     return null;
   } else if (!isDeckId(deckId)) {
-    router.replace(routes.rootPage);
-    return null;
+    return <Redirect href={routes.rootPage} />;
   } else {
     return (
       <PlaySettingPage

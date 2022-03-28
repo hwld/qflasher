@@ -2,6 +2,7 @@ import {
   DeckPlayerPage,
   DeckPlaySettings,
 } from "@/components/pages/DeckPlayerPage";
+import { Redirect } from "@/components/ui/Redirect";
 import { useAuthState } from "@/hooks/useAuthState";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { useSignInButton } from "@/hooks/useSignInButton";
@@ -28,8 +29,7 @@ const Play: NextPage = () => {
   if (loading) {
     return null;
   } else if (!isDeckId(deckId)) {
-    router.replace(routes.rootPage);
-    return null;
+    return <Redirect href={routes.rootPage} />;
   } else {
     return (
       <DeckPlayerPage

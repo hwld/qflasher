@@ -43,7 +43,8 @@ export const PlaySettingPage: React.FC<Props> = ({ userId, deckId }) => {
       initialFront: settings.isAnswerFirst.value ? "answer" : "question",
       isOrderRandom: settings.isOrderRandom.value,
     };
-    router.push(routes.playDeckPage, {
+    router.push({
+      pathname: routes.playDeckPage,
       query: { deckId, redirectTo: router.query.redirectTo, ...setting },
     });
   };
