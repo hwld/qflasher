@@ -4,6 +4,7 @@ import {
 } from "@/components/model/deck/DeckPlayer";
 import { FlashCardStack } from "@/components/model/flashCard/FlashCardStack";
 import { DeckPlaySettings } from "@/components/pages/DeckPlayerPage";
+import { Routes } from "@/routes";
 import { Deck } from "@/types";
 import { Grid, GridProps } from "@chakra-ui/react";
 import React from "react";
@@ -12,12 +13,14 @@ type Props = {
   deck: Deck;
   settings: DeckPlaySettings;
   size: "sm" | "md";
+  returnRoute: Routes;
 } & GridProps;
 
 export const DeckPlayer: React.FC<Props> = ({
   deck,
   settings,
   size,
+  returnRoute,
   ...styles
 }) => {
   const {
@@ -51,6 +54,7 @@ export const DeckPlayer: React.FC<Props> = ({
       />
       <OperationBar
         size={size}
+        returnRoute={returnRoute}
         isEnd={cardStack.length === 0}
         wrongAnswerCount={wrongCards.length}
         onTurnOver={handleTurnOver}

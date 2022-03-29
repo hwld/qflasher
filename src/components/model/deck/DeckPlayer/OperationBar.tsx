@@ -1,6 +1,6 @@
 import { OperationButton } from "@/components/model/deck/DeckPlayer/OperationButton";
 import { OperationButtonContainer } from "@/components/model/deck/DeckPlayer/OperationButtonContainer";
-import { isRoute, routes } from "@/routes";
+import { Routes } from "@/routes";
 import { BoxProps, Flex, FlexProps } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -14,6 +14,7 @@ import {
 
 type Props = {
   size: "md" | "sm";
+  returnRoute: Routes;
   isEnd: boolean;
   wrongAnswerCount: number;
   onTurnOver: () => void;
@@ -25,6 +26,7 @@ type Props = {
 
 export const OperationBar: React.FC<Props> = ({
   size,
+  returnRoute,
   isEnd,
   wrongAnswerCount,
   onTurnOver,
@@ -81,12 +83,7 @@ export const OperationBar: React.FC<Props> = ({
   };
 
   const handleBack = () => {
-    const returnTo = router.query.returnTo;
-    if (typeof returnTo === "string" && isRoute(returnTo)) {
-      router.push(returnTo);
-    } else {
-      router.push(routes.rootPage);
-    }
+    router.push(returnRoute);
   };
 
   return (
