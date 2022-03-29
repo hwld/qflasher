@@ -4,7 +4,7 @@ import {
 } from "@/components/model/deck/DeckListItem";
 import { DeckListItemBase } from "@/components/model/deck/DeckListItem/DeckListItemBase";
 import { useTagDrop } from "@/hooks/useTagDnD";
-import { Routes, routes } from "@/routes";
+import { Route, routes } from "@/routes";
 import { DeckWithoutCards } from "@/types";
 import { useRouter } from "next/router";
 import React from "react";
@@ -13,7 +13,7 @@ import { MdDelete, MdEdit } from "react-icons/md";
 export type DeckListItemProps = {
   cardStyle: DeckCardStyle;
   deck: DeckWithoutCards;
-  returnRoutes: Routes;
+  returnRoutes: Route;
   onDeleteDeck: (id: string) => Promise<void>;
   onTagDeck: (deckId: string, tagId: string) => unknown;
 };

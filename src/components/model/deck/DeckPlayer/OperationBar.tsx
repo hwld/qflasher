@@ -1,6 +1,6 @@
 import { OperationButton } from "@/components/model/deck/DeckPlayer/OperationButton";
 import { OperationButtonContainer } from "@/components/model/deck/DeckPlayer/OperationButtonContainer";
-import { Routes } from "@/routes";
+import { Route } from "@/routes";
 import { BoxProps, Flex, FlexProps } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -14,7 +14,7 @@ import {
 
 type Props = {
   size: "md" | "sm";
-  returnRoute: Routes;
+  returnRoute: Route;
   isEnd: boolean;
   wrongAnswerCount: number;
   onTurnOver: () => void;

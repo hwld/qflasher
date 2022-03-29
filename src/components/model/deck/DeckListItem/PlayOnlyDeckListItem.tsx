@@ -1,6 +1,6 @@
 import { DeckCardStyle } from "@/components/model/deck/DeckListItem";
 import { DeckListItemBase } from "@/components/model/deck/DeckListItem/DeckListItemBase";
-import { Routes, routes } from "@/routes";
+import { Route, routes } from "@/routes";
 import { DeckWithoutCards } from "@/types";
 import { useRouter } from "next/router";
 import React from "react";
@@ -8,7 +8,7 @@ import React from "react";
 export type PlayOnlyDeckListItemProps = {
   cardStyle: DeckCardStyle;
   deck: DeckWithoutCards;
-  returnRoutes: Routes;
+  returnRoutes: Route;
 };
 
 export const PlayOnlyDeckListItem: React.FC<PlayOnlyDeckListItemProps> = ({

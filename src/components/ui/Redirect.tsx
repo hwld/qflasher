@@ -1,8 +1,8 @@
-import { Routes } from "@/routes";
+import { Route } from "@/routes";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-type Props = { href: Routes };
+type Props = { href: Route };
 export const Redirect: React.VFC<Props> = ({ href }) => {
   const router = useRouter();
   useEffect(() => {
