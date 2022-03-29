@@ -2,7 +2,7 @@ import { DeckPlayer } from "@/components/model/deck/DeckPlayer";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { useDeck } from "@/hooks/useDeck";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
-import { isRoute, Routes, routes } from "@/routes";
+import { isRoute, Route, routes } from "@/routes";
 import { Center, Grid, Text, useBreakpointValue } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useMemo } from "react";
@@ -28,7 +28,7 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
   const deckPlayerSize =
     useBreakpointValue<"sm" | "md">({ base: "sm", md: "md" }) ?? "md";
 
-  const returnRoute = useMemo((): Routes => {
+  const returnRoute = useMemo((): Route => {
     const returnTo = router.query.returnTo;
     if (typeof returnTo === "string" && isRoute(returnTo)) {
       return returnTo;

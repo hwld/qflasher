@@ -4,7 +4,7 @@ import {
 } from "@/components/model/deck/DeckPlayer";
 import { FlashCardStack } from "@/components/model/flashCard/FlashCardStack";
 import { DeckPlaySettings } from "@/components/pages/DeckPlayerPage";
-import { Routes } from "@/routes";
+import { Route } from "@/routes";
 import { Deck } from "@/types";
 import { Grid, GridProps } from "@chakra-ui/react";
 import React from "react";
@@ -13,7 +13,7 @@ type Props = {
   deck: Deck;
   settings: DeckPlaySettings;
   size: "sm" | "md";
-  returnRoute: Routes;
+  returnRoute: Route;
 } & GridProps;
 
 export const DeckPlayer: React.FC<Props> = ({
