@@ -2,8 +2,10 @@ import { DeckPlayer } from "@/components/model/deck/DeckPlayer";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { useDeck } from "@/hooks/useDeck";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
+import { isRoute, Routes, routes } from "@/routes";
 import { Center, Grid, Text, useBreakpointValue } from "@chakra-ui/react";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useMemo } from "react";
 
 type DeckPlayerPageProps = {
   deckId: string;
@@ -21,10 +23,19 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
   userId,
   settings,
 }) => {
+  const router = useRouter();
+  const useDeckResult = useDeck(userId, deckId);
   const deckPlayerSize =
     useBreakpointValue<"sm" | "md">({ base: "sm", md: "md" }) ?? "md";
 
-  const useDeckResult = useDeck(userId, deckId);
+  const returnRoute = useMemo((): Routes => {
+    const returnTo = router.query.returnTo;
+    if (typeof returnTo === "string" && isRoute(returnTo)) {
+      return returnTo;
+    } else {
+      return routes.rootPage;
+    }
+  }, [router]);
 
   useLoadingEffect(useDeckResult.status === "loading");
 
@@ -81,6 +92,7 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
             mx="auto"
             w="90%"
             maxW="800px"
+            returnRoute={returnRoute}
             size={deckPlayerSize}
             deck={useDeckResult.data}
             settings={settings}

@@ -12,6 +12,6 @@ export const routes = {
 
 export type Routes = typeof routes[keyof typeof routes];
 
-export const isRoute = (route: string) => {
+export const isRoute = (route: string): route is Routes => {
   return (Object.values(routes) as string[]).includes(route);
 };
