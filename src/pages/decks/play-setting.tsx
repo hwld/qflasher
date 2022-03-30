@@ -26,7 +26,7 @@ const PlaySetting: NextPage = () => {
     return (
       <PlaySettingPage
         deckId={deckId}
-        userId={userResult.data?.uid && undefined}
+        userId={userResult.data?.uid ?? undefined}
       />
     );
   }
