@@ -23,7 +23,7 @@ export const PlayOnlyDeckListItem: React.FC<PlayOnlyDeckListItemProps> = ({
       pathname: routes.playSettingPage,
       query: {
         id: deck.id,
-        returnTo: returnRoutes,
+        redirectTo: returnRoutes,
       },
     });
   };

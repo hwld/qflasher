@@ -38,7 +38,7 @@ export const DeckListItem: React.FC<DeckListItemProps> = ({
   const handlePlayDeck = () => {
     router.push({
       pathname: routes.playSettingPage,
-      query: { id: deck.id, returnTo: returnRoutes },
+      query: { id: deck.id, redirectTo: returnRoutes },
     });
   };
 
