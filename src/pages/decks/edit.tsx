@@ -1,16 +1,14 @@
 import { DeckEditPage } from "@/components/pages/DeckEditorPage";
+import { AppLoading } from "@/components/ui/AppLoading";
 import { Redirect } from "@/components/ui/Redirect";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { useAuthState } from "@/hooks/useAuthState";
-import { useLoadingEffect } from "@/hooks/useLoadingEffect";
-import { useRequireSignIn } from "@/hooks/useRequireSignIn";
 import { routes } from "@/routes";
 import { isDeckId } from "@/utils/isDeckId";
 import type { NextPage } from "next";
 import React from "react";
 
 const Edit: NextPage = () => {
-  const { userResult } = useAuthState();
   const router = useAppRouter({
     currentPage: routes.editDeckPage,
     validateQuery: (query) => {
@@ -18,12 +16,15 @@ const Edit: NextPage = () => {
     },
   });
   const queryResult = router.query;
+  const { userResult } = useAuthState();
 
-  useLoadingEffect(queryResult.status === "loading");
-  useRequireSignIn({ userResult });
+  const loading =
+    queryResult.status === "loading" || userResult.status === "loading";
 
-  if (!userResult.data || queryResult.status === "loading") {
-    return null;
+  if (loading) {
+    return <AppLoading isLoading={true} />;
+  } else if (!userResult.data) {
+    return <Redirect href={routes.signInPage} />;
   } else if (queryResult.status === "error") {
     return <Redirect href={routes.rootPage} />;
   } else {

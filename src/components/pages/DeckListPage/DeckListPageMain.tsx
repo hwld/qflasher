@@ -1,5 +1,6 @@
 import { DeckList } from "@/components/model/deck/DeckList";
 import { DeckListItemProps } from "@/components/model/deck/DeckListItem";
+import { AppLoading } from "@/components/ui/AppLoading";
 import { SearchBar } from "@/components/ui/SearchBar";
 import { DeckListData } from "@/hooks/useMyDeckList";
 import { routes } from "@/routes";
@@ -37,7 +38,7 @@ export const DeckListPageMain: React.FC<Props> = ({
       );
     }
     case "loading": {
-      return null;
+      return <AppLoading isLoading={true} />;
     }
     case "success": {
       const viewDecks = deckListData.data.filter((decks) =>

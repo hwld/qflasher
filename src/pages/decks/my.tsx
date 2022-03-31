@@ -1,16 +1,20 @@
 import { DeckListPage } from "@/components/pages/DeckListPage";
+import { AppLoading } from "@/components/ui/AppLoading";
+import { Redirect } from "@/components/ui/Redirect";
 import { useAuthState } from "@/hooks/useAuthState";
-import { useRequireSignIn } from "@/hooks/useRequireSignIn";
+import { routes } from "@/routes";
 import { NextPage } from "next";
 
 const MyDecks: NextPage = () => {
   const { userResult } = useAuthState();
-  useRequireSignIn({ userResult });
 
-  if (userResult.data) {
-    return <DeckListPage userId={userResult.data.uid} />;
+  if (userResult.status === "loading") {
+    return <AppLoading isLoading={true} />;
+  }
+  if (!userResult.data) {
+    return <Redirect href={routes.signInPage} />;
   } else {
-    return null;
+    return <DeckListPage userId={userResult.data.uid} />;
   }
 };
 

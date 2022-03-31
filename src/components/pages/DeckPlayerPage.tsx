@@ -1,8 +1,8 @@
 import { DeckPlayer } from "@/components/model/deck/DeckPlayer";
+import { AppLoading } from "@/components/ui/AppLoading";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { useDeck } from "@/hooks/useDeck";
-import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { isRoute, Route, routes } from "@/routes";
 import { Center, Grid, Text, useBreakpointValue } from "@chakra-ui/react";
 import React, { useMemo } from "react";
@@ -30,11 +30,7 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
     useBreakpointValue<"sm" | "md">({ base: "sm", md: "md" }) ?? "md";
 
   const returnRoute = useMemo((): Route => {
-    if (queryResult.status === "loading" || queryResult.status === "error") {
-      return routes.rootPage;
-    }
-
-    const returnTo = queryResult.data.redirectTo;
+    const returnTo = queryResult?.data?.redirectTo;
     if (isRoute(returnTo)) {
       return returnTo;
     } else {
@@ -42,72 +38,61 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
     }
   }, [queryResult]);
 
-  useLoadingEffect(useDeckResult.status === "loading");
-
-  if (queryResult.status === "loading") {
-    return null;
-  }
-
-  switch (useDeckResult.status) {
-    case "loading": {
-      // useLoadingEffectによってローディング状態が表示されている
-      return null;
-    }
-    case "error": {
-      if (useDeckResult.error === "not-found") {
-        return (
-          <ErrorMessageBox
-            mx="auto"
-            mt={10}
-            header="エラー"
-            description="デッキが存在しません。"
-          />
-        );
-      }
+  if (useDeckResult.status === "loading" || queryResult.status === "loading") {
+    return <AppLoading isLoading={true} />;
+  } else if (useDeckResult.status === "error") {
+    if (useDeckResult.error === "not-found") {
       return (
         <ErrorMessageBox
           mx="auto"
           mt={10}
           header="エラー"
-          description="デッキの読み込みに失敗しましfた。"
+          description="デッキが存在しません。"
         />
       );
     }
-    case "success": {
-      return (
-        <Grid templateRows="auto 1fr" h="100%" w="100%">
-          <Center
-            bgColor={"gray.700"}
-            py={{ base: 1, md: 3 }}
-            w="100%"
-            overflow={"hidden"}
+    return (
+      <ErrorMessageBox
+        mx="auto"
+        mt={10}
+        header="エラー"
+        description="デッキの読み込みに失敗しましfた。"
+      />
+    );
+  } else {
+    return (
+      <Grid templateRows="auto 1fr" h="100%" w="100%">
+        <Center
+          bgColor={"gray.700"}
+          py={{ base: 1, md: 3 }}
+          w="100%"
+          overflow={"hidden"}
+        >
+          <Text
+            flexShrink={1}
+            fontWeight="bold"
+            fontSize={{ base: "lg", md: "2xl" }}
+            w={"90%"}
+            maxW="1000px"
+            textAlign="center"
+            whiteSpace={"nowrap"}
+            overflow="hidden"
+            textOverflow={"ellipsis"}
           >
-            <Text
-              flexShrink={1}
-              fontWeight="bold"
-              fontSize={{ base: "lg", md: "2xl" }}
-              w={"90%"}
-              maxW="1000px"
-              textAlign="center"
-              whiteSpace={"nowrap"}
-              overflow="hidden"
-              textOverflow={"ellipsis"}
-            >
-              {useDeckResult.data.name}
-            </Text>
-          </Center>
-          <DeckPlayer
-            my={5}
-            mx="auto"
-            w="90%"
-            maxW="800px"
-            returnRoute={returnRoute}
-            size={deckPlayerSize}
-            deck={useDeckResult.data}
-            settings={settings}
-          />
-        </Grid>
-      );
-    }
+            {useDeckResult.data.name}
+          </Text>
+        </Center>
+        <DeckPlayer
+          my={5}
+          mx="auto"
+          w="90%"
+          maxW="800px"
+          returnRoute={returnRoute}
+          size={deckPlayerSize}
+          deck={useDeckResult.data}
+          settings={settings}
+        />
+      </Grid>
+    );
   }
 };

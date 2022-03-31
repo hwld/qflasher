@@ -8,9 +8,9 @@ export const AppTemplate: React.FC = ({ children }) => {
   const { isLoading } = useLoadingState();
   const size =
     useBreakpointValue<"sm" | "md">({ base: "sm", md: "md" }) ?? "md";
+  const [screenHeight, setScreenHeight] = useState(window.innerHeight);
 
   usePageLoading();
-  const [screenHeight, setScreenHeight] = useState(window.innerHeight);
 
   // 100vhにするとスマホのツールバーの高さを含まず、その分下にはみ出してしまう
   useEffect(() => {

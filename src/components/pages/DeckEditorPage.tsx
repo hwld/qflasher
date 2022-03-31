@@ -1,10 +1,10 @@
 import { DeckForm, DeckFormProps } from "@/components/model/deck/DeckForm";
+import { AppLoading } from "@/components/ui/AppLoading";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { Fab } from "@/components/ui/Fab";
 import { useAppOperation } from "@/hooks/useAppOperation";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { useDeckOperation } from "@/hooks/useDeckOperation";
-import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { useMyDeck } from "@/hooks/useMyDeck";
 import { useTags } from "@/hooks/useTags";
 import { routes } from "@/routes";
@@ -34,11 +34,9 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
   const handleAddTag = useAppOperation(addTag);
   const handleDeleteTag = useAppOperation(deleteTag);
 
-  useLoadingEffect(useMyDeckResult.status === "loading");
-
   switch (useMyDeckResult.status) {
     case "loading": {
-      return null;
+      return <AppLoading isLoading={true} />;
     }
     case "error": {
       if (useMyDeckResult.error === "not-found") {

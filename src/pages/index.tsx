@@ -1,30 +1,19 @@
-import { useAppRouter } from "@/hooks/useAppRouter";
+import { AppLoading } from "@/components/ui/AppLoading";
+import { Redirect } from "@/components/ui/Redirect";
 import { useAuthState } from "@/hooks/useAuthState";
-import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { routes } from "@/routes";
-import { Box } from "@chakra-ui/react";
 import { NextPage } from "next";
-import { useEffect } from "react";
 
 const Index: NextPage = () => {
-  const router = useAppRouter();
   const { userResult } = useAuthState();
-  useLoadingEffect(userResult.status === "loading");
 
-  useEffect(() => {
-    if (userResult.status === "loading") {
-      return;
-    }
-    if (userResult.data) {
-      // ログインしている場合
-      router.replace(routes.myDecksPage);
-    } else {
-      // ログインしていない場合
-      router.replace(routes.publicDecksPage);
-    }
-  }, [router, userResult.data, userResult.status]);
-
-  return <Box />;
+  if (userResult.status === "loading") {
+    return <AppLoading isLoading={true} />;
+  } else if (userResult.data) {
+    return <Redirect href={routes.myDecksPage} />;
+  } else {
+    return <Redirect href={routes.publicDecksPage} />;
+  }
 };
 
 export default Index;

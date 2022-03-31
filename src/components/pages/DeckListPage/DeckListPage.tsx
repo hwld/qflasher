@@ -8,7 +8,6 @@ import { useAppOperation } from "@/hooks/useAppOperation";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { useAttachTagOperation } from "@/hooks/useAttachTagOperation";
 import { useDeckOperation } from "@/hooks/useDeckOperation";
-import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { useMyDeckList } from "@/hooks/useMyDeckList";
 import { useTags } from "@/hooks/useTags";
 import { routes } from "@/routes";
@@ -72,8 +71,6 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
       selectMenu(name);
     }
   };
-
-  useLoadingEffect(useDeckListResult.status === "loading");
 
   return (
     <Flex h="100%">
