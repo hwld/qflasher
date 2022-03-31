@@ -11,7 +11,12 @@ import React from "react";
 
 const Play: NextPage = () => {
   const { userResult } = useAuthState();
-  const router = useAppRouter(routes.playDeckPage);
+  const router = useAppRouter({
+    currentPage: routes.playDeckPage,
+    validateQuery: (query) => {
+      return isDeckId(query.id);
+    },
+  });
   const queryResult = router.query;
 
   const loading =
@@ -21,10 +26,7 @@ const Play: NextPage = () => {
 
   if (loading) {
     return null;
-  } else if (
-    queryResult.status === "error" ||
-    (queryResult.status === "success" && !isDeckId(queryResult.data.id))
-  ) {
+  } else if (queryResult.status === "error") {
     return <Redirect href={routes.rootPage} />;
   } else {
     const { id, redirectTo, ...settings } = queryResult.data;

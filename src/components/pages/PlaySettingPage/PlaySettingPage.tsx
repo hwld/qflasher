@@ -21,7 +21,7 @@ export type SettingForm = {
 };
 
 export const PlaySettingPage: React.FC<Props> = ({ userId, deckId }) => {
-  const router = useAppRouter(routes.playSettingPage);
+  const router = useAppRouter({ currentPage: routes.playSettingPage });
   const queryResult = router.query;
   const useDeckResult = useDeck(userId, deckId);
   const [settings, setSettings] = useState<SettingForm>({

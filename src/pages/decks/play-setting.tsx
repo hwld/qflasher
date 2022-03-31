@@ -9,7 +9,12 @@ import { isDeckId } from "@/utils/isDeckId";
 import { NextPage } from "next";
 
 const PlaySetting: NextPage = () => {
-  const router = useAppRouter(routes.playSettingPage);
+  const router = useAppRouter({
+    currentPage: routes.playSettingPage,
+    validateQuery: (query) => {
+      return isDeckId(query.id);
+    },
+  });
   const queryResult = router.query;
   const { userResult } = useAuthState();
 
@@ -21,10 +26,7 @@ const PlaySetting: NextPage = () => {
 
   if (loading) {
     return null;
-  } else if (
-    queryResult.status === "error" ||
-    (queryResult.status === "success" && !isDeckId(queryResult.data.id))
-  ) {
+  } else if (queryResult.status === "error") {
     return <Redirect href={routes.rootPage} />;
   } else {
     return (

@@ -11,7 +11,12 @@ import React from "react";
 
 const Edit: NextPage = () => {
   const { userResult } = useAuthState();
-  const router = useAppRouter(routes.editDeckPage);
+  const router = useAppRouter({
+    currentPage: routes.editDeckPage,
+    validateQuery: (query) => {
+      return isDeckId(query.id);
+    },
+  });
   const queryResult = router.query;
 
   useLoadingEffect(queryResult.status === "loading");
@@ -19,10 +24,7 @@ const Edit: NextPage = () => {
 
   if (!userResult.data || queryResult.status === "loading") {
     return null;
-  } else if (
-    queryResult.status === "error" ||
-    (queryResult.status === "success" && !isDeckId(queryResult.data.id))
-  ) {
+  } else if (queryResult.status === "error") {
     return <Redirect href={routes.rootPage} />;
   } else {
     return (

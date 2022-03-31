@@ -23,7 +23,7 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
   userId,
   settings,
 }) => {
-  const router = useAppRouter(routes.playDeckPage);
+  const router = useAppRouter({ currentPage: routes.playDeckPage });
   const queryResult = router.query;
   const useDeckResult = useDeck(userId, deckId);
   const deckPlayerSize =

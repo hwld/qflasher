@@ -7,7 +7,14 @@ type Param<T extends Route> = { path: T } & (keyof Query[T] extends never
   ? { query?: never }
   : { query: Query[T] });
 
-export const useAppRouter = <T extends Route>(currentPage?: T) => {
+type UseAppRouterParam<T extends Route> = {
+  currentPage?: T;
+  validateQuery?: (query: Query[T]) => boolean;
+};
+export const useAppRouter = <T extends Route>(
+  param: UseAppRouterParam<T> = {}
+) => {
+  const { currentPage, validateQuery } = param;
   const router = useRouter();
 
   const push = <T extends Route>(param: Param<T>) => {
@@ -18,22 +25,29 @@ export const useAppRouter = <T extends Route>(currentPage?: T) => {
     if (!router.isReady) {
       return { status: "loading", data: undefined, error: undefined };
     }
-    if (currentPage === undefined) {
-      return { status: "error", data: undefined, error: undefined };
-    }
-    const currentRoute: Route = currentPage;
     const parsed = parseQuery(router.query);
-    if (queries[currentRoute].is(parsed)) {
-      return {
-        status: "success",
-        data: parsed as Query[T],
-        error: undefined,
-      };
-    } else {
-      console.log("!g");
+
+    if (
+      currentPage === undefined ||
+      // as Routeをしないとtypescript 4.6ではエラーが出てしまう
+      // Nightlyだとエラーが出ないのでそのうち解消されそう
+      !queries[currentPage as Route].is(parsed)
+    ) {
       return { status: "error", data: undefined, error: undefined };
     }
-  }, [currentPage, router.isReady, router.query]);
+
+    // queries[T].is()ってやってもQuery[T]に推論されないため、asを使った。
+    // バグの温床になりそう
+    const queryData = parsed as Query[T];
+    if (validateQuery && !validateQuery(queryData)) {
+      return { status: "error", data: undefined, error: undefined };
+    }
+    return {
+      status: "success",
+      data: queryData,
+      error: undefined,
+    };
+  }, [currentPage, validateQuery, router.isReady, router.query]);
 
   return { ...router, push, query };
 };
