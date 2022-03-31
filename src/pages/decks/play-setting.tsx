@@ -1,15 +1,15 @@
 import { PlaySettingPage } from "@/components/pages/PlaySettingPage/PlaySettingPage";
 import { Redirect } from "@/components/ui/Redirect";
+import { useAppRouter } from "@/hooks/useAppRouter";
 import { useAuthState } from "@/hooks/useAuthState";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { useSignInButton } from "@/hooks/useSignInButton";
 import { routes } from "@/routes";
 import { isDeckId } from "@/utils/isDeckId";
 import { NextPage } from "next";
-import { useRouter } from "next/router";
 
 const PlaySetting: NextPage = () => {
-  const router = useRouter();
+  const router = useAppRouter();
   const deckId = router.query.id;
   const { userResult } = useAuthState();
 

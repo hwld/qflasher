@@ -1,11 +1,11 @@
 import { DeckPlaySettings } from "@/components/pages/DeckPlayerPage";
 import { SettingFormElement } from "@/components/pages/PlaySettingPage/SettingFormElement";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
+import { useAppRouter } from "@/hooks/useAppRouter";
 import { useDeck } from "@/hooks/useDeck";
 import { routes } from "@/routes";
 import { objectKeys } from "@/utils/ObjectKeys";
 import { Box, Button, Stack, Text, useBreakpointValue } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 type Props = {
@@ -20,7 +20,7 @@ export type SettingForm = {
 };
 
 export const PlaySettingPage: React.FC<Props> = ({ userId, deckId }) => {
-  const router = useRouter();
+  const router = useAppRouter();
   const useDeckResult = useDeck(userId, deckId);
   const [settings, setSettings] = useState<SettingForm>({
     isAnswerFirst: { value: false, text: "答え → 質問の順で表示する" },
@@ -43,9 +43,11 @@ export const PlaySettingPage: React.FC<Props> = ({ userId, deckId }) => {
       initialFront: settings.isAnswerFirst.value ? "answer" : "question",
       isOrderRandom: settings.isOrderRandom.value,
     };
+    // TODO　queryが現在のページに対応した型がつくようにする
+    const redirectTo = router.query.redirectTo as string | undefined;
     router.push({
-      pathname: routes.playDeckPage,
-      query: { deckId, redirectTo: router.query.redirectTo, ...setting },
+      path: routes.playDeckPage,
+      query: { id: deckId, redirectTo: redirectTo, ...setting },
     });
   };
 

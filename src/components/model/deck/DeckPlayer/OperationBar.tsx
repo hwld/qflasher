@@ -1,8 +1,8 @@
 import { OperationButton } from "@/components/model/deck/DeckPlayer/OperationButton";
 import { OperationButtonContainer } from "@/components/model/deck/DeckPlayer/OperationButtonContainer";
+import { useAppRouter } from "@/hooks/useAppRouter";
 import { Route } from "@/routes";
 import { BoxProps, Flex, FlexProps } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import React, { useState } from "react";
 import {
   MdArrowBack,
@@ -36,7 +36,7 @@ export const OperationBar: React.FC<Props> = ({
   onReplayWrong,
   ...styles
 }) => {
-  const router = useRouter();
+  const router = useAppRouter();
   const [isOpen, setIsOpen] = useState(false);
 
   const iconSize = "50%";
@@ -83,7 +83,7 @@ export const OperationBar: React.FC<Props> = ({
   };
 
   const handleBack = () => {
-    router.push(returnRoute);
+    router.push({ path: returnRoute });
   };
 
   return (

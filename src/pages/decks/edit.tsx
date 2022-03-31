@@ -1,19 +1,19 @@
 import { DeckEditPage } from "@/components/pages/DeckEditorPage";
 import { Redirect } from "@/components/ui/Redirect";
+import { useAppRouter } from "@/hooks/useAppRouter";
 import { useAuthState } from "@/hooks/useAuthState";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { useRequireSignIn } from "@/hooks/useRequireSignIn";
 import { routes } from "@/routes";
 import { isDeckId } from "@/utils/isDeckId";
 import type { NextPage } from "next";
-import { useRouter } from "next/router";
 import React from "react";
 
 const Edit: NextPage = () => {
   const { userResult } = useAuthState();
   useRequireSignIn({ userResult });
 
-  const router = useRouter();
+  const router = useAppRouter();
   const id = router.query.id;
 
   useLoadingEffect(!router.isReady);

@@ -2,13 +2,13 @@ import { DeckForm, DeckFormProps } from "@/components/model/deck/DeckForm";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { Fab } from "@/components/ui/Fab";
 import { useAppOperation } from "@/hooks/useAppOperation";
+import { useAppRouter } from "@/hooks/useAppRouter";
 import { useDeckOperation } from "@/hooks/useDeckOperation";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { useMyDeck } from "@/hooks/useMyDeck";
 import { useTags } from "@/hooks/useTags";
 import { routes } from "@/routes";
 import { Box } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import React from "react";
 import { MdSave } from "react-icons/md";
 
@@ -18,7 +18,7 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
   deckId,
   userId,
 }) => {
-  const router = useRouter();
+  const router = useAppRouter();
   const { tags, addTag, deleteTag } = useTags(userId);
   const { updateDeck } = useDeckOperation(userId);
   const useMyDeckResult = useMyDeck({ userId, deckId });
@@ -27,7 +27,7 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
   const handleUpdateDeck: DeckFormProps["onSubmit"] = useAppOperation(
     async ({ newDeck, oldCards }) => {
       await updateDeck(newDeck, oldCards);
-      router.push(routes.myDecksPage);
+      router.push({ path: routes.myDecksPage });
     }
   );
 

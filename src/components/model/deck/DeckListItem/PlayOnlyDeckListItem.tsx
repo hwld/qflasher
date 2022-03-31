@@ -1,8 +1,8 @@
 import { DeckCardStyle } from "@/components/model/deck/DeckListItem";
 import { DeckListItemBase } from "@/components/model/deck/DeckListItem/DeckListItemBase";
+import { useAppRouter } from "@/hooks/useAppRouter";
 import { Route, routes } from "@/routes";
 import { DeckWithoutCards } from "@/types";
-import { useRouter } from "next/router";
 import React from "react";
 
 export type PlayOnlyDeckListItemProps = {
@@ -16,11 +16,11 @@ export const PlayOnlyDeckListItem: React.FC<PlayOnlyDeckListItemProps> = ({
   deck,
   returnRoutes,
 }) => {
-  const router = useRouter();
+  const router = useAppRouter();
 
   const handlePlayDeck = () => {
     router.push({
-      pathname: routes.playSettingPage,
+      path: routes.playSettingPage,
       query: {
         id: deck.id,
         redirectTo: returnRoutes,

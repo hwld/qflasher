@@ -3,6 +3,7 @@ import { AccountMenu, useHeaderStyle } from "@/components/ui/Header";
 import { Link } from "@/components/ui/Link";
 import { SignInForm } from "@/components/ui/SignInForm";
 import { useHeaderState } from "@/context/HeaderContext";
+import { useAppRouter } from "@/hooks/useAppRouter";
 import { useAuthState } from "@/hooks/useAuthState";
 import { routes } from "@/routes";
 import {
@@ -20,7 +21,6 @@ import {
   Progress,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import React, { useMemo } from "react";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 
@@ -31,7 +31,7 @@ type Props = {
 
 export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
   const { userResult } = useAuthState();
-  const router = useRouter();
+  const router = useAppRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     barHeight,

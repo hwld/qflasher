@@ -1,16 +1,16 @@
 import { SignInForm } from "@/components/ui/SignInForm";
+import { useAppRouter } from "@/hooks/useAppRouter";
 import { useAuthState } from "@/hooks/useAuthState";
 import { routes } from "@/routes";
 import { Alert, AlertIcon, Flex } from "@chakra-ui/react";
 import { NextPage } from "next";
-import { useRouter } from "next/router";
 
 const SignInPage: NextPage = () => {
-  const router = useRouter();
+  const router = useAppRouter();
   const { userResult } = useAuthState();
 
   const handleAfterSIgnIn = () => {
-    router.push(routes.myDecksPage);
+    router.push({ path: routes.myDecksPage });
   };
 
   return (

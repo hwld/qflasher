@@ -1,9 +1,9 @@
+import { useAppRouter } from "@/hooks/useAppRouter";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export const usePageLoading = () => {
-  const router = useRouter();
+  const router = useAppRouter();
   const [loading, setLoading] = useState(false);
 
   useLoadingEffect(loading);

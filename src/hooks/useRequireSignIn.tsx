@@ -1,12 +1,12 @@
+import { useAppRouter } from "@/hooks/useAppRouter";
 import { UserResult } from "@/hooks/useAuthState";
 import { routes } from "@/routes";
-import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 type UseRequireSignInArg = { userResult: UserResult };
 
 export const useRequireSignIn = ({ userResult }: UseRequireSignInArg) => {
-  const router = useRouter();
+  const router = useAppRouter();
 
   // リダイレクト処理
   useEffect(() => {

@@ -1,13 +1,13 @@
+import { useAppRouter } from "@/hooks/useAppRouter";
 import { useAuthState } from "@/hooks/useAuthState";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
 import { routes } from "@/routes";
 import { Box } from "@chakra-ui/react";
 import { NextPage } from "next";
-import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 const Index: NextPage = () => {
-  const router = useRouter();
+  const router = useAppRouter();
   const { userResult } = useAuthState();
   useLoadingEffect(userResult.status === "loading");
 

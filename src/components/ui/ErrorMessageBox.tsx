@@ -1,6 +1,6 @@
+import { useAppRouter } from "@/hooks/useAppRouter";
 import { routes } from "@/routes";
 import { Box, Button, Flex, FlexProps, Heading, Text } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 
 type Props = { header: string; description: string } & FlexProps;
 export const ErrorMessageBox: React.FC<Props> = ({
@@ -8,10 +8,10 @@ export const ErrorMessageBox: React.FC<Props> = ({
   description = "エラーが発生しました。",
   ...props
 }) => {
-  const router = useRouter();
+  const router = useAppRouter();
 
   const handleBack = () => {
-    router.push(routes.rootPage);
+    router.push({ path: routes.rootPage });
   };
 
   return (

@@ -5,6 +5,7 @@ import { SideMenu } from "@/components/ui/SideMenu";
 import { useConfirm } from "@/context/ConfirmContext";
 import { useSideMenu, useSideMenuWidth } from "@/context/SideMenuContext";
 import { useAppOperation } from "@/hooks/useAppOperation";
+import { useAppRouter } from "@/hooks/useAppRouter";
 import { useAttachTagOperation } from "@/hooks/useAttachTagOperation";
 import { useDeckOperation } from "@/hooks/useDeckOperation";
 import { useLoadingEffect } from "@/hooks/useLoadingEffect";
@@ -12,7 +13,6 @@ import { useMyDeckList } from "@/hooks/useMyDeckList";
 import { useTags } from "@/hooks/useTags";
 import { routes } from "@/routes";
 import { Box, Flex } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import React, { useCallback, useState } from "react";
 import { AiFillTags } from "react-icons/ai";
 import { MdAdd } from "react-icons/md";
@@ -21,7 +21,7 @@ type DeckListPageProps = { userId: string };
 export type DeckListSideMenuNames = "tags" | "search" | "none";
 
 export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
-  const router = useRouter();
+  const router = useAppRouter();
   const confirm = useConfirm();
 
   const sideAreaWidth = useSideMenuWidth();
@@ -49,7 +49,7 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
   };
 
   const handleAddDeck = () => {
-    router.push(routes.createDeckPage);
+    router.push({ path: routes.createDeckPage });
   };
 
   const handleDeleteDeck = useCallback(

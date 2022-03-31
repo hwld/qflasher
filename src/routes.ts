@@ -1,21 +1,76 @@
 import { objectKeys } from "@chakra-ui/utils";
 import * as t from "io-ts";
+import { BaseRouter } from "next/dist/shared/lib/router/router";
 
 export const isRoute = (route: string): route is Route => {
   return (Object.values(routes) as string[]).includes(route);
 };
 
-// 新しくページを追加したときはここにパスとクエリの型を定義する
+type UrlQuery = BaseRouter["query"];
+type ParsedUrlQuery = { [T in keyof UrlQuery]: UrlQuery[T] | boolean };
+/**
+ * Queryの"false"|"true"をbooleanに変換する
+ */
+export const parseQuery = (value: UrlQuery): ParsedUrlQuery => {
+  return objectKeys(value).reduce((prev, key) => {
+    let item: ParsedUrlQuery[keyof ParsedUrlQuery] = value[key];
+    if (item === "true" || item === "false") {
+      item = JSON.parse(item) as boolean;
+    }
+    return { ...prev, [key]: item };
+  }, {} as ParsedUrlQuery);
+};
+
+// ここにパスとクエリの型を定義する
+// クエリの型は string | string[] | undefined | booleanのサブタイプにしないと色んな所でエラーが出てしまう
+// 他に良い実装ないかな・・・
 const RouteMap = {
-  rootPage: { path: "/", query: t.type({}) },
-  myDecksPage: { path: "/decks/my", query: t.type({}) },
-  publicDecksPage: { path: "/decks/public", query: t.type({}) },
-  createDeckPage: { path: "/decks/create", query: t.type({}) },
-  editDeckPage: { path: "/decks/edit", query: t.type({}) },
-  playSettingPage: { path: "/decks/play-setting", query: t.type({}) },
-  playDeckPage: { path: "/decks/play", query: t.type({}) },
-  signInPage: { path: "/signIn", query: t.type({}) },
-  notFoundPage: { path: "/404", query: t.type({}) },
+  rootPage: {
+    path: "/",
+    query: t.type({}),
+  },
+  myDecksPage: {
+    path: "/decks/my",
+    query: t.type({}),
+  },
+  publicDecksPage: {
+    path: "/decks/public",
+    query: t.type({}),
+  },
+  createDeckPage: {
+    path: "/decks/create",
+    query: t.type({}),
+  },
+  editDeckPage: {
+    path: "/decks/edit",
+    query: t.type({
+      id: t.string,
+    }),
+  },
+  playSettingPage: {
+    path: "/decks/play-setting",
+    query: t.type({
+      id: t.string,
+      redirectTo: t.string,
+    }),
+  },
+  playDeckPage: {
+    path: "/decks/play",
+    query: t.type({
+      id: t.string,
+      initialFront: t.union([t.literal("question"), t.literal("answer")]),
+      isOrderRandom: t.boolean,
+      redirectTo: t.union([t.string, t.undefined]),
+    }),
+  },
+  signInPage: {
+    path: "/signIn",
+    query: t.type({}),
+  },
+  notFoundPage: {
+    path: "/404",
+    query: t.type({}),
+  },
 } as const;
 type RouteMap = typeof RouteMap;
 

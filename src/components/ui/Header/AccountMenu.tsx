@@ -1,6 +1,7 @@
 import { AccountMenuButton } from "@/components/ui/Header/AccountMenuButton";
 import { useConfirm } from "@/context/ConfirmContext";
 import { useAppOperation } from "@/hooks/useAppOperation";
+import { useAppRouter } from "@/hooks/useAppRouter";
 import { useAuthState } from "@/hooks/useAuthState";
 import { routes } from "@/routes";
 import {
@@ -12,7 +13,6 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { User } from "firebase/auth";
-import { useRouter } from "next/router";
 import React from "react";
 import { BsStack } from "react-icons/bs";
 import { MdExitToApp, MdNoAccounts } from "react-icons/md";
@@ -20,11 +20,11 @@ import { MdExitToApp, MdNoAccounts } from "react-icons/md";
 type Props = { user: User } & MenuButtonProps;
 
 export const AccountMenu: React.FC<Props> = ({ user, ...styles }) => {
-  const router = useRouter();
+  const router = useAppRouter();
   const { signOut, deleteUser } = useAuthState();
 
   const handleGoMyDeskPage = () => {
-    router.push(routes.myDecksPage);
+    router.push({ path: routes.myDecksPage });
   };
 
   const handleSignOut = useAppOperation(signOut);
