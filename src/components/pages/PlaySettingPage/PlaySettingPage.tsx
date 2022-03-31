@@ -1,6 +1,7 @@
 import { DeckPlaySettings } from "@/components/pages/DeckPlayerPage";
 import { SettingFormElement } from "@/components/pages/PlaySettingPage/SettingFormElement";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
+import { Redirect } from "@/components/ui/Redirect";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { useDeck } from "@/hooks/useDeck";
 import { routes } from "@/routes";
@@ -20,7 +21,8 @@ export type SettingForm = {
 };
 
 export const PlaySettingPage: React.FC<Props> = ({ userId, deckId }) => {
-  const router = useAppRouter();
+  const router = useAppRouter(routes.playSettingPage);
+  const queryResult = router.query;
   const useDeckResult = useDeck(userId, deckId);
   const [settings, setSettings] = useState<SettingForm>({
     isAnswerFirst: { value: false, text: "答え → 質問の順で表示する" },
@@ -39,17 +41,25 @@ export const PlaySettingPage: React.FC<Props> = ({ userId, deckId }) => {
   };
 
   const handleClick = () => {
+    if (queryResult.status === "loading" || queryResult.status === "error") {
+      return;
+    }
+    const redirectTo = queryResult.data.redirectTo;
     const setting: DeckPlaySettings = {
       initialFront: settings.isAnswerFirst.value ? "answer" : "question",
       isOrderRandom: settings.isOrderRandom.value,
     };
-    // TODO　queryが現在のページに対応した型がつくようにする
-    const redirectTo = router.query.redirectTo as string | undefined;
     router.push({
       path: routes.playDeckPage,
       query: { id: deckId, redirectTo: redirectTo, ...setting },
     });
   };
+
+  if (queryResult.status === "loading") {
+    return null;
+  } else if (queryResult.status === "error") {
+    return <Redirect href={routes.rootPage} />;
+  }
 
   // TODO 共有できる？
   switch (useDeckResult.status) {

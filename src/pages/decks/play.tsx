@@ -1,7 +1,4 @@
-import {
-  DeckPlayerPage,
-  DeckPlaySettings,
-} from "@/components/pages/DeckPlayerPage";
+import { DeckPlayerPage } from "@/components/pages/DeckPlayerPage";
 import { Redirect } from "@/components/ui/Redirect";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { useAuthState } from "@/hooks/useAuthState";
@@ -14,23 +11,23 @@ import React from "react";
 
 const Play: NextPage = () => {
   const { userResult } = useAuthState();
+  const router = useAppRouter(routes.playDeckPage);
+  const queryResult = router.query;
 
-  const router = useAppRouter();
-  // TODO
-  const { id, redirectTo, ...settings } = router.query as unknown as {
-    id: string;
-    redirectTo?: string;
-  } & DeckPlaySettings;
-
-  const loading = !router.isReady || userResult.status === "loading";
+  const loading =
+    queryResult.status === "loading" || userResult.status === "loading";
   useLoadingEffect(loading);
   useSignInButton();
 
   if (loading) {
     return null;
-  } else if (!isDeckId(id)) {
+  } else if (
+    queryResult.status === "error" ||
+    (queryResult.status === "success" && !isDeckId(queryResult.data.id))
+  ) {
     return <Redirect href={routes.rootPage} />;
   } else {
+    const { id, redirectTo, ...settings } = queryResult.data;
     return (
       <DeckPlayerPage
         deckId={id}

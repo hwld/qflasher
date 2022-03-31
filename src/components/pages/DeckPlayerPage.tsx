@@ -23,21 +23,30 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
   userId,
   settings,
 }) => {
-  const router = useAppRouter();
+  const router = useAppRouter(routes.playDeckPage);
+  const queryResult = router.query;
   const useDeckResult = useDeck(userId, deckId);
   const deckPlayerSize =
     useBreakpointValue<"sm" | "md">({ base: "sm", md: "md" }) ?? "md";
 
   const returnRoute = useMemo((): Route => {
-    const returnTo = router.query.redirectTo;
-    if (typeof returnTo === "string" && isRoute(returnTo)) {
+    if (queryResult.status === "loading" || queryResult.status === "error") {
+      return routes.rootPage;
+    }
+
+    const returnTo = queryResult.data.redirectTo;
+    if (isRoute(returnTo)) {
       return returnTo;
     } else {
       return routes.rootPage;
     }
-  }, [router]);
+  }, [queryResult]);
 
   useLoadingEffect(useDeckResult.status === "loading");
+
+  if (queryResult.status === "loading") {
+    return null;
+  }
 
   switch (useDeckResult.status) {
     case "loading": {

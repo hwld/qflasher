@@ -9,23 +9,27 @@ import { isDeckId } from "@/utils/isDeckId";
 import { NextPage } from "next";
 
 const PlaySetting: NextPage = () => {
-  const router = useAppRouter();
-  const deckId = router.query.id;
+  const router = useAppRouter(routes.playSettingPage);
+  const queryResult = router.query;
   const { userResult } = useAuthState();
 
-  const loading = !router.isReady || userResult.status === "loading";
+  const loading =
+    queryResult.status === "loading" || userResult.status === "loading";
 
   useLoadingEffect(loading);
   useSignInButton();
 
   if (loading) {
     return null;
-  } else if (!isDeckId(deckId)) {
+  } else if (
+    queryResult.status === "error" ||
+    (queryResult.status === "success" && !isDeckId(queryResult.data.id))
+  ) {
     return <Redirect href={routes.rootPage} />;
   } else {
     return (
       <PlaySettingPage
-        deckId={deckId}
+        deckId={queryResult.data.id}
         userId={userResult.data?.uid ?? undefined}
       />
     );

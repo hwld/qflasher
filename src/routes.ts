@@ -2,8 +2,8 @@ import { objectKeys } from "@chakra-ui/utils";
 import * as t from "io-ts";
 import { BaseRouter } from "next/dist/shared/lib/router/router";
 
-export const isRoute = (route: string): route is Route => {
-  return (Object.values(routes) as string[]).includes(route);
+export const isRoute = (value: unknown): value is Route => {
+  return (Object.values(routes) as unknown[]).includes(value);
 };
 
 type UrlQuery = BaseRouter["query"];
@@ -49,19 +49,21 @@ const RouteMap = {
   },
   playSettingPage: {
     path: "/decks/play-setting",
-    query: t.type({
-      id: t.string,
-      redirectTo: t.string,
-    }),
+    query: t.intersection([
+      t.type({ id: t.string }),
+      t.partial({ redirectTo: t.union([t.string, t.undefined]) }),
+    ]),
   },
   playDeckPage: {
     path: "/decks/play",
-    query: t.type({
-      id: t.string,
-      initialFront: t.union([t.literal("question"), t.literal("answer")]),
-      isOrderRandom: t.boolean,
-      redirectTo: t.union([t.string, t.undefined]),
-    }),
+    query: t.intersection([
+      t.type({
+        id: t.string,
+        initialFront: t.union([t.literal("question"), t.literal("answer")]),
+        isOrderRandom: t.boolean,
+      }),
+      t.partial({ redirectTo: t.union([t.string, t.undefined]) }),
+    ]),
   },
   signInPage: {
     path: "/signIn",
