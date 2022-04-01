@@ -65,7 +65,7 @@ export const DeckListPageMain: React.FC<Props> = ({
                     variant={"outline"}
                     borderColor="orange.300"
                     color={"orange.300"}
-                    fontSize="sm"
+                    fontSize={{ base: "xs", md: "sm" }}
                   >
                     公開されているデッキを見に行く
                   </Button>

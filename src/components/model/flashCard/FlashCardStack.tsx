@@ -2,7 +2,7 @@ import {
   FlashCardStackItem,
   ResultItem,
 } from "@/components/model/flashCard/FlashCardStackItem";
-import { Progress } from "@/components/ui/Progress";
+import { AppProgress } from "@/components/ui/AppProgress";
 import { FlashCard } from "@/types";
 import { Box, BoxProps } from "@chakra-ui/react";
 import React from "react";
@@ -64,7 +64,7 @@ export const FlashCardStack: React.FC<Props> = ({
           rightAnswersCount={rightAnswersCount}
         />
       )}
-      <Progress
+      <AppProgress
         position="absolute"
         bottom={0}
         w="100%"

@@ -1,4 +1,5 @@
 import { AppLogo } from "@/components/ui/AppLogo";
+import { AppProgress } from "@/components/ui/AppProgress";
 import { AccountMenu, useHeaderStyle } from "@/components/ui/Header";
 import { Link } from "@/components/ui/Link";
 import { SignInForm } from "@/components/ui/SignInForm";
@@ -18,7 +19,6 @@ import {
   ModalCloseButton,
   ModalContent,
   ModalOverlay,
-  Progress,
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { useMemo } from "react";
@@ -110,7 +110,7 @@ export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
           </HStack>
           {userInfo}
         </Flex>
-        <Progress
+        <AppProgress
           hasStripe
           colorScheme="orange"
           height={`${progressHeight}px`}

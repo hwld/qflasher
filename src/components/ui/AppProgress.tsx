@@ -6,7 +6,7 @@ import React from "react";
 
 type Props = ChakraProgressProps;
 
-export const Progress: React.FC<Props> = ({ ...styles }) => {
+export const AppProgress: React.FC<Props> = ({ ...styles }) => {
   return (
     <ChakraProgress sx={{ "& > div": { transition: "inherit" } }} {...styles} />
   );
