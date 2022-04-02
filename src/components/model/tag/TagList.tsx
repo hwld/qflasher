@@ -1,9 +1,9 @@
 import {
   TagListItem,
   TagListItemProps,
-  TagListItemType,
-} from "@/components/model/tag/TagListItem";
-import { useDraggingTag } from "@/hooks/useTagDnD";
+} from "@/components/model/tag/TagListItem/TagListItem";
+import { TagListItemType } from "@/components/model/tag/TagListItem/useTagListItems";
+import { useDraggingTag } from "@/components/model/tag/useTagDnD";
 import { Box, ListProps, UnorderedList } from "@chakra-ui/layout";
 import { Tag } from "@chakra-ui/react";
 import React from "react";

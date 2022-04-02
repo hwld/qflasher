@@ -1,14 +1,14 @@
 import {
   EditableTagName,
   EditableTagNameProps,
-} from "@/components/model/tag/TagListItem";
+} from "@/components/model/tag/TagListItem/EditableTagName";
 import {
   TagListItemBase,
   TagListItemLayoutProps,
 } from "@/components/model/tag/TagListItem/TagListItemBase";
 import { useConfirm } from "@/context/ConfirmContext";
-import { useTagDrag } from "@/hooks/useTagDnD";
-import { UseTagsResult } from "@/hooks/useTags";
+import { useTagDrag } from "@/components/model/tag/useTagDnD";
+import { UseTagsResult } from "@/components/model/tag/useTags";
 import { Tag } from "@/types";
 import { Box, Flex, Text } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/react";

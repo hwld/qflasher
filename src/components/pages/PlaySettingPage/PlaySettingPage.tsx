@@ -3,7 +3,7 @@ import { SettingFormElement } from "@/components/pages/PlaySettingPage/SettingFo
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { Redirect } from "@/components/ui/Redirect";
 import { useAppRouter } from "@/hooks/useAppRouter";
-import { useDeck } from "@/hooks/useDeck";
+import { useDeck } from "@/components/model/deck/useDeck";
 import { routes } from "@/routes";
 import { objectKeys } from "@/utils/ObjectKeys";
 import { Box, Button, Stack, Text, useBreakpointValue } from "@chakra-ui/react";

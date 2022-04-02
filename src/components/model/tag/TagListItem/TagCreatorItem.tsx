@@ -1,12 +1,12 @@
 import {
   EditableTagName,
   EditableTagNameProps,
-  UseTagListItemsResult,
-} from "@/components/model/tag/TagListItem";
+} from "@/components/model/tag/TagListItem/EditableTagName";
 import {
   TagListItemBase,
   TagListItemLayoutProps,
 } from "@/components/model/tag/TagListItem/TagListItemBase";
+import { UseTagListItemsResult } from "@/components/model/tag/TagListItem/useTagListItems";
 import React from "react";
 
 export type TagCreatorProps = {

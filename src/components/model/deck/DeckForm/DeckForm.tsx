@@ -1,7 +1,7 @@
-import { DeckFormInput } from "@/components/model/deck/DeckForm";
 import { DeckFormBox } from "@/components/model/deck/DeckForm/DeckFormBox";
+import { DeckFormInput } from "@/components/model/deck/DeckForm/DeckFormInput";
 import { useDeckForm } from "@/components/model/deck/DeckForm/useDeckForm";
-import { FlashCardEditor } from "@/components/model/flashCard/FlashCardEditor";
+import { FlashCardEditor } from "@/components/model/flashCard/FlashCardEditor/FlashCardEditor";
 import { TagSelectProps, TagsSelect } from "@/components/model/tag/TagsSelect";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Deck, FlashCard, Tag } from "@/types";

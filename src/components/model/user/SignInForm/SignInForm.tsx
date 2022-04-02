@@ -1,6 +1,6 @@
 import { AppLogo } from "@/components/ui/AppLogo";
-import { GoogleSignInButton } from "@/components/ui/SignInForm";
-import { AnonymousSignInButton } from "@/components/ui/SignInForm/AnonymousSignInButton";
+import { AnonymousSignInButton } from "@/components/model/user/SignInForm/AnonymousSignInButton";
+import { GoogleSignInButton } from "@/components/model/user/SignInForm/GoogleSignInButton";
 import { useAppOperation } from "@/hooks/useAppOperation";
 import { useAuthState } from "@/hooks/useAuthState";
 import { Result } from "@/types";

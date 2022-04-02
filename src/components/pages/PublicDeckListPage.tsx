@@ -1,7 +1,7 @@
 import { DeckList } from "@/components/model/deck/DeckList";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { AppLogo } from "@/components/ui/AppLogo";
-import { usePublicDeckList } from "@/hooks/usePublicDeckList";
+import { usePublicDeckList } from "@/components/model/deck/usePublicDeckList";
 import { routes } from "@/routes";
 import {
   Center,

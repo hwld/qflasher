@@ -1,5 +1,5 @@
 import { ResizableBox } from "@/components/ui/ResizableBox";
-import { SideMenuItem } from "@/components/ui/SideMenu";
+import { SideMenuItem } from "@/components/ui/SideMenu/SideMenuItem";
 import { Box } from "@chakra-ui/layout";
 import { Flex, useBreakpointValue } from "@chakra-ui/react";
 import { ReactNode, useMemo } from "react";

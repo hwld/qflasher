@@ -1,8 +1,8 @@
 import { DeckList } from "@/components/model/deck/DeckList";
-import { DeckListItemProps } from "@/components/model/deck/DeckListItem";
+import { DeckListItemProps } from "@/components/model/deck/DeckListItem/DeckListItem";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { SearchBar } from "@/components/ui/SearchBar";
-import { DeckListData } from "@/hooks/useMyDeckList";
+import { DeckListData } from "@/components/model/deck/useMyDeckList";
 import { routes } from "@/routes";
 import { Center, Flex, Heading, Stack } from "@chakra-ui/layout";
 import { Button, Tag, useBreakpointValue } from "@chakra-ui/react";

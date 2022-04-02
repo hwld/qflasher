@@ -1,5 +1,5 @@
-import { DeckCardStyle } from "@/components/model/deck/DeckListItem";
 import { DeckListItemBase } from "@/components/model/deck/DeckListItem/DeckListItemBase";
+import { DeckCardStyle } from "@/components/model/deck/DeckListItem/useDeckListItemStyle";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { Route, routes } from "@/routes";
 import { DeckWithoutCards } from "@/types";

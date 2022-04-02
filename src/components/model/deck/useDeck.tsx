@@ -1,5 +1,5 @@
-import { useMyDeck } from "@/hooks/useMyDeck";
-import { usePublicDeck } from "@/hooks/usePublicDeck";
+import { useMyDeck } from "@/components/model/deck/useMyDeck";
+import { usePublicDeck } from "@/components/model/deck/usePublicDeck";
 import { Deck, Result } from "@/types";
 import { displayErrors } from "@/utils/displayError";
 import { useMemo } from "react";

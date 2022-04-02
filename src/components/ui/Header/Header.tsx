@@ -1,8 +1,9 @@
+import { AccountMenu } from "@/components/model/user/AccountMenu";
 import { AppLogo } from "@/components/ui/AppLogo";
 import { AppProgress } from "@/components/ui/AppProgress";
-import { AccountMenu, useHeaderStyle } from "@/components/ui/Header";
+import { useHeaderStyle } from "@/components/ui/Header/useHeaderStyle";
 import { Link } from "@/components/ui/Link";
-import { SignInForm } from "@/components/ui/SignInForm";
+import { SignInForm } from "@/components/model/user/SignInForm/SignInForm";
 import { useHeaderState } from "@/context/HeaderContext";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { useAuthState } from "@/hooks/useAuthState";

@@ -1,9 +1,12 @@
-import { DeckForm, DeckFormProps } from "@/components/model/deck/DeckForm";
+import {
+  DeckForm,
+  DeckFormProps,
+} from "@/components/model/deck/DeckForm/DeckForm";
 import { Fab } from "@/components/ui/Fab";
 import { useAppOperation } from "@/hooks/useAppOperation";
 import { useAppRouter } from "@/hooks/useAppRouter";
-import { useDeckOperation } from "@/hooks/useDeckOperation";
-import { useTags } from "@/hooks/useTags";
+import { useDeckOperation } from "@/components/model/deck/useDeckOperation";
+import { useTags } from "@/components/model/tag/useTags";
 import { routes } from "@/routes";
 import { Box } from "@chakra-ui/react";
 import React from "react";

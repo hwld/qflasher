@@ -1,4 +1,4 @@
-import { SignInForm } from "@/components/ui/SignInForm";
+import { SignInForm } from "@/components/model/user/SignInForm/SignInForm";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { useAuthState } from "@/hooks/useAuthState";
 import { routes } from "@/routes";

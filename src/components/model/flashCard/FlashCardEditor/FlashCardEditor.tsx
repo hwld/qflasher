@@ -1,10 +1,10 @@
-import { DeckFormInput } from "@/components/model/deck/DeckForm";
 import { DeckFormBox } from "@/components/model/deck/DeckForm/DeckFormBox";
+import { DeckFormInput } from "@/components/model/deck/DeckForm/DeckFormInput";
 import {
   DeckFormFields,
   useDeckForm,
 } from "@/components/model/deck/DeckForm/useDeckForm";
-import { CardEditorHeader } from "@/components/model/flashCard/FlashCardEditor";
+import { CardEditorHeader } from "@/components/model/flashCard/FlashCardEditor/FlashCardEditorHeader";
 import { BoxProps, Stack } from "@chakra-ui/react";
 import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
 import { Draggable } from "react-beautiful-dnd";

@@ -1,4 +1,4 @@
-import { OneSideFlashCardItem } from "@/components/model/flashCard/FlashCardStackItem";
+import { OneSideFlashCardItem } from "@/components/model/flashCard/FlashCardStackItem/OneSideFlashCardItem";
 import { FlashCard } from "@/types";
 import { Box, BoxProps } from "@chakra-ui/react";
 import React from "react";

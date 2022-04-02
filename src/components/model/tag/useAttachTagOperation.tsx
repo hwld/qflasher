@@ -1,5 +1,5 @@
 import { useWithLoading } from "@/context/LoadingStateContext";
-import { DeckOperation } from "@/hooks/useDeckOperation";
+import { DeckOperation } from "@/components/model/deck/useDeckOperation";
 import { useWithAppErrorHandler } from "@/hooks/useWithAppErrorHandler";
 import { useWithAppSuccessHandler } from "@/hooks/useWithAppSuccessHandler";
 import { useWithResult } from "@/hooks/useWithResult";

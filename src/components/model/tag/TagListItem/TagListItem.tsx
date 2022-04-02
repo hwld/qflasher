@@ -1,10 +1,12 @@
 import {
   TagCreatorItem,
   TagCreatorProps,
+} from "@/components/model/tag/TagListItem/TagCreatorItem";
+import {
   TagDataItem,
   TagDataProps,
-  TagListItemType,
-} from "@/components/model/tag/TagListItem";
+} from "@/components/model/tag/TagListItem/TagDataItem";
+import { TagListItemType } from "@/components/model/tag/TagListItem/useTagListItems";
 import { assertNever } from "@/utils/assertNever";
 import { BoxProps } from "@chakra-ui/layout";
 import React from "react";

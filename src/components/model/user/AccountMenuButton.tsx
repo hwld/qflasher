@@ -1,4 +1,4 @@
-import { UserIcon } from "@/components/ui/Header/UserIcon";
+import { UserIcon } from "@/components/model/user/UserIcon";
 import { Button, MenuButton, MenuButtonProps } from "@chakra-ui/react";
 import { User } from "firebase/auth";
 import { forwardRef } from "react";

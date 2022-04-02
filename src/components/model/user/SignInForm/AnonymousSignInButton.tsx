@@ -1,4 +1,4 @@
-import { SignInButton } from "@/components/ui/SignInForm/SignInButton";
+import { SignInButton } from "@/components/model/user/SignInForm/SignInButton";
 import { ButtonProps, Icon } from "@chakra-ui/react";
 import { FaUserSecret } from "react-icons/fa";
 

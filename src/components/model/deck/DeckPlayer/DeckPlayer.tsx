@@ -1,7 +1,5 @@
-import {
-  OperationBar,
-  useDeckPlayerState,
-} from "@/components/model/deck/DeckPlayer";
+import { OperationBar } from "@/components/model/deck/DeckPlayer/OperationBar";
+import { useDeckPlayerState } from "@/components/model/deck/DeckPlayer/useDeckPlayerState";
 import { FlashCardStack } from "@/components/model/flashCard/FlashCardStack";
 import { DeckPlaySettings } from "@/components/pages/DeckPlayerPage";
 import { Route } from "@/routes";

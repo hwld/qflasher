@@ -1,8 +1,8 @@
-import { DeckPlayer } from "@/components/model/deck/DeckPlayer";
+import { DeckPlayer } from "@/components/model/deck/DeckPlayer/DeckPlayer";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { useAppRouter } from "@/hooks/useAppRouter";
-import { useDeck } from "@/hooks/useDeck";
+import { useDeck } from "@/components/model/deck/useDeck";
 import { isRoute, Route, routes } from "@/routes";
 import { Center, Grid, Text, useBreakpointValue } from "@chakra-ui/react";
 import React, { useMemo } from "react";

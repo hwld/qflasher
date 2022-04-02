@@ -1,7 +1,7 @@
 import { DeckFormFields } from "@/components/model/deck/DeckForm/useDeckForm";
 import { CreatableSelect } from "@/components/ui/CreatableSelect";
 import { useConfirm } from "@/context/ConfirmContext";
-import { UseTagsResult } from "@/hooks/useTags";
+import { UseTagsResult } from "@/components/model/tag/useTags";
 import { Result, Tag } from "@/types";
 import {
   Box,

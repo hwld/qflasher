@@ -1,5 +1,5 @@
 import { AppPageLoading } from "@/components/ui/AppPageLoading";
-import { Header } from "@/components/ui/Header";
+import { Header } from "@/components/ui/Header/Header";
 import { useLoadingState } from "@/context/LoadingStateContext";
 import { Box, Grid, useBreakpointValue } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";

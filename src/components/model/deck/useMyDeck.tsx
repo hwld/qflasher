@@ -4,7 +4,7 @@ import {
   deckConverter,
   privateFieldOnDeckConverter,
 } from "@/firebase/firestoreConverters";
-import { UseDeckResult } from "@/hooks/useDeck";
+import { UseDeckResult } from "@/components/model/deck/useDeck";
 import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
 import { useFirestoreDocData } from "@/hooks/useFirestoreDocData";
 import { Deck } from "@/types";

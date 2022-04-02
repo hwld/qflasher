@@ -1,10 +1,8 @@
-import {
-  DeckCardStyle,
-  DeckListItemButton,
-} from "@/components/model/deck/DeckListItem";
 import { DeckListItemBase } from "@/components/model/deck/DeckListItem/DeckListItemBase";
+import { DeckListItemButton } from "@/components/model/deck/DeckListItem/DeckListItemButton";
+import { DeckCardStyle } from "@/components/model/deck/DeckListItem/useDeckListItemStyle";
 import { useAppRouter } from "@/hooks/useAppRouter";
-import { useTagDrop } from "@/hooks/useTagDnD";
+import { useTagDrop } from "@/components/model/tag/useTagDnD";
 import { Route, routes } from "@/routes";
 import { DeckWithoutCards } from "@/types";
 import React from "react";

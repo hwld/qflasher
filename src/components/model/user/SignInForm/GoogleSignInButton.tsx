@@ -1,5 +1,5 @@
-import { GoogleIcon } from "@/components/ui/SignInForm";
-import { SignInButton } from "@/components/ui/SignInForm/SignInButton";
+import { GoogleIcon } from "@/components/model/user/SignInForm/GoogleIcon";
+import { SignInButton } from "@/components/model/user/SignInForm/SignInButton";
 import { ButtonProps } from "@chakra-ui/button";
 import React from "react";
 

@@ -1,6 +1,6 @@
 import { TagList, TagListProps } from "@/components/model/tag/TagList";
-import { useTagListItems } from "@/components/model/tag/TagListItem";
-import { UseTagsResult } from "@/hooks/useTags";
+import { useTagListItems } from "@/components/model/tag/TagListItem/useTagListItems";
+import { UseTagsResult } from "@/components/model/tag/useTags";
 import { Result, Tag } from "@/types";
 import {
   Box,
