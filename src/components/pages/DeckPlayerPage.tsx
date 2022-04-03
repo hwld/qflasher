@@ -1,8 +1,8 @@
 import { DeckPlayer } from "@/components/model/deck/DeckPlayer/DeckPlayer";
+import { useDeck } from "@/components/model/deck/useDeck";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { useAppRouter } from "@/hooks/useAppRouter";
-import { useDeck } from "@/components/model/deck/useDeck";
 import { isRoute, Route, routes } from "@/routes";
 import { Center, Grid, Text, useBreakpointValue } from "@chakra-ui/react";
 import React, { useMemo } from "react";
@@ -39,7 +39,7 @@ export const DeckPlayerPage: React.FC<DeckPlayerPageProps> = ({
   }, [queryResult]);
 
   if (useDeckResult.status === "loading" || queryResult.status === "loading") {
-    return <AppLoading isLoading={true} />;
+    return <AppLoading />;
   } else if (useDeckResult.status === "error") {
     if (useDeckResult.error === "not-found") {
       return (

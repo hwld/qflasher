@@ -1,7 +1,6 @@
-import { useLoadingEffect } from "@/hooks/useLoadingEffect";
+import { useAppLoading } from "@/hooks/useAppLoading";
 
-type Props = { isLoading: boolean };
-export const AppLoading: React.VFC<Props> = ({ isLoading }) => {
-  useLoadingEffect(isLoading);
+export const AppLoading: React.VFC = () => {
+  useAppLoading();
   return null;
 };

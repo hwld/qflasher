@@ -26,14 +26,14 @@ export const LoadingProvider: React.FC = ({ children }) => {
     return loadingIds?.length !== 0;
   }, [loadingIds]);
 
+  const endLoading = useCallback((id: string) => {
+    setTimeout(() => setLoadingIds((ids) => ids.filter((i) => i !== id)), 500);
+  }, []);
+
   const startLoading = useCallback((): string => {
     const id = uuid();
     setLoadingIds((items) => [...items, id]);
     return id;
-  }, []);
-
-  const endLoading = useCallback((id: string) => {
-    setTimeout(() => setLoadingIds((ids) => ids.filter((i) => i !== id)), 500);
   }, []);
 
   return (

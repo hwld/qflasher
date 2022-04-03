@@ -22,7 +22,7 @@ const Edit: NextPage = () => {
     queryResult.status === "loading" || userResult.status === "loading";
 
   if (loading) {
-    return <AppLoading isLoading={true} />;
+    return <AppLoading />;
   } else if (!userResult.data) {
     return <Redirect href={routes.signInPage} />;
   } else if (queryResult.status === "error") {

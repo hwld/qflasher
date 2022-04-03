@@ -10,7 +10,7 @@ const Create: NextPage = () => {
   const { userResult } = useAuthState();
 
   if (userResult.status === "loading") {
-    return <AppLoading isLoading={true} />;
+    return <AppLoading />;
   }
   if (!userResult.data) {
     return <Redirect href={routes.signInPage} />;

@@ -1,8 +1,8 @@
 import { DeckList } from "@/components/model/deck/DeckList";
 import { DeckListItemProps } from "@/components/model/deck/DeckListItem/DeckListItem";
+import { DeckListData } from "@/components/model/deck/useMyDeckList";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { SearchBar } from "@/components/ui/SearchBar";
-import { DeckListData } from "@/components/model/deck/useMyDeckList";
 import { routes } from "@/routes";
 import { Center, Flex, Heading, Stack } from "@chakra-ui/layout";
 import { Button, Tag, useBreakpointValue } from "@chakra-ui/react";
@@ -38,7 +38,7 @@ export const DeckListPageMain: React.FC<Props> = ({
       );
     }
     case "loading": {
-      return <AppLoading isLoading={true} />;
+      return <AppLoading />;
     }
     case "success": {
       const viewDecks = deckListData.data.filter((decks) =>

@@ -1,7 +1,7 @@
 import { DeckList } from "@/components/model/deck/DeckList";
+import { usePublicDeckList } from "@/components/model/deck/usePublicDeckList";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { AppLogo } from "@/components/ui/AppLogo";
-import { usePublicDeckList } from "@/components/model/deck/usePublicDeckList";
 import { routes } from "@/routes";
 import {
   Center,
@@ -24,7 +24,7 @@ export const PublicDeckListPage: React.FC = () => {
       );
     }
     case "loading": {
-      return <AppLoading isLoading={true} />;
+      return <AppLoading />;
     }
     case "success": {
       return (

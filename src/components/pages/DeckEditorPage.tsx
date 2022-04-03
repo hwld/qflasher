@@ -2,14 +2,14 @@ import {
   DeckForm,
   DeckFormProps,
 } from "@/components/model/deck/DeckForm/DeckForm";
+import { useDeckOperation } from "@/components/model/deck/useDeckOperation";
+import { useMyDeck } from "@/components/model/deck/useMyDeck";
+import { useTags } from "@/components/model/tag/useTags";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { Fab } from "@/components/ui/Fab";
 import { useAppOperation } from "@/hooks/useAppOperation";
 import { useAppRouter } from "@/hooks/useAppRouter";
-import { useDeckOperation } from "@/components/model/deck/useDeckOperation";
-import { useMyDeck } from "@/components/model/deck/useMyDeck";
-import { useTags } from "@/components/model/tag/useTags";
 import { routes } from "@/routes";
 import { Box } from "@chakra-ui/react";
 import React from "react";
@@ -39,7 +39,7 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
 
   switch (useMyDeckResult.status) {
     case "loading": {
-      return <AppLoading isLoading={true} />;
+      return <AppLoading />;
     }
     case "error": {
       if (useMyDeckResult.error === "not-found") {

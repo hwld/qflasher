@@ -1,16 +1,22 @@
+import { useLoadingAction } from "@/context/LoadingStateContext";
 import { useAppRouter } from "@/hooks/useAppRouter";
-import { useLoadingEffect } from "@/hooks/useLoadingEffect";
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export const usePageLoading = () => {
   const router = useAppRouter();
-  const [loading, setLoading] = useState(false);
-
-  useLoadingEffect(loading);
+  const { startLoading: start, endLoading: end } = useLoadingAction();
+  const id = useRef<string | undefined>();
 
   useEffect(() => {
-    const startLoading = () => setLoading(true);
-    const endLoading = () => setLoading(false);
+    const endLoading = () => {
+      if (id.current) {
+        end(id.current);
+      }
+    };
+    const startLoading = () => {
+      endLoading();
+      id.current = start();
+    };
 
     router.events.on("routeChangeStart", startLoading);
     router.events.on("routeChangeComplete", endLoading);
@@ -21,5 +27,5 @@ export const usePageLoading = () => {
       router.events.off("routeChangeComplete", endLoading);
       router.events.off("routeChangeError", endLoading);
     };
-  }, [router.events]);
+  }, [end, router.events, start]);
 };

@@ -8,7 +8,7 @@ const Index: NextPage = () => {
   const { userResult } = useAuthState();
 
   if (userResult.status === "loading") {
-    return <AppLoading isLoading={true} />;
+    return <AppLoading />;
   } else if (userResult.data) {
     return <Redirect href={routes.myDecksPage} />;
   } else {

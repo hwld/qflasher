@@ -24,7 +24,7 @@ const PlaySetting: NextPage = () => {
   useSignInButton();
 
   if (loading) {
-    return <AppLoading isLoading={true} />;
+    return <AppLoading />;
   } else if (queryResult.status === "error") {
     return <Redirect href={routes.rootPage} />;
   } else {
