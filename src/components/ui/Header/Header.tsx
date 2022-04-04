@@ -1,9 +1,9 @@
 import { AccountMenu } from "@/components/model/user/AccountMenu";
+import { SignInForm } from "@/components/model/user/SignInForm/SignInForm";
 import { AppLogo } from "@/components/ui/AppLogo";
 import { AppProgress } from "@/components/ui/AppProgress";
 import { useHeaderStyle } from "@/components/ui/Header/useHeaderStyle";
 import { Link } from "@/components/ui/Link";
-import { SignInForm } from "@/components/model/user/SignInForm/SignInForm";
 import { useHeaderState } from "@/context/HeaderContext";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { useAuthState } from "@/hooks/useAuthState";
@@ -44,6 +44,11 @@ export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
   } = useHeaderStyle(size);
 
   const { showSignInButton } = useHeaderState();
+
+  const handleAfterSignIn = async () => {
+    onClose();
+    await router.replace(routes.myDecksPage);
+  };
 
   const signInButton = useMemo(() => {
     return showSignInButton ? (
@@ -123,7 +128,7 @@ export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
         <ModalOverlay></ModalOverlay>
         <ModalContent>
           <ModalCloseButton color={"white"} size="lg" />
-          <SignInForm afterSignIn={onClose} />
+          <SignInForm afterSignIn={handleAfterSignIn} />
         </ModalContent>
       </Modal>
     </>
