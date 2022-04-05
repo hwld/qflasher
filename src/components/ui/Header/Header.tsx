@@ -1,5 +1,5 @@
 import { AccountMenu } from "@/components/model/user/AccountMenu";
-import { SignInForm } from "@/components/model/user/SignInForm/SignInForm";
+import { SignInButton } from "@/components/model/user/SignInButton";
 import { AppLogo } from "@/components/ui/AppLogo";
 import { AppProgress } from "@/components/ui/AppProgress";
 import { useHeaderStyle } from "@/components/ui/Header/useHeaderStyle";
@@ -10,17 +10,11 @@ import { useAuthState } from "@/hooks/useAuthState";
 import { routes } from "@/routes";
 import {
   Box,
-  Button,
   Flex,
   FlexProps,
   HStack,
   Icon,
   IconButton,
-  Modal,
-  ModalCloseButton,
-  ModalContent,
-  ModalOverlay,
-  useDisclosure,
 } from "@chakra-ui/react";
 import React, { useMemo } from "react";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
@@ -33,49 +27,24 @@ type Props = {
 export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
   const { userResult } = useAuthState();
   const router = useAppRouter();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const {
-    barHeight,
-    progressHeight,
-    logoWidth,
-    accountIconSize,
-    formSize,
-    signInButtonSize,
-  } = useHeaderStyle(size);
+  const { barHeight, progressHeight, logoWidth, accountIconSize } =
+    useHeaderStyle(size);
 
   const { showSignInButton } = useHeaderState();
-
-  const handleAfterSignIn = async () => {
-    onClose();
-    await router.replace(routes.myDecksPage);
-  };
-
-  const signInButton = useMemo(() => {
-    return showSignInButton ? (
-      <Button
-        size={signInButtonSize}
-        bgColor={"orange.300"}
-        _hover={{ bgColor: "orange.400" }}
-        _active={{ bgColor: "orange.500" }}
-        color="gray.700"
-        onClick={onOpen}
-      >
-        ログイン
-      </Button>
-    ) : null;
-  }, [showSignInButton, signInButtonSize, onOpen]);
 
   const userInfo = useMemo(() => {
     if (userResult.status === "loading") {
       return null;
+    } else if (userResult.data) {
+      return (
+        <AccountMenu boxSize={`${accountIconSize}px`} user={userResult.data} />
+      );
+    } else if (!userResult.data && showSignInButton) {
+      return <SignInButton />;
     }
 
-    return userResult.data ? (
-      <AccountMenu boxSize={`${accountIconSize}px`} user={userResult.data} />
-    ) : (
-      signInButton
-    );
-  }, [accountIconSize, signInButton, userResult.data, userResult.status]);
+    return null;
+  }, [accountIconSize, showSignInButton, userResult.data, userResult.status]);
 
   const handleBack = () => {
     router.back();
@@ -124,13 +93,6 @@ export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
         />
       </Box>
       <Box h={`${barHeight + progressHeight}px`} flexShrink={0} />
-      <Modal isOpen={isOpen} onClose={onClose} size={formSize}>
-        <ModalOverlay></ModalOverlay>
-        <ModalContent>
-          <ModalCloseButton color={"white"} size="lg" />
-          <SignInForm afterSignIn={handleAfterSignIn} />
-        </ModalContent>
-      </Modal>
     </>
   );
 };
