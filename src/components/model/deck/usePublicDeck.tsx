@@ -1,6 +1,6 @@
+import { UseDeckResult } from "@/components/model/deck/useDeck";
 import { db } from "@/firebase/config";
 import { cardConverter, deckConverter } from "@/firebase/firestoreConverters";
-import { UseDeckResult } from "@/components/model/deck/useDeck";
 import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
 import { Deck } from "@/types";
 import { collectionGroup, orderBy, query, where } from "firebase/firestore";

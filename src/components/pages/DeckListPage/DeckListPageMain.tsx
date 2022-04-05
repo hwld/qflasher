@@ -2,9 +2,10 @@ import { DeckList } from "@/components/model/deck/DeckList";
 import { DeckListItemProps } from "@/components/model/deck/DeckListItem/DeckListItem";
 import { DeckListData } from "@/components/model/deck/useMyDeckList";
 import { AppLoading } from "@/components/ui/AppLoading";
+import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { SearchBar } from "@/components/ui/SearchBar";
 import { routes } from "@/routes";
-import { Center, Flex, Heading, Stack } from "@chakra-ui/layout";
+import { Flex, Stack } from "@chakra-ui/layout";
 import { Button, Tag, useBreakpointValue } from "@chakra-ui/react";
 import NextLink from "next/link";
 
@@ -32,9 +33,12 @@ export const DeckListPageMain: React.FC<Props> = ({
   switch (deckListData.status) {
     case "error": {
       return (
-        <Center>
-          <Heading>読み込みに失敗しました</Heading>
-        </Center>
+        <ErrorMessageBox
+          mx="auto"
+          mt={10}
+          header="エラー"
+          description="自分のデッキを読み込むことができませんでした。"
+        />
       );
     }
     case "loading": {

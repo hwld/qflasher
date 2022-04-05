@@ -1,6 +1,14 @@
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { routes } from "@/routes";
-import { Box, Button, Flex, FlexProps, Heading, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  FlexProps,
+  Heading,
+  Text,
+  Wrap,
+} from "@chakra-ui/react";
 
 type Props = { header: string; description: string } & FlexProps;
 export const ErrorMessageBox: React.FC<Props> = ({
@@ -14,6 +22,9 @@ export const ErrorMessageBox: React.FC<Props> = ({
     router.push({ path: routes.rootPage });
   };
 
+  const handleReload = () => {
+    router.reload();
+  };
   return (
     <Flex
       direction="column"
@@ -21,7 +32,8 @@ export const ErrorMessageBox: React.FC<Props> = ({
       align="center"
       p={10}
       bgColor="gray.700"
-      w="800px"
+      w={"95%"}
+      maxW="800px"
       rounded="lg"
       {...props}
     >
@@ -33,9 +45,14 @@ export const ErrorMessageBox: React.FC<Props> = ({
           {description}
         </Text>
       </Box>
-      <Button mt={10} colorScheme="green" onClick={handleBack}>
-        ホーム画面に戻る
-      </Button>
+      <Wrap mt={10} justify="center">
+        <Button colorScheme="orange" onClick={handleReload}>
+          もう一度読み込む
+        </Button>
+        <Button colorScheme="green" onClick={handleBack}>
+          ホーム画面に戻る
+        </Button>
+      </Wrap>
     </Flex>
   );
 };

@@ -2,14 +2,9 @@ import { DeckList } from "@/components/model/deck/DeckList";
 import { usePublicDeckList } from "@/components/model/deck/usePublicDeckList";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { AppLogo } from "@/components/ui/AppLogo";
+import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { routes } from "@/routes";
-import {
-  Center,
-  Flex,
-  Heading,
-  useBreakpointValue,
-  VStack,
-} from "@chakra-ui/react";
+import { Flex, Heading, useBreakpointValue, VStack } from "@chakra-ui/react";
 
 export const PublicDeckListPage: React.FC = () => {
   const publicDecks = usePublicDeckList();
@@ -18,9 +13,12 @@ export const PublicDeckListPage: React.FC = () => {
   switch (publicDecks.status) {
     case "error": {
       return (
-        <Center>
-          <Heading>読み込みに失敗しました</Heading>
-        </Center>
+        <ErrorMessageBox
+          mx="auto"
+          mt={10}
+          header="エラー"
+          description="公開デッキの読み込みに失敗しました。"
+        />
       );
     }
     case "loading": {
