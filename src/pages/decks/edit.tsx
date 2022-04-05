@@ -1,14 +1,15 @@
 import { DeckEditPage } from "@/components/pages/DeckEditorPage";
+import { AppLayoutWithOutSignInButton } from "@/components/ui/AppLayout";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { Redirect } from "@/components/ui/Redirect";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { useAuthState } from "@/hooks/useAuthState";
+import { NextPageWithLayout } from "@/pages/_app";
 import { routes } from "@/routes";
 import { isDeckId } from "@/utils/isDeckId";
-import type { NextPage } from "next";
 import React from "react";
 
-const Edit: NextPage = () => {
+const Edit: NextPageWithLayout = () => {
   const router = useAppRouter({
     currentPage: routes.editDeckPage,
     validateQuery: (query) => {
@@ -33,5 +34,7 @@ const Edit: NextPage = () => {
     );
   }
 };
+
+Edit.getLayout = AppLayoutWithOutSignInButton;
 
 export default Edit;

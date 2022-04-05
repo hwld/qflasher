@@ -4,7 +4,6 @@ import { AppLogo } from "@/components/ui/AppLogo";
 import { AppProgress } from "@/components/ui/AppProgress";
 import { useHeaderStyle } from "@/components/ui/Header/useHeaderStyle";
 import { Link } from "@/components/ui/Link";
-import { useHeaderState } from "@/context/HeaderContext";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { useAuthState } from "@/hooks/useAuthState";
 import { routes } from "@/routes";
@@ -21,16 +20,20 @@ import { MdOutlineArrowBackIosNew } from "react-icons/md";
 
 type Props = {
   isLoading?: boolean;
+  isSignInButtonHidden?: boolean;
   size: "sm" | "md";
 } & FlexProps;
 
-export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
+export const Header: React.FC<Props> = ({
+  isLoading,
+  isSignInButtonHidden = false,
+  size,
+  ...styles
+}) => {
   const { userResult } = useAuthState();
   const router = useAppRouter();
   const { barHeight, progressHeight, logoWidth, accountIconSize } =
     useHeaderStyle(size);
-
-  const { showSignInButton } = useHeaderState();
 
   const userInfo = useMemo(() => {
     if (userResult.status === "loading") {
@@ -39,12 +42,17 @@ export const Header: React.FC<Props> = ({ isLoading, size, ...styles }) => {
       return (
         <AccountMenu boxSize={`${accountIconSize}px`} user={userResult.data} />
       );
-    } else if (!userResult.data && showSignInButton) {
+    } else if (!userResult.data && !isSignInButtonHidden) {
       return <SignInButton />;
     }
 
     return null;
-  }, [accountIconSize, showSignInButton, userResult.data, userResult.status]);
+  }, [
+    accountIconSize,
+    isSignInButtonHidden,
+    userResult.data,
+    userResult.status,
+  ]);
 
   const handleBack = () => {
     router.back();

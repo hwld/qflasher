@@ -1,15 +1,15 @@
 import { DeckPlayerPage } from "@/components/pages/DeckPlayerPage";
+import { AppLayout } from "@/components/ui/AppLayout";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { Redirect } from "@/components/ui/Redirect";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { useAuthState } from "@/hooks/useAuthState";
-import { useSignInButton } from "@/hooks/useSignInButton";
+import { NextPageWithLayout } from "@/pages/_app";
 import { routes } from "@/routes";
 import { isDeckId } from "@/utils/isDeckId";
-import { NextPage } from "next";
 import React from "react";
 
-const Play: NextPage = () => {
+const Play: NextPageWithLayout = () => {
   const { userResult } = useAuthState();
   const router = useAppRouter({
     currentPage: routes.playDeckPage,
@@ -21,8 +21,6 @@ const Play: NextPage = () => {
 
   const loading =
     queryResult.status === "loading" || userResult.status === "loading";
-
-  useSignInButton();
 
   if (loading) {
     return <AppLoading />;
@@ -39,5 +37,7 @@ const Play: NextPage = () => {
     );
   }
 };
+
+Play.getLayout = AppLayout;
 
 export default Play;

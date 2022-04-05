@@ -1,11 +1,12 @@
 import { DeckListPage } from "@/components/pages/DeckListPage";
+import { AppLayoutWithOutSignInButton } from "@/components/ui/AppLayout";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { Redirect } from "@/components/ui/Redirect";
 import { useAuthState } from "@/hooks/useAuthState";
+import { NextPageWithLayout } from "@/pages/_app";
 import { routes } from "@/routes";
-import { NextPage } from "next";
 
-const MyDecks: NextPage = () => {
+const MyDecks: NextPageWithLayout = () => {
   const { userResult } = useAuthState();
 
   if (userResult.status === "loading") {
@@ -17,5 +18,7 @@ const MyDecks: NextPage = () => {
     return <DeckListPage userId={userResult.data.uid} />;
   }
 };
+
+MyDecks.getLayout = AppLayoutWithOutSignInButton;
 
 export default MyDecks;

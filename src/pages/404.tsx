@@ -1,7 +1,9 @@
+import { AppLayout } from "@/components/ui/AppLayout";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
+import { NextPageWithLayout } from "@/pages/_app";
 import React from "react";
 
-export const NotFoundPage: React.FC = () => {
+export const NotFoundPage: NextPageWithLayout = () => {
   return (
     <ErrorMessageBox
       mt={10}
@@ -11,5 +13,7 @@ export const NotFoundPage: React.FC = () => {
     />
   );
 };
+
+NotFoundPage.getLayout = AppLayout;
 
 export default NotFoundPage;

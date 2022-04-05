@@ -1,11 +1,12 @@
 import { PublicDeckListPage } from "@/components/pages/PublicDeckListPage";
-import { useSignInButton } from "@/hooks/useSignInButton";
-import { NextPage } from "next";
+import { AppLayout } from "@/components/ui/AppLayout";
+import { NextPageWithLayout } from "@/pages/_app";
+import React from "react";
 
-const PublicDecks: NextPage = () => {
-  useSignInButton();
-
+const PublicDecks: NextPageWithLayout = () => {
   return <PublicDeckListPage />;
 };
+
+PublicDecks.getLayout = AppLayout;
 
 export default PublicDecks;

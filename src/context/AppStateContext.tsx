@@ -1,5 +1,4 @@
 import { ConfirmProvider } from "@/context/ConfirmContext";
-import { HeaderStateProvider } from "@/context/HeaderContext";
 import { LoadingProvider } from "@/context/LoadingStateContext";
 import { SideMenuProvider } from "@/context/SideMenuContext";
 import React from "react";
@@ -11,9 +10,7 @@ export const AppStateProvider: React.FC = ({ children }) => {
     <DndProvider backend={HTML5Backend}>
       <LoadingProvider>
         <ConfirmProvider>
-          <HeaderStateProvider>
-            <SideMenuProvider>{children}</SideMenuProvider>
-          </HeaderStateProvider>
+          <SideMenuProvider>{children}</SideMenuProvider>
         </ConfirmProvider>
       </LoadingProvider>
     </DndProvider>

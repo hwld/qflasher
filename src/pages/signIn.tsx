@@ -1,11 +1,12 @@
 import { SignInForm } from "@/components/model/user/SignInForm/SignInForm";
+import { AppLayoutWithOutSignInButton } from "@/components/ui/AppLayout";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { useAuthState } from "@/hooks/useAuthState";
+import { NextPageWithLayout } from "@/pages/_app";
 import { routes } from "@/routes";
 import { Alert, AlertIcon, Flex } from "@chakra-ui/react";
-import { NextPage } from "next";
 
-const SignInPage: NextPage = () => {
+const SignInPage: NextPageWithLayout = () => {
   const router = useAppRouter();
   const { userResult } = useAuthState();
 
@@ -43,5 +44,7 @@ const SignInPage: NextPage = () => {
     </Flex>
   );
 };
+
+SignInPage.getLayout = AppLayoutWithOutSignInButton;
 
 export default SignInPage;

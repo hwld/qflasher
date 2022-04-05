@@ -2,9 +2,14 @@ import { AppPageLoading } from "@/components/ui/AppPageLoading";
 import { Header } from "@/components/ui/Header/Header";
 import { useLoadingState } from "@/context/LoadingStateContext";
 import { Box, Grid, useBreakpointValue } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 
-export const AppTemplate: React.FC = ({ children }) => {
+type Props = { children: ReactNode; isSignInButtonHidden?: boolean };
+
+export const AppTemplate: React.FC<Props> = ({
+  children,
+  isSignInButtonHidden,
+}) => {
   const { isLoading } = useLoadingState();
   const size =
     useBreakpointValue<"sm" | "md">({ base: "sm", md: "md" }) ?? "md";
@@ -34,7 +39,11 @@ export const AppTemplate: React.FC = ({ children }) => {
         bgPosition="center"
         bgSize="cover"
       >
-        <Header isLoading={isLoading} size={size} />
+        <Header
+          isLoading={isLoading}
+          size={size}
+          isSignInButtonHidden={isSignInButtonHidden}
+        />
         <Box overflow="auto">{children}</Box>
       </Grid>
     </>

@@ -1,11 +1,19 @@
-import { AppTemplate } from "@/components/ui/AppTemplate";
 import { AppStateProvider } from "@/context/AppStateContext";
 import { theme } from "@/theme/theme";
 import { ChakraProvider } from "@chakra-ui/react";
+import { NextPage } from "next";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import React from "react";
+import React, { ReactElement } from "react";
 import "../theme/scrollbar.css";
+
+export type NextPageWithLayout = NextPage & {
+  getLayout?: (page: ReactElement) => ReactElement;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
 
 // SSRを使用せずにstatic html exportを使用するので、next devでSSRされないようにする
 const NoSSR: React.FC = ({ children }) => {
@@ -16,9 +24,8 @@ const NoSSR: React.FC = ({ children }) => {
   );
 };
 
-function MyApp({ Component, pageProps }: AppProps) {
-  // @ts-ignore
-  const getProvider = Component.getProvider || ((page: unknown) => page);
+function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+  const getLayout = Component.getLayout ?? ((page: ReactElement) => page);
 
   return (
     <NoSSR>
@@ -31,8 +38,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <ChakraProvider theme={theme}>
         <AppStateProvider>
-          {/* ちらつきを防ぐために全画面でヘッダーを共有したかったのでAppTemplateはここに書いた */}
-          <AppTemplate>{getProvider(<Component {...pageProps} />)}</AppTemplate>
+          {getLayout(<Component {...pageProps} />)}
         </AppStateProvider>
       </ChakraProvider>
     </NoSSR>

@@ -1,14 +1,14 @@
 import { PlaySettingPage } from "@/components/pages/PlaySettingPage/PlaySettingPage";
+import { AppLayout } from "@/components/ui/AppLayout";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { Redirect } from "@/components/ui/Redirect";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { useAuthState } from "@/hooks/useAuthState";
-import { useSignInButton } from "@/hooks/useSignInButton";
+import { NextPageWithLayout } from "@/pages/_app";
 import { routes } from "@/routes";
 import { isDeckId } from "@/utils/isDeckId";
-import { NextPage } from "next";
 
-const PlaySetting: NextPage = () => {
+const PlaySetting: NextPageWithLayout = () => {
   const router = useAppRouter({
     currentPage: routes.playSettingPage,
     validateQuery: (query) => {
@@ -20,8 +20,6 @@ const PlaySetting: NextPage = () => {
 
   const loading =
     queryResult.status === "loading" || userResult.status === "loading";
-
-  useSignInButton();
 
   if (loading) {
     return <AppLoading />;
@@ -36,5 +34,7 @@ const PlaySetting: NextPage = () => {
     );
   }
 };
+
+PlaySetting.getLayout = AppLayout;
 
 export default PlaySetting;
