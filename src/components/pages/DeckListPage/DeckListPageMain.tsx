@@ -70,6 +70,7 @@ export const DeckListPageMain: React.FC<Props> = ({
                     borderColor="orange.300"
                     color={"orange.300"}
                     fontSize={{ base: "xs", md: "sm" }}
+                    border="2px"
                   >
                     公開されているデッキを見に行く
                   </Button>
