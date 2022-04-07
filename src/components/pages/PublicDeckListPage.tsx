@@ -4,13 +4,15 @@ import { AppLoading } from "@/components/ui/AppLoading";
 import { AppLogo } from "@/components/ui/AppLogo";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { routes } from "@/routes";
-import { Flex, Heading, useBreakpointValue, VStack } from "@chakra-ui/react";
+import { Flex, Heading, VStack } from "@chakra-ui/react";
 
 export const PublicDeckListPage: React.FC = () => {
   const publicDecks = usePublicDeckList();
-  const logoWidth = useBreakpointValue({ base: "70%", md: "50%" });
 
   switch (publicDecks.status) {
+    case "loading": {
+      return <AppLoading />;
+    }
     case "error": {
       return (
         <ErrorMessageBox
@@ -20,9 +22,6 @@ export const PublicDeckListPage: React.FC = () => {
           description="公開デッキの読み込みに失敗しました。"
         />
       );
-    }
-    case "loading": {
-      return <AppLoading />;
     }
     case "success": {
       return (
@@ -43,7 +42,7 @@ export const PublicDeckListPage: React.FC = () => {
             py={{ base: "16", md: "20" }}
             rounded="md"
           >
-            <AppLogo width={logoWidth} />
+            <AppLogo width={{ base: "70%", md: "50%" }} />
           </Flex>
 
           <VStack spacing={5} align={"flex-start"} w="100%">

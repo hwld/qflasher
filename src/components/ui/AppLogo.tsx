@@ -1,14 +1,19 @@
+import { useBreakpointValue } from "@chakra-ui/react";
 import { useState } from "react";
 import { v4 as uuid } from "uuid";
 
-export const AppLogo: React.VFC<{ width?: string | number }> = ({
-  width = "100%",
-}) => {
+type Width = string | number;
+type BreakpointWidth = Record<string, Width>;
+
+export const AppLogo: React.VFC<{
+  width?: Width | BreakpointWidth;
+}> = ({ width = "100%" }) => {
+  const appLogoWidth = useAppLogoWidth(width);
   const [ids] = useState([...new Array(7)].map((_) => uuid()));
 
   return (
     <svg
-      width={width}
+      width={appLogoWidth}
       viewBox="0 0 287.469 55.841"
       xmlnsXlink="http://www.w3.org/1999/xlink"
       xmlns="http://www.w3.org/2000/svg"
@@ -132,4 +137,19 @@ export const AppLogo: React.VFC<{ width?: string | number }> = ({
       </g>
     </svg>
   );
+};
+
+// widthがbreakpointWidthだった場合はuseBreakpointValueを使用して画面幅に応じた幅を取得する
+const useAppLogoWidth = (width: Width | BreakpointWidth): Width | undefined => {
+  const isBreakpointWidth =
+    typeof width !== "string" && typeof width !== "number";
+
+  let breakpointValue: BreakpointWidth = {};
+
+  if (isBreakpointWidth) {
+    breakpointValue = width;
+  }
+  const breakpointWidth = useBreakpointValue(breakpointValue);
+
+  return isBreakpointWidth ? breakpointWidth : width;
 };
