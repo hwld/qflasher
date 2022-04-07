@@ -23,14 +23,14 @@ export const useDeck = (userId: string | undefined, deckId: string) => {
       displayErrors(myDeck.error, publicDeck.error);
       return { status: "error", data: undefined, error: "unknown" };
     }
-    if (myDeck.status === "success" && publicDeck.status === "success") {
+    if (myDeck.status === "ok" && publicDeck.status === "ok") {
       return myDeck;
     }
 
-    if (myDeck.status === "success") {
+    if (myDeck.status === "ok") {
       return myDeck;
     }
-    if (publicDeck.status === "success") {
+    if (publicDeck.status === "ok") {
       return publicDeck;
     }
 

@@ -30,7 +30,7 @@ export const usePublicDeckList = (): Result<DeckWithoutCards[]> => {
       ...d,
       tagIds: [],
     }));
-    return { status: "success", data: deckInfo, error: undefined };
+    return { status: "ok", data: deckInfo, error: undefined };
   }, [deckListResult]);
 
   return deckList;

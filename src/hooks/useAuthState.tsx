@@ -22,7 +22,7 @@ export const useAuthState = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, {
       next: (user) => {
-        setUserResult({ status: "success", data: user, error: undefined });
+        setUserResult({ status: "ok", data: user, error: undefined });
       },
       error: (error) => {
         setUserResult({ status: "error", data: undefined, error: undefined });

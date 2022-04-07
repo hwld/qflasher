@@ -61,7 +61,7 @@ export const usePublicDeck = (deckId: string) => {
       tagIds: [],
     };
 
-    return { status: "success", data: deck, error: undefined };
+    return { status: "ok", data: deck, error: undefined };
   }, [
     publicCardsResult.data,
     publicCardsResult.status,

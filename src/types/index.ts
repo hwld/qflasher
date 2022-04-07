@@ -36,7 +36,32 @@ export type WithResult<T extends Operation<any, any>> = (
   ...args: Parameters<T>
 ) => Promise<Result<Awaited<ReturnType<T>>>>;
 
+// すべてのstatusでプロパティ名を同じにするほうが扱いやすいと感じたのでこうしている。
+// 例えばTにundefinedが入ってくることがあって、undefinedのokとerrorを一緒に扱いたいときに、
+// loadingをチェックしたあとに result.data === undefined とできるけど、
+// そもそもerrorとokを一緒に扱うっていうのが設計的にまずい？
+type LoadingResult = { status: "loading"; data: undefined; error: undefined };
+type OkResult<T> = { status: "ok"; data: T; error: undefined };
+type ErrorResult<E> = { status: "error"; data: undefined; error: E };
 export type Result<T, E = undefined> =
-  | { status: "loading"; data: undefined; error: undefined }
-  | { status: "error"; data: undefined; error: E }
-  | { status: "success"; data: T; error: undefined };
+  | LoadingResult
+  | OkResult<T>
+  | ErrorResult<E>;
+
+export const Result = {
+  Loading: (): LoadingResult => ({
+    status: "loading",
+    data: undefined,
+    error: undefined,
+  }),
+  Ok: <T>(data: T): OkResult<T> => ({
+    status: "ok",
+    data,
+    error: undefined,
+  }),
+  Err: <E>(error: E): ErrorResult<E> => ({
+    status: "error",
+    data: undefined,
+    error: error,
+  }),
+} as const;

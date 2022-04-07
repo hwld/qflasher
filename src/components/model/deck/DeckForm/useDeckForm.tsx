@@ -71,13 +71,13 @@ export const useDeckForm = (defaultDeck: Deck, allTags: Tag[]) => {
 
   const appendCardField = useCallback(():
     | { type: "error"; message: string }
-    | { type: "success" } => {
+    | { type: "ok" } => {
     if (cardFields.length === 100) {
       return { type: "error", message: "カードは100枚までしか作れません。" };
     }
 
     append({ answer: "", cardId: uuid(), question: "" });
-    return { type: "success" };
+    return { type: "ok" };
   }, [append, cardFields.length]);
 
   const findCardIndex = useCallback(

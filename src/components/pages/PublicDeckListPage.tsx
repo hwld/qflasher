@@ -23,7 +23,7 @@ export const PublicDeckListPage: React.FC = () => {
         />
       );
     }
-    case "success": {
+    case "ok": {
       return (
         <VStack
           mt={3}

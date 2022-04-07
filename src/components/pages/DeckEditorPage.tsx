@@ -61,7 +61,7 @@ export const DeckEditPage: React.FC<DeckEditPageProps> = ({
         />
       );
     }
-    case "success": {
+    case "ok": {
       return (
         <Box>
           <Box my={{ base: 3, md: 5 }} maxW="800px" marginX="auto">

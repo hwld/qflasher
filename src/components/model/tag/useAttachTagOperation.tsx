@@ -1,5 +1,5 @@
-import { useWithLoading } from "@/context/LoadingStateContext";
 import { DeckOperation } from "@/components/model/deck/useDeckOperation";
+import { useWithLoading } from "@/context/LoadingStateContext";
 import { useWithAppErrorHandler } from "@/hooks/useWithAppErrorHandler";
 import { useWithAppSuccessHandler } from "@/hooks/useWithAppSuccessHandler";
 import { useWithResult } from "@/hooks/useWithResult";
@@ -10,7 +10,7 @@ export const useAttachTagOperation = (
 ) => {
   const withResult = useWithResult(attachTag);
   const withError = useWithAppErrorHandler(withResult);
-  const withSuccess = useWithAppSuccessHandler(withError, {
+  const withok = useWithAppSuccessHandler(withError, {
     getMessage: ({ tagName, deckName, alreadyExisted }) => {
       if (alreadyExisted) {
         return (
@@ -29,5 +29,5 @@ export const useAttachTagOperation = (
     },
     isWarning: ({ alreadyExisted }) => alreadyExisted,
   });
-  return useWithLoading(withSuccess);
+  return useWithLoading(withok);
 };

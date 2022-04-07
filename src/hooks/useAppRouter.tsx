@@ -43,7 +43,7 @@ export const useAppRouter = <T extends Route>(
       return { status: "error", data: undefined, error: undefined };
     }
     return {
-      status: "success",
+      status: "ok",
       data: queryData,
       error: undefined,
     };

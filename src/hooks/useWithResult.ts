@@ -8,7 +8,7 @@ export const useWithResult = <A extends unknown[], R>(
     async (...args) => {
       try {
         const result = await callback(...args);
-        return { status: "success", data: result, error: undefined };
+        return { status: "ok", data: result, error: undefined };
       } catch (e) {
         return { status: "error", data: undefined, error: undefined };
       }

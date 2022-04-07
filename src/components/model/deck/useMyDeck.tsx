@@ -88,7 +88,7 @@ export const useMyDeck = ({
       cards: cardsResult.data,
       published: deckInfo.published,
     };
-    return { status: "success", data: deck, error: undefined };
+    return { status: "ok", data: deck, error: undefined };
   }, [
     cardsResult.data,
     cardsResult.status,

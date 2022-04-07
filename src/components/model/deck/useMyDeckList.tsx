@@ -62,11 +62,13 @@ export const useMyDeckList = (userId: string): DeckListData => {
       return { ...deck, tagIds };
     });
 
-    return { status: "success", data, error: undefined };
+    return { status: "ok", data, error: undefined };
   }, [
     deckListResult.data,
+    deckListResult.error,
     deckListResult.status,
     privatesResult.data,
+    privatesResult.error,
     privatesResult.status,
   ]);
 

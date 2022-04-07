@@ -44,7 +44,7 @@ export const DeckListPageMain: React.FC<Props> = ({
     case "loading": {
       return <AppLoading />;
     }
-    case "success": {
+    case "ok": {
       const viewDecks = deckListData.data.filter((decks) =>
         decks.name.includes(searchText)
       );

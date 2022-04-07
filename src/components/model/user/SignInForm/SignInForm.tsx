@@ -1,6 +1,6 @@
-import { AppLogo } from "@/components/ui/AppLogo";
 import { AnonymousSignInButton } from "@/components/model/user/SignInForm/AnonymousSignInButton";
 import { GoogleSignInButton } from "@/components/model/user/SignInForm/GoogleSignInButton";
+import { AppLogo } from "@/components/ui/AppLogo";
 import { useAppOperation } from "@/hooks/useAppOperation";
 import { useAuthState } from "@/hooks/useAuthState";
 import { Result } from "@/types";
@@ -31,7 +31,7 @@ export const SignInForm: React.FC<Props> = ({
     callback: () => Promise<Result<UserCredential>>
   ) => {
     const result = await callback();
-    if (result.status === "success") {
+    if (result.status === "ok") {
       afterSignIn?.();
     }
   };

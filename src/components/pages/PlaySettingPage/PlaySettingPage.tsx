@@ -1,9 +1,9 @@
+import { useDeck } from "@/components/model/deck/useDeck";
 import { DeckPlaySettings } from "@/components/pages/DeckPlayerPage";
 import { SettingFormElement } from "@/components/pages/PlaySettingPage/SettingFormElement";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { Redirect } from "@/components/ui/Redirect";
 import { useAppRouter } from "@/hooks/useAppRouter";
-import { useDeck } from "@/components/model/deck/useDeck";
 import { routes } from "@/routes";
 import { objectKeys } from "@/utils/ObjectKeys";
 import { Box, Button, Stack, Text, useBreakpointValue } from "@chakra-ui/react";
@@ -86,7 +86,7 @@ export const PlaySettingPage: React.FC<Props> = ({ userId, deckId }) => {
         />
       );
     }
-    case "success": {
+    case "ok": {
       const deck = useDeckResult.data;
       return (
         <Stack

@@ -17,7 +17,7 @@ export const useFirestoreCollectionData = <T,>(
     const unsubscribe = onSnapshot(query, {
       next: (snap) => {
         setData({
-          status: "success",
+          status: "ok",
           data: snap.docs.map((d) => d.data()),
           error: undefined,
         });

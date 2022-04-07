@@ -20,7 +20,7 @@ export const useFirestoreDocData = <T,>(
   useEffect(() => {
     const unsubscribe = onSnapshot(query, {
       next: (snap) => {
-        setData({ status: "success", data: snap.data(), error: undefined });
+        setData({ status: "ok", data: snap.data(), error: undefined });
       },
       error: (error) => {
         setData({ status: "error", data: undefined, error: error });

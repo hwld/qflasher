@@ -16,7 +16,7 @@ export const useWithAppSuccessHandler = <A extends unknown[], R>(
   return useCallback(
     async (...args) => {
       const result = await callback(...args);
-      if (result.status === "success") {
+      if (result.status === "ok") {
         const message = getMessage(result.data);
         toast({
           description: message,
