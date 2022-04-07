@@ -1,4 +1,4 @@
-import { Operation, WithResult } from "@/types";
+import { isOk, Operation, WithResult } from "@/types";
 import { useToast } from "@chakra-ui/react";
 import { ReactNode, useCallback } from "react";
 
@@ -16,7 +16,7 @@ export const useWithAppSuccessHandler = <A extends unknown[], R>(
   return useCallback(
     async (...args) => {
       const result = await callback(...args);
-      if (result.status === "ok") {
+      if (isOk(result)) {
         const message = getMessage(result.data);
         toast({
           description: message,

@@ -1,4 +1,4 @@
-import { Operation, WithResult } from "@/types";
+import { Operation, Result, WithResult } from "@/types";
 import { useCallback } from "react";
 
 export const useWithResult = <A extends unknown[], R>(
@@ -8,9 +8,9 @@ export const useWithResult = <A extends unknown[], R>(
     async (...args) => {
       try {
         const result = await callback(...args);
-        return { status: "ok", data: result, error: undefined };
+        return Result.Ok(result);
       } catch (e) {
-        return { status: "error", data: undefined, error: undefined };
+        return Result.Err();
       }
     },
     [callback]

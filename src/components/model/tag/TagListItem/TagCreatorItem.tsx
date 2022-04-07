@@ -7,6 +7,7 @@ import {
   TagListItemLayoutProps,
 } from "@/components/model/tag/TagListItem/TagListItemBase";
 import { UseTagListItemsResult } from "@/components/model/tag/TagListItem/useTagListItems";
+import { isErr } from "@/types";
 import React from "react";
 
 export type TagCreatorProps = {
@@ -26,7 +27,7 @@ export const TagCreatorItem: React.FC<TagCreatorProps> = ({
   const completeCreate = async (tagName: string) => {
     if (tagName !== "") {
       const result = await onAddTagData({ name: tagName }, creatorId);
-      if (result.status === "error") {
+      if (isErr(result)) {
         onDeleteTagCreator(creatorId);
       }
     } else {

@@ -5,11 +5,12 @@ import { Redirect } from "@/components/ui/Redirect";
 import { useAuthState } from "@/hooks/useAuthState";
 import { NextPageWithLayout } from "@/pages/_app";
 import { routes } from "@/routes";
+import { isLoading } from "@/types";
 
 const MyDecks: NextPageWithLayout = () => {
   const { userResult } = useAuthState();
 
-  if (userResult.status === "loading") {
+  if (isLoading(userResult)) {
     return <AppLoading />;
   }
   if (!userResult.data) {

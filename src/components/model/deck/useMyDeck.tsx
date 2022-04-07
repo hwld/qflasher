@@ -1,13 +1,13 @@
+import { UseDeckResult } from "@/components/model/deck/useDeck";
 import { db } from "@/firebase/config";
 import {
   cardConverter,
   deckConverter,
   privateFieldOnDeckConverter,
 } from "@/firebase/firestoreConverters";
-import { UseDeckResult } from "@/components/model/deck/useDeck";
 import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
 import { useFirestoreDocData } from "@/hooks/useFirestoreDocData";
-import { Deck } from "@/types";
+import { Deck, isErr, isLoading, Result } from "@/types";
 import {
   collection,
   collectionGroup,
@@ -52,23 +52,19 @@ export const useMyDeck = ({
   // deckDocとcardDoc[]からDeckを作成する
   const deck = useMemo((): UseDeckResult => {
     //　どちらかがエラーだったらエラーにセットする
-    if (
-      deckInfoResult.status === "error" ||
-      privatesResult.status === "error" ||
-      cardsResult.status === "error"
-    ) {
+    if (isErr(deckInfoResult) || isErr(privatesResult) || isErr(cardsResult)) {
       if (deckInfoResult.error?.code === "permission-denied") {
-        return { status: "error", data: undefined, error: "not-found" };
+        return Result.Err("not-found");
       }
-      return { status: "error", data: undefined, error: "unknown" };
+      return Result.Err("unknown");
     }
     // どちらかがロード中だったらロード中にセットする
     if (
-      deckInfoResult.status === "loading" ||
-      privatesResult.status === "loading" ||
-      cardsResult.status === "loading"
+      isLoading(deckInfoResult) ||
+      isLoading(privatesResult) ||
+      isLoading(cardsResult)
     ) {
-      return { status: "loading", data: undefined, error: undefined };
+      return Result.Loading();
     }
 
     // firestoreのルールでドキュメントが存在しない場合にはエラーを出すようにしているので、
@@ -88,16 +84,9 @@ export const useMyDeck = ({
       cards: cardsResult.data,
       published: deckInfo.published,
     };
-    return { status: "ok", data: deck, error: undefined };
-  }, [
-    cardsResult.data,
-    cardsResult.status,
-    deckInfoResult.data,
-    deckInfoResult.error?.code,
-    deckInfoResult.status,
-    privatesResult.data,
-    privatesResult.status,
-  ]);
+
+    return Result.Ok(deck);
+  }, [cardsResult, deckInfoResult, privatesResult]);
 
   return deck;
 };

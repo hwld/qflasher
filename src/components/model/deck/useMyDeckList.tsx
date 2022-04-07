@@ -4,7 +4,7 @@ import {
   privateFieldOnDeckConverter,
 } from "@/firebase/firestoreConverters";
 import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
-import { DeckWithoutCards, Result } from "@/types";
+import { DeckWithoutCards, isErr, isLoading, Result } from "@/types";
 import { displayErrors } from "@/utils/displayError";
 import {
   collection,
@@ -40,19 +40,13 @@ export const useMyDeckList = (userId: string): DeckListData => {
   const privatesResult = useFirestoreCollectionData(privatesRef);
 
   const deckList = useMemo((): Result<DeckWithoutCards[]> => {
-    if (
-      deckListResult.status === "loading" ||
-      privatesResult.status === "loading"
-    ) {
-      return { status: "loading", data: undefined, error: undefined };
+    if (isLoading(deckListResult) || isLoading(privatesResult)) {
+      return Result.Loading();
     }
 
-    if (
-      deckListResult.status === "error" ||
-      privatesResult.status === "error"
-    ) {
+    if (isErr(deckListResult) || isErr(privatesResult)) {
       displayErrors(deckListResult.error, privatesResult.error);
-      return { status: "error", data: undefined, error: undefined };
+      return Result.Err();
     }
 
     // ここに到達した時点でどちらも読み込みが成功している
@@ -62,15 +56,8 @@ export const useMyDeckList = (userId: string): DeckListData => {
       return { ...deck, tagIds };
     });
 
-    return { status: "ok", data, error: undefined };
-  }, [
-    deckListResult.data,
-    deckListResult.error,
-    deckListResult.status,
-    privatesResult.data,
-    privatesResult.error,
-    privatesResult.status,
-  ]);
+    return Result.Ok(data);
+  }, [deckListResult, privatesResult]);
 
   return deckList;
 };

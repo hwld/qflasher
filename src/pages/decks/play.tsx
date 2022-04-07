@@ -6,6 +6,7 @@ import { useAppRouter } from "@/hooks/useAppRouter";
 import { useAuthState } from "@/hooks/useAuthState";
 import { NextPageWithLayout } from "@/pages/_app";
 import { routes } from "@/routes";
+import { isErr, isLoading } from "@/types";
 import { isDeckId } from "@/utils/isDeckId";
 import React from "react";
 
@@ -19,12 +20,9 @@ const Play: NextPageWithLayout = () => {
   });
   const queryResult = router.query;
 
-  const loading =
-    queryResult.status === "loading" || userResult.status === "loading";
-
-  if (loading) {
+  if (isLoading(queryResult) || isLoading(userResult)) {
     return <AppLoading />;
-  } else if (queryResult.status === "error") {
+  } else if (isErr(queryResult)) {
     return <Redirect href={routes.rootPage} />;
   } else {
     const { id, redirectTo, ...settings } = queryResult.data;

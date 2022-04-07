@@ -7,6 +7,7 @@ import { Link } from "@/components/ui/Link";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { useAuthState } from "@/hooks/useAuthState";
 import { routes } from "@/routes";
+import { isLoading } from "@/types";
 import {
   Box,
   Flex,
@@ -19,13 +20,13 @@ import React, { useMemo } from "react";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 
 type Props = {
-  isLoading?: boolean;
+  loading?: boolean;
   isSignInButtonHidden?: boolean;
   size: "sm" | "md";
 } & FlexProps;
 
 export const Header: React.FC<Props> = ({
-  isLoading,
+  loading,
   isSignInButtonHidden = false,
   size,
   ...styles
@@ -36,7 +37,7 @@ export const Header: React.FC<Props> = ({
     useHeaderStyle(size);
 
   const userInfo = useMemo(() => {
-    if (userResult.status === "loading") {
+    if (isLoading(userResult)) {
       return null;
     } else if (userResult.data) {
       return (
@@ -47,12 +48,7 @@ export const Header: React.FC<Props> = ({
     }
 
     return null;
-  }, [
-    accountIconSize,
-    isSignInButtonHidden,
-    userResult.data,
-    userResult.status,
-  ]);
+  }, [accountIconSize, isSignInButtonHidden, userResult]);
 
   const handleBack = () => {
     router.back();
@@ -97,7 +93,7 @@ export const Header: React.FC<Props> = ({
           hasStripe
           colorScheme="orange"
           height={`${progressHeight}px`}
-          isIndeterminate={isLoading}
+          isIndeterminate={loading}
         />
       </Box>
       <Box h={`${barHeight + progressHeight}px`} flexShrink={0} />

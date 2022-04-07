@@ -42,7 +42,12 @@ export type WithResult<T extends Operation<any, any>> = (
 // そもそもerrorとokを一緒に扱うっていうのが設計的にまずい？
 type LoadingResult = { status: "loading"; data: undefined; error: undefined };
 type OkResult<T> = { status: "ok"; data: T; error: undefined };
-type ErrorResult<E> = { status: "error"; data: undefined; error: E };
+type ErrorResult<E> = {
+  status: "error";
+  data: undefined;
+  error: E | undefined;
+};
+
 export type Result<T, E = undefined> =
   | LoadingResult
   | OkResult<T>
@@ -59,9 +64,21 @@ export const Result = {
     data,
     error: undefined,
   }),
-  Err: <E>(error: E): ErrorResult<E> => ({
+  Err: <E>(error?: E): ErrorResult<E> => ({
     status: "error",
     data: undefined,
     error: error,
   }),
 } as const;
+
+export const isLoading = <T, E>(
+  result: Result<T, E>
+): result is LoadingResult => {
+  return result.status === "loading";
+};
+export const isOk = <T, E>(result: Result<T, E>): result is OkResult<T> => {
+  return result.status === "ok";
+};
+export const isErr = <T, E>(result: Result<T, E>): result is ErrorResult<E> => {
+  return result.status === "error";
+};

@@ -1,4 +1,4 @@
-import { Operation, WithResult } from "@/types";
+import { isErr, Operation, WithResult } from "@/types";
 import { useToast } from "@chakra-ui/react";
 import { useCallback } from "react";
 
@@ -16,7 +16,7 @@ export const useWithAppErrorHandler = <A extends unknown[], R>(
   return useCallback(
     async (...args) => {
       const result = await callback(...args);
-      if (result.status === "error") {
+      if (isErr(result)) {
         toast({ title, description, status: "error" });
       }
       return result;

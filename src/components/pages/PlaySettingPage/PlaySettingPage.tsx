@@ -5,6 +5,7 @@ import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { Redirect } from "@/components/ui/Redirect";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { routes } from "@/routes";
+import { isErr, isLoading } from "@/types";
 import { objectKeys } from "@/utils/ObjectKeys";
 import { Box, Button, Stack, Text, useBreakpointValue } from "@chakra-ui/react";
 import React, { useState } from "react";
@@ -41,7 +42,7 @@ export const PlaySettingPage: React.FC<Props> = ({ userId, deckId }) => {
   };
 
   const handleClick = () => {
-    if (queryResult.status === "loading" || queryResult.status === "error") {
+    if (isLoading(queryResult) || isErr(queryResult)) {
       return;
     }
     const redirectTo = queryResult.data.redirectTo;
@@ -55,9 +56,9 @@ export const PlaySettingPage: React.FC<Props> = ({ userId, deckId }) => {
     });
   };
 
-  if (queryResult.status === "loading") {
+  if (isLoading(queryResult)) {
     return null;
-  } else if (queryResult.status === "error") {
+  } else if (isErr(queryResult)) {
     return <Redirect href={routes.rootPage} />;
   }
 

@@ -11,24 +11,20 @@ type DocData<T> = Result<T | undefined, FirestoreError>;
 export const useFirestoreDocData = <T,>(
   query: DocumentReference<T>
 ): DocData<T> => {
-  const [data, setData] = useState<DocData<T>>({
-    status: "loading",
-    data: undefined,
-    error: undefined,
-  });
+  const [data, setData] = useState<DocData<T>>(Result.Loading());
 
   useEffect(() => {
     const unsubscribe = onSnapshot(query, {
       next: (snap) => {
-        setData({ status: "ok", data: snap.data(), error: undefined });
+        setData(Result.Ok(snap.data()));
       },
       error: (error) => {
-        setData({ status: "error", data: undefined, error: error });
+        setData(Result.Err(error));
       },
     });
 
     return () => {
-      setData({ status: "loading", data: undefined, error: undefined });
+      setData(Result.Loading());
       unsubscribe();
     };
   }, [query]);

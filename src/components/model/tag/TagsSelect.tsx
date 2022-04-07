@@ -2,7 +2,7 @@ import { DeckFormFields } from "@/components/model/deck/DeckForm/useDeckForm";
 import { UseTagsResult } from "@/components/model/tag/useTags";
 import { CreatableSelect } from "@/components/ui/CreatableSelect";
 import { useConfirm } from "@/context/ConfirmContext";
-import { Result, Tag } from "@/types";
+import { isOk, Result, Tag } from "@/types";
 import {
   Box,
   BoxProps,
@@ -126,7 +126,7 @@ export const TagsSelect: React.FC<TagSelectProps> = ({
                 setIsLoading(true);
                 const newTag = { id: uuid(), name };
                 const result = await onAddTag(newTag);
-                if (result.status === "ok") {
+                if (isOk(result)) {
                   field.onChange([...field.value, newTag]);
                 }
                 setIsLoading(false);

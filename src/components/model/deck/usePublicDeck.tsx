@@ -2,7 +2,7 @@ import { UseDeckResult } from "@/components/model/deck/useDeck";
 import { db } from "@/firebase/config";
 import { cardConverter, deckConverter } from "@/firebase/firestoreConverters";
 import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
-import { Deck } from "@/types";
+import { Deck, isErr, isLoading, Result } from "@/types";
 import { collectionGroup, orderBy, query, where } from "firebase/firestore";
 import { useMemo } from "react";
 
@@ -32,23 +32,18 @@ export const usePublicDeck = (deckId: string) => {
   const publicCardsResult = useFirestoreCollectionData(publicCardsQuery);
 
   const publicDeck = useMemo((): UseDeckResult => {
-    if (
-      publicDecksResult.status === "error" ||
-      publicCardsResult.status === "error"
-    ) {
-      return { status: "error", data: undefined, error: "unknown" };
+    if (isErr(publicDecksResult) || isErr(publicCardsResult)) {
+      return Result.Err("unknown");
     }
 
-    if (
-      publicDecksResult.status === "loading" ||
-      publicCardsResult.status === "loading"
-    ) {
-      return { status: "loading", data: undefined, error: undefined };
+    if (isLoading(publicDecksResult) || isLoading(publicCardsResult)) {
+      return Result.Loading();
     }
+
     const firestoreDeck = publicDecksResult.data[0];
     const firestoreCards = publicCardsResult.data;
     if (!firestoreDeck) {
-      return { status: "error", data: undefined, error: "not-found" };
+      return Result.Err("not-found");
     }
 
     const deck: Deck = {
@@ -61,13 +56,8 @@ export const usePublicDeck = (deckId: string) => {
       tagIds: [],
     };
 
-    return { status: "ok", data: deck, error: undefined };
-  }, [
-    publicCardsResult.data,
-    publicCardsResult.status,
-    publicDecksResult.data,
-    publicDecksResult.status,
-  ]);
+    return Result.Ok(deck);
+  }, [publicCardsResult, publicDecksResult]);
 
   return publicDeck;
 };

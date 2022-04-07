@@ -13,19 +13,15 @@ import { useCallback, useEffect, useState } from "react";
 export type UserResult = Result<User | null>;
 
 export const useAuthState = () => {
-  const [userResult, setUserResult] = useState<UserResult>({
-    status: "loading",
-    data: undefined,
-    error: undefined,
-  });
+  const [userResult, setUserResult] = useState<UserResult>(Result.Loading());
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, {
       next: (user) => {
-        setUserResult({ status: "ok", data: user, error: undefined });
+        setUserResult(Result.Ok(user));
       },
       error: (error) => {
-        setUserResult({ status: "error", data: undefined, error: undefined });
+        setUserResult(Result.Err());
       },
       complete: () => {},
     });

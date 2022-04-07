@@ -1,6 +1,6 @@
 import { useMyDeck } from "@/components/model/deck/useMyDeck";
 import { usePublicDeck } from "@/components/model/deck/usePublicDeck";
-import { Deck, Result } from "@/types";
+import { Deck, isErr, isLoading, isOk, Result } from "@/types";
 import { displayErrors } from "@/utils/displayError";
 import { useMemo } from "react";
 
@@ -16,26 +16,26 @@ export const useDeck = (userId: string | undefined, deckId: string) => {
       return publicDeck;
     }
 
-    if (myDeck.status === "loading" || publicDeck.status === "loading") {
-      return { status: "loading", data: undefined, error: undefined };
+    if (isLoading(myDeck) || isLoading(publicDeck)) {
+      return Result.Loading();
     }
-    if (myDeck.status === "error" && publicDeck.status === "error") {
+    if (isErr(myDeck) && isErr(publicDeck)) {
       displayErrors(myDeck.error, publicDeck.error);
-      return { status: "error", data: undefined, error: "unknown" };
+      return Result.Err("unknown");
     }
-    if (myDeck.status === "ok" && publicDeck.status === "ok") {
+    if (isOk(myDeck) && isOk(publicDeck)) {
       return myDeck;
     }
 
-    if (myDeck.status === "ok") {
+    if (isOk(myDeck)) {
       return myDeck;
     }
-    if (publicDeck.status === "ok") {
+    if (isOk(publicDeck)) {
       return publicDeck;
     }
 
-    // ここには到達しない？
-    return { status: "error", data: undefined, error: "unknown" };
+    // ここには到達しないと思うけど、型で表現できなかった
+    return Result.Err("unknown");
   }, [myDeck, publicDeck, userId]);
 
   return deck;

@@ -40,7 +40,7 @@ export const AppTemplate: React.FC<Props> = ({
         bgSize="cover"
       >
         <Header
-          isLoading={isLoading}
+          loading={isLoading}
           size={size}
           isSignInButtonHidden={isSignInButtonHidden}
         />

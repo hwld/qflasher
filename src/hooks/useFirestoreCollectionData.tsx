@@ -7,28 +7,20 @@ type CollectionData<T> = Result<T[], FirestoreError>;
 export const useFirestoreCollectionData = <T,>(
   query: Query<T>
 ): CollectionData<T> => {
-  const [data, setData] = useState<CollectionData<T>>({
-    status: "loading",
-    data: undefined,
-    error: undefined,
-  });
+  const [data, setData] = useState<CollectionData<T>>(Result.Loading());
 
   useEffect(() => {
     const unsubscribe = onSnapshot(query, {
       next: (snap) => {
-        setData({
-          status: "ok",
-          data: snap.docs.map((d) => d.data()),
-          error: undefined,
-        });
+        setData(Result.Ok(snap.docs.map((d) => d.data())));
       },
       error: (error) => {
-        setData({ status: "error", data: undefined, error });
+        setData(Result.Err(error));
       },
     });
 
     return () => {
-      setData({ status: "loading", data: undefined, error: undefined });
+      setData(Result.Loading());
       unsubscribe();
     };
   }, [query]);

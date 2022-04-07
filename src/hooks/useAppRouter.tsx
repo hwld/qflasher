@@ -23,7 +23,7 @@ export const useAppRouter = <T extends Route>(
 
   const query = useMemo((): Result<Query[T]> => {
     if (!router.isReady) {
-      return { status: "loading", data: undefined, error: undefined };
+      return Result.Loading();
     }
     const parsed = parseQuery(router.query);
 
@@ -33,20 +33,17 @@ export const useAppRouter = <T extends Route>(
       // Nightlyだとエラーが出ないのでそのうち解消されそう
       !queries[currentPage as Route].is(parsed)
     ) {
-      return { status: "error", data: undefined, error: undefined };
+      return Result.Err();
     }
 
     // queries[T].is()ってやってもQuery[T]に推論されないため、asを使った。
     // バグの温床になりそう
     const queryData = parsed as Query[T];
     if (validateQuery && !validateQuery(queryData)) {
-      return { status: "error", data: undefined, error: undefined };
+      return Result.Err();
     }
-    return {
-      status: "ok",
-      data: queryData,
-      error: undefined,
-    };
+
+    return Result.Ok(queryData);
   }, [currentPage, validateQuery, router.isReady, router.query]);
 
   return { ...router, push, query };
