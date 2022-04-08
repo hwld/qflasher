@@ -1,10 +1,10 @@
 import { DeckFormBox } from "@/components/model/deck/DeckForm/DeckFormBox";
 import { DeckFormInput } from "@/components/model/deck/DeckForm/DeckFormInput";
 import { useDeckForm } from "@/components/model/deck/DeckForm/useDeckForm";
-import { FlashCardEditor } from "@/components/model/flashCard/FlashCardEditor/FlashCardEditor";
+import { DeckCardEditor } from "@/components/model/deckCard/DeckCardEditor/DeckCardEditor";
 import { TagSelectProps, TagsSelect } from "@/components/model/tag/TagsSelect";
 import { useDebounce } from "@/hooks/useDebounce";
-import { Deck, FlashCard, Tag } from "@/models";
+import { Deck, DeckCard, Tag } from "@/models";
 import { Box, Text } from "@chakra-ui/layout";
 import { Button, Checkbox, Icon, useToast } from "@chakra-ui/react";
 import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
@@ -18,7 +18,7 @@ export type DeckFormProps = {
   defaultDeck?: Deck;
   formId: string;
   // ctrl+EnterでもSubmitされるようにする
-  onSubmit: (arg: { newDeck: Deck; oldCards: FlashCard[] }) => void;
+  onSubmit: (arg: { newDeck: Deck; oldCards: DeckCard[] }) => void;
   onAddTag: TagSelectProps["onAddTag"];
   onDeleteTag: TagSelectProps["onDeleteTag"];
 };
@@ -270,7 +270,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
             <Box {...provided.droppableProps} ref={provided.innerRef}>
               {cardFields.map((field, i) => {
                 return (
-                  <FlashCardEditor
+                  <DeckCardEditor
                     mt={2}
                     index={i}
                     formControl={control}

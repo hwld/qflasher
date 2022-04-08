@@ -1,7 +1,7 @@
-import { FlashCardStackItem } from "@/components/model/flashCard/FlashCardStackItem/FlashCardStackItem";
-import { ResultItem } from "@/components/model/flashCard/FlashCardStackItem/ResultItem";
+import { DeckCardStackItem } from "@/components/model/deckCard/DeckCardStackItem/DeckCardStackItem";
+import { ResultItem } from "@/components/model/deckCard/DeckCardStackItem/ResultItem";
 import { AppProgress } from "@/components/ui/AppProgress";
-import { FlashCard } from "@/models";
+import { DeckCard } from "@/models";
 import { Box, BoxProps } from "@chakra-ui/react";
 import React from "react";
 
@@ -9,13 +9,13 @@ type Props = {
   size: "sm" | "md";
   totalCardsCount: number;
   rightAnswersCount: number;
-  cards: FlashCard[];
+  cards: DeckCard[];
   progress: number;
   initialFront: "question" | "answer";
   topFront: "question" | "answer";
 } & Omit<BoxProps, "size">;
 
-export const FlashCardStack: React.FC<Props> = ({
+export const DeckCardStack: React.FC<Props> = ({
   size,
   totalCardsCount,
   rightAnswersCount,
@@ -46,7 +46,7 @@ export const FlashCardStack: React.FC<Props> = ({
         cards
           .slice(-2)
           .map((card) => (
-            <FlashCardStackItem
+            <DeckCardStackItem
               size={size}
               key={card.id}
               initialFront={initialFront}

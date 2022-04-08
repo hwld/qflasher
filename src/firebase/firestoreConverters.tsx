@@ -1,11 +1,11 @@
-import { DeckWithoutCards, FlashCard, PrivateFieldOnDeck, Tag } from "@/models";
+import { DeckCard, DeckWithoutCards, PrivateFieldOnDeck, Tag } from "@/models";
 import { FirestoreDataConverter, Timestamp } from "firebase/firestore";
 
 export type FirestoreDeck = Omit<DeckWithoutCards, "tagIds"> & {
   uid: string;
   createdAt: Timestamp;
 };
-export type FirestoreFlashCard = FlashCard & {
+export type FirestoreDeckCard = DeckCard & {
   index: number;
   deckId: string;
   uid: string;
@@ -56,10 +56,10 @@ export const privateFieldOnDeckConverter: FirestoreDataConverter<PrivateFieldOnD
     },
   };
 
-export const cardConverter: FirestoreDataConverter<FirestoreFlashCard> = {
+export const cardConverter: FirestoreDataConverter<FirestoreDeckCard> = {
   fromFirestore: (snapshot, options) => {
     const card = snapshot.data(options)!;
-    const data: FirestoreFlashCard = {
+    const data: FirestoreDeckCard = {
       id: card.id,
       deckId: card.deckId,
       index: card.index,
@@ -71,7 +71,7 @@ export const cardConverter: FirestoreDataConverter<FirestoreFlashCard> = {
     return data;
   },
   toFirestore: (card) => {
-    const firestoreCard: { [T in keyof FirestoreFlashCard]: typeof card[T] } = {
+    const firestoreCard: { [T in keyof FirestoreDeckCard]: typeof card[T] } = {
       id: card.id,
       deckId: card.deckId,
       index: card.index,

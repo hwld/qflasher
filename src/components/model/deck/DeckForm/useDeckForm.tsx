@@ -1,4 +1,4 @@
-import { Deck, FlashCard, Tag } from "@/models";
+import { Deck, DeckCard, Tag } from "@/models";
 import { first, isFirst, isLast, last, next, prev } from "@/utils/array";
 import { useCallback } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -6,7 +6,7 @@ import { v4 as uuid } from "uuid";
 
 export type DeckFormFields = {
   name: string;
-  cards: (Omit<FlashCard, "id"> & { cardId: string })[] | undefined;
+  cards: (Omit<DeckCard, "id"> & { cardId: string })[] | undefined;
   tags: Tag[];
   published: boolean;
 };
@@ -50,7 +50,7 @@ export const useDeckForm = (defaultDeck: Deck, allTags: Tag[]) => {
   const handleSubmit = useCallback(
     (callback: (deck: Omit<Deck, "id" | "uid">) => void) => {
       return innerHandleSubmit((fields) => {
-        let cards: FlashCard[] =
+        let cards: DeckCard[] =
           fields.cards?.map(({ cardId, question, answer }, i) => ({
             id: cardId,
             question,

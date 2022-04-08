@@ -1,6 +1,6 @@
 import { OperationBar } from "@/components/model/deck/DeckPlayer/OperationBar";
 import { useDeckPlayerState } from "@/components/model/deck/DeckPlayer/useDeckPlayerState";
-import { FlashCardStack } from "@/components/model/flashCard/FlashCardStack";
+import { DeckCardStack } from "@/components/model/deckCard/DeckCardStack";
 import { DeckPlaySettings } from "@/components/pages/DeckPlayerPage";
 import { Deck } from "@/models";
 import { Route } from "@/routes";
@@ -37,7 +37,7 @@ export const DeckPlayer: React.FC<Props> = ({
 
   return (
     <Grid templateRows="1fr auto" {...styles}>
-      <FlashCardStack
+      <DeckCardStack
         maxW="1000px"
         w="100%"
         mx="auto"

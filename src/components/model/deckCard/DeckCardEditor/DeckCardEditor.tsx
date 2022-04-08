@@ -4,7 +4,7 @@ import {
   DeckFormFields,
   useDeckForm,
 } from "@/components/model/deck/DeckForm/useDeckForm";
-import { CardEditorHeader } from "@/components/model/flashCard/FlashCardEditor/FlashCardEditorHeader";
+import { CardEditorHeader } from "@/components/model/deckCard/DeckCardEditor/DeckCardEditorHeader";
 import { BoxProps, Stack } from "@chakra-ui/react";
 import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
 import { Draggable } from "react-beautiful-dnd";
@@ -21,7 +21,7 @@ type Props = {
   onDelete: (id: string) => void;
 } & Omit<BoxProps, "defaultValue">;
 
-export const FlashCardEditor: React.FC<Props> = ({
+export const DeckCardEditor: React.FC<Props> = ({
   index,
   id,
   formControl,

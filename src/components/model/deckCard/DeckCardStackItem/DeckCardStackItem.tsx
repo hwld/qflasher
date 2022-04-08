@@ -1,17 +1,17 @@
-import { OneSideFlashCardItem } from "@/components/model/flashCard/FlashCardStackItem/OneSideFlashCardItem";
-import { FlashCard } from "@/models";
+import { OneSideDeckCardItem } from "@/components/model/deckCard/DeckCardStackItem/OneSideDeckCardItem";
+import { DeckCard } from "@/models";
 import { Box, BoxProps } from "@chakra-ui/react";
 import React from "react";
 
 type Props = {
   size: "sm" | "md";
-  card: FlashCard;
+  card: DeckCard;
   initialFront: "question" | "answer";
   front: "question" | "answer";
   isBackground?: boolean;
 } & BoxProps;
 
-export const FlashCardStackItem: React.FC<Props> = ({
+export const DeckCardStackItem: React.FC<Props> = ({
   size,
   card,
   initialFront,
@@ -35,13 +35,13 @@ export const FlashCardStackItem: React.FC<Props> = ({
       boxSize="100%"
       {...styles}
     >
-      <OneSideFlashCardItem
+      <OneSideDeckCardItem
         size={size}
         text={frontText}
         type={frontType}
         isBackground={isBackground}
       />
-      <OneSideFlashCardItem
+      <OneSideDeckCardItem
         size={size}
         transform="rotateY(180deg)"
         text={backText}

@@ -5,7 +5,7 @@ import {
   privateFieldOnDeckConverter,
   tagConverter,
 } from "@/firebase/firestoreConverters";
-import { Deck, FlashCard } from "@/models";
+import { Deck, DeckCard } from "@/models";
 import {
   arrayUnion,
   collection,
@@ -20,7 +20,7 @@ import { useCallback, useMemo } from "react";
 
 export type DeckOperation = {
   addDeck: (deck: Deck) => Promise<unknown>;
-  updateDeck: (newDeck: Deck, oldCards: FlashCard[]) => Promise<unknown>;
+  updateDeck: (newDeck: Deck, oldCards: DeckCard[]) => Promise<unknown>;
   deleteDeck: (id: string) => Promise<unknown>;
   attachTag: (
     deckId: string,
@@ -107,7 +107,7 @@ export const useDeckOperation = (userId: string): DeckOperation => {
   );
 
   const updateDeck: DeckOperation["updateDeck"] = useCallback(
-    async (newDeck: Deck, oldCards: FlashCard[]) => {
+    async (newDeck: Deck, oldCards: DeckCard[]) => {
       const batch = writeBatch(db);
 
       const deckRef = doc(decksRef, newDeck.id);

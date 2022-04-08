@@ -8,7 +8,7 @@ type Props = {
   isBackground?: boolean;
 } & FlexProps;
 
-export const OneSideFlashCardItem: React.FC<Props> = ({
+export const OneSideDeckCardItem: React.FC<Props> = ({
   size,
   text,
   type,

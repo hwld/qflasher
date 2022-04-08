@@ -1,7 +1,7 @@
 export type Deck = {
   id: string;
   name: string;
-  cards: FlashCard[];
+  cards: DeckCard[];
   tagIds: string[];
   cardLength: number;
   published: boolean;
@@ -14,6 +14,6 @@ export type PrivateFieldOnDeck = {
   deckId: string;
 };
 
-export type FlashCard = { id: string; question: string; answer: string };
+export type DeckCard = { id: string; question: string; answer: string };
 
 export type Tag = { id: string; name: string };

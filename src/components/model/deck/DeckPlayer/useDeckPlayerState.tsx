@@ -1,22 +1,22 @@
 import { DeckPlaySettings } from "@/components/pages/DeckPlayerPage";
-import { Deck, FlashCard } from "@/models";
+import { Deck, DeckCard } from "@/models";
 import { assertNever } from "@/utils/assertNever";
 import { shuffle } from "@/utils/shuffle";
 import { Reducer, useReducer } from "react";
 
 type State = {
-  initialCards: FlashCard[];
+  initialCards: DeckCard[];
   settings: DeckPlaySettings;
-  cardStack: FlashCard[];
+  cardStack: DeckCard[];
   rightAnswerCount: number;
-  wrongCards: FlashCard[];
+  wrongCards: DeckCard[];
   totalCardsCount: number;
   progress: number;
   front: "question" | "answer";
 };
 type Action = "trunOver" | "right" | "wrong" | "replayAll" | "replayWrong";
 
-const buildCardStack = (cards: FlashCard[], isOrderRandom: boolean) => {
+const buildCardStack = (cards: DeckCard[], isOrderRandom: boolean) => {
   const stack = isOrderRandom ? shuffle(cards) : cards;
   return [...stack].reverse();
 };
