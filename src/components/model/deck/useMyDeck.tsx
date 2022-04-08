@@ -7,7 +7,8 @@ import {
 } from "@/firebase/firestoreConverters";
 import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
 import { useFirestoreDocData } from "@/hooks/useFirestoreDocData";
-import { Deck, isErr, isLoading, Result } from "@/types";
+import { Deck } from "@/models";
+import { isErr, isLoading, Result } from "@/utils/result";
 import {
   collection,
   collectionGroup,

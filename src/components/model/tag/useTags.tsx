@@ -4,7 +4,7 @@ import {
   tagConverter,
 } from "@/firebase/firestoreConverters";
 import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
-import { Tag } from "@/types";
+import { Tag } from "@/models";
 import {
   collection,
   collectionGroup,

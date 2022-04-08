@@ -2,8 +2,8 @@ import { OperationBar } from "@/components/model/deck/DeckPlayer/OperationBar";
 import { useDeckPlayerState } from "@/components/model/deck/DeckPlayer/useDeckPlayerState";
 import { FlashCardStack } from "@/components/model/flashCard/FlashCardStack";
 import { DeckPlaySettings } from "@/components/pages/DeckPlayerPage";
+import { Deck } from "@/models";
 import { Route } from "@/routes";
-import { Deck } from "@/types";
 import { Grid, GridProps } from "@chakra-ui/react";
 import React from "react";
 

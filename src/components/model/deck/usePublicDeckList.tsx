@@ -1,8 +1,9 @@
 import { db } from "@/firebase/config";
 import { deckConverter } from "@/firebase/firestoreConverters";
 import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
-import { DeckWithoutCards, isErr, isLoading, Result } from "@/types";
+import { DeckWithoutCards } from "@/models";
 import { displayErrors } from "@/utils/displayError";
+import { isErr, isLoading, Result } from "@/utils/result";
 import { collectionGroup, orderBy, query, where } from "firebase/firestore";
 import { useMemo } from "react";
 

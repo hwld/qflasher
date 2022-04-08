@@ -1,7 +1,8 @@
 import { useMyDeck } from "@/components/model/deck/useMyDeck";
 import { usePublicDeck } from "@/components/model/deck/usePublicDeck";
-import { Deck, isErr, isLoading, isOk, Result } from "@/types";
+import { Deck } from "@/models";
 import { displayErrors } from "@/utils/displayError";
+import { isErr, isLoading, isOk, Result } from "@/utils/result";
 import { useMemo } from "react";
 
 export type UseDeckResult = Result<Deck, "not-found" | "unknown">;

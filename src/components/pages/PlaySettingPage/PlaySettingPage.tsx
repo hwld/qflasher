@@ -5,8 +5,8 @@ import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { Redirect } from "@/components/ui/Redirect";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { routes } from "@/routes";
-import { isErr, isLoading } from "@/types";
 import { objectKeys } from "@/utils/ObjectKeys";
+import { isErr, isLoading } from "@/utils/result";
 import { Box, Button, Stack, Text, useBreakpointValue } from "@chakra-ui/react";
 import React, { useState } from "react";
 

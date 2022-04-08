@@ -1,4 +1,4 @@
-import { Result } from "@/types";
+import { Result } from "@/utils/result";
 import { FirestoreError, onSnapshot, Query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 

@@ -6,8 +6,8 @@ import { useAppRouter } from "@/hooks/useAppRouter";
 import { useAuthState } from "@/hooks/useAuthState";
 import { NextPageWithLayout } from "@/pages/_app";
 import { routes } from "@/routes";
-import { isErr, isLoading } from "@/types";
 import { isDeckId } from "@/utils/isDeckId";
+import { isErr, isLoading } from "@/utils/result";
 import React from "react";
 
 const Play: NextPageWithLayout = () => {

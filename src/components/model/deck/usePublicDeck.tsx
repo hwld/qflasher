@@ -2,7 +2,8 @@ import { UseDeckResult } from "@/components/model/deck/useDeck";
 import { db } from "@/firebase/config";
 import { cardConverter, deckConverter } from "@/firebase/firestoreConverters";
 import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
-import { Deck, isErr, isLoading, Result } from "@/types";
+import { Deck } from "@/models";
+import { isErr, isLoading, Result } from "@/utils/result";
 import { collectionGroup, orderBy, query, where } from "firebase/firestore";
 import { useMemo } from "react";
 

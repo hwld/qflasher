@@ -4,7 +4,7 @@ import { useDeckForm } from "@/components/model/deck/DeckForm/useDeckForm";
 import { FlashCardEditor } from "@/components/model/flashCard/FlashCardEditor/FlashCardEditor";
 import { TagSelectProps, TagsSelect } from "@/components/model/tag/TagsSelect";
 import { useDebounce } from "@/hooks/useDebounce";
-import { Deck, FlashCard, Tag } from "@/types";
+import { Deck, FlashCard, Tag } from "@/models";
 import { Box, Text } from "@chakra-ui/layout";
 import { Button, Checkbox, Icon, useToast } from "@chakra-ui/react";
 import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";

@@ -1,4 +1,5 @@
-import { Operation, Result, WithResult } from "@/types";
+import { Operation, WithResult } from "@/types";
+import { Result } from "@/utils/result";
 import { useCallback } from "react";
 
 export const useWithResult = <A extends unknown[], R>(

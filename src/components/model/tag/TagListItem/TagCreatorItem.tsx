@@ -7,7 +7,7 @@ import {
   TagListItemLayoutProps,
 } from "@/components/model/tag/TagListItem/TagListItemBase";
 import { UseTagListItemsResult } from "@/components/model/tag/TagListItem/useTagListItems";
-import { isErr } from "@/types";
+import { isErr } from "@/utils/result";
 import React from "react";
 
 export type TagCreatorProps = {

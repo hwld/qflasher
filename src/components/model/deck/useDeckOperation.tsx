@@ -5,7 +5,7 @@ import {
   privateFieldOnDeckConverter,
   tagConverter,
 } from "@/firebase/firestoreConverters";
-import { Deck, FlashCard } from "@/types";
+import { Deck, FlashCard } from "@/models";
 import {
   arrayUnion,
   collection,

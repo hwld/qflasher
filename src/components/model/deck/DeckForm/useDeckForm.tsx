@@ -1,4 +1,4 @@
-import { Deck, FlashCard, Tag } from "@/types";
+import { Deck, FlashCard, Tag } from "@/models";
 import { first, isFirst, isLast, last, next, prev } from "@/utils/array";
 import { useCallback } from "react";
 import { useFieldArray, useForm } from "react-hook-form";

@@ -1,5 +1,5 @@
 import { parseQuery, queries, Query, Route } from "@/routes";
-import { Result } from "@/types";
+import { Result } from "@/utils/result";
 import { useRouter } from "next/dist/client/router";
 import { useMemo } from "react";
 

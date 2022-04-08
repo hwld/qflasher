@@ -3,7 +3,7 @@ import { GoogleSignInButton } from "@/components/model/user/SignInForm/GoogleSig
 import { AppLogo } from "@/components/ui/AppLogo";
 import { useAppOperation } from "@/hooks/useAppOperation";
 import { useAuthState } from "@/hooks/useAuthState";
-import { isOk, Result } from "@/types";
+import { isOk, Result } from "@/utils/result";
 import {
   Box,
   BoxProps,

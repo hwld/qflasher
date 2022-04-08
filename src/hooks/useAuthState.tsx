@@ -1,5 +1,5 @@
 import { auth } from "@/firebase/config";
-import { Result } from "@/types";
+import { Result } from "@/utils/result";
 import {
   deleteUser as deleteAccount,
   GoogleAuthProvider,

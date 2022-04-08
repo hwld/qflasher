@@ -1,7 +1,7 @@
 import { FlashCardStackItem } from "@/components/model/flashCard/FlashCardStackItem/FlashCardStackItem";
 import { ResultItem } from "@/components/model/flashCard/FlashCardStackItem/ResultItem";
 import { AppProgress } from "@/components/ui/AppProgress";
-import { FlashCard } from "@/types";
+import { FlashCard } from "@/models";
 import { Box, BoxProps } from "@chakra-ui/react";
 import React from "react";
 

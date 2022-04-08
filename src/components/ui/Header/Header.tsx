@@ -7,7 +7,7 @@ import { Link } from "@/components/ui/Link";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { useAuthState } from "@/hooks/useAuthState";
 import { routes } from "@/routes";
-import { isLoading } from "@/types";
+import { isLoading } from "@/utils/result";
 import {
   Box,
   Flex,

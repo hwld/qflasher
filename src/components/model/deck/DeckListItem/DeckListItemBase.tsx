@@ -1,5 +1,5 @@
 import { DeckCardStyle } from "@/components/model/deck/DeckListItem/useDeckListItemStyle";
-import { DeckWithoutCards } from "@/types";
+import { DeckWithoutCards } from "@/models";
 import { Box, Button, Flex, FlexProps, Text, Tooltip } from "@chakra-ui/react";
 import { forwardRef, ReactNode, useMemo } from "react";
 import { MdPlayArrow } from "react-icons/md";

@@ -1,5 +1,5 @@
 import { DeckPlaySettings } from "@/components/pages/DeckPlayerPage";
-import { Deck, FlashCard } from "@/types";
+import { Deck, FlashCard } from "@/models";
 import { assertNever } from "@/utils/assertNever";
 import { shuffle } from "@/utils/shuffle";
 import { Reducer, useReducer } from "react";

@@ -5,7 +5,7 @@ import { Redirect } from "@/components/ui/Redirect";
 import { useAuthState } from "@/hooks/useAuthState";
 import { NextPageWithLayout } from "@/pages/_app";
 import { routes } from "@/routes";
-import { isLoading } from "@/types";
+import { isLoading } from "@/utils/result";
 import React from "react";
 
 const Create: NextPageWithLayout = () => {

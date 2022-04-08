@@ -6,10 +6,10 @@ import {
   TagListItemBase,
   TagListItemLayoutProps,
 } from "@/components/model/tag/TagListItem/TagListItemBase";
-import { useConfirm } from "@/context/ConfirmContext";
 import { useTagDrag } from "@/components/model/tag/useTagDnD";
 import { UseTagsResult } from "@/components/model/tag/useTags";
-import { Tag } from "@/types";
+import { useConfirm } from "@/context/ConfirmContext";
+import { Tag } from "@/models";
 import { Box, Flex, Text } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/react";
 import React, { SyntheticEvent, useEffect, useState } from "react";

@@ -4,12 +4,12 @@ import {
 } from "@/components/model/deck/DeckListItem/DeckListItem";
 import { PlayOnlyDeckListItem } from "@/components/model/deck/DeckListItem/PlayOnlyDeckListItem";
 import { useDeckCardStyle } from "@/components/model/deck/DeckListItem/useDeckListItemStyle";
+import { DeckWithoutCards } from "@/models";
 import { Route } from "@/routes";
-import { DeckWithoutCards } from "@/types";
 import { FlexProps, Grid } from "@chakra-ui/layout";
 import { useBreakpointValue } from "@chakra-ui/media-query";
 import React, { useMemo } from "react";
-        
+
 export type DeckListProps = {
   decks: DeckWithoutCards[];
   selectedTagId?: string;

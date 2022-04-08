@@ -1,4 +1,4 @@
-import { Result } from "@/types";
+import { Result } from "@/utils/result";
 import {
   DocumentReference,
   FirestoreError,

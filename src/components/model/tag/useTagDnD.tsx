@@ -1,4 +1,4 @@
-import { Tag } from "@/types";
+import { Tag } from "@/models";
 import {
   DragSourceHookSpec,
   DropTargetHookSpec,

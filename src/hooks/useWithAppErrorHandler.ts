@@ -1,4 +1,5 @@
-import { isErr, Operation, WithResult } from "@/types";
+import { Operation, WithResult } from "@/types";
+import { isErr } from "@/utils/result";
 import { useToast } from "@chakra-ui/react";
 import { useCallback } from "react";
 

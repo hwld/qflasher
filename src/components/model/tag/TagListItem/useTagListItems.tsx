@@ -1,4 +1,5 @@
-import { Result, Tag } from "@/types";
+import { Tag } from "@/models";
+import { Result } from "@/utils/result";
 import { useCallback, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 
