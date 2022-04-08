@@ -1,11 +1,10 @@
+import { DragTagLayer } from "@/components/model/tag/DragTagLayer";
 import {
   TagListItem,
   TagListItemProps,
 } from "@/components/model/tag/TagListItem/TagListItem";
 import { TagListItemType } from "@/components/model/tag/TagListItem/useTagListItems";
-import { useDraggingTag } from "@/components/model/tag/useTagDnD";
-import { Box, ListProps, UnorderedList } from "@chakra-ui/layout";
-import { Tag } from "@chakra-ui/react";
+import { ListProps, UnorderedList } from "@chakra-ui/layout";
 import React from "react";
 
 export type TagListProps = {
@@ -30,8 +29,6 @@ export const TagList: React.FC<TagListProps> = ({
   onDeleteTag,
   ...styles
 }) => {
-  const dragObj = useDraggingTag();
-
   return (
     <UnorderedList listStyleType="none" m={0} p={0} {...styles}>
       {tagListItems.map((tag) => {
@@ -50,20 +47,7 @@ export const TagList: React.FC<TagListProps> = ({
           />
         );
       })}
-      {dragObj && (
-        <Box
-          pos={"fixed"}
-          top={0}
-          left={0}
-          transform={`translate(${dragObj.currentOffset.x + 10}px,${
-            dragObj.currentOffset?.y
-          }px)`}
-          pointerEvents={"none"}
-          zIndex={1}
-        >
-          <Tag>{dragObj.tag.name}</Tag>
-        </Box>
-      )}
+      <DragTagLayer />
     </UnorderedList>
   );
 };
