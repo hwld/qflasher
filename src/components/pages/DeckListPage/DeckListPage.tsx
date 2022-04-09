@@ -12,18 +12,23 @@ import { useAppOperation } from "@/hooks/useAppOperation";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { routes } from "@/routes";
 import { Box, Flex } from "@chakra-ui/react";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { AiFillTags } from "react-icons/ai";
 import { MdAdd } from "react-icons/md";
 
 type DeckListPageProps = { userId: string };
-export type DeckListSideMenuNames = "tags" | "search" | "none";
+const sideMenuNames = ["tags", "search", "none"] as const;
+export type SideMenuNames = typeof sideMenuNames[number];
+export const isSideMenuName = (arg: unknown): arg is SideMenuNames => {
+  return sideMenuNames.includes(arg as any);
+};
 
 export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
   const router = useAppRouter();
   const confirm = useConfirm();
 
-  const { menuSelected, selectMenu } = useSideMenu();
+  const { readMenuSelected, storeMenuSelected } = useSideMenu();
+  const [menuSelected, setMenuSelected] = useState<SideMenuNames>("none");
 
   const { tags, addTag, updateTag, deleteTag } = useTags(userId);
   const [selectedTagId, setSelectedTagId] = useState<string | undefined>();
@@ -37,6 +42,16 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
   const handleUpdateTag = useAppOperation(updateTag);
   const handleDeleteTag = useAppOperation(deleteTag);
   const handleTagDeck = useAttachTagOperation(attachTag);
+
+  useEffect(() => {
+    const init = async () => {
+      const menu = await readMenuSelected();
+      if (menu) {
+        setMenuSelected(menu);
+      }
+    };
+    init();
+  }, [readMenuSelected]);
 
   const handleChangeSearchText = (text: string) => {
     setSearchText(text);
@@ -63,11 +78,13 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
     [confirm, deleteDeckOperation]
   );
 
-  const handleSelectMenu = (name: DeckListSideMenuNames) => {
+  const handleSelectMenu = (name: SideMenuNames) => {
     if (menuSelected === name) {
-      selectMenu("none");
+      storeMenuSelected("none");
+      setMenuSelected("none");
     } else {
-      selectMenu(name);
+      storeMenuSelected(name);
+      setMenuSelected(name);
     }
   };
 

@@ -22,6 +22,7 @@
     "firebase": "^9.1.1",
     "fp-ts": "^2.11.9",
     "framer-motion": "^4",
+    "idb-keyval": "^6.1.0",
     "io-ts": "^2.2.16",
     "next": "11.1.2",
     "react": "17.0.2",

@@ -2,7 +2,7 @@ import { ResizableBox } from "@/components/ui/ResizableBox";
 import { useSideMenu } from "@/context/SideMenuContext";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Box, useBreakpointValue } from "@chakra-ui/react";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 
 type Props<T> = {
   selectedItem:
@@ -21,8 +21,19 @@ export const SideMenuArea = <T extends string>({
   mobileBarWidth,
 }: Props<T>): ReturnType<React.VFC> => {
   const breakPoint = useBreakpointValue({ base: "base", md: "md" } as const);
-  const { storeWidth, initialWidth } = useSideMenu();
+  const { storeWidth, readWidth } = useSideMenu();
   const storeWidthWithDebounce = useDebounce(500, storeWidth);
+  const [initialWidth, setInitialWidth] = useState(0);
+
+  useEffect(() => {
+    const init = async () => {
+      const initialWidth = await readWidth();
+      if (initialWidth) {
+        setInitialWidth(initialWidth);
+      }
+    };
+    init();
+  }, [readWidth]);
 
   if (!selectedItem) {
     return null;

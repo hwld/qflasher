@@ -1,48 +1,75 @@
-import { DeckListSideMenuNames } from "@/components/pages/DeckListPage";
+import { isSideMenuName, SideMenuNames } from "@/components/pages/DeckListPage";
+import { displayErrors } from "@/utils/displayError";
+import { get, update } from "idb-keyval";
 import {
   createContext,
-  Dispatch,
   ReactNode,
-  SetStateAction,
   useCallback,
   useContext,
   useMemo,
-  useState,
 } from "react";
 
 type SideMenuState = {
-  initialWidth: number;
-  menuSelected: DeckListSideMenuNames;
-  selectMenu: Dispatch<SetStateAction<DeckListSideMenuNames>>;
+  readWidth: () => Promise<number | undefined>;
+  readMenuSelected: () => Promise<SideMenuNames | undefined>;
+  storeMenuSelected: (menu: SideMenuNames) => void;
   storeWidth: (width: number) => void;
 };
 
 const SideMenuContext = createContext<SideMenuState | undefined>(undefined);
 
+const defaultState = { menuSelected: "none", initialWidth: 300 } as const;
+
 // 状態をlocalStorageに保存したいためProviderで提供する
 export const SideMenuProvider: React.VFC<{
   children: ReactNode;
 }> = ({ children }) => {
-  const [menuSelected, selectMenu] = useState<DeckListSideMenuNames>("none");
+  const readWidth = useCallback(async (): Promise<number | undefined> => {
+    try {
+      const result = await get<Record<string, unknown>>("sideMenu");
+      if (result && typeof result.initialWidth === "number") {
+        return result.initialWidth;
+      }
+    } catch (e) {
+      displayErrors(e);
+      throw new Error();
+    }
+  }, []);
 
-  const initialWidth = useMemo(() => {
-    // TODO: IDBから読み込みたい
-    return 300;
+  const readMenuSelected = useCallback(async (): Promise<
+    SideMenuNames | undefined
+  > => {
+    try {
+      const result = await get<Record<string, unknown>>("sideMenu");
+      if (result && isSideMenuName(result.menuSelected)) {
+        return result.menuSelected;
+      }
+    } catch (e) {
+      displayErrors(e);
+      throw new Error();
+    }
   }, []);
 
   const storeWidth = useCallback((number) => {
-    //IDBに書き込む
-    console.log("write width");
+    return update("sideMenu", (old = defaultState) => {
+      return { menuSelected: old.menuSelected, initialWidth: number };
+    });
+  }, []);
+
+  const storeMenuSelected = useCallback((menu: SideMenuNames) => {
+    return update("sideMenu", (old = defaultState) => {
+      return { menuSelected: menu, initialWidth: old.initialWidth };
+    });
   }, []);
 
   const state = useMemo(
     (): SideMenuState => ({
-      initialWidth,
-      menuSelected,
-      selectMenu,
+      readWidth,
+      readMenuSelected,
       storeWidth,
+      storeMenuSelected,
     }),
-    [initialWidth, menuSelected, storeWidth]
+    [readMenuSelected, readWidth, storeMenuSelected, storeWidth]
   );
 
   return (
