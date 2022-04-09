@@ -1,15 +1,15 @@
+import { useDeckOperation } from "@/components/model/deck/useDeckOperation";
+import { useMyDeckList } from "@/components/model/deck/useMyDeckList";
 import { TagsSideView } from "@/components/model/tag/TagsSideView";
+import { useAttachTagOperation } from "@/components/model/tag/useAttachTagOperation";
+import { useTags } from "@/components/model/tag/useTags";
 import { DeckListPageMain } from "@/components/pages/DeckListPage";
 import { Fab } from "@/components/ui/Fab";
 import { SideMenu } from "@/components/ui/SideMenu/SideMenu";
 import { useConfirm } from "@/context/ConfirmContext";
-import { useSideMenu, useSideMenuWidth } from "@/context/SideMenuContext";
+import { useSideMenu } from "@/context/SideMenuContext";
 import { useAppOperation } from "@/hooks/useAppOperation";
 import { useAppRouter } from "@/hooks/useAppRouter";
-import { useAttachTagOperation } from "@/components/model/tag/useAttachTagOperation";
-import { useDeckOperation } from "@/components/model/deck/useDeckOperation";
-import { useMyDeckList } from "@/components/model/deck/useMyDeckList";
-import { useTags } from "@/components/model/tag/useTags";
 import { routes } from "@/routes";
 import { Box, Flex } from "@chakra-ui/react";
 import React, { useCallback, useState } from "react";
@@ -23,8 +23,7 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
   const router = useAppRouter();
   const confirm = useConfirm();
 
-  const sideAreaWidth = useSideMenuWidth();
-  const { menuSelected, selectMenu, changeWidth } = useSideMenu();
+  const { menuSelected, selectMenu } = useSideMenu();
 
   const { tags, addTag, updateTag, deleteTag } = useTags(userId);
   const [selectedTagId, setSelectedTagId] = useState<string | undefined>();
@@ -77,8 +76,6 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
       <SideMenu
         selected={menuSelected}
         onSelect={handleSelectMenu}
-        contentWidth={sideAreaWidth}
-        onChangeContentWitdh={changeWidth}
         items={[
           {
             name: "tags",

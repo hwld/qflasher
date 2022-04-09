@@ -3,7 +3,7 @@ import { MouseEventHandler } from "hoist-non-react-statics/node_modules/@types/r
 import React, { useEffect, useRef } from "react";
 
 type Props = {
-  width: number;
+  initialWidth?: number;
   onChangeWidth: (w: number) => void;
   maxW?: string;
   minW?: string;
@@ -11,7 +11,7 @@ type Props = {
 
 export const ResizableBox: React.FC<Props> = ({
   children,
-  width,
+  initialWidth,
   onChangeWidth,
   maxW = 700,
   minW = 300,
@@ -34,7 +34,11 @@ export const ResizableBox: React.FC<Props> = ({
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isMouseDown.current) {
-        onChangeWidth(currentWidth.current + (e.clientX - startX.current));
+        const newWidth = currentWidth.current + (e.clientX - startX.current);
+        onChangeWidth(newWidth);
+        if (handleRef.current) {
+          handleRef.current.style.width = newWidth + "px";
+        }
       }
     };
     const handleMouseUp = () => {
@@ -54,11 +58,10 @@ export const ResizableBox: React.FC<Props> = ({
   return (
     <Flex
       ref={handleRef}
-      w={`${width}px`}
+      w={initialWidth ? `${initialWidth}px` : "auto"}
       h="100%"
       minW={minW}
       maxW={maxW}
-      bgColor={"gray.700"}
       position={"relative"}
       {...styles}
     >

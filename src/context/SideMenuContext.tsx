@@ -4,49 +4,52 @@ import {
   Dispatch,
   ReactNode,
   SetStateAction,
+  useCallback,
   useContext,
   useMemo,
   useState,
 } from "react";
 
-type Width = number;
 type SideMenuState = {
+  initialWidth: number;
   menuSelected: DeckListSideMenuNames;
   selectMenu: Dispatch<SetStateAction<DeckListSideMenuNames>>;
-  changeWidth: Dispatch<SetStateAction<number>>;
+  storeWidth: (width: number) => void;
 };
 
-// ドラッグによってwidthが頻繁に変更されることを想定しているのでContextを分けてみる
-const WidthContext = createContext<Width | undefined>(undefined);
 const SideMenuContext = createContext<SideMenuState | undefined>(undefined);
 
 // 状態をlocalStorageに保存したいためProviderで提供する
 export const SideMenuProvider: React.VFC<{
   children: ReactNode;
 }> = ({ children }) => {
-  const [width, changeWidth] = useState(300);
   const [menuSelected, selectMenu] = useState<DeckListSideMenuNames>("none");
 
+  const initialWidth = useMemo(() => {
+    // TODO: IDBから読み込みたい
+    return 300;
+  }, []);
+
+  const storeWidth = useCallback((number) => {
+    //IDBに書き込む
+    console.log("write width");
+  }, []);
+
   const state = useMemo(
-    () => ({ menuSelected, selectMenu, changeWidth }),
-    [menuSelected]
+    (): SideMenuState => ({
+      initialWidth,
+      menuSelected,
+      selectMenu,
+      storeWidth,
+    }),
+    [initialWidth, menuSelected, storeWidth]
   );
 
   return (
-    <WidthContext.Provider value={width}>
-      <SideMenuContext.Provider value={state}>
-        {children}
-      </SideMenuContext.Provider>
-    </WidthContext.Provider>
+    <SideMenuContext.Provider value={state}>
+      {children}
+    </SideMenuContext.Provider>
   );
-};
-
-export const useSideMenuWidth = () => {
-  const value = useContext(WidthContext);
-  if (!value) {
-    throw new Error("useSideMenuWidth must be used within a SideMenuProvider");
-  }
-  return value;
 };
 
 export const useSideMenu = () => {
