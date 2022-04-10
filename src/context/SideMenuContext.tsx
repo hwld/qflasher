@@ -1,4 +1,7 @@
-import { isSideMenuName, SideMenuNames } from "@/components/pages/DeckListPage";
+import {
+  isSideMenuName,
+  SideMenuName,
+} from "@/components/pages/DeckListPage/DeckListPage";
 import { displayErrors } from "@/utils/displayError";
 import { get, update } from "idb-keyval";
 import {
@@ -11,8 +14,8 @@ import {
 
 type SideMenuState = {
   readWidth: () => Promise<number | undefined>;
-  readMenuSelected: () => Promise<SideMenuNames | undefined>;
-  storeMenuSelected: (menu: SideMenuNames) => void;
+  readMenuSelected: () => Promise<SideMenuName | undefined>;
+  storeMenuSelected: (menu: SideMenuName) => void;
   storeWidth: (width: number) => void;
 };
 
@@ -20,7 +23,6 @@ const SideMenuContext = createContext<SideMenuState | undefined>(undefined);
 
 const defaultState = { menuSelected: "none", initialWidth: 300 } as const;
 
-// 状態をlocalStorageに保存したいためProviderで提供する
 export const SideMenuProvider: React.VFC<{
   children: ReactNode;
 }> = ({ children }) => {
@@ -36,8 +38,14 @@ export const SideMenuProvider: React.VFC<{
     }
   }, []);
 
+  const storeWidth = useCallback((number) => {
+    return update("sideMenu", (old = defaultState) => {
+      return { menuSelected: old.menuSelected, initialWidth: number };
+    });
+  }, []);
+
   const readMenuSelected = useCallback(async (): Promise<
-    SideMenuNames | undefined
+    SideMenuName | undefined
   > => {
     try {
       const result = await get<Record<string, unknown>>("sideMenu");
@@ -50,13 +58,7 @@ export const SideMenuProvider: React.VFC<{
     }
   }, []);
 
-  const storeWidth = useCallback((number) => {
-    return update("sideMenu", (old = defaultState) => {
-      return { menuSelected: old.menuSelected, initialWidth: number };
-    });
-  }, []);
-
-  const storeMenuSelected = useCallback((menu: SideMenuNames) => {
+  const storeMenuSelected = useCallback((menu: SideMenuName) => {
     return update("sideMenu", (old = defaultState) => {
       return { menuSelected: menu, initialWidth: old.initialWidth };
     });

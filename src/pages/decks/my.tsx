@@ -1,4 +1,4 @@
-import { DeckListPage } from "@/components/pages/DeckListPage";
+import { DeckListPage } from "@/components/pages/DeckListPage/DeckListPage";
 import { AppLayoutWithOutSignInButton } from "@/components/ui/AppLayout";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { Redirect } from "@/components/ui/Redirect";

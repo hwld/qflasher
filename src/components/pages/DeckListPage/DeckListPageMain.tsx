@@ -1,36 +1,58 @@
 import { DeckList } from "@/components/model/deck/DeckList";
-import { DeckListItemProps } from "@/components/model/deck/DeckListItem/DeckListItem";
-import { DeckListData } from "@/components/model/deck/useMyDeckList";
+import { useDeckOperation } from "@/components/model/deck/useDeckOperation";
+import { useMyDeckList } from "@/components/model/deck/useMyDeckList";
+import { useAttachTagOperation } from "@/components/model/tag/useAttachTagOperation";
+import { useTags } from "@/components/model/tag/useTags";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { SearchBar } from "@/components/ui/SearchBar";
+import { useConfirm } from "@/context/ConfirmContext";
+import { useAppOperation } from "@/hooks/useAppOperation";
 import { routes } from "@/routes";
 import { Flex, Stack } from "@chakra-ui/layout";
 import { Button, Tag, useBreakpointValue } from "@chakra-ui/react";
 import NextLink from "next/link";
+import { useCallback, useMemo, useState } from "react";
 
 type Props = {
-  deckListData: DeckListData;
-  searchText: string;
+  userId: string;
   selectedTagId: string | undefined;
-  selectedTagName: string | undefined;
-  onChangeSearchText: (text: string) => void;
-  onDeleteDeck: DeckListItemProps["onDeleteDeck"];
-  onTagDeck: DeckListItemProps["onTagDeck"];
 };
 
 export const DeckListPageMain: React.FC<Props> = ({
-  deckListData,
-  searchText,
+  userId,
   selectedTagId,
-  selectedTagName,
-  onChangeSearchText,
-  onDeleteDeck,
-  onTagDeck,
 }) => {
+  const confirm = useConfirm();
+
+  const { getTagName } = useTags(userId);
+  const selectedTagName = useMemo(() => {
+    return getTagName(selectedTagId);
+  }, [getTagName, selectedTagId]);
+
+  const [searchText, setSearchText] = useState("");
+  const useDeckListResult = useMyDeckList(userId);
+  const { deleteDeck, attachTag } = useDeckOperation(userId);
+
+  const deleteDeckOperation = useAppOperation(deleteDeck);
+  const handleTagDeck = useAttachTagOperation(attachTag);
+
+  const handleDeleteDeck = useCallback(
+    async (deckId: string) => {
+      confirm({
+        onContinue: () => deleteDeckOperation(deckId),
+        title: "単語帳の削除",
+        body: "単語帳を削除しますか？",
+        continueText: "削除する",
+        cancelText: "キャンセル",
+      });
+    },
+    [confirm, deleteDeckOperation]
+  );
+
   const tagSize = useBreakpointValue({ base: "md", md: "lg" });
 
-  switch (deckListData.status) {
+  switch (useDeckListResult.status) {
     case "error": {
       return (
         <ErrorMessageBox
@@ -45,7 +67,7 @@ export const DeckListPageMain: React.FC<Props> = ({
       return <AppLoading />;
     }
     case "ok": {
-      const viewDecks = deckListData.data.filter((decks) =>
+      const viewDecks = useDeckListResult.data.filter((decks) =>
         decks.name.includes(searchText)
       );
       return (
@@ -76,15 +98,15 @@ export const DeckListPageMain: React.FC<Props> = ({
                   </Button>
                 </NextLink>
               </Flex>
-              <SearchBar text={searchText} onChange={onChangeSearchText} />
+              <SearchBar text={searchText} onChange={setSearchText} />
             </Stack>
           </Stack>
           <DeckList
             selectedTagId={selectedTagId}
             decks={viewDecks}
             returnRoute={routes.myDecksPage}
-            onDeleteDeck={onDeleteDeck}
-            onTagDeck={onTagDeck}
+            onDeleteDeck={handleDeleteDeck}
+            onTagDeck={handleTagDeck}
           />
         </Stack>
       );

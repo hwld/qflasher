@@ -25,6 +25,7 @@ import { useCallback, useMemo } from "react";
 
 export type UseTagsResult = {
   tags: Tag[];
+  getTagName: (id: string | undefined) => string | undefined;
   addTag: (tag: Tag) => Promise<unknown>;
   updateTag: (newTag: Tag) => Promise<unknown>;
   deleteTag: (id: string) => Promise<unknown>;
@@ -52,6 +53,13 @@ export const useTags = (userId: string): UseTagsResult => {
   const tags: Tag[] = useMemo(() => {
     return tagsData.data ?? [];
   }, [tagsData.data]);
+
+  const getTagName = useCallback(
+    (id: string | undefined): string | undefined => {
+      return tags.find((t) => t.id === id)?.name;
+    },
+    [tags]
+  );
 
   const addTag = useCallback(
     async (tag: Tag) => {
@@ -106,5 +114,5 @@ export const useTags = (userId: string): UseTagsResult => {
     [privateRef, tagsRef, userId]
   );
 
-  return { tags, addTag, updateTag, deleteTag };
+  return { tags, getTagName, addTag, updateTag, deleteTag };
 };
