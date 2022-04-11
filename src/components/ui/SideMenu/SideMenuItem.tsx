@@ -25,7 +25,7 @@ export const SideMenuItem = <T,>({
     <Flex mt={3}>
       <Box w="3px" bgColor={selected ? "green.300" : "transparent"}></Box>
       <Flex justifyContent="center" w="100%">
-        <Tooltip label={label}>
+        <Tooltip label={label} placement="bottom-start">
           <Button
             role="group"
             rounded="full"

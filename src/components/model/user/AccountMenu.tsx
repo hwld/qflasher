@@ -43,7 +43,7 @@ export const AccountMenu: React.FC<Props> = ({ user, ...styles }) => {
 
   return (
     <Menu>
-      <Tooltip label="アカウント">
+      <Tooltip label="アカウント" placement="bottom-end">
         <AccountMenuButton user={user} {...styles} />
       </Tooltip>
 

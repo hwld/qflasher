@@ -21,7 +21,6 @@ export const AccountMenuButton = forwardRef<HTMLButtonElement, Props>(
         color="gray.700"
         rounded="full"
         bgColor="gray.200"
-        overflow={"hidden"}
         _hover={{ bgColor: "gray.300" }}
         _active={{ bgColor: "gray.400" }}
         minW="none"
