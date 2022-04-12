@@ -1,6 +1,7 @@
 import { AppStateProvider } from "@/context/AppStateContext";
 import { theme } from "@/theme/theme";
 import { ChakraProvider } from "@chakra-ui/react";
+import "focus-visible/dist/focus-visible";
 import { NextPage } from "next";
 import type { AppProps } from "next/app";
 import Head from "next/head";
