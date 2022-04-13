@@ -5,6 +5,7 @@ import { DeckCardEditor } from "@/components/model/deckCard/DeckCardEditor/DeckC
 import { TagSelectProps, TagsSelect } from "@/components/model/tag/TagsSelect";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Deck, DeckCard, Tag } from "@/models";
+import { isIME } from "@/utils/isIME";
 import { Box, Text } from "@chakra-ui/layout";
 import { Button, Checkbox, Icon, useToast } from "@chakra-ui/react";
 import React, { KeyboardEvent, KeyboardEventHandler, useEffect } from "react";
@@ -104,6 +105,9 @@ export const DeckForm: React.FC<DeckFormProps> = ({
   };
 
   const handleKeyDownTemplate = (event: KeyboardEvent, handler: () => void) => {
+    if (isIME(event)) {
+      return;
+    }
     if (event.key === "Enter" && event.ctrlKey) {
       handleSubmit(submit)();
       return;

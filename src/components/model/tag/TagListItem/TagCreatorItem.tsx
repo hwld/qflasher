@@ -7,6 +7,7 @@ import {
   TagListItemLayoutProps,
 } from "@/components/model/tag/TagListItem/TagListItemBase";
 import { UseTagListItemsResult } from "@/components/model/tag/TagListItem/useTagListItems";
+import { isIME } from "@/utils/isIME";
 import { isErr } from "@/utils/result";
 import React from "react";
 
@@ -36,12 +37,15 @@ export const TagCreatorItem: React.FC<TagCreatorProps> = ({
   };
 
   const handleKeyDown: EditableTagNameProps["onKeyDown"] = async (
-    { key, ctrlKey },
+    event,
     tagName
   ) => {
-    if (key === "Enter") {
+    if (isIME(event)) {
+      return;
+    }
+    if (event.key === "Enter") {
       await completeCreate(tagName);
-      if (ctrlKey) {
+      if (event.ctrlKey) {
         onAddTagCreator();
       }
     }

@@ -10,6 +10,7 @@ import { useTagDrag } from "@/components/model/tag/useTagDnD";
 import { UseTagsResult } from "@/components/model/tag/useTags";
 import { useConfirm } from "@/context/ConfirmContext";
 import { Tag } from "@/models";
+import { isIME } from "@/utils/isIME";
 import { Box, Flex, Text } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/react";
 import React, { SyntheticEvent, useEffect, useState } from "react";
@@ -54,10 +55,13 @@ export const TagDataItem: React.FC<TagDataProps> = ({
   };
 
   const handleKeyDownEditableTagName: EditableTagNameProps["onKeyDown"] = (
-    { key },
+    event,
     tagName
   ) => {
-    if (key === "Enter") {
+    if (isIME(event)) {
+      return;
+    }
+    if (event.key === "Enter") {
       completeUpdate(tagName);
     }
   };

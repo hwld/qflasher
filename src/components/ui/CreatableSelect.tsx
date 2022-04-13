@@ -1,4 +1,5 @@
 import { useOutsideClick } from "@/hooks/useOutsideClick";
+import { isIME } from "@/utils/isIME";
 import { Box, useMergeRefs } from "@chakra-ui/react";
 import {
   forwardRef,
@@ -103,6 +104,9 @@ export const CreatableSelect = forwardRef(
     const handleKeyDownCapture = (
       event: React.KeyboardEvent<HTMLInputElement>
     ) => {
+      if (isIME(event)) {
+        return;
+      }
       if (event.key === "Enter") {
         event.stopPropagation();
         event.preventDefault();
