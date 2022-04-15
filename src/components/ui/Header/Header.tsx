@@ -1,5 +1,5 @@
-import { AccountMenu } from "@/components/model/user/AccountMenu";
 import { SignInButton } from "@/components/model/user/SignInButton";
+import { UserMenu } from "@/components/model/user/UserMenu";
 import { AppLogo } from "@/components/ui/AppLogo";
 import { AppProgress } from "@/components/ui/AppProgress";
 import { useHeaderStyle } from "@/components/ui/Header/useHeaderStyle";
@@ -33,22 +33,20 @@ export const Header: React.FC<Props> = ({
 }) => {
   const { userResult } = useAuthState();
   const router = useAppRouter();
-  const { barHeight, progressHeight, logoWidth, accountIconSize } =
+  const { barHeight, progressHeight, logoWidth, userIconSize } =
     useHeaderStyle(size);
 
   const userInfo = useMemo(() => {
     if (isLoading(userResult)) {
       return null;
     } else if (userResult.data) {
-      return (
-        <AccountMenu boxSize={`${accountIconSize}px`} user={userResult.data} />
-      );
+      return <UserMenu boxSize={`${userIconSize}px`} user={userResult.data} />;
     } else if (!userResult.data && !isSignInButtonHidden) {
       return <SignInButton />;
     }
 
     return null;
-  }, [accountIconSize, isSignInButtonHidden, userResult]);
+  }, [userIconSize, isSignInButtonHidden, userResult]);
 
   const handleBack = () => {
     router.back();

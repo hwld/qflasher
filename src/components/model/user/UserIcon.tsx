@@ -29,7 +29,7 @@ export const UserIcon: React.FC<Props> = ({ user }) => {
           src={user.photoURL}
           fallback={<></>}
           onError={handleError}
-          alt={"accountIcon"}
+          alt={"userIcon"}
         />
       );
     }

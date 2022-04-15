@@ -5,7 +5,7 @@ import { forwardRef } from "react";
 
 type Props = { user: User } & MenuButtonProps;
 
-export const AccountMenuButton = forwardRef<HTMLButtonElement, Props>(
+export const UserMenuButton = forwardRef<HTMLButtonElement, Props>(
   function Component({ user, ...styles }, ref) {
     return (
       <MenuButton

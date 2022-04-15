@@ -1,7 +1,7 @@
 import { auth } from "@/firebase/config";
 import { Result } from "@/utils/result";
 import {
-  deleteUser as deleteAccount,
+  deleteUser as deleteFirebaseUser,
   GoogleAuthProvider,
   onAuthStateChanged,
   signInAnonymously,
@@ -40,7 +40,7 @@ export const useAuthState = () => {
   const deleteUser = useCallback(() => {
     const user = auth.currentUser;
     if (user) {
-      return deleteAccount(user);
+      return deleteFirebaseUser(user);
     }
     return Promise.reject();
   }, []);

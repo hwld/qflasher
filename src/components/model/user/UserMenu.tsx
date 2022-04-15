@@ -1,4 +1,4 @@
-import { AccountMenuButton } from "@/components/model/user/AccountMenuButton";
+import { UserMenuButton } from "@/components/model/user/UserMenuButton";
 import { useConfirm } from "@/context/ConfirmContext";
 import { useAppOperation } from "@/hooks/useAppOperation";
 import { useAppRouter } from "@/hooks/useAppRouter";
@@ -19,7 +19,7 @@ import { MdExitToApp, MdNoAccounts } from "react-icons/md";
 
 type Props = { user: User } & MenuButtonProps;
 
-export const AccountMenu: React.FC<Props> = ({ user, ...styles }) => {
+export const UserMenu: React.FC<Props> = ({ user, ...styles }) => {
   const router = useAppRouter();
   const { signOut, deleteUser } = useAuthState();
 
@@ -44,7 +44,7 @@ export const AccountMenu: React.FC<Props> = ({ user, ...styles }) => {
   return (
     <Menu>
       <Tooltip label="アカウント" placement="bottom-end">
-        <AccountMenuButton user={user} {...styles} />
+        <UserMenuButton user={user} {...styles} />
       </Tooltip>
 
       <MenuList>
