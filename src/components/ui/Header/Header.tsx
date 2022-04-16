@@ -1,13 +1,10 @@
-import { SignInButton } from "@/components/model/user/SignInButton";
-import { UserMenu } from "@/components/model/user/UserMenu";
 import { AppLogo } from "@/components/ui/AppLogo";
 import { AppProgress } from "@/components/ui/AppProgress";
+import { HeaderActions } from "@/components/ui/Header/HeaderActions";
 import { useHeaderStyle } from "@/components/ui/Header/useHeaderStyle";
 import { Link } from "@/components/ui/Link";
 import { useAppRouter } from "@/hooks/useAppRouter";
-import { useAuthState } from "@/hooks/useAuthState";
 import { routes } from "@/routes";
-import { isLoading } from "@/utils/result";
 import {
   Box,
   Flex,
@@ -16,7 +13,7 @@ import {
   Icon,
   IconButton,
 } from "@chakra-ui/react";
-import React, { useMemo } from "react";
+import React from "react";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 
 type Props = {
@@ -31,22 +28,9 @@ export const Header: React.FC<Props> = ({
   size,
   ...styles
 }) => {
-  const { userResult } = useAuthState();
   const router = useAppRouter();
   const { barHeight, progressHeight, logoWidth, userIconSize } =
     useHeaderStyle(size);
-
-  const userInfo = useMemo(() => {
-    if (isLoading(userResult)) {
-      return null;
-    } else if (userResult.data) {
-      return <UserMenu boxSize={`${userIconSize}px`} user={userResult.data} />;
-    } else if (!userResult.data && !isSignInButtonHidden) {
-      return <SignInButton />;
-    }
-
-    return null;
-  }, [userIconSize, isSignInButtonHidden, userResult]);
 
   const handleBack = () => {
     router.back();
@@ -85,7 +69,10 @@ export const Header: React.FC<Props> = ({
               <AppLogo width={`${logoWidth}px`} />
             </Link>
           </HStack>
-          {userInfo}
+          <HeaderActions
+            userIconSize={userIconSize}
+            isSignInButtonHidden={isSignInButtonHidden}
+          />
         </Flex>
         <AppProgress
           hasStripe
