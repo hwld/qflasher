@@ -13,7 +13,7 @@ import {
   Icon,
   IconButton,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { createContext, useContext } from "react";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 
 type Props = {
@@ -37,7 +37,7 @@ export const Header: React.FC<Props> = ({
   };
 
   return (
-    <>
+    <HeaderContext.Provider value={{ userIconSize, isSignInButtonHidden }}>
       <Box position="fixed" zIndex="sticky">
         <Flex
           bgGradient="linear(to-r, green.400 70%, green.500)"
@@ -69,10 +69,7 @@ export const Header: React.FC<Props> = ({
               <AppLogo width={`${logoWidth}px`} />
             </Link>
           </HStack>
-          <HeaderActions
-            userIconSize={userIconSize}
-            isSignInButtonHidden={isSignInButtonHidden}
-          />
+          <HeaderActions />
         </Flex>
         <AppProgress
           hasStripe
@@ -82,6 +79,23 @@ export const Header: React.FC<Props> = ({
         />
       </Box>
       <Box h={`${barHeight + progressHeight}px`} flexShrink={0} />
-    </>
+    </HeaderContext.Provider>
   );
+};
+
+const HeaderContext = createContext<
+  | {
+      isSignInButtonHidden?: boolean;
+      userIconSize: number;
+    }
+  | undefined
+>(undefined);
+export const useHeaderContext = () => {
+  const context = useContext(HeaderContext);
+  if (!context) {
+    throw new Error(
+      "useHeaderContext must be used within a HeaderContext.Provider"
+    );
+  }
+  return context;
 };

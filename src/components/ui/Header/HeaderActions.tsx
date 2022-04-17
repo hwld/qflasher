@@ -1,18 +1,12 @@
 import { SignInButton } from "@/components/model/user/SignInButton";
 import { UserMenu } from "@/components/model/user/UserMenu";
+import { useHeaderContext } from "@/components/ui/Header/Header";
 import { useAuthState } from "@/hooks/useAuthState";
 import { isLoading } from "@/utils/result";
 
-type Props = {
-  isSignInButtonHidden?: boolean;
-  userIconSize: number;
-};
-
-export const HeaderActions: React.VFC<Props> = ({
-  userIconSize,
-  isSignInButtonHidden,
-}) => {
+export const HeaderActions: React.VFC = () => {
   const { userResult } = useAuthState();
+  const { userIconSize, isSignInButtonHidden } = useHeaderContext();
 
   if (isLoading(userResult)) {
     return null;
