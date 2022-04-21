@@ -30,32 +30,32 @@ const RouteMap = {
     query: t.type({}),
   },
   myDecksPage: {
-    path: "/decks/my",
+    path: "/decks/my/",
     query: t.type({}),
   },
   publicDecksPage: {
-    path: "/decks/public",
+    path: "/decks/public/",
     query: t.type({}),
   },
   createDeckPage: {
-    path: "/decks/create",
+    path: "/decks/create/",
     query: t.type({}),
   },
   editDeckPage: {
-    path: "/decks/edit",
+    path: "/decks/edit/",
     query: t.type({
       id: t.string,
     }),
   },
   playSettingPage: {
-    path: "/decks/play-setting",
+    path: "/decks/play-setting/",
     query: t.intersection([
       t.type({ id: t.string }),
       t.partial({ redirectTo: t.union([t.string, t.undefined]) }),
     ]),
   },
   playDeckPage: {
-    path: "/decks/play",
+    path: "/decks/play/",
     query: t.intersection([
       t.type({
         id: t.string,
@@ -66,11 +66,11 @@ const RouteMap = {
     ]),
   },
   signInPage: {
-    path: "/signIn",
+    path: "/signIn/",
     query: t.type({}),
   },
   notFoundPage: {
-    path: "/404",
+    path: "/404/",
     query: t.type({}),
   },
 } as const;

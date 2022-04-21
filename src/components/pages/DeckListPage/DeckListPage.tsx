@@ -31,7 +31,11 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
       />
       <Box flexGrow={1} overflowY={"scroll"}>
         <DeckListPageMain userId={userId} selectedTagId={selectedTagId} />
-        <Fab tooltipLabel="デッキの追加" onClick={handleAddDeck}>
+        <Fab
+          tooltipLabel="デッキの追加"
+          aria-label="go add deck"
+          onClick={handleAddDeck}
+        >
           <MdAdd size="70%" />
         </Fab>
       </Box>

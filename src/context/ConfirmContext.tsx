@@ -82,10 +82,15 @@ export const ConfirmProvider: React.FC = ({ children }) => {
             <AlertDialogHeader>{title}</AlertDialogHeader>
             <AlertDialogBody>{body}</AlertDialogBody>
             <AlertDialogFooter>
-              <Button ref={ref} onClick={handleClose}>
+              <Button ref={ref} aria-label="cancel" onClick={handleClose}>
                 {cancelText}
               </Button>
-              <Button ml={3} colorScheme="red" onClick={handleApply}>
+              <Button
+                ml={3}
+                colorScheme="red"
+                aria-label="continue"
+                onClick={handleApply}
+              >
                 {continueText}
               </Button>
             </AlertDialogFooter>

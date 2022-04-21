@@ -10,6 +10,7 @@ export const AnonymousSignInButton: React.VFC<ButtonProps> = ({ ...props }) => {
       _hover={{ bgColor: "gray.400" }}
       _active={{ bgColor: "gray.500" }}
       textStyles={{ color: "gray.800", fontSize: "sm" }}
+      aria-label="anonymous signin"
       {...props}
     >
       ゲストとしてログイン

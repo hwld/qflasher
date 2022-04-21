@@ -2,11 +2,11 @@ import {
   DeckForm,
   DeckFormProps,
 } from "@/components/model/deck/DeckForm/DeckForm";
+import { useDeckOperation } from "@/components/model/deck/useDeckOperation";
+import { useTags } from "@/components/model/tag/useTags";
 import { Fab } from "@/components/ui/Fab";
 import { useAppOperation } from "@/hooks/useAppOperation";
 import { useAppRouter } from "@/hooks/useAppRouter";
-import { useDeckOperation } from "@/components/model/deck/useDeckOperation";
-import { useTags } from "@/components/model/tag/useTags";
 import { routes } from "@/routes";
 import { Box } from "@chakra-ui/react";
 import React from "react";
@@ -42,7 +42,12 @@ export const DeckCreatorPage: React.FC<Props> = ({ userId }) => {
           onDeleteTag={handleDeleteTag}
         />
       </Box>
-      <Fab tooltipLabel="作成" type="submit" form={formId}>
+      <Fab
+        tooltipLabel="作成"
+        type="submit"
+        aria-label="add deck"
+        form={formId}
+      >
         <MdSave size="60%" />
       </Fab>
     </Box>

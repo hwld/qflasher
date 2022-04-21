@@ -1,6 +1,14 @@
 import { DeckCardStyle } from "@/components/model/deck/DeckListItem/useDeckListItemStyle";
 import { DeckWithoutCards } from "@/models";
-import { Box, Button, Flex, FlexProps, Text, Tooltip } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  FlexProps,
+  ListItem,
+  Text,
+  Tooltip,
+} from "@chakra-ui/react";
 import { forwardRef, ReactNode, useMemo } from "react";
 import { MdPlayArrow } from "react-icons/md";
 
@@ -39,6 +47,7 @@ export const DeckListItemBase = forwardRef<
     <Flex
       {...styles}
       ref={ref}
+      as={ListItem}
       align="center"
       w={`${ringWidth + cardWidth}px`}
       h={`${height}px`}
@@ -99,6 +108,7 @@ export const DeckListItemBase = forwardRef<
           <Flex>
             <Tooltip label="暗記">
               <Button
+                aria-label="go play settings"
                 boxSize={playButtonSize}
                 rounded="full"
                 colorScheme="green"

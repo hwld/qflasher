@@ -60,10 +60,19 @@ export const DeckListItem: React.FC<DeckListItemProps> = ({
       onPlayDeck={handlePlayDeck}
       menuButtons={
         <>
-          <DeckListItemButton label="削除" onClick={handleDelete}>
+          <DeckListItemButton
+            label="削除"
+            aria-label="delete deck"
+            onClick={handleDelete}
+          >
             <MdDelete size="60%" />
           </DeckListItemButton>
-          <DeckListItemButton ml={2} label="編集" onClick={handleUpdateDeck}>
+          <DeckListItemButton
+            ml={2}
+            label="編集"
+            aria-label="update deck"
+            onClick={handleUpdateDeck}
+          >
             <MdEdit size="60%" />
           </DeckListItemButton>
         </>

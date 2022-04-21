@@ -130,6 +130,7 @@ export const PlaySettingPage: React.FC<Props> = ({ userId, deckId }) => {
               onClick={handleClick}
               colorScheme="green"
               alignSelf={"center"}
+              aria-label="play deck"
             >
               暗記を始める
             </Button>

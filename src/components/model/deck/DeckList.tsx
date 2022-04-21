@@ -8,6 +8,7 @@ import { DeckWithoutCards } from "@/models";
 import { Route } from "@/routes";
 import { FlexProps, Grid } from "@chakra-ui/layout";
 import { useBreakpointValue } from "@chakra-ui/media-query";
+import { List } from "@chakra-ui/react";
 import React, { useMemo } from "react";
 
 export type DeckListProps = {
@@ -66,6 +67,7 @@ export const DeckList: React.VFC<DeckListProps> = ({
 
   return (
     <Grid
+      as={List}
       templateColumns={`repeat(auto-fill,${
         cardStyle.ringWidth + cardStyle.cardWidth
       }px)`}

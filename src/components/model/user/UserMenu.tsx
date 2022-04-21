@@ -44,7 +44,7 @@ export const UserMenu: React.FC<Props> = ({ user, ...styles }) => {
   return (
     <Menu>
       <Tooltip label="アカウント" placement="bottom-end">
-        <UserMenuButton user={user} {...styles} />
+        <UserMenuButton user={user} aria-label="user" {...styles} />
       </Tooltip>
 
       <MenuList>
@@ -61,6 +61,7 @@ export const UserMenu: React.FC<Props> = ({ user, ...styles }) => {
         <MenuItem
           icon={<MdNoAccounts size="20px" />}
           onClick={handleUserDelete}
+          aria-label="delete user"
         >
           アカウントを削除する
         </MenuItem>

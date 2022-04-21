@@ -12,6 +12,7 @@ export const GoogleSignInButton: React.FC<Props> = ({ ...props }) => {
       bgColor="#4285F4"
       _hover={{ bgColor: "#3275E4" }}
       _active={{ bgColor: "#2265D4" }}
+      aria-label="google signin"
       {...props}
     >
       Sign in with Google
