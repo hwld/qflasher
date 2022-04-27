@@ -1,3 +1,4 @@
+import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
 import { AppStateProvider } from "@/context/AppStateContext";
 import { theme } from "@/theme/theme";
 import { ChakraProvider } from "@chakra-ui/react";
@@ -29,20 +30,25 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page: ReactElement) => page);
 
   return (
-    <NoSSR>
-      <Head>
-        {/* documentに書かない理由  */}
-        {/* https://nextjs.org/docs/messages/no-document-title */}
-        {/* https://nextjs.org/docs/messages/no-document-viewport-meta */}
-        <title>Qflasher</title>
-        <meta name="viewport" content="initial-scale=1.0,width=device-width" />
-      </Head>
-      <ChakraProvider theme={theme}>
-        <AppStateProvider>
-          {getLayout(<Component {...pageProps} />)}
-        </AppStateProvider>
-      </ChakraProvider>
-    </NoSSR>
+    <ErrorBoundary>
+      <NoSSR>
+        <Head>
+          {/* documentに書かない理由  */}
+          {/* https://nextjs.org/docs/messages/no-document-title */}
+          {/* https://nextjs.org/docs/messages/no-document-viewport-meta */}
+          <title>Qflasher</title>
+          <meta
+            name="viewport"
+            content="initial-scale=1.0,width=device-width"
+          />
+        </Head>
+        <ChakraProvider theme={theme}>
+          <AppStateProvider>
+            {getLayout(<Component {...pageProps} />)}
+          </AppStateProvider>
+        </ChakraProvider>
+      </NoSSR>
+    </ErrorBoundary>
   );
 }
 export default MyApp;
