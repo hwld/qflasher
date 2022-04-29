@@ -71,14 +71,20 @@ export const DeckListPageMain: React.FC<Props> = ({
         decks.name.includes(searchText)
       );
       return (
-        <Stack mt={5} spacing={5}>
+        // 5
+        <Stack
+          mt={5}
+          ml={{ base: 4, md: 12 }}
+          mr={{ base: 4, md: 5 }}
+          spacing={5}
+        >
           <Stack
             w={"90%"}
             maxW={"600px"}
             bgColor={"gray.600"}
             p={5}
             rounded={"md"}
-            mx={"auto"}
+            ml={"25px"}
           >
             <Stack spacing={5}>
               <Flex justify={"space-between"} flexWrap={"wrap"} gridGap={3}>
@@ -107,6 +113,7 @@ export const DeckListPageMain: React.FC<Props> = ({
             returnRoute={routes.myDecksPage}
             onDeleteDeck={handleDeleteDeck}
             onTagDeck={handleTagDeck}
+            styleProps={{ justifyContent: "flex-start" }}
           />
         </Stack>
       );

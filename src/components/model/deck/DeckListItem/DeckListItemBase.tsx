@@ -61,7 +61,6 @@ export const DeckListItemBase = forwardRef<
         borderRight="none"
         borderLeftRadius={`${ringWidth}px`}
         bgColor="gray.700"
-        boxShadow="dark-lg"
       />
       <Flex
         w={`${cardWidth}px`}
@@ -70,9 +69,9 @@ export const DeckListItemBase = forwardRef<
         rounded="2xl"
         direction="column"
         justify="space-between"
+        boxShadow={"lg"}
         py={2}
         px={3}
-        boxShadow="dark-lg"
       >
         <Flex justify="space-between" grow={1} minH={0}>
           <Flex direction="column" grow={1} minH={0}>
