@@ -51,7 +51,7 @@ export const PublicDeckListPage: React.FC = () => {
               decks={publicDecks.data}
               playOnly
               returnRoute={routes.publicDecksPage}
-              justifyContent="flex-start"
+              styleProps={{ justifyContent: "flex-start" }}
             />
           </VStack>
         </VStack>

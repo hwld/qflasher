@@ -12,8 +12,7 @@ const MyDecks: NextPageWithLayout = () => {
 
   if (isLoading(userResult)) {
     return <AppLoading />;
-  }
-  if (!userResult.data) {
+  } else if (!userResult.data) {
     return <Redirect href={routes.signInPage} />;
   } else {
     return <DeckListPage userId={userResult.data.uid} />;
