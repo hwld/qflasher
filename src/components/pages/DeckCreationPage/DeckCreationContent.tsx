@@ -14,7 +14,7 @@ import { MdSave } from "react-icons/md";
 
 type Props = { userId: string; allTags: Tag[] };
 
-export const DeckCreatorContent: React.VFC<Props> = ({ userId, allTags }) => {
+export const DeckCreationContent: React.VFC<Props> = ({ userId, allTags }) => {
   const router = useAppRouter();
   const { addTag, deleteTag } = useTagOperation(userId);
   const { addDeck } = useDeckOperation(userId);

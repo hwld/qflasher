@@ -1,4 +1,4 @@
-import { DeckPlaySettings } from "@/components/pages/DeckPlayerPage";
+import { DeckPlaySettings } from "@/components/pages/DeckPlayerPage/DeckPlayerPage";
 import { Deck, DeckCard } from "@/models";
 import { assertNever } from "@/utils/assertNever";
 import { shuffle } from "@/utils/shuffle";

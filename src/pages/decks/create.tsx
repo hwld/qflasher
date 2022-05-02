@@ -1,4 +1,4 @@
-import { DeckCreatorPage } from "@/components/pages/DeckCreatorPage/DeckCreatorPage";
+import { DeckCreationPage } from "@/components/pages/DeckCreationPage/DeckCreationPage";
 import { AppLayoutWithOutSignInButton } from "@/components/ui/AppLayout";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { Redirect } from "@/components/ui/Redirect";
@@ -17,7 +17,7 @@ const Create: NextPageWithLayout = () => {
   if (!userResult.data) {
     return <Redirect href={routes.signInPage} />;
   } else {
-    return <DeckCreatorPage userId={userResult.data.uid} />;
+    return <DeckCreationPage userId={userResult.data.uid} />;
   }
 };
 

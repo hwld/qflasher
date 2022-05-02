@@ -1,4 +1,4 @@
-import { DeckPlayerPage } from "@/components/pages/DeckPlayerPage";
+import { DeckPlayerPage } from "@/components/pages/DeckPlayerPage/DeckPlayerPage";
 import { AppLayout } from "@/components/ui/AppLayout";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { Redirect } from "@/components/ui/Redirect";
