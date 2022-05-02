@@ -1,5 +1,5 @@
 import { DeckFormFields } from "@/components/model/deck/DeckForm/useDeckForm";
-import { UseTagsResult } from "@/components/model/tag/useTags";
+import { UseTagOperationResult } from "@/components/model/tag/useTagOperation";
 import { CreatableSelect } from "@/components/ui/CreatableSelect";
 import { useConfirm } from "@/context/ConfirmContext";
 import { Tag } from "@/models";
@@ -23,7 +23,7 @@ export type TagSelectProps = {
   defaultTagIds?: string[];
   error?: FieldError;
   onAddTag: (tag: Tag) => Promise<Result<unknown>>;
-  onDeleteTag: UseTagsResult["deleteTag"];
+  onDeleteTag: UseTagOperationResult["deleteTag"];
   onNextFocus?: () => void;
   onPrevFocus?: () => void;
 } & BoxProps;

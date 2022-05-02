@@ -1,9 +1,10 @@
 import { TagsSideView } from "@/components/model/tag/TagsSideView";
-import { useTags } from "@/components/model/tag/useTags";
+import { useTagOperation } from "@/components/model/tag/useTagOperation";
 import { SideMenuName } from "@/components/pages/DeckListPage/DeckListPage";
 import { SideMenu } from "@/components/ui/SideMenu/SideMenu";
 import { useSideMenu } from "@/context/SideMenuContext";
 import { useAppOperation } from "@/hooks/useAppOperation";
+import { Tag } from "@/models";
 import { useEffect, useState } from "react";
 import { AiFillTags } from "react-icons/ai";
 
@@ -21,7 +22,9 @@ export const DeckListPageSideMenu: React.VFC<Props> = ({
   const { readMenuSelected, storeMenuSelected } = useSideMenu();
   const [menuSelected, setMenuSelected] = useState<SideMenuName>("none");
 
-  const { tags, addTag, updateTag, deleteTag } = useTags(userId);
+  const { addTag, updateTag, deleteTag } = useTagOperation(userId);
+  // TODO
+  const tags: Tag[] = [];
   const handleAddTag = useAppOperation(addTag);
   const handleUpdateTag = useAppOperation(updateTag);
   const handleDeleteTag = useAppOperation(deleteTag);

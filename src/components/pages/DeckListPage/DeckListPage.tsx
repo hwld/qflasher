@@ -1,4 +1,5 @@
 import { useMyDeckList } from "@/components/model/deck/useMyDeckList";
+import { useTags } from "@/components/model/tag/useTags";
 import { DeckListContent } from "@/components/pages/DeckListPage/DeckListContent";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
@@ -13,6 +14,23 @@ export const isSideMenuName = (arg: unknown): arg is SideMenuName => {
 
 export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
   const useDeckListResult = useMyDeckList(userId);
+  const useTagsResult = useTags(userId);
+
+  switch (useTagsResult.status) {
+    case "loading": {
+      return <AppLoading />;
+    }
+    case "error": {
+      return (
+        <ErrorMessageBox
+          mx="auto"
+          mt={10}
+          header="エラー"
+          description="タグの一覧を読み込むことができませんでした。"
+        />
+      );
+    }
+  }
 
   switch (useDeckListResult.status) {
     case "loading": {
@@ -29,7 +47,13 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
       );
     }
     case "ok": {
-      return <DeckListContent userId={userId} decks={useDeckListResult.data} />;
+      return (
+        <DeckListContent
+          userId={userId}
+          decks={useDeckListResult.data}
+          allTags={useTagsResult.data}
+        />
+      );
     }
   }
 };

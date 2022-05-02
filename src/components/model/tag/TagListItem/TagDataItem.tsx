@@ -7,7 +7,7 @@ import {
   TagListItemLayoutProps,
 } from "@/components/model/tag/TagListItem/TagListItemBase";
 import { useTagDrag } from "@/components/model/tag/useTagDnD";
-import { UseTagsResult } from "@/components/model/tag/useTags";
+import { UseTagOperationResult } from "@/components/model/tag/useTagOperation";
 import { useConfirm } from "@/context/ConfirmContext";
 import { Tag } from "@/models";
 import { isIME } from "@/utils/isIME";
@@ -21,8 +21,8 @@ export type TagDataProps = {
   tag: Tag;
   selected: boolean;
   onSelectTag: (id: string) => void;
-  onUpdateTag: UseTagsResult["updateTag"];
-  onDeleteTag: UseTagsResult["deleteTag"];
+  onUpdateTag: UseTagOperationResult["updateTag"];
+  onDeleteTag: UseTagOperationResult["deleteTag"];
 } & TagListItemLayoutProps;
 
 export const TagDataItem: React.FC<TagDataProps> = ({

@@ -1,4 +1,4 @@
-import { DeckCreatorPage } from "@/components/pages/DeckCreatorPage";
+import { DeckCreatorPage } from "@/components/pages/DeckCreatorPage/DeckCreatorPage";
 import { AppLayoutWithOutSignInButton } from "@/components/ui/AppLayout";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { Redirect } from "@/components/ui/Redirect";
