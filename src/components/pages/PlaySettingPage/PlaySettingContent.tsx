@@ -1,4 +1,4 @@
-import { DeckPlaySettings } from "@/components/pages/DeckPlayerPage";
+import { DeckPlaySettings } from "@/components/pages/DeckPlayerPage/DeckPlayerPage";
 import { PlaySettingHeader } from "@/components/pages/PlaySettingPage/PlaySettingHeader";
 import {
   SettingForm,
