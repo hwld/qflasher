@@ -1,27 +1,35 @@
 import { TagsSideView } from "@/components/model/tag/TagsSideView";
-import { useTags } from "@/components/model/tag/useTags";
+import { useTagOperation } from "@/components/model/tag/useTagOperation";
 import { SideMenuName } from "@/components/pages/DeckListPage/DeckListPage";
 import { SideMenu } from "@/components/ui/SideMenu/SideMenu";
 import { useSideMenu } from "@/context/SideMenuContext";
 import { useAppOperation } from "@/hooks/useAppOperation";
-import { useEffect, useState } from "react";
+import { Tag } from "@/models";
+import { useState } from "react";
 import { AiFillTags } from "react-icons/ai";
 
 type Props = {
   userId: string;
+  allTags: Tag[];
+  defaultMenuSelected?: SideMenuName;
+  defaultMenuWidth?: number;
   selectedTagId: string | undefined;
   onSelectTag: (id: string | undefined) => void;
 };
 
 export const DeckListPageSideMenu: React.VFC<Props> = ({
   userId,
+  allTags,
+  defaultMenuSelected = "none",
+  defaultMenuWidth,
   selectedTagId,
   onSelectTag,
 }) => {
-  const { readMenuSelected, storeMenuSelected } = useSideMenu();
-  const [menuSelected, setMenuSelected] = useState<SideMenuName>("none");
+  const { storeMenuSelected } = useSideMenu();
+  const [menuSelected, setMenuSelected] =
+    useState<SideMenuName>(defaultMenuSelected);
 
-  const { tags, addTag, updateTag, deleteTag } = useTags(userId);
+  const { addTag, updateTag, deleteTag } = useTagOperation(userId);
   const handleAddTag = useAppOperation(addTag);
   const handleUpdateTag = useAppOperation(updateTag);
   const handleDeleteTag = useAppOperation(deleteTag);
@@ -36,20 +44,11 @@ export const DeckListPageSideMenu: React.VFC<Props> = ({
     }
   };
 
-  useEffect(() => {
-    const init = async () => {
-      const menu = await readMenuSelected();
-      if (menu) {
-        setMenuSelected(menu);
-      }
-    };
-    init();
-  }, [readMenuSelected]);
-
   return (
     <SideMenu
       selected={menuSelected}
       onSelect={handleSelectMenu}
+      defaultWidth={defaultMenuWidth}
       items={[
         {
           name: "tags",
@@ -59,7 +58,7 @@ export const DeckListPageSideMenu: React.VFC<Props> = ({
             <TagsSideView
               selectedTagId={selectedTagId}
               onSelectTagId={onSelectTag}
-              tags={tags}
+              tags={allTags}
               onAddTag={handleAddTag}
               onUpdateTag={handleUpdateTag}
               onDeleteTag={handleDeleteTag}

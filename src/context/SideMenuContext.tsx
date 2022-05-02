@@ -39,7 +39,9 @@ export const SideMenuProvider: React.VFC<{
   }, []);
 
   const storeWidth = useCallback((number) => {
+    console.log("updateに時間かかってるっぽくね？");
     return update("sideMenu", (old = defaultState) => {
+      console.log("inside update");
       return { menuSelected: old.menuSelected, initialWidth: number };
     });
   }, []);
@@ -86,5 +88,6 @@ export const useSideMenu = () => {
   if (!value) {
     throw new Error("useSideMenu must be used within a SideMenuProvider");
   }
+
   return value;
 };

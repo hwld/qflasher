@@ -1,5 +1,6 @@
 import { useDeck } from "@/components/model/deck/useDeck";
-import { PlaySettingContent } from "@/components/pages/PlaySettingPage/PlaySettingContent";
+import { DeckPlaySettings } from "@/components/pages/DeckPlayerPage/DeckPlayerPage";
+import { SettingFormElement } from "@/components/pages/PlaySettingPage/SettingFormElement";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { Redirect } from "@/components/ui/Redirect";
 import { useAppRouter } from "@/hooks/useAppRouter";

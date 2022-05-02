@@ -1,37 +1,12 @@
 import { db } from "@/firebase/config";
-import {
-  privateFieldOnDeckConverter,
-  tagConverter,
-} from "@/firebase/firestoreConverters";
+import { tagConverter } from "@/firebase/firestoreConverters";
 import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
 import { Tag } from "@/models";
-import {
-  collection,
-  collectionGroup,
-  doc,
-  orderBy,
-  setDoc,
-  writeBatch,
-} from "@firebase/firestore";
-import {
-  arrayRemove,
-  getDoc,
-  getDocs,
-  query,
-  serverTimestamp,
-  where,
-} from "firebase/firestore";
-import { useCallback, useMemo } from "react";
+import { Result } from "@/utils/result";
+import { collection, orderBy, query } from "firebase/firestore";
+import { useMemo } from "react";
 
-export type UseTagsResult = {
-  tags: Tag[];
-  getTagName: (id: string | undefined) => string | undefined;
-  addTag: (tag: Tag) => Promise<unknown>;
-  updateTag: (newTag: Tag) => Promise<unknown>;
-  deleteTag: (id: string) => Promise<unknown>;
-};
-
-export const useTags = (userId: string): UseTagsResult => {
+export const useTags = (userId: string) => {
   const tagsRef = useMemo(
     () => collection(db, `users/${userId}/tags`).withConverter(tagConverter),
     [userId]
@@ -42,77 +17,24 @@ export const useTags = (userId: string): UseTagsResult => {
     [tagsRef]
   );
 
-  const privateRef = useMemo(() => {
-    return collectionGroup(db, "private").withConverter(
-      privateFieldOnDeckConverter
-    );
-  }, []);
-
   const tagsData = useFirestoreCollectionData(tagsQuery);
-
-  const tags: Tag[] = useMemo(() => {
-    return tagsData.data ?? [];
-  }, [tagsData.data]);
-
-  const getTagName = useCallback(
-    (id: string | undefined): string | undefined => {
-      return tags.find((t) => t.id === id)?.name;
-    },
-    [tags]
-  );
-
-  const addTag = useCallback(
-    async (tag: Tag) => {
-      const tagRef = doc(tagsRef, tag.id);
-      await setDoc(tagRef, {
-        id: tagRef.id,
-        name: tag.name,
-        createdAt: serverTimestamp(),
-      });
-    },
-    [tagsRef]
-  );
-
-  const updateTag = useCallback(
-    async (newTag: Tag) => {
-      const tagRef = doc(tagsRef, newTag.id);
-      const tag = (await getDoc(tagRef)).data();
-      if (!tag) {
-        throw new Error("存在しないタグを更新しようとしました");
+  const tagsResult = useMemo((): Result<Tag[]> => {
+    switch (tagsData.status) {
+      case "loading": {
+        return Result.Loading();
       }
+      case "error": {
+        return Result.Err();
+      }
+      case "ok": {
+        const tags: Tag[] = tagsData.data.map(({ id, name }) => ({
+          id,
+          name,
+        }));
+        return Result.Ok(tags);
+      }
+    }
+  }, [tagsData.data, tagsData.status]);
 
-      await setDoc(tagRef, {
-        id: tagRef.id,
-        name: newTag.name,
-        createdAt: tag.createdAt,
-      });
-    },
-    [tagsRef]
-  );
-
-  const deleteTag = useCallback(
-    async (id: string) => {
-      const batch = writeBatch(db);
-
-      const tagRef = doc(tagsRef, id);
-      batch.delete(tagRef);
-
-      const privatesSnapshot = await getDocs(
-        query(
-          privateRef,
-          where("uid", "==", userId),
-          where("tagIds", "array-contains", id)
-        )
-      );
-
-      privatesSnapshot.docs.map((privateField) => {
-        batch.update(privateField.ref, { tagIds: arrayRemove(id) });
-      });
-
-      await batch.commit();
-    },
-    [privateRef, tagsRef, userId]
-  );
-
-  return { tags, getTagName, addTag, updateTag, deleteTag };
+  return tagsResult;
 };

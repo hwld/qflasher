@@ -2,7 +2,7 @@ import { ResizableBox } from "@/components/ui/ResizableBox";
 import { useSideMenu } from "@/context/SideMenuContext";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Box, useBreakpointValue } from "@chakra-ui/react";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode } from "react";
 
 type Props<T> = {
   selectedItem:
@@ -14,26 +14,17 @@ type Props<T> = {
       }
     | undefined;
   mobileBarWidth: string;
+  defaultWidth?: number;
 };
 
 export const SideMenuArea = <T extends string>({
   selectedItem,
   mobileBarWidth,
+  defaultWidth = 300,
 }: Props<T>): ReturnType<React.VFC> => {
   const breakPoint = useBreakpointValue({ base: "base", md: "md" } as const);
-  const { storeWidth, readWidth } = useSideMenu();
+  const { storeWidth } = useSideMenu();
   const storeWidthWithDebounce = useDebounce(500, storeWidth);
-  const [initialWidth, setInitialWidth] = useState(0);
-
-  useEffect(() => {
-    const init = async () => {
-      const initialWidth = await readWidth();
-      if (initialWidth) {
-        setInitialWidth(initialWidth);
-      }
-    };
-    init();
-  }, [readWidth]);
 
   if (!selectedItem) {
     return null;
@@ -57,7 +48,7 @@ export const SideMenuArea = <T extends string>({
     case "md": {
       return (
         <ResizableBox
-          initialWidth={initialWidth}
+          initialWidth={defaultWidth}
           onChangeWidth={storeWidthWithDebounce}
           bgColor={"gray.700"}
         >

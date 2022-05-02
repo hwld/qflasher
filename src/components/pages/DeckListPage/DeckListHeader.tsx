@@ -1,27 +1,18 @@
-import { useTags } from "@/components/model/tag/useTags";
 import { SearchBar } from "@/components/ui/SearchBar";
 import { routes } from "@/routes";
 import { Button, Flex, Stack, Tag, useBreakpointValue } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { useMemo } from "react";
 
 type Props = {
-  userId: string;
-  selectedTagId: string | undefined;
+  selectedTagName: string | undefined;
   searchText: string;
   onChangeSearchText: (value: string) => void;
 };
 export const DeckListHeader: React.VFC<Props> = ({
-  userId,
-  selectedTagId,
+  selectedTagName,
   searchText,
   onChangeSearchText,
 }) => {
-  const { getTagName } = useTags(userId);
-  const selectedTagName = useMemo(() => {
-    return getTagName(selectedTagId);
-  }, [getTagName, selectedTagId]);
-
   const tagSize = useBreakpointValue({ base: "md", md: "lg" });
 
   return (
