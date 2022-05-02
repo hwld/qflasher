@@ -1,9 +1,11 @@
 import { useDeck } from "@/components/model/deck/useDeck";
 import { PlaySettingContent } from "@/components/pages/PlaySettingPage/PlaySettingContent";
+import { AppLoading } from "@/components/ui/AppLoading";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { Redirect } from "@/components/ui/Redirect";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { routes } from "@/routes";
+import { isErr, isLoading } from "@/utils/result";
 import React from "react";
 
 type Props = {
@@ -22,49 +24,35 @@ export const PlaySettingPage: React.FC<Props> = ({ userId, deckId }) => {
   const queryResult = router.query;
   const useDeckResult = useDeck(userId, deckId);
 
-  switch (queryResult.status) {
-    case "loading": {
-      return null;
-    }
-    case "error": {
-      return <Redirect href={routes.rootPage} />;
-    }
-    default: {
-      break;
-    }
-  }
-
-  switch (useDeckResult.status) {
-    case "loading": {
-      return null;
-    }
-    case "error": {
-      if (useDeckResult.error === "not-found") {
-        return (
-          <ErrorMessageBox
-            mx="auto"
-            mt={10}
-            header="エラー"
-            description="デッキが存在しません。"
-          />
-        );
-      }
+  if (isLoading(queryResult) || isLoading(useDeckResult)) {
+    return <AppLoading />;
+  } else if (isErr(queryResult)) {
+    return <Redirect href={routes.rootPage} />;
+  } else if (isErr(useDeckResult)) {
+    if (useDeckResult.error === "not-found") {
       return (
         <ErrorMessageBox
           mx="auto"
           mt={10}
           header="エラー"
-          description="デッキの読み込みに失敗しましfた。"
+          description="デッキが存在しません。"
         />
       );
     }
-    case "ok": {
-      return (
-        <PlaySettingContent
-          deck={useDeckResult.data}
-          queryData={queryResult.data}
-        />
-      );
-    }
+    return (
+      <ErrorMessageBox
+        mx="auto"
+        mt={10}
+        header="エラー"
+        description="デッキの読み込みに失敗しましfた。"
+      />
+    );
+  } else {
+    return (
+      <PlaySettingContent
+        deck={useDeckResult.data}
+        queryData={queryResult.data}
+      />
+    );
   }
 };
