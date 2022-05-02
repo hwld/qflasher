@@ -2,6 +2,7 @@ import { DeckList } from "@/components/model/deck/DeckList";
 import { useDeckOperation } from "@/components/model/deck/useDeckOperation";
 import { useAttachTagOperation } from "@/components/model/tag/useAttachTagOperation";
 import { DeckListHeader } from "@/components/pages/DeckListPage/DeckListHeader";
+import { SideMenuName } from "@/components/pages/DeckListPage/DeckListPage";
 import { DeckListPageSideMenu } from "@/components/pages/DeckListPage/DeckListPageSideMenu";
 import { Fab } from "@/components/ui/Fab";
 import { useConfirm } from "@/context/ConfirmContext";
@@ -18,12 +19,16 @@ type Props = {
   userId: string;
   decks: DeckWithoutCards[];
   allTags: Tag[];
+  defaultMenuSelected?: SideMenuName;
+  defaultMenuWidth?: number;
 };
 
 export const DeckListContent: React.FC<Props> = ({
   userId,
   decks,
   allTags,
+  defaultMenuSelected,
+  defaultMenuWidth,
 }) => {
   const router = useAppRouter();
 
@@ -60,6 +65,9 @@ export const DeckListContent: React.FC<Props> = ({
     <Flex h="100%">
       <DeckListPageSideMenu
         userId={userId}
+        allTags={allTags}
+        defaultMenuSelected={defaultMenuSelected}
+        defaultMenuWidth={defaultMenuWidth}
         selectedTagId={selectedTagId}
         onSelectTag={setSelectedTagId}
       />

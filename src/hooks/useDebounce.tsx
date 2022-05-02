@@ -8,6 +8,7 @@ export const useDebounce = <T extends unknown[]>(
 
   const func = useCallback(
     (...args: T) => {
+      console.log("f: ", ms);
       if (timer.current) {
         clearTimeout(timer.current);
       }

@@ -3,6 +3,8 @@ import { useTags } from "@/components/model/tag/useTags";
 import { DeckListContent } from "@/components/pages/DeckListPage/DeckListContent";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
+import { useSideMenu } from "@/context/SideMenuContext";
+import { useResult } from "@/hooks/useResult";
 import React from "react";
 
 type DeckListPageProps = { userId: string };
@@ -15,6 +17,22 @@ export const isSideMenuName = (arg: unknown): arg is SideMenuName => {
 export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
   const useDeckListResult = useMyDeckList(userId);
   const useTagsResult = useTags(userId);
+  const { readMenuSelected, readWidth } = useSideMenu();
+  const readMenuSelectedResult = useResult(readMenuSelected);
+  const readWidthResult = useResult(readWidth);
+
+  // TODO: resultを合成できないかなあ
+  switch (readMenuSelectedResult.status) {
+    case "loading": {
+      return <AppLoading />;
+    }
+  }
+
+  switch (readWidthResult.status) {
+    case "loading": {
+      return <AppLoading />;
+    }
+  }
 
   switch (useTagsResult.status) {
     case "loading": {
@@ -52,6 +70,8 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
           userId={userId}
           decks={useDeckListResult.data}
           allTags={useTagsResult.data}
+          defaultMenuSelected={readMenuSelectedResult.data}
+          defaultMenuWidth={readWidthResult.data}
         />
       );
     }

@@ -13,12 +13,14 @@ type Props<T extends string> = {
   }[];
   selected: T;
   onSelect: (name: T) => void;
+  defaultWidth?: number;
 };
 
 export const SideMenu = <T extends string>({
   items,
   selected,
   onSelect,
+  defaultWidth,
 }: Props<T>): ReactElement => {
   const selectedItem = items.find((item) => item.name === selected);
   const mobileBarWidth = "40px";
@@ -47,6 +49,7 @@ export const SideMenu = <T extends string>({
       <SideMenuArea
         selectedItem={selectedItem}
         mobileBarWidth={mobileBarWidth}
+        defaultWidth={defaultWidth}
       />
     </Flex>
   );
