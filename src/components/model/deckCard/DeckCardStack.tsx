@@ -1,3 +1,4 @@
+import { AnimationEvent } from "@/components/model/deck/DeckPlayer/DeckPlayer";
 import { DeckCardStackItem } from "@/components/model/deckCard/DeckCardStackItem/DeckCardStackItem";
 import { ResultItem } from "@/components/model/deckCard/DeckCardStackItem/ResultItem";
 import { AppProgress } from "@/components/ui/AppProgress";
@@ -13,6 +14,8 @@ type Props = {
   progress: number;
   initialFront: "question" | "answer";
   topFront: "question" | "answer";
+  animationEvents: AnimationEvent[];
+  onRemoveEvent: (id: string) => void;
 } & Omit<BoxProps, "size">;
 
 export const DeckCardStack: React.FC<Props> = ({
@@ -23,6 +26,8 @@ export const DeckCardStack: React.FC<Props> = ({
   progress,
   initialFront,
   topFront,
+  animationEvents,
+  onRemoveEvent,
   ...styles
 }) => {
   const isTopCard = (id: string) => {
@@ -53,6 +58,8 @@ export const DeckCardStack: React.FC<Props> = ({
               card={card}
               front={isTopCard(card.id) ? topFront : initialFront}
               isBackground={isTopCard(card.id) ? false : true}
+              animationEvent={animationEvents.find((e) => e.cardId === card.id)}
+              onRemoveEvent={onRemoveEvent}
             />
           ))
       ) : (
