@@ -23,7 +23,7 @@ export const SignInButton: React.VFC<
       display="flex"
       justifyContent="space-between"
       padding={0}
-      minW="200px"
+      minW="210px"
       {...styles}
     >
       <Flex
