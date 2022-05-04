@@ -34,7 +34,7 @@ export const DeckFormInput: React.FC<Props> = ({
           <ChakraInput
             autoComplete="off"
             spellCheck={false}
-            _placeholder={{ color: "gray.300" }}
+            _placeholder={{ color: "whiteAlpha.600" }}
             isInvalid={!!error}
             {...inputProps}
             {...field}

@@ -5,14 +5,12 @@ import { Box, useBreakpointValue } from "@chakra-ui/react";
 import React, { ReactNode } from "react";
 
 type Props<T> = {
-  selectedItem:
-    | {
-        name: T;
-        label: string;
-        icon: React.ElementType;
-        content: ReactNode;
-      }
-    | undefined;
+  selectedItem: {
+    name: T;
+    label: string;
+    icon: React.ElementType;
+    content: ReactNode;
+  };
   mobileBarWidth: string;
   defaultWidth?: number;
 };
@@ -25,10 +23,6 @@ export const SideMenuArea = <T extends string>({
   const breakPoint = useBreakpointValue({ base: "base", md: "md" } as const);
   const { storeWidth } = useSideMenu();
   const storeWidthWithDebounce = useDebounce(500, storeWidth);
-
-  if (!selectedItem) {
-    return null;
-  }
 
   switch (breakPoint) {
     case "base": {

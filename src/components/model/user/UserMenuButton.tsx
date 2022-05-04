@@ -20,6 +20,7 @@ export const UserMenuButton = forwardRef<HTMLButtonElement, Props>(
         as={Button}
         color="gray.700"
         rounded="full"
+        overflow={"hidden"}
         bgColor="gray.200"
         _hover={{ bgColor: "gray.300" }}
         _active={{ bgColor: "gray.400" }}

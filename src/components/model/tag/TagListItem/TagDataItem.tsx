@@ -109,7 +109,7 @@ export const TagDataItem: React.FC<TagDataProps> = ({
           <Text
             flexGrow={1}
             userSelect="none"
-            color={selected ? "gray.50" : "gray.300"}
+            color={"gray.50"}
             fontWeight="bold"
             fontSize="sm"
             overflow="hidden"

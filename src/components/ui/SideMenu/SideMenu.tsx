@@ -46,11 +46,14 @@ export const SideMenu = <T extends string>({
           );
         })}
       </Box>
-      <SideMenuArea
-        selectedItem={selectedItem}
-        mobileBarWidth={mobileBarWidth}
-        defaultWidth={defaultWidth}
-      />
+
+      {selectedItem && (
+        <SideMenuArea
+          selectedItem={selectedItem}
+          mobileBarWidth={mobileBarWidth}
+          defaultWidth={defaultWidth}
+        />
+      )}
     </Flex>
   );
 };
