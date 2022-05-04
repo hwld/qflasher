@@ -1,5 +1,5 @@
 import { OperationBar } from "@/components/model/deck/DeckPlayer/OperationBar";
-import { useDeckPlayerState } from "@/components/model/deck/DeckPlayer/useDeckPlayerState";
+import { useDeckPlayer } from "@/components/model/deck/DeckPlayer/useDeckPlayer";
 import { DeckCardStack } from "@/components/model/deckCard/DeckCardStack";
 import { DeckPlaySettings } from "@/components/pages/DeckPlayerPage/DeckPlayerPage";
 import { Deck } from "@/models";
@@ -40,59 +40,60 @@ export const DeckPlayer: React.FC<Props> = ({
   ...styles
 }) => {
   const {
-    cardStack,
-    rightAnswerCount,
-    wrongCards,
-    totalCardsCount,
-    progress,
-    front,
+    currentPlay,
+    currentTopCard,
     handleTurnOver,
     handleRight,
     handleWrong,
     handleReplayAll,
     handleReplayWrong,
-  } = useDeckPlayerState(deck, settings);
-  const [animationEvents, setAnimationEvents] = useState<AnimationEvent[]>([]);
+  } = useDeckPlayer(deck, settings);
 
-  const topCard = cardStack[cardStack.length - 1];
+  const [animationEvents, setAnimationEvents] = useState<AnimationEvent[]>([]);
 
   const handleClickRightButton = useCallback(() => {
     setAnimationEvents((events) => {
       // 一番上のカードを対象とするeventsが存在すれば何もしない
-      if (!topCard || events.find((e) => e.cardId === topCard.id)) {
+      if (
+        !currentTopCard ||
+        events.find((e) => e.cardId === currentTopCard.id)
+      ) {
         return events;
       }
       return [
         ...events,
         {
-          cardId: topCard.id,
+          cardId: currentTopCard.id,
           keyframe: slideLeft,
           onAfterAnimation: handleRight,
         },
       ];
     });
-  }, [handleRight, topCard]);
+  }, [currentTopCard, handleRight]);
 
   const handleClickWrongButton = useCallback(() => {
     setAnimationEvents((events) => {
-      if (!topCard || events.find((e) => e.cardId === topCard.id)) {
+      if (
+        !currentTopCard ||
+        events.find((e) => e.cardId === currentTopCard.id)
+      ) {
         return events;
       }
 
       return [
         ...events,
         {
-          cardId: topCard.id,
+          cardId: currentTopCard.id,
           keyframe: slideRight,
           onAfterAnimation: handleWrong,
         },
       ];
     });
-  }, [handleWrong, topCard]);
+  }, [currentTopCard, handleWrong]);
 
   const handleRemoveEvent = (id: string) => {
     setAnimationEvents((events) => {
-      if (!topCard || !events.find((e) => e.cardId === id)) {
+      if (!currentTopCard || !events.find((e) => e.cardId === id)) {
         return events;
       }
 
@@ -109,24 +110,19 @@ export const DeckPlayer: React.FC<Props> = ({
         mb={3}
         size={size}
         initialFront={settings.initialFront}
-        totalCardsCount={totalCardsCount}
-        rightAnswersCount={rightAnswerCount}
-        cards={cardStack}
-        progress={progress}
-        topFront={front}
+        currentPlay={currentPlay}
         animationEvents={animationEvents}
         onRemoveEvent={handleRemoveEvent}
       />
       <OperationBar
         size={size}
         returnRoute={returnRoute}
-        isEnd={cardStack.length === 0}
-        wrongAnswerCount={wrongCards.length}
-        onTurnOver={handleTurnOver}
-        onRight={handleClickRightButton}
-        onWrong={handleClickWrongButton}
-        onReplayWrong={handleReplayWrong}
-        onReplayAll={handleReplayAll}
+        currentPlay={currentPlay}
+        onClickWrong={handleClickWrongButton}
+        onClickRight={handleClickRightButton}
+        onClickReplayAll={handleReplayAll}
+        onClickReplayWrong={handleReplayWrong}
+        onClickTrunOver={handleTurnOver}
       />
     </Grid>
   );

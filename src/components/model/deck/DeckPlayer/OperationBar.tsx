@@ -1,5 +1,6 @@
 import { OperationButton } from "@/components/model/deck/DeckPlayer/OperationButton";
 import { OperationButtonContainer } from "@/components/model/deck/DeckPlayer/OperationButtonContainer";
+import { Play } from "@/components/model/deck/DeckPlayer/useDeckPlayer";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { Route } from "@/routes";
 import { BoxProps, Flex, FlexProps } from "@chakra-ui/react";
@@ -15,27 +16,28 @@ import {
 type Props = {
   size: "md" | "sm";
   returnRoute: Route;
-  isEnd: boolean;
-  wrongAnswerCount: number;
-  onTurnOver: () => void;
-  onRight: () => void;
-  onWrong: () => void;
-  onReplayAll: () => void;
-  onReplayWrong: () => void;
+  currentPlay: Play;
+  onClickRight: () => void;
+  onClickWrong: () => void;
+  onClickReplayAll: () => void;
+  onClickReplayWrong: () => void;
+  onClickTrunOver: () => void;
 } & FlexProps;
 
 export const OperationBar: React.FC<Props> = ({
   size,
   returnRoute,
-  isEnd,
-  wrongAnswerCount,
-  onTurnOver,
-  onRight,
-  onWrong,
-  onReplayAll,
-  onReplayWrong,
+  currentPlay: { cardStack, wrongCards },
+  onClickRight,
+  onClickWrong,
+  onClickReplayAll,
+  onClickReplayWrong,
+  onClickTrunOver,
   ...styles
 }) => {
+  const isEnd = cardStack.length === 0;
+  const wrongAnswerCount = wrongCards.length;
+
   const router = useAppRouter();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -56,30 +58,28 @@ export const OperationBar: React.FC<Props> = ({
   }
 
   const handleRight = () => {
-    // TODO 仮
     setIsOpen(false);
-    onRight();
+    onClickRight();
   };
 
   const handleWrong = () => {
-    // TODO 仮
     setIsOpen(false);
-    onWrong();
+    onClickWrong();
   };
 
   const handleReplayAll = () => {
     setIsOpen(false);
-    onReplayAll();
+    onClickReplayAll();
   };
 
   const handleReplayWrong = () => {
     setIsOpen(false);
-    onReplayWrong();
+    onClickReplayWrong();
   };
 
   const handleTurnOver = () => {
     setIsOpen(true);
-    onTurnOver();
+    onClickTrunOver();
   };
 
   const handleBack = () => {

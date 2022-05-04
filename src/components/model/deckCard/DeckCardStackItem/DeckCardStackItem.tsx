@@ -24,12 +24,6 @@ export const DeckCardStackItem: React.FC<Props> = ({
   onRemoveEvent,
   ...styles
 }) => {
-  const frontText = initialFront === "question" ? card.question : card.answer;
-  const frontType = initialFront;
-
-  const backText = initialFront === "question" ? card.answer : card.question;
-  const backType = initialFront === "question" ? "answer" : "question";
-
   const animation = useMemo(() => {
     if (!animationEvent) {
       return "";
@@ -67,15 +61,20 @@ export const DeckCardStackItem: React.FC<Props> = ({
       >
         <OneSideDeckCardItem
           size={size}
-          text={frontText}
-          type={frontType}
+          transform={
+            initialFront === "question" ? "rotateY(0deg)" : "rotateY(180deg)"
+          }
+          text={card.question}
+          type={"question"}
           isBackground={isBackground}
         />
         <OneSideDeckCardItem
           size={size}
-          transform="rotateY(180deg)"
-          text={backText}
-          type={backType}
+          transform={
+            initialFront === "answer" ? "rotateY(0deg)" : "rotateY(180deg)"
+          }
+          text={card.answer}
+          type={"answer"}
           isBackground={isBackground}
         />
       </Box>

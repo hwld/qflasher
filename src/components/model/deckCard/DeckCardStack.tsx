@@ -1,31 +1,29 @@
 import { AnimationEvent } from "@/components/model/deck/DeckPlayer/DeckPlayer";
+import { Play } from "@/components/model/deck/DeckPlayer/useDeckPlayer";
 import { DeckCardStackItem } from "@/components/model/deckCard/DeckCardStackItem/DeckCardStackItem";
 import { ResultItem } from "@/components/model/deckCard/DeckCardStackItem/ResultItem";
 import { AppProgress } from "@/components/ui/AppProgress";
-import { DeckCard } from "@/models";
 import { Box, BoxProps } from "@chakra-ui/react";
 import React from "react";
 
 type Props = {
   size: "sm" | "md";
-  totalCardsCount: number;
-  rightAnswersCount: number;
-  cards: DeckCard[];
-  progress: number;
+  currentPlay: Play;
   initialFront: "question" | "answer";
-  topFront: "question" | "answer";
   animationEvents: AnimationEvent[];
   onRemoveEvent: (id: string) => void;
 } & Omit<BoxProps, "size">;
 
 export const DeckCardStack: React.FC<Props> = ({
   size,
-  totalCardsCount,
-  rightAnswersCount,
-  cards,
-  progress,
+  currentPlay: {
+    cardStack: cards,
+    allCardsCount,
+    rightAnswersCount,
+    front: topFront,
+    progress,
+  },
   initialFront,
-  topFront,
   animationEvents,
   onRemoveEvent,
   ...styles
@@ -65,7 +63,7 @@ export const DeckCardStack: React.FC<Props> = ({
       ) : (
         <ResultItem
           size={size}
-          totalCardsCount={totalCardsCount}
+          totalCardsCount={allCardsCount}
           rightAnswersCount={rightAnswersCount}
         />
       )}
