@@ -8,6 +8,7 @@ type Props<T> = {
   icon: React.ElementType;
   selected: boolean;
   onSelect: (name: T) => void;
+  onDeselect: () => void;
 };
 
 export const SideMenuItem = <T,>({
@@ -16,9 +17,14 @@ export const SideMenuItem = <T,>({
   name,
   label,
   onSelect,
+  onDeselect,
 }: Props<T>) => {
   const handleClick = () => {
-    onSelect(name);
+    if (selected) {
+      onDeselect();
+    } else {
+      onSelect(name);
+    }
   };
 
   return (

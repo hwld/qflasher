@@ -4,10 +4,9 @@ import { DeckCardStack } from "@/components/model/deckCard/DeckCardStack";
 import { DeckPlaySettings } from "@/components/pages/DeckPlayerPage/DeckPlayerPage";
 import { Deck } from "@/models";
 import { Route } from "@/routes";
+import { AppKeyframes } from "@/types";
 import { Grid, GridProps, keyframes } from "@chakra-ui/react";
 import React, { useCallback, useState } from "react";
-
-type Keyframes = ReturnType<typeof keyframes>;
 
 type Props = {
   deck: Deck;
@@ -28,7 +27,7 @@ const slideRight = keyframes`
 
 export type AnimationEvent = {
   cardId: string;
-  keyframe: Keyframes;
+  keyframe: AppKeyframes;
   onAfterAnimation: Function;
 };
 

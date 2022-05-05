@@ -1,7 +1,8 @@
-import { TagList, TagListProps } from "@/components/model/tag/TagList";
+import { TagList } from "@/components/model/tag/TagList";
 import { useTagListItems } from "@/components/model/tag/TagListItem/useTagListItems";
+import { useTagOperation } from "@/components/model/tag/useTagOperation";
+import { useAppOperation } from "@/hooks/useAppOperation";
 import { Tag } from "@/models";
-import { Result } from "@/utils/result";
 import {
   Box,
   Button,
@@ -17,27 +18,27 @@ import React from "react";
 import { RiAddFill } from "react-icons/ri";
 
 export type TagsSideViewProps = {
+  userId: string;
   selectedTagId: string | undefined;
   onSelectTagId: (id: string | undefined) => void;
-} & {
   tags: Tag[];
-  onAddTag: (tag: Tag) => Promise<Result<unknown>>;
-  onUpdateTag: TagListProps["onUpdateTag"];
-  onDeleteTag: TagListProps["onDeleteTag"];
 };
 
 export const TagsSideView: React.FC<TagsSideViewProps> = ({
+  userId,
   selectedTagId,
   onSelectTagId,
   tags,
-  onAddTag,
-  onUpdateTag,
-  onDeleteTag,
 }) => {
+  const { addTag, updateTag, deleteTag } = useTagOperation(userId);
+  const appAddTag = useAppOperation(addTag);
+  const appUpdateTag = useAppOperation(updateTag);
+  const appDeleteTag = useAppOperation(deleteTag);
+
   const isAllSelected = selectedTagId === undefined;
 
   const { tagListItems, addTagCreator, addTagData, deleteTagCreator } =
-    useTagListItems(tags, onAddTag);
+    useTagListItems(tags, appAddTag);
 
   const handleClickShowAll = () => {
     onSelectTagId(undefined);
@@ -51,7 +52,7 @@ export const TagsSideView: React.FC<TagsSideViewProps> = ({
     if (id === selectedTagId) {
       onSelectTagId(undefined);
     }
-    onDeleteTag(id);
+    appDeleteTag(id);
   };
 
   return (
@@ -123,7 +124,7 @@ export const TagsSideView: React.FC<TagsSideViewProps> = ({
         onDeleteTagCreator={deleteTagCreator}
         onDeleteTag={handleDeleteTag}
         onSelectTag={onSelectTagId}
-        onUpdateTag={onUpdateTag}
+        onUpdateTag={appUpdateTag}
       />
     </Grid>
   );

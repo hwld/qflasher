@@ -5,6 +5,7 @@ import React, { useEffect, useRef } from "react";
 type Props = {
   initialWidth?: number;
   onChangeWidth: (w: number) => void;
+  // ドラッグで変更できる最小の幅と高さ
   maxW?: string;
   minW?: string;
 } & FlexProps;
@@ -35,6 +36,9 @@ export const ResizableBox: React.FC<Props> = ({
     const handleMouseMove = (e: MouseEvent) => {
       if (isMouseDown.current) {
         const newWidth = currentWidth.current + (e.clientX - startX.current);
+        if (newWidth < minW || newWidth > maxW) {
+          return;
+        }
         onChangeWidth(newWidth);
         if (handleRef.current) {
           handleRef.current.style.width = newWidth + "px";
@@ -60,8 +64,6 @@ export const ResizableBox: React.FC<Props> = ({
       ref={handleRef}
       w={initialWidth ? `${initialWidth}px` : "auto"}
       h="100%"
-      minW={minW}
-      maxW={maxW}
       position={"relative"}
       {...styles}
     >

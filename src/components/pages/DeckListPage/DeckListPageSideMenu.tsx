@@ -1,9 +1,7 @@
 import { TagsSideView } from "@/components/model/tag/TagsSideView";
-import { useTagOperation } from "@/components/model/tag/useTagOperation";
 import { SideMenuName } from "@/components/pages/DeckListPage/DeckListPage";
 import { SideMenu } from "@/components/ui/SideMenu/SideMenu";
 import { useSideMenu } from "@/context/SideMenuContext";
-import { useAppOperation } from "@/hooks/useAppOperation";
 import { Tag } from "@/models";
 import { useState } from "react";
 import { AiFillTags } from "react-icons/ai";
@@ -29,25 +27,21 @@ export const DeckListPageSideMenu: React.VFC<Props> = ({
   const [menuSelected, setMenuSelected] =
     useState<SideMenuName>(defaultMenuSelected);
 
-  const { addTag, updateTag, deleteTag } = useTagOperation(userId);
-  const handleAddTag = useAppOperation(addTag);
-  const handleUpdateTag = useAppOperation(updateTag);
-  const handleDeleteTag = useAppOperation(deleteTag);
-
   const handleSelectMenu = (name: SideMenuName) => {
-    if (menuSelected === name) {
-      storeMenuSelected("none");
-      setMenuSelected("none");
-    } else {
-      storeMenuSelected(name);
-      setMenuSelected(name);
-    }
+    storeMenuSelected(name);
+    setMenuSelected(name);
+  };
+
+  const handleDeselectMenu = () => {
+    storeMenuSelected("none");
+    setMenuSelected("none");
   };
 
   return (
     <SideMenu
       selected={menuSelected}
-      onSelect={handleSelectMenu}
+      onSelectMenu={handleSelectMenu}
+      onDeselectMenu={handleDeselectMenu}
       defaultWidth={defaultMenuWidth}
       items={[
         {
@@ -56,12 +50,10 @@ export const DeckListPageSideMenu: React.VFC<Props> = ({
           icon: AiFillTags,
           content: (
             <TagsSideView
+              userId={userId}
               selectedTagId={selectedTagId}
               onSelectTagId={onSelectTag}
               tags={allTags}
-              onAddTag={handleAddTag}
-              onUpdateTag={handleUpdateTag}
-              onDeleteTag={handleDeleteTag}
             />
           ),
         },
