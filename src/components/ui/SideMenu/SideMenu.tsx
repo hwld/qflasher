@@ -1,9 +1,9 @@
 import { SideMenuName } from "@/components/pages/DeckListPage/DeckListPage";
 import { SideMenuArea } from "@/components/ui/SideMenu/SideMenuArea";
 import { SideMenuItem } from "@/components/ui/SideMenu/SideMenuItem";
-import { AppKeyframes } from "@/types";
 import { Box } from "@chakra-ui/layout";
 import { Flex } from "@chakra-ui/react";
+import { eventmit } from "eventmit";
 import { ReactElement, ReactNode, useState } from "react";
 
 type Props<T extends SideMenuName> = {
@@ -19,6 +19,12 @@ type Props<T extends SideMenuName> = {
   defaultWidth?: number;
 };
 
+export type SideMenuAnimationEvent = {
+  animation: "open" | "close";
+  onBefore?: () => void;
+  onAfter?: () => void;
+};
+
 export const SideMenu = <T extends SideMenuName>({
   items,
   selected,
@@ -29,9 +35,7 @@ export const SideMenu = <T extends SideMenuName>({
   const selectedItem = items.find((item) => item.name === selected);
   const mobileBarWidth = "40px";
 
-  const [animationEvents, setAnimationEvents] = useState<
-    { keyframe: AppKeyframes; onAfter: () => void; onBefore: () => void }[]
-  >([]);
+  const [animationEmitter, _] = useState(eventmit<SideMenuAnimationEvent>());
 
   return (
     <Flex position={"relative"}>
@@ -53,6 +57,7 @@ export const SideMenu = <T extends SideMenuName>({
               selected={selected === item.name}
               onSelect={onSelectMenu}
               onDeselect={onDeselectMenu}
+              animationEmitter={animationEmitter}
             />
           );
         })}
@@ -62,6 +67,7 @@ export const SideMenu = <T extends SideMenuName>({
         selectedItem={selectedItem}
         mobileBarWidth={mobileBarWidth}
         defaultWidth={defaultWidth}
+        animationEmitter={animationEmitter}
       />
     </Flex>
   );
