@@ -1,7 +1,7 @@
 import { FullWidthSideArea } from "@/components/ui/SideMenu/FullWidthSideArea";
 import { ResizableSideArea } from "@/components/ui/SideMenu/ResizableSideArea";
 import { useBreakpointValue } from "@chakra-ui/react";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 
 type Props<T> = {
   selectedItem:
@@ -21,6 +21,7 @@ export const SideMenuArea = <T extends string>({
   mobileBarWidth,
   defaultWidth = 300,
 }: Props<T>): ReturnType<React.VFC> => {
+  const [width, setWidth] = useState(defaultWidth);
   const breakPoint = useBreakpointValue({ base: "base", md: "md" } as const);
 
   if (!selectedItem) {
@@ -37,7 +38,7 @@ export const SideMenuArea = <T extends string>({
     }
     case "md": {
       return (
-        <ResizableSideArea initialWidth={defaultWidth}>
+        <ResizableSideArea initialWidth={width} onChangeWidht={setWidth}>
           {selectedItem.content}
         </ResizableSideArea>
       );
