@@ -1,6 +1,6 @@
 import { useWithResult } from "@/hooks/useWithResult";
 import { Result } from "@/utils/result";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type UseExecuteResult<T, K> = {
   result: Result<T>;
@@ -17,12 +17,20 @@ export const useResult = <Params extends unknown[], Return>(
   const [result, setResult] = useState<Result<Return>>(Result.Loading);
   const func = useWithResult(callback);
 
+  // paramsが空だった場合にuseEffectが無限に呼ばれるのを防ぐ
+  const constEmpty = useMemo(() => {
+    return [];
+  }, []);
+  const innerParams = useMemo(() => {
+    return params.length === 0 ? (constEmpty as unknown as Params) : params;
+  }, [constEmpty, params]);
+
   useEffect(() => {
     (async () => {
-      const r = await func(...params);
+      const r = await func(...innerParams);
       setResult(r);
     })();
-  }, [func, params]);
+  }, [func, innerParams]);
 
   return result;
 };
