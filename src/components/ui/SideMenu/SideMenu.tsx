@@ -1,3 +1,4 @@
+import { SideMenuName } from "@/components/pages/DeckListPage/DeckListPage";
 import { SideMenuArea } from "@/components/ui/SideMenu/SideMenuArea";
 import { SideMenuItem } from "@/components/ui/SideMenu/SideMenuItem";
 import { AppKeyframes } from "@/types";
@@ -5,7 +6,7 @@ import { Box } from "@chakra-ui/layout";
 import { Flex } from "@chakra-ui/react";
 import { ReactElement, ReactNode, useState } from "react";
 
-type Props<T extends string> = {
+type Props<T extends SideMenuName> = {
   items: {
     name: T;
     label: string;
@@ -18,7 +19,7 @@ type Props<T extends string> = {
   defaultWidth?: number;
 };
 
-export const SideMenu = <T extends string>({
+export const SideMenu = <T extends SideMenuName>({
   items,
   selected,
   onSelectMenu,

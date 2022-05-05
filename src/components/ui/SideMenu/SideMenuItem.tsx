@@ -1,8 +1,9 @@
+import { SideMenuName } from "@/components/pages/DeckListPage/DeckListPage";
 import { Box, Flex } from "@chakra-ui/layout";
 import { Button, Icon, Tooltip } from "@chakra-ui/react";
 import React from "react";
 
-type Props<T> = {
+type Props<T extends SideMenuName> = {
   name: T;
   label: string;
   icon: React.ElementType;
@@ -11,7 +12,7 @@ type Props<T> = {
   onDeselect: () => void;
 };
 
-export const SideMenuItem = <T,>({
+export const SideMenuItem = <T extends SideMenuName>({
   selected,
   icon,
   name,
