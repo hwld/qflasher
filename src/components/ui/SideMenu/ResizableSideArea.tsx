@@ -8,6 +8,7 @@ import React, {
   ReactNode,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -96,7 +97,7 @@ export const ResizableSideArea: React.VFC<Props> = ({
   };
 
   //　初回レンダリングで選択状態ではなければwidthを0にする
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (ref.current && !selected) {
       ref.current.style.width = "0px";
     }

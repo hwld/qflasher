@@ -1,7 +1,14 @@
 import { SideMenuAnimationEvent } from "@/components/ui/SideMenu/SideMenu";
 import { Box, keyframes } from "@chakra-ui/react";
 import { Eventmitter } from "eventmit";
-import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import {
+  ReactNode,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 type Props = {
   selected: boolean;
@@ -72,7 +79,7 @@ export const FullWidthSideArea: React.VFC<Props> = ({
   };
 
   //　初回レンダリングで選択状態ではなければwidthを0にする
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (ref.current && !selected) {
       ref.current.style.width = "0px";
     }
