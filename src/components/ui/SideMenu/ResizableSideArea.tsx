@@ -1,113 +1,88 @@
+import { SideMenuName } from "@/components/pages/DeckListPage/DeckListPage";
 import { ResizableBox } from "@/components/ui/ResizableBox";
-import { SideMenuAnimationEvent } from "@/components/ui/SideMenu/SideMenu";
+import { SideMenuItem } from "@/components/ui/SideMenu/SideMenuArea";
 import { useSideMenu } from "@/context/SideMenuContext";
 import { useDebounce } from "@/hooks/useDebounce";
 import { keyframes } from "@emotion/react";
-import { Eventmitter } from "eventmit";
 import React, {
-  ReactNode,
   useCallback,
   useEffect,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
 
-type Props = {
-  selected: boolean;
-  initialWidth: number;
-  onChangeWidht: (value: number) => void;
-  children: ReactNode;
-  animationEmitter: Eventmitter<SideMenuAnimationEvent>;
+type Props<T extends SideMenuName> = {
+  selectedItem: SideMenuItem<T> | undefined;
+  defaultWidth: number;
 };
 
-export const ResizableSideArea: React.VFC<Props> = ({
-  selected,
-  initialWidth,
-  onChangeWidht,
-  children,
-  animationEmitter,
-}) => {
+export const ResizableSideArea = <T extends SideMenuName>({
+  selectedItem,
+  defaultWidth,
+}: Props<T>) => {
+  const [width, setWidth] = useState(defaultWidth);
   const { storeWidth } = useSideMenu();
   const handleChangeWidth = useCallback(
     (value: number) => {
-      onChangeWidht(value);
+      setWidth(value);
       storeWidth(value);
     },
-    [onChangeWidht, storeWidth]
+    [storeWidth]
   );
   const storeWidthWithDebounce = useDebounce(500, handleChangeWidth);
 
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [animation, setAnimation] = useState("");
   const close = useMemo(() => {
     return keyframes`
-      from { width: ${initialWidth}px; }
+      from { width: ${width}px; }
       to { width: 0px; }
     `;
-  }, [initialWidth]);
+  }, [width]);
   const open = useMemo(() => {
     return keyframes`
       from { width: 0px }
-      to { width: ${initialWidth}px }
+      to { width: ${width}px }
     `;
-  }, [initialWidth]);
-  const animationEvent = useRef<SideMenuAnimationEvent | null>(null);
+  }, [width]);
 
+  // areaをcloseするときには、selectedItemがundefinedになっても
+  // アニメーションのためにselectedItemを使用するため、内部で別に状態を持たせる
+  const [innerSelectedItem, setInnerSelectedItem] = useState(selectedItem);
   useEffect(() => {
-    const handler = (e: SideMenuAnimationEvent) => {
-      if (animationEvent.current) {
-        return;
-      }
-
-      e.onBefore?.();
-      if (e.animation === "close") {
-        setAnimation(`${close} cubic-bezier(0, 0, 0.2, 1) 300ms`);
-      } else if (e.animation === "open") {
-        setAnimation(`${open} cubic-bezier(0, 0, 0.2, 1) 300ms`);
-      }
-
-      animationEvent.current = e;
-    };
-
-    animationEmitter.on(handler);
-    return () => {
-      animationEmitter.off(handler);
-    };
-  }, [animationEmitter, close, open]);
+    // selectedItemがundefindになるとアニメーションが実行され、
+    // そのアニメーションが完了した時点で内部の状態をundefinedに変更するため、ここでは変更しない
+    if (selectedItem) {
+      setInnerSelectedItem(selectedItem);
+    }
+  }, [selectedItem]);
 
   const handleAnimationEnd = (e: React.AnimationEvent) => {
-    if (!ref.current) {
-      return;
-    }
-
     if (close.name === e.animationName) {
-      ref.current.style.width = `0px`;
-    } else if (open.name === e.animationName) {
-      ref.current.style.width = `${initialWidth}px`;
+      setInnerSelectedItem(undefined);
     }
-
-    if (animationEvent.current) {
-      animationEvent.current.onAfter?.();
-      animationEvent.current = null;
-    }
-
     setAnimation("");
   };
 
-  //　初回レンダリングで選択状態ではなければwidthを0にする
-  useLayoutEffect(() => {
-    if (ref.current && !selected) {
-      ref.current.style.width = "0px";
+  const [animation, setAnimation] = useState("");
+  const isFirstRender = useRef(true);
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
-  return (
+    if (!!selectedItem) {
+      setAnimation(`${open} cubic-bezier(0, 0, 0.2, 1) 150ms`);
+    } else {
+      setAnimation(`${close} cubic-bezier(0, 0, 0.2, 1) 150ms`);
+    }
+    // undefinedかそれ以外か
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [!!selectedItem]);
+
+  return innerSelectedItem ? (
     <ResizableBox
-      ref={ref}
-      initialWidth={initialWidth}
+      initialWidth={width}
       onChangeWidth={storeWidthWithDebounce}
       bgColor={"gray.700"}
       wordBreak="keep-all"
@@ -116,7 +91,7 @@ export const ResizableSideArea: React.VFC<Props> = ({
       animation={animation}
       onAnimationEnd={handleAnimationEnd}
     >
-      {children}
+      {innerSelectedItem.content}
     </ResizableBox>
-  );
+  ) : null;
 };

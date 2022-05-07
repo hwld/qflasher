@@ -3,8 +3,7 @@ import { SideMenuArea } from "@/components/ui/SideMenu/SideMenuArea";
 import { SideMenuItem } from "@/components/ui/SideMenu/SideMenuItem";
 import { Box } from "@chakra-ui/layout";
 import { Flex } from "@chakra-ui/react";
-import { eventmit } from "eventmit";
-import { ReactElement, ReactNode, useState } from "react";
+import { ReactElement, ReactNode } from "react";
 
 type Props<T extends SideMenuName> = {
   items: {
@@ -35,8 +34,6 @@ export const SideMenu = <T extends SideMenuName>({
   const selectedItem = items.find((item) => item.name === selected);
   const mobileBarWidth = "40px";
 
-  const [animationEmitter, _] = useState(eventmit<SideMenuAnimationEvent>());
-
   return (
     <Flex position={"relative"}>
       <Box
@@ -57,7 +54,6 @@ export const SideMenu = <T extends SideMenuName>({
               selected={selected === item.name}
               onSelect={onSelectMenu}
               onDeselect={onDeselectMenu}
-              animationEmitter={animationEmitter}
             />
           );
         })}
@@ -67,7 +63,6 @@ export const SideMenu = <T extends SideMenuName>({
         selectedItem={selectedItem}
         mobileBarWidth={mobileBarWidth}
         defaultWidth={defaultWidth}
-        animationEmitter={animationEmitter}
       />
     </Flex>
   );

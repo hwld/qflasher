@@ -1,28 +1,17 @@
-import { SideMenuAnimationEvent } from "@/components/ui/SideMenu/SideMenu";
+import { SideMenuName } from "@/components/pages/DeckListPage/DeckListPage";
+import { SideMenuItem } from "@/components/ui/SideMenu/SideMenuArea";
 import { Box, keyframes } from "@chakra-ui/react";
-import { Eventmitter } from "eventmit";
-import {
-  ReactNode,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
-type Props = {
-  selected: boolean;
+type Props<T extends SideMenuName> = {
   sideMenuWidth: string;
-  children: ReactNode;
-  animationEmitter: Eventmitter<SideMenuAnimationEvent>;
+  selectedItem: SideMenuItem<T> | undefined;
 };
 
-export const FullWidthSideArea: React.VFC<Props> = ({
-  selected,
+export const FullWidthSideArea = <T extends SideMenuName>({
+  selectedItem,
   sideMenuWidth,
-  children,
-  animationEmitter,
-}) => {
+}: Props<T>) => {
   const [animation, setAnimation] = useState("");
   const close = useMemo(() => {
     return keyframes`
@@ -31,77 +20,57 @@ export const FullWidthSideArea: React.VFC<Props> = ({
   }, []);
   const open = useMemo(() => {
     return keyframes`
+      from { width: 0px; }
       to { width: calc(100vw - ${sideMenuWidth}); }
     `;
   }, [sideMenuWidth]);
 
-  const ref = useRef<HTMLDivElement | null>(null);
-  const animationEvent = useRef<SideMenuAnimationEvent | null>(null);
+  const [innerSelectedItem, setInnerSelectedItem] = useState(selectedItem);
+
   useEffect(() => {
-    const handler = (e: SideMenuAnimationEvent) => {
-      if (animationEvent.current) {
-        return;
-      }
-
-      e.onBefore?.();
-      if (e.animation === "close") {
-        setAnimation(`${close} cubic-bezier(0, 0, 0.2, 1) 300ms`);
-      } else if (e.animation === "open") {
-        setAnimation(`${open} cubic-bezier(0, 0, 0.2, 1) 300ms`);
-      }
-
-      animationEvent.current = e;
-    };
-
-    animationEmitter.on(handler);
-    return () => {
-      animationEmitter.off(handler);
-    };
-  }, [animationEmitter, close, open]);
+    if (selectedItem) {
+      setInnerSelectedItem(selectedItem);
+    }
+  }, [selectedItem]);
 
   const handleAnimationEnd = (e: React.AnimationEvent) => {
-    if (!ref.current) {
-      return;
-    }
-
     if (close.name === e.animationName) {
-      ref.current.style.width = `0px`;
-    } else if (open.name === e.animationName) {
-      ref.current.style.width = `calc(100vw - ${sideMenuWidth})`;
+      setInnerSelectedItem(undefined);
     }
-
-    if (animationEvent.current) {
-      animationEvent.current.onAfter?.();
-      animationEvent.current = null;
-    }
-
     setAnimation("");
   };
 
-  //　初回レンダリングで選択状態ではなければwidthを0にする
-  useLayoutEffect(() => {
-    if (ref.current && !selected) {
-      ref.current.style.width = "0px";
+  const isFirstRender = useRef(true);
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
-  return (
+    if (!!selectedItem) {
+      setAnimation(`${open} cubic-bezier(0, 0, 0.2, 1) 150ms`);
+    } else {
+      setAnimation(`${close} cubic-bezier(0, 0, 0.2, 1) 150ms`);
+    }
+    // undefinedかそれ以外か
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [!!selectedItem]);
+
+  return innerSelectedItem ? (
     <Box
-      ref={ref}
       bgColor={"gray.700"}
       position="absolute"
       zIndex="modal"
       left={sideMenuWidth}
       w={`calc(100vw - ${sideMenuWidth})`}
-      animation={animation}
-      onAnimationEnd={handleAnimationEnd}
       h="100%"
       overflow={"hidden"}
       wordBreak="keep-all"
       style={{ animationFillMode: "forwards" }}
+      animation={animation}
+      onAnimationEnd={handleAnimationEnd}
     >
-      {children}
+      {innerSelectedItem.content}
     </Box>
-  );
+  ) : null;
 };

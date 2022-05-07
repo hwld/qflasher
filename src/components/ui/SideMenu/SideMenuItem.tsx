@@ -1,9 +1,7 @@
 import { SideMenuName } from "@/components/pages/DeckListPage/DeckListPage";
-import { SideMenuAnimationEvent } from "@/components/ui/SideMenu/SideMenu";
 import { Box, Flex } from "@chakra-ui/layout";
 import { Button, Icon, Tooltip } from "@chakra-ui/react";
-import { Eventmitter } from "eventmit";
-import React, { useCallback } from "react";
+import React from "react";
 
 type Props<T extends SideMenuName> = {
   name: T;
@@ -12,7 +10,6 @@ type Props<T extends SideMenuName> = {
   selected: boolean;
   onSelect: (name: T) => void;
   onDeselect: () => void;
-  animationEmitter: Eventmitter<SideMenuAnimationEvent>;
 };
 
 export const SideMenuItem = <T extends SideMenuName>({
@@ -22,25 +19,12 @@ export const SideMenuItem = <T extends SideMenuName>({
   label,
   onSelect,
   onDeselect,
-  animationEmitter,
 }: Props<T>) => {
-  const select = useCallback(() => {
-    onSelect(name);
-  }, [name, onSelect]);
-
-  const handleClickSelect = useCallback(() => {
-    animationEmitter.emit({ animation: "open", onBefore: select });
-  }, [animationEmitter, select]);
-
-  const handleClickDeselect = useCallback(() => {
-    animationEmitter.emit({ animation: "close", onAfter: onDeselect });
-  }, [animationEmitter, onDeselect]);
-
   const handleClick = () => {
     if (selected) {
-      handleClickDeselect();
+      onDeselect();
     } else {
-      handleClickSelect();
+      onSelect(name);
     }
   };
 
