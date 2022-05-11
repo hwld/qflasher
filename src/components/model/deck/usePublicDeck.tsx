@@ -1,7 +1,7 @@
 import { UseDeckResult } from "@/components/model/deck/useDeck";
 import { db } from "@/firebase/config";
 import { cardConverter, deckConverter } from "@/firebase/firestoreConverters";
-import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
+import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
 import { Deck } from "@/models";
 import { isErr, isLoading, Result } from "@/utils/result";
 import { collectionGroup, orderBy, query, where } from "firebase/firestore";
@@ -29,8 +29,8 @@ export const usePublicDeck = (deckId: string) => {
     );
   }, [deckId]);
 
-  const publicDecksResult = useFirestoreCollectionData(publicDecksQuery);
-  const publicCardsResult = useFirestoreCollectionData(publicCardsQuery);
+  const publicDecksResult = useFirestoreCollection(publicDecksQuery);
+  const publicCardsResult = useFirestoreCollection(publicCardsQuery);
 
   const publicDeck = useMemo((): UseDeckResult => {
     if (isErr(publicDecksResult) || isErr(publicCardsResult)) {

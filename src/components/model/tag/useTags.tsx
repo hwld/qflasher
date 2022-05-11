@@ -1,6 +1,6 @@
 import { db } from "@/firebase/config";
 import { tagConverter } from "@/firebase/firestoreConverters";
-import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
+import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
 import { Tag } from "@/models";
 import { Result } from "@/utils/result";
 import { collection, orderBy, query } from "firebase/firestore";
@@ -17,7 +17,7 @@ export const useTags = (userId: string) => {
     [tagsRef]
   );
 
-  const tagsData = useFirestoreCollectionData(tagsQuery);
+  const tagsData = useFirestoreCollection(tagsQuery);
   const tagsResult = useMemo((): Result<Tag[]> => {
     switch (tagsData.status) {
       case "loading": {

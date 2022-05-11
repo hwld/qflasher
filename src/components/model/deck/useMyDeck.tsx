@@ -5,8 +5,8 @@ import {
   deckConverter,
   privateFieldOnDeckConverter,
 } from "@/firebase/firestoreConverters";
-import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
-import { useFirestoreDocData } from "@/hooks/useFirestoreDocData";
+import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
+import { useFirestoreDoc } from "@/hooks/useFirestoreDoc";
 import { Deck } from "@/models";
 import { isErr, isLoading, Result } from "@/utils/result";
 import {
@@ -46,9 +46,9 @@ export const useMyDeck = ({
     );
   }, [deckRef]);
 
-  const deckInfoResult = useFirestoreDocData(deckRef);
-  const privatesResult = useFirestoreCollectionData(privatesRef);
-  const cardsResult = useFirestoreCollectionData(cardsQuery);
+  const deckInfoResult = useFirestoreDoc(deckRef);
+  const privatesResult = useFirestoreCollection(privatesRef);
+  const cardsResult = useFirestoreCollection(cardsQuery);
 
   // deckDocとcardDoc[]からDeckを作成する
   const deck = useMemo((): UseDeckResult => {

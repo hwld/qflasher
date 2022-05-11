@@ -3,7 +3,7 @@ import {
   deckConverter,
   privateFieldOnDeckConverter,
 } from "@/firebase/firestoreConverters";
-import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
+import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
 import { DeckWithoutCards } from "@/models";
 import { displayErrors } from "@/utils/displayError";
 import { isErr, isLoading, Result } from "@/utils/result";
@@ -37,8 +37,8 @@ export const useMyDeckList = (userId: string): DeckListData => {
     );
   }, [userId]);
 
-  const deckListResult = useFirestoreCollectionData(decksQuery);
-  const privatesResult = useFirestoreCollectionData(privatesRef);
+  const deckListResult = useFirestoreCollection(decksQuery);
+  const privatesResult = useFirestoreCollection(privatesRef);
 
   const deckList = useMemo((): Result<DeckWithoutCards[]> => {
     if (isLoading(deckListResult) || isLoading(privatesResult)) {

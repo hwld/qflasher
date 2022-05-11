@@ -1,22 +1,18 @@
 import { Result } from "@/utils/result";
-import {
-  DocumentReference,
-  FirestoreError,
-  onSnapshot,
-} from "firebase/firestore";
+import { FirestoreError, onSnapshot, Query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
-type DocData<T> = Result<T | undefined, FirestoreError>;
+type CollectionData<T> = Result<T[], FirestoreError>;
 
-export const useFirestoreDocData = <T,>(
-  query: DocumentReference<T>
-): DocData<T> => {
-  const [data, setData] = useState<DocData<T>>(Result.Loading());
+export const useFirestoreCollection = <T,>(
+  query: Query<T>
+): CollectionData<T> => {
+  const [data, setData] = useState<CollectionData<T>>(Result.Loading());
 
   useEffect(() => {
     const unsubscribe = onSnapshot(query, {
       next: (snap) => {
-        setData(Result.Ok(snap.data()));
+        setData(Result.Ok(snap.docs.map((d) => d.data())));
       },
       error: (error) => {
         setData(Result.Err(error));

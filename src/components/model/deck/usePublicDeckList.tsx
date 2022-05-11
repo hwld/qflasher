@@ -1,6 +1,6 @@
 import { db } from "@/firebase/config";
 import { deckConverter } from "@/firebase/firestoreConverters";
-import { useFirestoreCollectionData } from "@/hooks/useFirestoreCollectionData";
+import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
 import { DeckWithoutCards } from "@/models";
 import { displayErrors } from "@/utils/displayError";
 import { isErr, isLoading, Result } from "@/utils/result";
@@ -16,7 +16,7 @@ export const usePublicDeckList = (): Result<DeckWithoutCards[]> => {
     );
   }, []);
 
-  const deckListResult = useFirestoreCollectionData(publicDecksQuery);
+  const deckListResult = useFirestoreCollection(publicDecksQuery);
 
   const deckList = useMemo((): Result<DeckWithoutCards[]> => {
     if (isLoading(deckListResult)) {

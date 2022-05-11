@@ -23,7 +23,6 @@ export const SideMenuArea = <T extends SideMenuName>({
   defaultWidth = 300,
 }: Props<T>): ReturnType<React.VFC> => {
   const breakPoint = useBreakpointValue({ base: "base", md: "md" } as const);
-  console.log(breakPoint);
 
   switch (breakPoint) {
     case "base": {
