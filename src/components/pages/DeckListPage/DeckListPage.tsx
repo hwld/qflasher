@@ -26,10 +26,10 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
     isLoading(readMenuSelectedResult) ||
     isLoading(readWidthResult) ||
     isLoading(useTagsResult) ||
-    isLoading(useDeckListResult)
+    useDeckListResult.isInitialLoading
   ) {
     return <AppLoading />;
-  } else if (isErr(useDeckListResult)) {
+  } else if (useDeckListResult.isError) {
     return (
       <ErrorMessageBox
         mx="auto"
@@ -55,6 +55,9 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
         allTags={useTagsResult.data}
         defaultMenuSelected={readMenuSelectedResult.data}
         defaultMenuWidth={readWidthResult.data}
+        isLoading={useDeckListResult.isLoading}
+        readMore={useDeckListResult.readMore}
+        canReadMore={useDeckListResult.canReadMore}
       />
     );
   }

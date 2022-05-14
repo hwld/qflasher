@@ -11,7 +11,7 @@ import { useAppRouter } from "@/hooks/useAppRouter";
 import { DeckWithoutCards, Tag } from "@/models";
 import { routes } from "@/routes";
 import { Stack } from "@chakra-ui/layout";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Button, Flex } from "@chakra-ui/react";
 import { useCallback, useMemo, useState } from "react";
 import { MdAdd } from "react-icons/md";
 
@@ -21,6 +21,9 @@ type Props = {
   allTags: Tag[];
   defaultMenuSelected?: SideMenuName;
   defaultMenuWidth?: number;
+  isLoading: boolean;
+  canReadMore: boolean;
+  readMore: () => void;
 };
 
 export const DeckListContent: React.FC<Props> = ({
@@ -29,6 +32,9 @@ export const DeckListContent: React.FC<Props> = ({
   allTags,
   defaultMenuSelected,
   defaultMenuWidth,
+  isLoading,
+  canReadMore,
+  readMore,
 }) => {
   const router = useAppRouter();
 
@@ -87,6 +93,23 @@ export const DeckListContent: React.FC<Props> = ({
             styleProps={{ justifyContent: "flex-start" }}
           />
         </Stack>
+        {canReadMore && (
+          <Button
+            mt={5}
+            ml={20}
+            onClick={readMore}
+            w="fit-content"
+            bgColor={"orange.300"}
+            _hover={{ bgColor: "orange.400" }}
+            _active={{ bgColor: "orange.500" }}
+            color="gray.800"
+            justifyContent="center"
+            isLoading={isLoading}
+          >
+            もっと読み込む
+          </Button>
+        )}
+
         <Fab
           tooltipLabel="デッキの追加"
           aria-label="go add deck"
