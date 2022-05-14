@@ -5,6 +5,9 @@ export type FirestoreDeck = Omit<DeckWithoutCards, "tagIds"> & {
   uid: string;
   createdAt: Timestamp;
 };
+export type FirestorePrivateFieldOnDeck = PrivateFieldOnDeck & {
+  createdAt: Timestamp;
+};
 export type FirestoreDeckCard = DeckCard & {
   index: number;
   deckId: string;
@@ -40,19 +43,28 @@ export const deckConverter: FirestoreDataConverter<FirestoreDeck> = {
   },
 };
 
-export const privateFieldOnDeckConverter: FirestoreDataConverter<PrivateFieldOnDeck> =
+export const privateFieldOnDeckConverter: FirestoreDataConverter<FirestorePrivateFieldOnDeck> =
   {
     fromFirestore: (snapshot, options) => {
       const field = snapshot.data(options);
-      const data: PrivateFieldOnDeck = {
+      const data: FirestorePrivateFieldOnDeck = {
         uid: field.uid,
         tagIds: field.tagIds,
         deckId: field.deckId,
+        createdAt: field.createdAt,
       };
       return data;
     },
     toFirestore: (field) => {
-      return { uid: field.uid, tagIds: field.tagIds, deckId: field.deckId };
+      const data: {
+        [T in keyof FirestorePrivateFieldOnDeck]: typeof field[T];
+      } = {
+        uid: field.uid,
+        tagIds: field.tagIds,
+        deckId: field.deckId,
+        createdAt: field.createdAt,
+      };
+      return data;
     },
   };
 

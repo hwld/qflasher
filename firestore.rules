@@ -57,7 +57,7 @@ service cloud.firestore {
   }
 
   function isValidDeckPrivateFields(fields,uid,deckId){
-    return fields.size() == 3
+    return fields.size() == 4
     && 'uid' in fields
     && fields.uid is string
     && fields.uid == uid
@@ -67,6 +67,8 @@ service cloud.firestore {
     && 'deckId' in fields
     && fields.deckId is string
     && fields.deckId == deckId
+    && 'createdAt' in fields
+    && fields.createdAt is timestamp
   }
 
   function isAuth(userId){

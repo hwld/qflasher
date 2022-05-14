@@ -36,7 +36,6 @@ export const useDeckOperation = (userId: string): DeckOperation => {
 
   const addDeck: DeckOperation["addDeck"] = useCallback(
     async (deck: Omit<Deck, "id">) => {
-      // バッチ書き込みは最大500ドキュメントにしか書き込めないから、後でなんとかしたい
       const batch = writeBatch(db);
 
       // deckの書き込み
@@ -58,6 +57,7 @@ export const useDeckOperation = (userId: string): DeckOperation => {
         uid: userId,
         tagIds: deck.tagIds,
         deckId: deckDoc.id,
+        createdAt: serverTimestamp(),
       });
 
       // cardsの書き込み
@@ -134,6 +134,7 @@ export const useDeckOperation = (userId: string): DeckOperation => {
         uid: userId,
         tagIds: newDeck.tagIds,
         deckId: deckRef.id,
+        createdAt: serverTimestamp(),
       });
 
       // カードの削除
