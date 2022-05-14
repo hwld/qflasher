@@ -1,13 +1,16 @@
 import { db } from "@/firebase/config";
 import { deckConverter } from "@/firebase/firestoreConverters";
-import { useFirestoreCollection } from "@/hooks/useFirestoreCollection";
+import { useInfiniteCollection } from "@/hooks/useInfiniteCollection";
 import { DeckWithoutCards } from "@/models";
-import { displayErrors } from "@/utils/displayError";
-import { isErr, isLoading, Result } from "@/utils/result";
 import { collectionGroup, orderBy, query, where } from "firebase/firestore";
 import { useMemo } from "react";
 
-export const usePublicDeckList = (): Result<DeckWithoutCards[]> => {
+type UsePublicDeckListParams = { count: number };
+
+export const usePublicDeckList = (
+  params: UsePublicDeckListParams = { count: 50 }
+) => {
+  const count = params.count;
   const publicDecksQuery = useMemo(() => {
     return query(
       collectionGroup(db, "decks").withConverter(deckConverter),
@@ -16,24 +19,19 @@ export const usePublicDeckList = (): Result<DeckWithoutCards[]> => {
     );
   }, []);
 
-  const deckListResult = useFirestoreCollection(publicDecksQuery);
+  const { data, ...other } = useInfiniteCollection({
+    query: publicDecksQuery,
+    count,
+  });
 
-  const deckList = useMemo((): Result<DeckWithoutCards[]> => {
-    if (isLoading(deckListResult)) {
-      return deckListResult;
-    }
-    if (isErr(deckListResult)) {
-      displayErrors(deckListResult.error);
-      return Result.Err();
-    }
+  const decks: DeckWithoutCards[] = useMemo(() => {
+    return data.map((d): DeckWithoutCards => {
+      return {
+        ...d,
+        tagIds: [],
+      };
+    });
+  }, [data]);
 
-    const deckInfo: DeckWithoutCards[] = deckListResult.data.map((d) => ({
-      ...d,
-      tagIds: [],
-    }));
-
-    return Result.Ok(deckInfo);
-  }, [deckListResult]);
-
-  return deckList;
+  return { decks, ...other };
 };

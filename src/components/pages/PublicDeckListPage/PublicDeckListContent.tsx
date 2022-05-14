@@ -15,6 +15,7 @@ export const PublicDeckListContent: React.VFC<Props> = ({ decks }) => {
       maxW={"1300px"}
       spacing={10}
       align="flex-start"
+      pb={16}
     >
       <Flex
         w={"100%"}
