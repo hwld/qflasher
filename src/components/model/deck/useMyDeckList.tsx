@@ -1,20 +1,8 @@
 import { db } from "@/firebase/config";
-import {
-  deckConverter,
-  privateFieldOnDeckConverter,
-} from "@/firebase/firestoreConverters";
+import { deckConverter } from "@/firebase/firestoreConverters";
 import { useInfiniteCollection } from "@/hooks/useInfiniteCollection";
 import { DeckWithoutCards } from "@/models";
-import { nonNullable } from "@/utils/nonNullable";
-import {
-  collection,
-  collectionGroup,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 export const useMyDeckList = (userId: string) => {
@@ -41,42 +29,22 @@ export const useMyDeckList = (userId: string) => {
     })();
   }, [userId]);
 
-  const privatesQuery = useMemo(() => {
-    return query(
-      collectionGroup(db, "private").withConverter(privateFieldOnDeckConverter),
-      where("uid", "==", userId),
-      orderBy("createdAt", "desc")
-    );
-  }, [userId]);
-
   const { readMore: readMoreDecks, ...decksResult } = useInfiniteCollection({
     query: decksQuery,
     count: 50,
   });
 
-  const { readMore: readMorePrivates, ...privatesResult } =
-    useInfiniteCollection({
-      query: privatesQuery,
-      count: 50,
-    });
-
   const data = useMemo((): DeckWithoutCards[] => {
-    return decksResult.data
-      .map((deck): DeckWithoutCards | null => {
-        const privates = privatesResult.data.find((p) => p.deckId === deck.id);
-        if (!privates) {
-          return null;
-        }
-        return {
-          id: deck.id,
-          name: deck.name,
-          cardLength: deck.cardLength,
-          published: deck.published,
-          tagIds: privates.tagIds,
-        };
-      })
-      .filter(nonNullable);
-  }, [decksResult.data, privatesResult.data]);
+    return decksResult.data.map((deck): DeckWithoutCards => {
+      return {
+        id: deck.id,
+        name: deck.name,
+        cardLength: deck.cardLength,
+        published: deck.published,
+        tagIds: deck.tagIds,
+      };
+    });
+  }, [decksResult.data]);
 
   const canReadMore = useMemo(() => {
     return (
@@ -87,16 +55,14 @@ export const useMyDeckList = (userId: string) => {
   const readMore = useCallback(() => {
     if (canReadMore) {
       readMoreDecks();
-      readMorePrivates();
     }
-  }, [canReadMore, readMoreDecks, readMorePrivates]);
+  }, [canReadMore, readMoreDecks]);
 
   return {
     data,
-    isError: decksResult.isError || privatesResult.isError,
-    isInitialLoading:
-      decksResult.isInitialLoading || privatesResult.isInitialLoading,
-    isLoading: decksResult.isLoading || privatesResult.isLoading,
+    isError: decksResult.isError,
+    isInitialLoading: decksResult.isInitialLoading,
+    isLoading: decksResult.isLoading,
     canReadMore,
     readMore,
   };

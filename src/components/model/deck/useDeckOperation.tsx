@@ -2,7 +2,6 @@ import { db } from "@/firebase/config";
 import {
   cardConverter,
   deckConverter,
-  privateFieldOnDeckConverter,
   tagConverter,
 } from "@/firebase/firestoreConverters";
 import { Deck, DeckCard } from "@/models";
@@ -45,19 +44,9 @@ export const useDeckOperation = (userId: string): DeckOperation => {
         uid: userId,
         name: deck.name,
         cardLength: deck.cards.length,
+        tagIds: deck.tagIds,
         createdAt: serverTimestamp(),
         published: deck.published,
-      });
-
-      // tagIdsの書き込み
-      const privateRef = doc(deckDoc, "private", "1").withConverter(
-        privateFieldOnDeckConverter
-      );
-      batch.set(privateRef, {
-        uid: userId,
-        tagIds: deck.tagIds,
-        deckId: deckDoc.id,
-        createdAt: serverTimestamp(),
       });
 
       // cardsの書き込み
@@ -89,11 +78,6 @@ export const useDeckOperation = (userId: string): DeckOperation => {
       const deckDoc = doc(decksRef, id);
       batch.delete(deckDoc);
 
-      const privateDoc = doc(deckDoc, "private/1").withConverter(
-        privateFieldOnDeckConverter
-      );
-      batch.delete(privateDoc);
-
       const cardsRef = collection(deckDoc, "cards").withConverter(
         cardConverter
       );
@@ -122,19 +106,9 @@ export const useDeckOperation = (userId: string): DeckOperation => {
         uid: userId,
         name: newDeck.name,
         cardLength: newDeck.cardLength,
+        tagIds: newDeck.tagIds,
         createdAt: oldDeck.createdAt,
         published: newDeck.published,
-      });
-
-      // プライベートフィールドの更新
-      const privateDoc = doc(deckRef, "private/1").withConverter(
-        privateFieldOnDeckConverter
-      );
-      batch.set(privateDoc, {
-        uid: userId,
-        tagIds: newDeck.tagIds,
-        deckId: deckRef.id,
-        createdAt: serverTimestamp(),
       });
 
       // カードの削除
@@ -172,10 +146,6 @@ export const useDeckOperation = (userId: string): DeckOperation => {
     async (deckId: string, tagId: string) => {
       const deckRef = doc(decksRef, deckId);
       const deck = (await getDoc(deckRef)).data();
-      const privateRef = doc(deckRef, "private/1").withConverter(
-        privateFieldOnDeckConverter
-      );
-      const privateField = (await getDoc(privateRef)).data();
 
       const tag = (
         await getDoc(
@@ -186,16 +156,13 @@ export const useDeckOperation = (userId: string): DeckOperation => {
       if (!deck) {
         throw new Error("存在しないデッキを参照しました");
       }
-      if (!privateField) {
-        throw new Error("存在しないフィールドを参照しました");
-      }
       if (!tag) {
         throw new Error("存在しないタグを参照しました");
       }
 
-      const alreadyExisted = privateField.tagIds.includes(tagId);
+      const alreadyExisted = deck.tagIds.includes(tagId);
 
-      await updateDoc(privateRef, { tagIds: arrayUnion(tagId) });
+      await updateDoc(deckRef, { tagIds: arrayUnion(tagId) });
 
       return { deckName: deck.name, tagName: tag.name, alreadyExisted };
     },

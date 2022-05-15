@@ -1,16 +1,7 @@
 import { db } from "@/firebase/config";
-import {
-  privateFieldOnDeckConverter,
-  tagConverter,
-} from "@/firebase/firestoreConverters";
+import { deckConverter, tagConverter } from "@/firebase/firestoreConverters";
 import { Tag } from "@/models";
-import {
-  collection,
-  collectionGroup,
-  doc,
-  setDoc,
-  writeBatch,
-} from "@firebase/firestore";
+import { collection, doc, setDoc, writeBatch } from "@firebase/firestore";
 import {
   arrayRemove,
   getDoc,
@@ -33,11 +24,9 @@ export const useTagOperation = (userId: string): UseTagOperationResult => {
     [userId]
   );
 
-  const privateRef = useMemo(() => {
-    return collectionGroup(db, "private").withConverter(
-      privateFieldOnDeckConverter
-    );
-  }, []);
+  const decksRef = useMemo(() => {
+    return collection(db, `users/${userId}/decks`).withConverter(deckConverter);
+  }, [userId]);
 
   const addTag = useCallback(
     async (tag: Tag) => {
@@ -75,21 +64,17 @@ export const useTagOperation = (userId: string): UseTagOperationResult => {
       const tagRef = doc(tagsRef, id);
       batch.delete(tagRef);
 
-      const privatesSnapshot = await getDocs(
-        query(
-          privateRef,
-          where("uid", "==", userId),
-          where("tagIds", "array-contains", id)
-        )
+      const decksSnapshot = await getDocs(
+        query(decksRef, where("tagIds", "array-contains", id))
       );
 
-      privatesSnapshot.docs.map((privateField) => {
-        batch.update(privateField.ref, { tagIds: arrayRemove(id) });
+      decksSnapshot.docs.map((deck) => {
+        batch.update(deck.ref, { tagIds: arrayRemove(id) });
       });
 
       await batch.commit();
     },
-    [privateRef, tagsRef, userId]
+    [decksRef, tagsRef]
   );
 
   return { addTag, updateTag, deleteTag };

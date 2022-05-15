@@ -37,7 +37,7 @@ service cloud.firestore {
   }
 
   function isValidDeck(deck,uid, deckId){
-    return deck.size() == 6
+    return deck.size() == 7
     && 'id' in deck
     && deck.id is string
     && deck.id == deckId
@@ -50,25 +50,13 @@ service cloud.firestore {
     && 'cardLength' in deck
     && deck.cardLength is int
     && deck.cardLength > 0 && deck.cardLength <= 100
+    && 'tagIds' in deck
+    && deck.tagIds is list
+    && deck.tagIds.size() <= 100
     && 'createdAt' in deck
     && deck.createdAt is timestamp
     && 'published' in deck
     && deck.published is bool
-  }
-
-  function isValidDeckPrivateFields(fields,uid,deckId){
-    return fields.size() == 4
-    && 'uid' in fields
-    && fields.uid is string
-    && fields.uid == uid
-    && 'tagIds' in fields
-    && fields.tagIds is list
-    && fields.tagIds.size() <= 100
-    && 'deckId' in fields
-    && fields.deckId is string
-    && fields.deckId == deckId
-    && 'createdAt' in fields
-    && fields.createdAt is timestamp
   }
 
   function isAuth(userId){
@@ -97,11 +85,6 @@ service cloud.firestore {
       allow list: if (isAuthField() || isPublic())
     }
 
-    match /{path=**}/private/{one} {
-      allow get: if isAuthField() && exists(request.path);
-      allow list: if isAuthField();
-    }
-
     match /users/{userId} {
       match /tags/{tagId} {
         allow create: if isAuth(userId) && isValidTag(request.resource.data, tagId);
@@ -119,12 +102,6 @@ service cloud.firestore {
 
         allow get: if isAuth(userId) && exists(request.path);
         allow list: if isAuth(userId);
-
-        match /private/1 {
-          allow create: if isAuth(userId) && isValidDeckPrivateFields(request.resource.data, userId, deckId);
-          allow update: if isAuth(userId) && isValidDeckPrivateFields(request.resource.data, userId, deckId);
-          allow delete: if isAuth(userId)
-        }
 
         match /cards/{cardId} {
           allow create: if isAuth(userId) && isValidCard(request.resource.data, cardId, deckId, userId);
