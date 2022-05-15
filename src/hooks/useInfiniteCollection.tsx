@@ -1,6 +1,7 @@
 import {
   getDocs,
   limit,
+  onSnapshot,
   query as firestoreQuery,
   Query,
   QueryDocumentSnapshot,
@@ -13,15 +14,33 @@ type UseInfiniteCollectionParams<T> = {
   count: number;
 };
 
-export const useInfiniteCollection = <T,>({
+export const useInfiniteCollection = <T extends { id: string }>({
   query,
   count,
 }: UseInfiniteCollectionParams<T>) => {
   const [data, setData] = useState<T[]>([]);
   const lastSnap = useRef<QueryDocumentSnapshot<T> | undefined>(undefined);
+
   const [isError, setIsError] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+
+  const removeData = useCallback((value: T) => {
+    setData((array) => {
+      return array.filter((d) => d.id !== value.id);
+    });
+  }, []);
+
+  const changeData = useCallback((value: T) => {
+    setData((array) => {
+      return array.map((d) => {
+        if (value.id === d.id) {
+          return value;
+        }
+        return d;
+      });
+    });
+  }, []);
 
   const initialLoad = useCallback(
     async (count: number) => {
@@ -70,6 +89,25 @@ export const useInfiniteCollection = <T,>({
   useEffect(() => {
     initialLoad(count);
   }, [count, initialLoad]);
+
+  // 変更があったときに反映させる
+  useEffect(() => {
+    const unsubscribe = onSnapshot(query, (snap) => {
+      snap.docChanges().forEach((change) => {
+        const data = change.doc.data();
+        if (change.type === "modified") {
+          changeData(data);
+        }
+        if (change.type === "removed") {
+          removeData(data);
+        }
+      });
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [changeData, query, removeData]);
 
   return { data, isError, isInitialLoading, isLoading, readMore };
 };

@@ -13,6 +13,11 @@ export const useMyDeckList = (userId: string) => {
     );
   }, [userId]);
 
+  const { readMore: readMoreDecks, ...decksResult } = useInfiniteCollection({
+    query: decksQuery,
+    count: 50,
+  });
+
   // 最後のデッキのid
   // これ以上読み込めるかの判定に使用する
   const [lastDeckId, setLastDeckId] = useState<string | undefined>(undefined);
@@ -27,12 +32,9 @@ export const useMyDeckList = (userId: string) => {
       );
       setLastDeckId(snap.docs[0]?.data().id);
     })();
-  }, [userId]);
 
-  const { readMore: readMoreDecks, ...decksResult } = useInfiniteCollection({
-    query: decksQuery,
-    count: 50,
-  });
+    // decksのdataが変更されたときに確認し直す
+  }, [userId, decksResult]);
 
   const data = useMemo((): DeckWithoutCards[] => {
     return decksResult.data.map((deck): DeckWithoutCards => {
@@ -48,7 +50,9 @@ export const useMyDeckList = (userId: string) => {
 
   const canReadMore = useMemo(() => {
     return (
-      lastDeckId !== undefined && data.every((deck) => deck.id !== lastDeckId)
+      lastDeckId !== undefined &&
+      data.length !== 0 &&
+      data.every((deck) => deck.id !== lastDeckId)
     );
   }, [data, lastDeckId]);
 
