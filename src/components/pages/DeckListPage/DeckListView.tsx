@@ -6,7 +6,7 @@ import { useConfirm } from "@/context/ConfirmContext";
 import { useAppOperation } from "@/hooks/useAppOperation";
 import { DeckWithoutCards } from "@/models";
 import { routes } from "@/routes";
-import { Button, Stack } from "@chakra-ui/react";
+import { Box, Button, Stack } from "@chakra-ui/react";
 import { useCallback, useState } from "react";
 
 type DeckListViewProps = {
@@ -63,20 +63,23 @@ export const DeckListView: React.VFC<DeckListViewProps> = ({
         onTagDeck={handleTagDeck}
         styleProps={{ justifyContent: "flex-start" }}
       />
-      {canReadMore && (
-        <Button
-          onClick={readMore}
-          w="fit-content"
-          bgColor={"orange.300"}
-          _hover={{ bgColor: "orange.400" }}
-          _active={{ bgColor: "orange.500" }}
-          color="gray.800"
-          justifyContent="center"
-          isLoading={isLoading}
-        >
-          もっと読み込む
-        </Button>
-      )}
+      <Box>
+        {canReadMore && (
+          <Button
+            onClick={readMore}
+            w="fit-content"
+            ml={5}
+            bgColor={"orange.300"}
+            _hover={{ bgColor: "orange.400" }}
+            _active={{ bgColor: "orange.500" }}
+            color="gray.800"
+            justifyContent="center"
+            isLoading={isLoading}
+          >
+            もっと読み込む
+          </Button>
+        )}
+      </Box>
     </Stack>
   );
 };
