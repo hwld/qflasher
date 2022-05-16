@@ -1,10 +1,12 @@
 import { DeckList } from "@/components/model/deck/DeckList";
 import { useDeckOperation } from "@/components/model/deck/useDeckOperation";
+import { useMyDeckList } from "@/components/model/deck/useMyDeckList";
 import { useAttachTagOperation } from "@/components/model/tag/useAttachTagOperation";
 import { DeckListHeader } from "@/components/pages/DeckListPage/DeckListHeader";
+import { AppLoading } from "@/components/ui/AppLoading";
+import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { useConfirm } from "@/context/ConfirmContext";
 import { useAppOperation } from "@/hooks/useAppOperation";
-import { DeckWithoutCards } from "@/models";
 import { routes } from "@/routes";
 import { Box, Button, Stack } from "@chakra-ui/react";
 import { useCallback, useState } from "react";
@@ -13,23 +15,22 @@ type DeckListViewProps = {
   userId: string;
   selectedTagId: string | undefined;
   selectedTagName: string | undefined;
-  decks: DeckWithoutCards[];
-  canReadMore: boolean;
-  readMore: () => void;
-  isLoading: boolean;
 };
 
 export const DeckListView: React.VFC<DeckListViewProps> = ({
   userId,
   selectedTagId,
   selectedTagName,
-  decks,
-  canReadMore,
-  readMore,
-  isLoading,
 }) => {
   const [searchText, setSearchText] = useState("");
-  const viewDecks = decks.filter((deck) => deck.name.includes(searchText));
+  const {
+    data: decks,
+    isInitialLoading,
+    isLoading,
+    isError,
+    canReadMore,
+    readMore,
+  } = useMyDeckList(userId, selectedTagId);
 
   const { deleteDeck, attachTag } = useDeckOperation(userId);
   const confirm = useConfirm();
@@ -47,6 +48,21 @@ export const DeckListView: React.VFC<DeckListViewProps> = ({
     [confirm, deleteDeckOperation]
   );
   const handleTagDeck = useAttachTagOperation(attachTag);
+
+  if (isInitialLoading) {
+    return <AppLoading />;
+  } else if (isError) {
+    return (
+      <ErrorMessageBox
+        mx="auto"
+        mt={5}
+        header="エラー"
+        description="自分のデッキを読み込むことができませんでした。"
+      />
+    );
+  }
+
+  const viewDecks = decks.filter((deck) => deck.name.includes(searchText));
 
   return (
     <Stack mt={5} ml={{ base: 4, md: 12 }} spacing={5}>

@@ -3,7 +3,7 @@ import { DeckListPageSideMenu } from "@/components/pages/DeckListPage/DeckListPa
 import { DeckListView } from "@/components/pages/DeckListPage/DeckListView";
 import { Fab } from "@/components/ui/Fab";
 import { useAppRouter } from "@/hooks/useAppRouter";
-import { DeckWithoutCards, Tag } from "@/models";
+import { Tag } from "@/models";
 import { routes } from "@/routes";
 import { Box, Flex } from "@chakra-ui/react";
 import { useMemo } from "react";
@@ -11,26 +11,18 @@ import { MdAdd } from "react-icons/md";
 
 type Props = {
   userId: string;
-  decks: DeckWithoutCards[];
   allTags: Tag[];
   defaultMenuSelected?: SideMenuName;
   defaultMenuWidth?: number;
-  isLoading: boolean;
-  canReadMore: boolean;
-  readMore: () => void;
   selectedTagId: string | undefined;
   onSelectTagId: (value: string | undefined) => void;
 };
 
 export const DeckListContent: React.FC<Props> = ({
   userId,
-  decks,
   allTags,
   defaultMenuSelected,
   defaultMenuWidth,
-  isLoading,
-  canReadMore,
-  readMore,
   selectedTagId,
   onSelectTagId,
 }) => {
@@ -57,12 +49,8 @@ export const DeckListContent: React.FC<Props> = ({
       <Box flexGrow={1} overflowY={"scroll"}>
         <DeckListView
           userId={userId}
-          decks={decks}
           selectedTagId={selectedTagId}
           selectedTagName={selectedTagName}
-          canReadMore={canReadMore}
-          readMore={readMore}
-          isLoading={isLoading}
         />
 
         <Fab

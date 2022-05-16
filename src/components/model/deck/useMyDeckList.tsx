@@ -10,13 +10,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useCallback, useLayoutEffect, useMemo, useState } from "react";
 
 export const useMyDeckList = (userId: string, tagId: string | undefined) => {
   const decksQuery = useMemo(() => {
@@ -56,7 +50,6 @@ export const useMyDeckList = (userId: string, tagId: string | undefined) => {
   }, [userId, decksResult, tagId]);
 
   const data = useMemo((): DeckWithoutCards[] => {
-    console.log("\nchange Data");
     return decksResult.data.map((deck): DeckWithoutCards => {
       return {
         id: deck.id,
@@ -67,11 +60,6 @@ export const useMyDeckList = (userId: string, tagId: string | undefined) => {
       };
     });
   }, [decksResult.data]);
-
-  useEffect(() => {
-    console.log("\nlastDeckId: ", lastDeckId);
-    console.log("canReadMore: ", canReadMore);
-  });
 
   // TODO: tagIdが変更されたときにcanReadMoreが更新される前にレンダリングされちゃう？
   const canReadMore = useMemo(() => {

@@ -1,4 +1,3 @@
-import { useMyDeckList } from "@/components/model/deck/useMyDeckList";
 import { useTags } from "@/components/model/tag/useTags";
 import { DeckListContent } from "@/components/pages/DeckListPage/DeckListContent";
 import { AppLoading } from "@/components/ui/AppLoading";
@@ -17,29 +16,17 @@ export const isSideMenuName = (arg: unknown): arg is SideMenuName => {
 
 export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
   const [selectedTagId, setSelectedTagId] = useState<string | undefined>();
-
   const useTagsResult = useTags(userId);
   const { readMenuSelected, readWidth } = useSideMenu();
   const readMenuSelectedResult = useResult(readMenuSelected);
   const readWidthResult = useResult(readWidth);
-  const useDeckListResult = useMyDeckList(userId, selectedTagId);
 
   if (
     isLoading(readMenuSelectedResult) ||
     isLoading(readWidthResult) ||
-    isLoading(useTagsResult) ||
-    useDeckListResult.isInitialLoading
+    isLoading(useTagsResult)
   ) {
     return <AppLoading />;
-  } else if (useDeckListResult.isError) {
-    return (
-      <ErrorMessageBox
-        mx="auto"
-        mt={10}
-        header="エラー"
-        description="自分のデッキを読み込むことができませんでした。"
-      />
-    );
   } else if (isErr(useTagsResult)) {
     return (
       <ErrorMessageBox
@@ -53,13 +40,9 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
     return (
       <DeckListContent
         userId={userId}
-        decks={useDeckListResult.data}
         allTags={useTagsResult.data}
         defaultMenuSelected={readMenuSelectedResult.data}
         defaultMenuWidth={readWidthResult.data}
-        isLoading={useDeckListResult.isLoading}
-        readMore={useDeckListResult.readMore}
-        canReadMore={useDeckListResult.canReadMore}
         selectedTagId={selectedTagId}
         onSelectTagId={setSelectedTagId}
       />
