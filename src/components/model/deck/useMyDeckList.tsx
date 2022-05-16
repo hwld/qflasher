@@ -26,7 +26,7 @@ export const useMyDeckList = (userId: string, tagId: string | undefined) => {
 
   const { readMore: readMoreDecks, ...decksResult } = useInfiniteCollection({
     query: decksQuery,
-    count: 50,
+    count: 30,
   });
 
   // 最後のデッキのid
@@ -49,6 +49,14 @@ export const useMyDeckList = (userId: string, tagId: string | undefined) => {
     // decksのdataが変更されたときに確認し直す
   }, [userId, decksResult, tagId]);
 
+  // useLayoutEffectを使用することで、
+  // useInfiniteCollection内のuseEffectのsetStateでinitialLoadingがtrueになる前に
+  // canReadMoreをfalseにしてる
+  // もっとわかりやすくかけないかなあ・・・
+  useLayoutEffect(() => {
+    setLastDeckId(undefined);
+  }, [tagId]);
+
   const data = useMemo((): DeckWithoutCards[] => {
     return decksResult.data.map((deck): DeckWithoutCards => {
       return {
@@ -61,7 +69,6 @@ export const useMyDeckList = (userId: string, tagId: string | undefined) => {
     });
   }, [decksResult.data]);
 
-  // TODO: tagIdが変更されたときにcanReadMoreが更新される前にレンダリングされちゃう？
   const canReadMore = useMemo(() => {
     return (
       lastDeckId !== undefined &&
