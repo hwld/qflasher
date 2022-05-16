@@ -6,7 +6,7 @@ import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { useSideMenu } from "@/context/SideMenuContext";
 import { useResult } from "@/hooks/useResult";
 import { isErr, isLoading } from "@/utils/result";
-import React from "react";
+import React, { useState } from "react";
 
 type DeckListPageProps = { userId: string };
 const sideMenuNames = ["tags", "search", "none"] as const;
@@ -16,11 +16,13 @@ export const isSideMenuName = (arg: unknown): arg is SideMenuName => {
 };
 
 export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
-  const useDeckListResult = useMyDeckList(userId);
+  const [selectedTagId, setSelectedTagId] = useState<string | undefined>();
+
   const useTagsResult = useTags(userId);
   const { readMenuSelected, readWidth } = useSideMenu();
   const readMenuSelectedResult = useResult(readMenuSelected);
   const readWidthResult = useResult(readWidth);
+  const useDeckListResult = useMyDeckList(userId, selectedTagId);
 
   if (
     isLoading(readMenuSelectedResult) ||
@@ -58,6 +60,8 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
         isLoading={useDeckListResult.isLoading}
         readMore={useDeckListResult.readMore}
         canReadMore={useDeckListResult.canReadMore}
+        selectedTagId={selectedTagId}
+        onSelectTagId={setSelectedTagId}
       />
     );
   }

@@ -2,16 +2,33 @@ import { db } from "@/firebase/config";
 import { deckConverter } from "@/firebase/firestoreConverters";
 import { useInfiniteCollection } from "@/hooks/useInfiniteCollection";
 import { DeckWithoutCards } from "@/models";
-import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  collection,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from "react";
 
-export const useMyDeckList = (userId: string) => {
+export const useMyDeckList = (userId: string, tagId: string | undefined) => {
   const decksQuery = useMemo(() => {
-    return query(
+    let q = query(
       collection(db, `users/${userId}/decks`).withConverter(deckConverter),
       orderBy("createdAt", "desc")
     );
-  }, [userId]);
+    if (tagId) {
+      q = query(q, where("tagIds", "array-contains", tagId));
+    }
+    return q;
+  }, [tagId, userId]);
 
   const { readMore: readMoreDecks, ...decksResult } = useInfiniteCollection({
     query: decksQuery,
@@ -21,22 +38,25 @@ export const useMyDeckList = (userId: string) => {
   // 最後のデッキのid
   // これ以上読み込めるかの判定に使用する
   const [lastDeckId, setLastDeckId] = useState<string | undefined>(undefined);
-  useEffect(() => {
+  useLayoutEffect(() => {
     (async () => {
-      const snap = await getDocs(
-        query(
-          collection(db, `users/${userId}/decks`).withConverter(deckConverter),
-          orderBy("createdAt", "asc"),
-          limit(1)
-        )
+      let q = query(
+        collection(db, `users/${userId}/decks`).withConverter(deckConverter),
+        orderBy("createdAt", "asc"),
+        limit(1)
       );
+      if (tagId) {
+        q = query(q, where("tagIds", "array-contains", tagId));
+      }
+      const snap = await getDocs(q);
       setLastDeckId(snap.docs[0]?.data().id);
     })();
 
     // decksのdataが変更されたときに確認し直す
-  }, [userId, decksResult]);
+  }, [userId, decksResult, tagId]);
 
   const data = useMemo((): DeckWithoutCards[] => {
+    console.log("\nchange Data");
     return decksResult.data.map((deck): DeckWithoutCards => {
       return {
         id: deck.id,
@@ -48,6 +68,12 @@ export const useMyDeckList = (userId: string) => {
     });
   }, [decksResult.data]);
 
+  useEffect(() => {
+    console.log("\nlastDeckId: ", lastDeckId);
+    console.log("canReadMore: ", canReadMore);
+  });
+
+  // TODO: tagIdが変更されたときにcanReadMoreが更新される前にレンダリングされちゃう？
   const canReadMore = useMemo(() => {
     return (
       lastDeckId !== undefined &&

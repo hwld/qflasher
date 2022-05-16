@@ -1,18 +1,12 @@
-import { DeckList } from "@/components/model/deck/DeckList";
-import { useDeckOperation } from "@/components/model/deck/useDeckOperation";
-import { useAttachTagOperation } from "@/components/model/tag/useAttachTagOperation";
-import { DeckListHeader } from "@/components/pages/DeckListPage/DeckListHeader";
 import { SideMenuName } from "@/components/pages/DeckListPage/DeckListPage";
 import { DeckListPageSideMenu } from "@/components/pages/DeckListPage/DeckListPageSideMenu";
+import { DeckListView } from "@/components/pages/DeckListPage/DeckListView";
 import { Fab } from "@/components/ui/Fab";
-import { useConfirm } from "@/context/ConfirmContext";
-import { useAppOperation } from "@/hooks/useAppOperation";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { DeckWithoutCards, Tag } from "@/models";
 import { routes } from "@/routes";
-import { Stack } from "@chakra-ui/layout";
-import { Box, Button, Flex } from "@chakra-ui/react";
-import { useCallback, useMemo, useState } from "react";
+import { Box, Flex } from "@chakra-ui/react";
+import { useMemo } from "react";
 import { MdAdd } from "react-icons/md";
 
 type Props = {
@@ -24,6 +18,8 @@ type Props = {
   isLoading: boolean;
   canReadMore: boolean;
   readMore: () => void;
+  selectedTagId: string | undefined;
+  onSelectTagId: (value: string | undefined) => void;
 };
 
 export const DeckListContent: React.FC<Props> = ({
@@ -35,33 +31,14 @@ export const DeckListContent: React.FC<Props> = ({
   isLoading,
   canReadMore,
   readMore,
+  selectedTagId,
+  onSelectTagId,
 }) => {
   const router = useAppRouter();
 
-  const [selectedTagId, setSelectedTagId] = useState<string | undefined>();
   const selectedTagName = useMemo(() => {
     return allTags.find((tag) => tag.id === selectedTagId)?.name;
   }, [allTags, selectedTagId]);
-
-  const [searchText, setSearchText] = useState("");
-  const viewDecks = decks.filter((deck) => deck.name.includes(searchText));
-
-  const { deleteDeck, attachTag } = useDeckOperation(userId);
-  const confirm = useConfirm();
-  const deleteDeckOperation = useAppOperation(deleteDeck);
-  const handleDeleteDeck = useCallback(
-    async (deckId: string) => {
-      confirm({
-        onContinue: () => deleteDeckOperation(deckId),
-        title: "単語帳の削除",
-        body: "単語帳を削除しますか？",
-        continueText: "削除する",
-        cancelText: "キャンセル",
-      });
-    },
-    [confirm, deleteDeckOperation]
-  );
-  const handleTagDeck = useAttachTagOperation(attachTag);
 
   const handleAddDeck = () => {
     router.push({ path: routes.createDeckPage });
@@ -75,40 +52,18 @@ export const DeckListContent: React.FC<Props> = ({
         defaultMenuSelected={defaultMenuSelected}
         defaultMenuWidth={defaultMenuWidth}
         selectedTagId={selectedTagId}
-        onSelectTag={setSelectedTagId}
+        onSelectTag={onSelectTagId}
       />
       <Box flexGrow={1} overflowY={"scroll"}>
-        <Stack mt={5} ml={{ base: 4, md: 12 }} spacing={5}>
-          <DeckListHeader
-            selectedTagName={selectedTagName}
-            searchText={searchText}
-            onChangeSearchText={setSearchText}
-          />
-          <DeckList
-            selectedTagId={selectedTagId}
-            decks={viewDecks}
-            returnRoute={routes.myDecksPage}
-            onDeleteDeck={handleDeleteDeck}
-            onTagDeck={handleTagDeck}
-            styleProps={{ justifyContent: "flex-start" }}
-          />
-        </Stack>
-        {canReadMore && (
-          <Button
-            mt={5}
-            ml={20}
-            onClick={readMore}
-            w="fit-content"
-            bgColor={"orange.300"}
-            _hover={{ bgColor: "orange.400" }}
-            _active={{ bgColor: "orange.500" }}
-            color="gray.800"
-            justifyContent="center"
-            isLoading={isLoading}
-          >
-            もっと読み込む
-          </Button>
-        )}
+        <DeckListView
+          userId={userId}
+          decks={decks}
+          selectedTagId={selectedTagId}
+          selectedTagName={selectedTagName}
+          canReadMore={canReadMore}
+          readMore={readMore}
+          isLoading={isLoading}
+        />
 
         <Fab
           tooltipLabel="デッキの追加"
