@@ -49,10 +49,13 @@ export const useMyDeckList = (userId: string, tagId: string | undefined) => {
     // decksのdataが変更されたときに確認し直す
   }, [userId, decksResult, tagId]);
 
-  // useLayoutEffectを使用することで、
-  // useInfiniteCollection内のuseEffectのsetStateでinitialLoadingがtrueになる前に
-  // canReadMoreをfalseにしてる
-  // もっとわかりやすくかけないかなあ・・・
+  // useLayoutEffectを使用することで、同期的に再レンダリングを行い、tagIdが変更された直後の描画をスキップする。
+  // そのため、initialLoadingがfalseでcanReadMoreがtrueの状態が画面に反映されることがない。
+  // (参考：https://github.com/facebook/react/issues/17334#issuecomment-1056968834)
+  //
+  // この同期レンダリングの前に、残っているuseEffectを実行する。ここでuseInfiniteCollectionのinitialLoadが動き、
+  // initialLoadingがtrueになる。 次の描画では、initialLoadingがtrueでcanReadMoreがfalseの状態が画面に反映される。
+  // (参考: https://github.com/facebook/react/issues/17334#issuecomment-553984285)
   useLayoutEffect(() => {
     setLastDeckId(undefined);
   }, [tagId]);
