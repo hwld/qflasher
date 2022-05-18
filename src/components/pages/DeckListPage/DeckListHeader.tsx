@@ -18,6 +18,7 @@ export const DeckListHeader: React.VFC<Props> = ({
   return (
     <Stack
       w={"90%"}
+      minW={"min-content"}
       maxW={"600px"}
       bgColor={"gray.600"}
       p={5}

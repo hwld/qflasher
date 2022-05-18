@@ -7,24 +7,30 @@ import {
   getDocs,
   limit,
   orderBy,
-  query,
+  query as firestoreQuery,
   where,
 } from "firebase/firestore";
 import { useCallback, useLayoutEffect, useMemo, useState } from "react";
 
 export const useMyDeckList = (userId: string, tagId: string | undefined) => {
   const decksQuery = useMemo(() => {
-    let q = query(
+    let query = firestoreQuery(
       collection(db, `users/${userId}/decks`).withConverter(deckConverter),
       orderBy("createdAt", "desc")
     );
     if (tagId) {
-      q = query(q, where("tagIds", "array-contains", tagId));
+      query = firestoreQuery(query, where("tagIds", "array-contains", tagId));
     }
-    return q;
+    return query;
   }, [tagId, userId]);
 
-  const { readMore: readMoreDecks, ...decksResult } = useInfiniteCollection({
+  const {
+    readMore: readMoreDecks,
+    isInitialLoading,
+    isLoading,
+    isError,
+    ...decksResult
+  } = useInfiniteCollection({
     query: decksQuery,
     count: 30,
   });
@@ -34,15 +40,15 @@ export const useMyDeckList = (userId: string, tagId: string | undefined) => {
   const [lastDeckId, setLastDeckId] = useState<string | undefined>(undefined);
   useLayoutEffect(() => {
     (async () => {
-      let q = query(
+      let query = firestoreQuery(
         collection(db, `users/${userId}/decks`).withConverter(deckConverter),
         orderBy("createdAt", "asc"),
         limit(1)
       );
       if (tagId) {
-        q = query(q, where("tagIds", "array-contains", tagId));
+        query = firestoreQuery(query, where("tagIds", "array-contains", tagId));
       }
-      const snap = await getDocs(q);
+      const snap = await getDocs(query);
       setLastDeckId(snap.docs[0]?.data().id);
     })();
 
@@ -73,11 +79,11 @@ export const useMyDeckList = (userId: string, tagId: string | undefined) => {
   }, [decksResult.data]);
 
   const canReadMore = useMemo(() => {
-    return (
-      lastDeckId !== undefined &&
-      data.length !== 0 &&
-      data.every((deck) => deck.id !== lastDeckId)
-    );
+    if (lastDeckId === undefined) {
+      return false;
+    }
+
+    return data.find((deck) => deck.id === lastDeckId) === undefined;
   }, [data, lastDeckId]);
 
   const readMore = useCallback(() => {
@@ -88,9 +94,9 @@ export const useMyDeckList = (userId: string, tagId: string | undefined) => {
 
   return {
     data,
-    isError: decksResult.isError,
-    isInitialLoading: decksResult.isInitialLoading,
-    isLoading: decksResult.isLoading,
+    isError,
+    isInitialLoading,
+    isLoading,
     canReadMore,
     readMore,
   };
