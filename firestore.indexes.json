@@ -69,7 +69,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "uid",
+          "fieldPath": "userId",
           "order": "ASCENDING"
         }
       ]
@@ -83,7 +83,7 @@
           "arrayConfig": "CONTAINS"
         },
         {
-          "fieldPath": "uid",
+          "fieldPath": "userId",
           "order": "ASCENDING"
         }
       ]
@@ -92,7 +92,7 @@
   "fieldOverrides": [
     {
       "collectionGroup": "private",
-      "fieldPath": "uid",
+      "fieldPath": "userId",
       "indexes": [
         {
           "order": "ASCENDING",

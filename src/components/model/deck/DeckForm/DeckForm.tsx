@@ -84,7 +84,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
     tagIds,
     cardLength,
     published,
-  }: Omit<Deck, "id" | "uid">) => {
+  }: Omit<Deck, "id" | "userId">) => {
     if (cards.length === 0) {
       addCardEditor();
       triggerValidation();

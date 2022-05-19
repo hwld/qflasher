@@ -2,14 +2,14 @@ import { DeckCard, DeckWithoutCards, Tag } from "@/models";
 import { FirestoreDataConverter, Timestamp } from "firebase/firestore";
 
 export type FirestoreDeck = DeckWithoutCards & {
-  uid: string;
+  userId: string;
   createdAt: Timestamp;
 };
 
 export type FirestoreDeckCard = DeckCard & {
   index: number;
   deckId: string;
-  uid: string;
+  userId: string;
   published: boolean;
 };
 export type FirestoreTag = Tag & { createdAt: Timestamp };
@@ -19,7 +19,7 @@ export const deckConverter: FirestoreDataConverter<FirestoreDeck> = {
     const deck = snapshot.data(option)!;
     const data: FirestoreDeck = {
       id: deck.id,
-      uid: deck.uid,
+      userId: deck.userId,
       name: deck.name,
       cardLength: deck.cardLength,
       tagIds: deck.tagIds,
@@ -32,7 +32,7 @@ export const deckConverter: FirestoreDataConverter<FirestoreDeck> = {
     // deckの型ではプロパティがオプショナルになるのでFirestoreDeckにプロパティが追加されたときにエラーにならないので手動で型をつける
     const firestoreDeck: { [T in keyof FirestoreDeck]: typeof deck[T] } = {
       id: deck.id,
-      uid: deck.uid,
+      userId: deck.userId,
       name: deck.name,
       cardLength: deck.cardLength,
       tagIds: deck.tagIds,
@@ -52,7 +52,7 @@ export const cardConverter: FirestoreDataConverter<FirestoreDeckCard> = {
       index: card.index,
       question: card.question,
       answer: card.answer,
-      uid: card.uid,
+      userId: card.userId,
       published: card.published,
     };
     return data;
@@ -64,7 +64,7 @@ export const cardConverter: FirestoreDataConverter<FirestoreDeckCard> = {
       index: card.index,
       question: card.question,
       answer: card.answer,
-      uid: card.uid,
+      userId: card.userId,
       published: card.published,
     };
     return firestoreCard;

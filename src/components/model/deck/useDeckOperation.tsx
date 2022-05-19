@@ -41,7 +41,7 @@ export const useDeckOperation = (userId: string): DeckOperation => {
       const deckDoc = doc(decksRef);
       batch.set(deckDoc, {
         id: deckDoc.id,
-        uid: userId,
+        userId,
         name: deck.name,
         cardLength: deck.cards.length,
         tagIds: deck.tagIds,
@@ -58,7 +58,7 @@ export const useDeckOperation = (userId: string): DeckOperation => {
         const cardDoc = doc(cardsRef, c.id);
         batch.set(cardDoc, {
           id: c.id,
-          uid: userId,
+          userId,
           published: deck.published,
           deckId: deckDoc.id,
           index,
@@ -103,7 +103,7 @@ export const useDeckOperation = (userId: string): DeckOperation => {
 
       batch.set(deckRef, {
         id: deckRef.id,
-        uid: userId,
+        userId,
         name: newDeck.name,
         cardLength: newDeck.cardLength,
         tagIds: newDeck.tagIds,
@@ -128,7 +128,7 @@ export const useDeckOperation = (userId: string): DeckOperation => {
         );
         batch.set(cardRef, {
           id,
-          uid: userId,
+          userId,
           published: newDeck.published,
           deckId: deckRef.id,
           index,

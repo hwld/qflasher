@@ -20,9 +20,9 @@ service cloud.firestore {
     && 'deckId' in card
     && card.deckId is string
     && card.deckId == deckId
-    && 'uid' in card
-    && card.uid is string
-    && card.uid == uid
+    && 'userId' in card
+    && card.userId is string
+    && card.userId == uid
     && 'question' in card
     && card.question is string
     && card.question.size() > 0 && card.question.size() <= 100
@@ -41,9 +41,9 @@ service cloud.firestore {
     && 'id' in deck
     && deck.id is string
     && deck.id == deckId
-    && 'uid' in deck
-    && deck.uid is string
-    && deck.uid == uid
+    && 'userId' in deck
+    && deck.userId is string
+    && deck.userId == uid
     && 'name' in deck 
     && deck.name is string
     && deck.name.size() > 0 && deck.name.size() <= 50
@@ -67,7 +67,7 @@ service cloud.firestore {
     return "published" in resource.data && resource.data.published == true;
   }
   function isAuthField(){
-    return request.auth != null && resource.data.uid == request.auth.uid;
+    return request.auth != null && resource.data.userId == request.auth.uid;
   }
 
   match /databases/{database}/documents {
