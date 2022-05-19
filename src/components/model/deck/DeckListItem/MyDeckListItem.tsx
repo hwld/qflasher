@@ -8,7 +8,7 @@ import { Route, routes } from "@/routes";
 import React from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 
-export type DeckListItemProps = {
+export type MyDeckListItemProps = {
   cardStyle: DeckCardStyle;
   deck: DeckWithoutCards;
   returnRoutes: Route;
@@ -16,7 +16,7 @@ export type DeckListItemProps = {
   onTagDeck: (deckId: string, tagId: string) => unknown;
 };
 
-export const DeckListItem: React.FC<DeckListItemProps> = ({
+export const MyDeckListItem: React.FC<MyDeckListItemProps> = ({
   cardStyle,
   deck,
   onDeleteDeck,

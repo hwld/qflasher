@@ -5,13 +5,13 @@ import { DeckWithoutCards } from "@/models";
 import { Route, routes } from "@/routes";
 import React from "react";
 
-export type PlayOnlyDeckListItemProps = {
+export type PublicDeckListItemProps = {
   cardStyle: DeckCardStyle;
   deck: DeckWithoutCards;
   returnRoutes: Route;
 };
 
-export const PlayOnlyDeckListItem: React.FC<PlayOnlyDeckListItemProps> = ({
+export const PublicDeckListItem: React.FC<PublicDeckListItemProps> = ({
   cardStyle,
   deck,
   returnRoutes,

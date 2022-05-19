@@ -1,8 +1,8 @@
 import {
-  DeckListItem,
-  DeckListItemProps,
-} from "@/components/model/deck/DeckListItem/DeckListItem";
-import { PlayOnlyDeckListItem } from "@/components/model/deck/DeckListItem/PlayOnlyDeckListItem";
+  MyDeckListItem,
+  MyDeckListItemProps,
+} from "@/components/model/deck/DeckListItem/MyDeckListItem";
+import { PublicDeckListItem } from "@/components/model/deck/DeckListItem/PublicDeckListItem";
 import { useDeckCardStyle } from "@/components/model/deck/DeckListItem/useDeckListItemStyle";
 import { DeckWithoutCards } from "@/models";
 import { Route } from "@/routes";
@@ -13,13 +13,12 @@ import React, { useMemo } from "react";
 
 export type DeckListProps = {
   decks: DeckWithoutCards[];
-  selectedTagId?: string;
   returnRoute: Route;
   styleProps?: GridProps;
 } & (
   | {
-      onDeleteDeck: DeckListItemProps["onDeleteDeck"];
-      onTagDeck: DeckListItemProps["onTagDeck"];
+      onDeleteDeck: MyDeckListItemProps["onDeleteDeck"];
+      onTagDeck: MyDeckListItemProps["onTagDeck"];
       playOnly?: false;
     }
   | { playOnly: true }
@@ -27,23 +26,19 @@ export type DeckListProps = {
 
 export const DeckList: React.VFC<DeckListProps> = ({
   decks,
-  selectedTagId,
   returnRoute,
   styleProps,
   ...others
 }) => {
-  const decksView = selectedTagId
-    ? decks.filter((d) => d.tagIds.includes(selectedTagId))
-    : decks;
   const cardSize =
     useBreakpointValue<"sm" | "md">({ base: "sm", md: "md" }) ?? "md";
   const cardStyle = useDeckCardStyle(cardSize);
 
   const deckItems = useMemo(() => {
-    return decksView.map((deck) => {
+    return decks.map((deck) => {
       if (others.playOnly) {
         return (
-          <PlayOnlyDeckListItem
+          <PublicDeckListItem
             key={deck.id}
             deck={deck}
             cardStyle={cardStyle}
@@ -52,7 +47,7 @@ export const DeckList: React.VFC<DeckListProps> = ({
         );
       } else {
         return (
-          <DeckListItem
+          <MyDeckListItem
             key={deck.id}
             cardStyle={cardStyle}
             deck={deck}
@@ -63,7 +58,7 @@ export const DeckList: React.VFC<DeckListProps> = ({
         );
       }
     });
-  }, [cardStyle, decksView, others, returnRoute]);
+  }, [cardStyle, decks, others, returnRoute]);
 
   return (
     <Grid

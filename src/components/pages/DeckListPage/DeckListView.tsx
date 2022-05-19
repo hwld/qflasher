@@ -72,7 +72,6 @@ export const DeckListView: React.VFC<DeckListViewProps> = ({
         onChangeSearchText={setSearchText}
       />
       <DeckList
-        selectedTagId={selectedTagId}
         decks={viewDecks}
         returnRoute={routes.myDecksPage}
         onDeleteDeck={handleDeleteDeck}
