@@ -1,6 +1,6 @@
 import { DeckListItemBase } from "@/components/model/deck/DeckListItem/DeckListItemBase";
 import { DeckListItemButton } from "@/components/model/deck/DeckListItem/DeckListItemButton";
-import { DeckCardStyle } from "@/components/model/deck/DeckListItem/useDeckListItemStyle";
+import { useDeckCardStyle } from "@/components/model/deck/DeckListItem/useDeckListItemStyle";
 import { useTagDrop } from "@/components/model/tag/useTagDnD";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { DeckWithoutCards } from "@/models";
@@ -9,20 +9,20 @@ import React from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 
 export type MyDeckListItemProps = {
-  cardStyle: DeckCardStyle;
   deck: DeckWithoutCards;
   returnRoutes: Route;
   onDeleteDeck: (id: string) => Promise<void>;
-  onTagDeck: (deckId: string, tagId: string) => unknown;
+  onTagDeck: (deckId: string, tagId: string) => void;
 };
 
 export const MyDeckListItem: React.FC<MyDeckListItemProps> = ({
-  cardStyle,
   deck,
   onDeleteDeck,
   onTagDeck,
   returnRoutes,
 }) => {
+  const cardStyle = useDeckCardStyle();
+
   const router = useAppRouter();
   const [{ hovered }, dropRef] = useTagDrop(() => ({
     drop: (tag) => {

@@ -1,7 +1,6 @@
-import { DeckList } from "@/components/model/deck/DeckList";
+import { PublicDeckList } from "@/components/pages/PublicDeckListPage/PublicDeckList";
 import { AppLogo } from "@/components/ui/AppLogo";
 import { DeckWithoutCards } from "@/models";
-import { routes } from "@/routes";
 import { Flex, Heading, VStack } from "@chakra-ui/react";
 
 type Props = { decks: DeckWithoutCards[] };
@@ -31,12 +30,7 @@ export const PublicDeckListContent: React.VFC<Props> = ({ decks }) => {
 
       <VStack spacing={5} align={"flex-start"} w="100%">
         <Heading>新着</Heading>
-        <DeckList
-          decks={decks}
-          playOnly
-          returnRoute={routes.publicDecksPage}
-          styleProps={{ justifyContent: "flex-start" }}
-        />
+        <PublicDeckList decks={decks} />
       </VStack>
     </VStack>
   );

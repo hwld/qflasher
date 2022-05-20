@@ -1,13 +1,12 @@
-import { DeckList } from "@/components/model/deck/DeckList";
 import { useDeckOperation } from "@/components/model/deck/useDeckOperation";
 import { useMyDeckList } from "@/components/model/deck/useMyDeckList";
 import { useAttachTagOperation } from "@/components/model/tag/useAttachTagOperation";
 import { DeckListHeader } from "@/components/pages/DeckListPage/DeckListHeader";
+import { MyDeckList } from "@/components/pages/DeckListPage/MyDeckList";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { useConfirm } from "@/context/ConfirmContext";
 import { useAppOperation } from "@/hooks/useAppOperation";
-import { routes } from "@/routes";
 import { Box, Button, Stack } from "@chakra-ui/react";
 import { useCallback, useState } from "react";
 
@@ -71,12 +70,10 @@ export const DeckListView: React.VFC<DeckListViewProps> = ({
         searchText={searchText}
         onChangeSearchText={setSearchText}
       />
-      <DeckList
+      <MyDeckList
         decks={viewDecks}
-        returnRoute={routes.myDecksPage}
         onDeleteDeck={handleDeleteDeck}
         onTagDeck={handleTagDeck}
-        styleProps={{ justifyContent: "flex-start" }}
       />
       <Box>
         {canReadMore && (

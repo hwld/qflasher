@@ -1,25 +1,18 @@
-import { LayoutProps, TypographyProps } from "@chakra-ui/react";
-
 export type DeckCardStyle = ReturnType<typeof useDeckCardStyle>;
 
-export const useDeckCardStyle = (size: "sm" | "md") => {
-  let ringWidth: number;
-  let cardWidth: number;
-  let height: number;
-  let nameFontSize: TypographyProps["fontSize"];
-  let metaFontSize: TypographyProps["fontSize"];
-  let playButtonSize: LayoutProps["boxSize"];
-
-  ringWidth = 25;
-  cardWidth = 275;
-  height = 145;
-  nameFontSize = "md";
-  metaFontSize = "sm";
-  playButtonSize = "40px";
+export const useDeckCardStyle = () => {
+  const ringWidth = 25;
+  const cardWidth = 275;
+  const width = ringWidth + cardWidth;
+  const height = 145;
+  const nameFontSize = "md";
+  const metaFontSize = "sm";
+  const playButtonSize = "40px";
 
   return {
     ringWidth,
     cardWidth,
+    width,
     height,
     nameFontSize,
     metaFontSize,
