@@ -1,8 +1,8 @@
 import { useDeckOperation } from "@/components/model/deck/useDeckOperation";
 import { useMyDeckList } from "@/components/model/deck/useMyDeckList";
 import { useAttachTagOperation } from "@/components/model/tag/useAttachTagOperation";
-import { DeckListHeader } from "@/components/pages/DeckListPage/DeckListHeader";
-import { MyDeckList } from "@/components/pages/DeckListPage/MyDeckList";
+import { MyDeckList } from "@/components/pages/MyDeckListPage/MyDeckList";
+import { MyDeckListHeader } from "@/components/pages/MyDeckListPage/MyDeckListHeader";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { useConfirm } from "@/context/ConfirmContext";
@@ -10,13 +10,13 @@ import { useAppOperation } from "@/hooks/useAppOperation";
 import { Box, Button, Stack } from "@chakra-ui/react";
 import { useCallback, useState } from "react";
 
-type DeckListViewProps = {
+type MyDeckListViewProps = {
   userId: string;
   selectedTagId: string | undefined;
   selectedTagName: string | undefined;
 };
 
-export const DeckListView: React.VFC<DeckListViewProps> = ({
+export const MyDeckListView: React.VFC<MyDeckListViewProps> = ({
   userId,
   selectedTagId,
   selectedTagName,
@@ -65,7 +65,7 @@ export const DeckListView: React.VFC<DeckListViewProps> = ({
 
   return (
     <Stack mt={5} ml={{ base: 4, md: 12 }} spacing={5}>
-      <DeckListHeader
+      <MyDeckListHeader
         selectedTagName={selectedTagName}
         searchText={searchText}
         onChangeSearchText={setSearchText}

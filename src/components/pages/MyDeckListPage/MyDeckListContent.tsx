@@ -1,6 +1,6 @@
-import { SideMenuName } from "@/components/pages/DeckListPage/DeckListPage";
-import { DeckListPageSideMenu } from "@/components/pages/DeckListPage/DeckListPageSideMenu";
-import { DeckListView } from "@/components/pages/DeckListPage/DeckListView";
+import { SideMenuName } from "@/components/pages/MyDeckListPage/MyDeckListPage";
+import { MyDeckListPageSideMenu } from "@/components/pages/MyDeckListPage/MyDeckListPageSideMenu";
+import { MyDeckListView } from "@/components/pages/MyDeckListPage/MyDeckListView";
 import { Fab } from "@/components/ui/Fab";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { Tag } from "@/models";
@@ -18,7 +18,7 @@ type Props = {
   onSelectTagId: (value: string | undefined) => void;
 };
 
-export const DeckListContent: React.FC<Props> = ({
+export const MyDeckListContent: React.FC<Props> = ({
   userId,
   allTags,
   defaultMenuSelected,
@@ -38,7 +38,7 @@ export const DeckListContent: React.FC<Props> = ({
 
   return (
     <Flex h="100%">
-      <DeckListPageSideMenu
+      <MyDeckListPageSideMenu
         userId={userId}
         allTags={allTags}
         defaultMenuSelected={defaultMenuSelected}
@@ -47,7 +47,7 @@ export const DeckListContent: React.FC<Props> = ({
         onSelectTag={onSelectTagId}
       />
       <Box flexGrow={1} overflowY={"scroll"}>
-        <DeckListView
+        <MyDeckListView
           userId={userId}
           selectedTagId={selectedTagId}
           selectedTagName={selectedTagName}

@@ -8,7 +8,7 @@ type Props = {
   searchText: string;
   onChangeSearchText: (value: string) => void;
 };
-export const DeckListHeader: React.VFC<Props> = ({
+export const MyDeckListHeader: React.VFC<Props> = ({
   selectedTagName,
   searchText,
   onChangeSearchText,

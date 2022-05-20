@@ -1,4 +1,4 @@
-import { DeckListPage } from "@/components/pages/DeckListPage/DeckListPage";
+import { MyDeckListPage } from "@/components/pages/MyDeckListPage/MyDeckListPage";
 import { AppLayoutWithOutSignInButton } from "@/components/ui/AppLayout";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { Redirect } from "@/components/ui/Redirect";
@@ -15,7 +15,7 @@ const MyDecks: NextPageWithLayout = () => {
   } else if (!userResult.data) {
     return <Redirect href={routes.signInPage} />;
   } else {
-    return <DeckListPage userId={userResult.data.uid} />;
+    return <MyDeckListPage userId={userResult.data.uid} />;
   }
 };
 

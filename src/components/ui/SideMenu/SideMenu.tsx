@@ -1,4 +1,4 @@
-import { SideMenuName } from "@/components/pages/DeckListPage/DeckListPage";
+import { SideMenuName } from "@/components/pages/MyDeckListPage/MyDeckListPage";
 import { SideMenuArea } from "@/components/ui/SideMenu/SideMenuArea";
 import { SideMenuItem } from "@/components/ui/SideMenu/SideMenuItem";
 import { Box } from "@chakra-ui/layout";

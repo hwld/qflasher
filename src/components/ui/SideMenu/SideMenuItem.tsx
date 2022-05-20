@@ -1,4 +1,4 @@
-import { SideMenuName } from "@/components/pages/DeckListPage/DeckListPage";
+import { SideMenuName } from "@/components/pages/MyDeckListPage/MyDeckListPage";
 import { Box, Flex } from "@chakra-ui/layout";
 import { Button, Icon, Tooltip } from "@chakra-ui/react";
 import React from "react";

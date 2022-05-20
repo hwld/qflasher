@@ -1,4 +1,4 @@
-import { SideMenuName } from "@/components/pages/DeckListPage/DeckListPage";
+import { SideMenuName } from "@/components/pages/MyDeckListPage/MyDeckListPage";
 import { SideMenuItem } from "@/components/ui/SideMenu/SideMenuArea";
 import { AppKeyframes } from "@/types";
 import {

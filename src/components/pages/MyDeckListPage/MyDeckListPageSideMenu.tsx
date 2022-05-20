@@ -1,5 +1,5 @@
 import { TagsSideView } from "@/components/model/tag/TagsSideView";
-import { SideMenuName } from "@/components/pages/DeckListPage/DeckListPage";
+import { SideMenuName } from "@/components/pages/MyDeckListPage/MyDeckListPage";
 import { SideMenu } from "@/components/ui/SideMenu/SideMenu";
 import { useSideMenu } from "@/context/SideMenuContext";
 import { Tag } from "@/models";
@@ -15,7 +15,7 @@ type Props = {
   onSelectTag: (id: string | undefined) => void;
 };
 
-export const DeckListPageSideMenu: React.VFC<Props> = ({
+export const MyDeckListPageSideMenu: React.VFC<Props> = ({
   userId,
   allTags,
   defaultMenuSelected = "none",

@@ -1,7 +1,7 @@
 import {
   isSideMenuName,
   SideMenuName,
-} from "@/components/pages/DeckListPage/DeckListPage";
+} from "@/components/pages/MyDeckListPage/MyDeckListPage";
 import { displayErrors } from "@/utils/displayError";
 import { get, update } from "idb-keyval";
 import {

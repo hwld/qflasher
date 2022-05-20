@@ -1,4 +1,4 @@
-import { SideMenuName } from "@/components/pages/DeckListPage/DeckListPage";
+import { SideMenuName } from "@/components/pages/MyDeckListPage/MyDeckListPage";
 import { FullWidthSideArea } from "@/components/ui/SideMenu/FullWidthSideArea";
 import { ResizableSideArea } from "@/components/ui/SideMenu/ResizableSideArea";
 import { useBreakpointValue } from "@chakra-ui/react";

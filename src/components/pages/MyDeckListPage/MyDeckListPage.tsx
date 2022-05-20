@@ -1,5 +1,5 @@
 import { useTags } from "@/components/model/tag/useTags";
-import { DeckListContent } from "@/components/pages/DeckListPage/DeckListContent";
+import { MyDeckListContent } from "@/components/pages/MyDeckListPage/MyDeckListContent";
 import { AppLoading } from "@/components/ui/AppLoading";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { useSideMenu } from "@/context/SideMenuContext";
@@ -7,14 +7,14 @@ import { useResult } from "@/hooks/useResult";
 import { isErr, isLoading } from "@/utils/result";
 import React, { useState } from "react";
 
-type DeckListPageProps = { userId: string };
+type MyDeckListPageProps = { userId: string };
 const sideMenuNames = ["tags", "search", "none"] as const;
 export type SideMenuName = typeof sideMenuNames[number];
 export const isSideMenuName = (arg: unknown): arg is SideMenuName => {
   return sideMenuNames.includes(arg as any);
 };
 
-export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
+export const MyDeckListPage: React.FC<MyDeckListPageProps> = ({ userId }) => {
   const [selectedTagId, setSelectedTagId] = useState<string | undefined>();
   const useTagsResult = useTags(userId);
   const { readMenuSelected, readWidth } = useSideMenu();
@@ -38,7 +38,7 @@ export const DeckListPage: React.FC<DeckListPageProps> = ({ userId }) => {
     );
   } else {
     return (
-      <DeckListContent
+      <MyDeckListContent
         userId={userId}
         allTags={useTagsResult.data}
         defaultMenuSelected={readMenuSelectedResult.data}
