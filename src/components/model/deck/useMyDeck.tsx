@@ -55,6 +55,7 @@ export const useMyDeck = ({
     const deck: Deck = {
       id: deckInfo.id,
       name: deckInfo.name,
+      userId: deckInfo.userId,
       tagIds: deckInfo.tagIds,
       cardLength: deckInfo!.cardLength,
       cards: cardsResult.data,

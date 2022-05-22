@@ -50,6 +50,7 @@ export const usePublicDeck = (deckId: string) => {
     const deck: Deck = {
       id: firestoreDeck.id,
       name: firestoreDeck.name,
+      userId: firestoreDeck.userId,
       cards: firestoreCards,
       cardLength: firestoreCards.length,
       published: firestoreDeck.published,

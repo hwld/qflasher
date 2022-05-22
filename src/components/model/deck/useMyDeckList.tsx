@@ -71,6 +71,7 @@ export const useMyDeckList = (userId: string, tagId: string | undefined) => {
       return {
         id: deck.id,
         name: deck.name,
+        userId: deck.userId,
         cardLength: deck.cardLength,
         published: deck.published,
         tagIds: deck.tagIds,

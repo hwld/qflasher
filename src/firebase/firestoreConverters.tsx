@@ -2,7 +2,6 @@ import { DeckCard, DeckWithoutCards, Tag } from "@/models";
 import { FirestoreDataConverter, Timestamp } from "firebase/firestore";
 
 export type FirestoreDeck = DeckWithoutCards & {
-  userId: string;
   createdAt: Timestamp;
 };
 

@@ -30,6 +30,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
   defaultDeck = {
     id: "",
     name: "",
+    userId: "",
     cards: [],
     tagIds: [],
     cardLength: 0,
@@ -95,6 +96,7 @@ export const DeckForm: React.FC<DeckFormProps> = ({
       newDeck: {
         id: defaultDeck.id,
         name,
+        userId,
         cards,
         tagIds,
         cardLength,

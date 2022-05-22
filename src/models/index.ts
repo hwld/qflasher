@@ -1,6 +1,7 @@
 export type Deck = {
   id: string;
   name: string;
+  userId: string;
   cards: DeckCard[];
   tagIds: string[];
   cardLength: number;
