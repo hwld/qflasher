@@ -28,6 +28,7 @@ export const MyDeckList: React.VFC<MyDeckListProps> = ({
       {decks.map((deck) => {
         return (
           <MyDeckListItem
+            cardStyle={deckCardStyle}
             key={deck.id}
             deck={deck}
             returnRoutes={routes.myDecksPage}

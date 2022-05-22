@@ -1,4 +1,4 @@
-import { PublicDeckListItem } from "@/components/model/deck/DeckListItem/PublicDeckListItem";
+import { PublicDeckListItem } from "@/components/model/deck/DeckListItem/PublicDeckListItem/PublicDeckListItem";
 import { useDeckCardStyle } from "@/components/model/deck/DeckListItem/useDeckListItemStyle";
 import { DeckWithoutCards } from "@/models";
 import { routes } from "@/routes";
@@ -30,6 +30,7 @@ export const PublicDeckList: React.VFC<PublicDeckListProps> = ({
             deck={deck}
             cardStyle={deckCardStyle}
             returnRoutes={routes.publicDecksPage}
+            userId={userId}
           />
         );
       })}

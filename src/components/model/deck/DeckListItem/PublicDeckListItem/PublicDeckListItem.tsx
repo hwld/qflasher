@@ -1,23 +1,27 @@
 import { DeckListItemBase } from "@/components/model/deck/DeckListItem/DeckListItemBase";
 import { DeckListItemButton } from "@/components/model/deck/DeckListItem/DeckListItemButton";
+import { AuthorMenuList } from "@/components/model/deck/DeckListItem/PublicDeckListItem/AuthorMenuItem";
+import { PublicMenuList } from "@/components/model/deck/DeckListItem/PublicDeckListItem/PublicMenuItem";
 import { DeckCardStyle } from "@/components/model/deck/DeckListItem/useDeckListItemStyle";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { DeckWithoutCards } from "@/models";
 import { Route, routes } from "@/routes";
-import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
-import React from "react";
+import { Menu, MenuButton, MenuList } from "@chakra-ui/react";
+import React, { useMemo } from "react";
 import { BsThreeDots } from "react-icons/bs";
 
 export type PublicDeckListItemProps = {
   cardStyle: DeckCardStyle;
   deck: DeckWithoutCards;
   returnRoutes: Route;
+  userId: string | undefined;
 };
 
 export const PublicDeckListItem: React.FC<PublicDeckListItemProps> = ({
   cardStyle,
   deck,
   returnRoutes,
+  userId,
 }) => {
   const router = useAppRouter();
 
@@ -30,6 +34,13 @@ export const PublicDeckListItem: React.FC<PublicDeckListItemProps> = ({
       },
     });
   };
+
+  const menuItem = useMemo(() => {
+    if (userId !== undefined && deck.userId === userId) {
+      return <AuthorMenuList userId={userId} deckId={deck.id} />;
+    }
+    return <PublicMenuList />;
+  }, [deck.id, deck.userId, userId]);
 
   return (
     <DeckListItemBase
@@ -45,11 +56,7 @@ export const PublicDeckListItem: React.FC<PublicDeckListItemProps> = ({
           >
             <BsThreeDots />
           </MenuButton>
-          <MenuList>
-            <MenuItem>デッキをコピーする</MenuItem>
-            <MenuItem>更新</MenuItem>
-            <MenuItem>削除</MenuItem>
-          </MenuList>
+          <MenuList>{menuItem}</MenuList>
         </Menu>
       }
     />
