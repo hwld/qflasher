@@ -7,7 +7,7 @@ export const useDeckCardStyle = () => {
   const height = 145;
   const nameFontSize = "md";
   const metaFontSize = "sm";
-  const playButtonSize = "40px";
+  const playButtonSize = "45px";
 
   return {
     ringWidth,

@@ -25,14 +25,7 @@ export const DeckListItemBase = forwardRef<
 >(function DeckListItemBase(
   {
     deck,
-    cardStyle: {
-      height,
-      cardWidth,
-      metaFontSize,
-      nameFontSize,
-      playButtonSize,
-      ringWidth,
-    },
+    cardStyle: { height, cardWidth, nameFontSize, playButtonSize, ringWidth },
     menuButtons,
     onPlayDeck,
     ...styles
@@ -70,8 +63,8 @@ export const DeckListItemBase = forwardRef<
         direction="column"
         justify="space-between"
         boxShadow={"lg"}
-        py={2}
-        px={3}
+        py={3}
+        px={4}
       >
         <Flex justify="space-between" grow={1} minH={0}>
           <Flex direction="column" grow={1} minH={0}>
@@ -89,21 +82,7 @@ export const DeckListItemBase = forwardRef<
         </Flex>
 
         <Flex shrink={0} align="flex-end" justify="space-between">
-          <Flex direction="column">
-            <Text
-              flexGrow={0}
-              flexShrink={0}
-              fontSize={metaFontSize}
-              fontWeight="bold"
-              color="gray.300"
-              ml={2}
-              textOverflow="ellipsis"
-              wordBreak="break-all"
-            >
-              枚数: {deck.cardLength}
-            </Text>
-            {menu}
-          </Flex>
+          <Flex direction="column">{menu}</Flex>
           <Flex>
             <Tooltip label="暗記">
               <Button
@@ -117,8 +96,9 @@ export const DeckListItemBase = forwardRef<
                 color="gray.700"
                 padding={0}
                 onClick={onPlayDeck}
+                boxShadow="dark-lg"
               >
-                <MdPlayArrow size="70%" />
+                <MdPlayArrow size="80%" />
               </Button>
             </Tooltip>
           </Flex>
