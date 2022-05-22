@@ -4,9 +4,15 @@ import { DeckWithoutCards } from "@/models";
 import { routes } from "@/routes";
 import { Grid, List } from "@chakra-ui/react";
 
-type PublicDeckListProps = { decks: DeckWithoutCards[] };
+type PublicDeckListProps = {
+  decks: DeckWithoutCards[];
+  userId: string | undefined;
+};
 
-export const PublicDeckList: React.VFC<PublicDeckListProps> = ({ decks }) => {
+export const PublicDeckList: React.VFC<PublicDeckListProps> = ({
+  decks,
+  userId,
+}) => {
   const deckCardStyle = useDeckCardStyle();
 
   return (

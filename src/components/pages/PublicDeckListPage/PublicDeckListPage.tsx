@@ -3,7 +3,9 @@ import { PublicDeckListContent } from "@/components/pages/PublicDeckListPage/Pub
 import { AppLoading } from "@/components/ui/AppLoading";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 
-export const PublicDeckListPage: React.FC = () => {
+type Props = { userId: string | undefined };
+
+export const PublicDeckListPage: React.FC<Props> = ({ userId }) => {
   const { isInitialLoading, isError, decks } = usePublicDeckList({ count: 12 });
 
   if (isInitialLoading) {
@@ -20,5 +22,5 @@ export const PublicDeckListPage: React.FC = () => {
     );
   }
 
-  return <PublicDeckListContent decks={decks} />;
+  return <PublicDeckListContent decks={decks} userId={userId} />;
 };

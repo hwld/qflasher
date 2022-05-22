@@ -3,9 +3,9 @@ import { AppLogo } from "@/components/ui/AppLogo";
 import { DeckWithoutCards } from "@/models";
 import { Flex, Heading, VStack } from "@chakra-ui/react";
 
-type Props = { decks: DeckWithoutCards[] };
+type Props = { decks: DeckWithoutCards[]; userId: string | undefined };
 
-export const PublicDeckListContent: React.VFC<Props> = ({ decks }) => {
+export const PublicDeckListContent: React.VFC<Props> = ({ decks, userId }) => {
   return (
     <VStack
       mt={3}
@@ -30,7 +30,7 @@ export const PublicDeckListContent: React.VFC<Props> = ({ decks }) => {
 
       <VStack spacing={5} align={"flex-start"} w="100%">
         <Heading>新着</Heading>
-        <PublicDeckList decks={decks} />
+        <PublicDeckList decks={decks} userId={userId} />
       </VStack>
     </VStack>
   );

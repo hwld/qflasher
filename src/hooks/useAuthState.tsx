@@ -10,14 +10,15 @@ import {
 } from "firebase/auth";
 import { useCallback, useEffect, useState } from "react";
 
-export type UserResult = Result<User | null>;
+export type UserResult = Result<User | undefined>;
 
 export const useAuthState = () => {
   const [userResult, setUserResult] = useState<UserResult>(Result.Loading());
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, {
-      next: (user) => {
+      next: (u) => {
+        const user = u === null ? undefined : u;
         setUserResult(Result.Ok(user));
       },
       error: (error) => {

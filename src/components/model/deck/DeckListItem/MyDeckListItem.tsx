@@ -6,7 +6,7 @@ import { useAppRouter } from "@/hooks/useAppRouter";
 import { DeckWithoutCards } from "@/models";
 import { Route, routes } from "@/routes";
 import React from "react";
-import { MdDelete, MdEdit } from "react-icons/md";
+import { MdOutlineDelete, MdOutlineModeEditOutline } from "react-icons/md";
 
 export type MyDeckListItemProps = {
   deck: DeckWithoutCards;
@@ -65,7 +65,7 @@ export const MyDeckListItem: React.FC<MyDeckListItemProps> = ({
             aria-label="delete deck"
             onClick={handleDelete}
           >
-            <MdDelete size="60%" />
+            <MdOutlineDelete size="80%" />
           </DeckListItemButton>
           <DeckListItemButton
             ml={2}
@@ -73,7 +73,7 @@ export const MyDeckListItem: React.FC<MyDeckListItemProps> = ({
             aria-label="update deck"
             onClick={handleUpdateDeck}
           >
-            <MdEdit size="60%" />
+            <MdOutlineModeEditOutline size="80%" />
           </DeckListItemButton>
         </>
       }
