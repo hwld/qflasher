@@ -1,14 +1,11 @@
 import { DeckListItemBase } from "@/components/model/deck/DeckListItem/DeckListItemBase";
-import { DeckListItemButton } from "@/components/model/deck/DeckListItem/DeckListItemButton";
-import { AuthorMenuList } from "@/components/model/deck/DeckListItem/PublicDeckListItem/AuthorMenuItem";
-import { PublicMenuList } from "@/components/model/deck/DeckListItem/PublicDeckListItem/PublicMenuItem";
+import { NotOwnerActions } from "@/components/model/deck/DeckListItem/PublicDeckListItem/NotOwnerActions";
+import { OwnerActions } from "@/components/model/deck/DeckListItem/PublicDeckListItem/OwnerActions";
 import { DeckCardStyle } from "@/components/model/deck/DeckListItem/useDeckListItemStyle";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { DeckWithoutCards } from "@/models";
 import { Route, routes } from "@/routes";
-import { Menu, MenuButton, MenuList } from "@chakra-ui/react";
 import React, { useMemo } from "react";
-import { BsThreeDots } from "react-icons/bs";
 
 export type PublicDeckListItemProps = {
   cardStyle: DeckCardStyle;
@@ -35,30 +32,25 @@ export const PublicDeckListItem: React.FC<PublicDeckListItemProps> = ({
     });
   };
 
-  const menuItem = useMemo(() => {
-    if (userId !== undefined && deck.userId === userId) {
-      return <AuthorMenuList userId={userId} deckId={deck.id} />;
+  const menuButtons = useMemo(() => {
+    // ログインしていないときは何も表示しない
+    if (userId === undefined) {
+      return undefined;
     }
-    return <PublicMenuList />;
-  }, [deck.id, deck.userId, userId]);
+
+    if (deck.userId === userId) {
+      return <OwnerActions deck={deck} userId={userId} />;
+    } else {
+      return <NotOwnerActions deck={deck} userId={userId} />;
+    }
+  }, [deck, userId]);
 
   return (
     <DeckListItemBase
       deck={deck}
       cardStyle={cardStyle}
       onPlayDeck={handlePlayDeck}
-      menuButtons={
-        <Menu>
-          <MenuButton
-            as={DeckListItemButton}
-            label=""
-            css={{ "&>span": { flexGrow: 0 } }}
-          >
-            <BsThreeDots />
-          </MenuButton>
-          <MenuList>{menuItem}</MenuList>
-        </Menu>
-      }
+      menuButtons={menuButtons}
     />
   );
 };

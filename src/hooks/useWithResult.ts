@@ -11,6 +11,7 @@ export const useWithResult = <A extends unknown[], R>(
         const result = await callback(...args);
         return Result.Ok(result);
       } catch (e) {
+        console.error(e);
         return Result.Err();
       }
     },
