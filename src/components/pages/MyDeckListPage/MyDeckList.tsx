@@ -1,5 +1,5 @@
-import { MyDeckListItem } from "@/components/model/deck/DeckListItem/MyDeckListItem";
-import { useDeckCardStyle } from "@/components/model/deck/DeckListItem/useDeckListItemStyle";
+import { MyDeckItem } from "@/components/model/deck/DeckItem/MyDeckItem";
+import { useDeckItemStyle } from "@/components/model/deck/DeckItem/useDeckItemStyle";
 import { DeckWithoutCards } from "@/models";
 import { routes } from "@/routes";
 import { Grid, List } from "@chakra-ui/react";
@@ -15,7 +15,7 @@ export const MyDeckList: React.VFC<MyDeckListProps> = ({
   onDeleteDeck,
   onTagDeck,
 }) => {
-  const deckCardStyle = useDeckCardStyle();
+  const deckCardStyle = useDeckItemStyle();
 
   return (
     <Grid
@@ -27,7 +27,7 @@ export const MyDeckList: React.VFC<MyDeckListProps> = ({
     >
       {decks.map((deck) => {
         return (
-          <MyDeckListItem
+          <MyDeckItem
             cardStyle={deckCardStyle}
             key={deck.id}
             deck={deck}

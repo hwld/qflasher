@@ -1,6 +1,6 @@
-export type DeckCardStyle = ReturnType<typeof useDeckCardStyle>;
+export type DeckItemStyle = ReturnType<typeof useDeckItemStyle>;
 
-export const useDeckCardStyle = () => {
+export const useDeckItemStyle = () => {
   const ringWidth = 25;
   const cardWidth = 275;
   const width = ringWidth + cardWidth;

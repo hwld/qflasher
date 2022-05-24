@@ -1,5 +1,5 @@
-import { DeckListItemButton } from "@/components/model/deck/DeckListItem/DeckListItemButton";
-import { ImportPublicDeck } from "@/components/model/deck/DeckListItem/PublicDeckListItem/ImportPublicDeck";
+import { DeckItemButton } from "@/components/model/deck/DeckItem/DeckItemButton";
+import { ImportPublicDeck } from "@/components/model/deck/DeckItem/PublicDeckItem/ImportPublicDeck";
 import { DeckWithoutCards } from "@/models";
 import { useDisclosure } from "@chakra-ui/react";
 import { MdDownload } from "react-icons/md";
@@ -10,9 +10,9 @@ export const NotOwnerActions: React.VFC<Props> = ({ userId, deck }) => {
 
   return (
     <>
-      <DeckListItemButton label="インポート" onClick={onOpen}>
+      <DeckItemButton label="インポート" onClick={onOpen}>
         <MdDownload size="80%" />
-      </DeckListItemButton>
+      </DeckItemButton>
       {/* クリックしたときにだけusePublicDeckを実行するために、機能を実行するだけのコンポーネントに分割する */}
       {isOpen && (
         <ImportPublicDeck userId={userId} deck={deck} onComplete={onClose} />

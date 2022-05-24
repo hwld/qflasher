@@ -1,5 +1,5 @@
-import { PublicDeckListItem } from "@/components/model/deck/DeckListItem/PublicDeckListItem/PublicDeckListItem";
-import { useDeckCardStyle } from "@/components/model/deck/DeckListItem/useDeckListItemStyle";
+import { PublicDeckItem } from "@/components/model/deck/DeckItem/PublicDeckItem/PublicDeckItem";
+import { useDeckItemStyle } from "@/components/model/deck/DeckItem/useDeckItemStyle";
 import { DeckWithoutCards } from "@/models";
 import { routes } from "@/routes";
 import { Grid, List } from "@chakra-ui/react";
@@ -13,7 +13,7 @@ export const PublicDeckList: React.VFC<PublicDeckListProps> = ({
   decks,
   userId,
 }) => {
-  const deckCardStyle = useDeckCardStyle();
+  const deckCardStyle = useDeckItemStyle();
 
   return (
     <Grid
@@ -25,7 +25,7 @@ export const PublicDeckList: React.VFC<PublicDeckListProps> = ({
     >
       {decks.map((deck) => {
         return (
-          <PublicDeckListItem
+          <PublicDeckItem
             key={deck.id}
             deck={deck}
             cardStyle={deckCardStyle}

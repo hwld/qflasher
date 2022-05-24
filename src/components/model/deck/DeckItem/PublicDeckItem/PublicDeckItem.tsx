@@ -1,20 +1,20 @@
-import { DeckListItemBase } from "@/components/model/deck/DeckListItem/DeckListItemBase";
-import { NotOwnerActions } from "@/components/model/deck/DeckListItem/PublicDeckListItem/NotOwnerActions";
-import { OwnerActions } from "@/components/model/deck/DeckListItem/PublicDeckListItem/OwnerActions";
-import { DeckCardStyle } from "@/components/model/deck/DeckListItem/useDeckListItemStyle";
+import { DeckItemBase } from "@/components/model/deck/DeckItem/DeckItemBase";
+import { NotOwnerActions } from "@/components/model/deck/DeckItem/PublicDeckItem/NotOwnerActions";
+import { OwnerActions } from "@/components/model/deck/DeckItem/PublicDeckItem/OwnerActions";
+import { DeckItemStyle } from "@/components/model/deck/DeckItem/useDeckItemStyle";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { DeckWithoutCards } from "@/models";
 import { Route, routes } from "@/routes";
 import React, { useMemo } from "react";
 
-export type PublicDeckListItemProps = {
-  cardStyle: DeckCardStyle;
+export type PublicDeckItemProps = {
+  cardStyle: DeckItemStyle;
   deck: DeckWithoutCards;
   returnRoutes: Route;
   userId: string | undefined;
 };
 
-export const PublicDeckListItem: React.FC<PublicDeckListItemProps> = ({
+export const PublicDeckItem: React.FC<PublicDeckItemProps> = ({
   cardStyle,
   deck,
   returnRoutes,
@@ -46,7 +46,7 @@ export const PublicDeckListItem: React.FC<PublicDeckListItemProps> = ({
   }, [deck, userId]);
 
   return (
-    <DeckListItemBase
+    <DeckItemBase
       deck={deck}
       cardStyle={cardStyle}
       onPlayDeck={handlePlayDeck}

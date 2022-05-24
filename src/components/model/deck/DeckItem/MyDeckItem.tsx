@@ -1,6 +1,6 @@
-import { DeckListItemBase } from "@/components/model/deck/DeckListItem/DeckListItemBase";
-import { DeckListItemButton } from "@/components/model/deck/DeckListItem/DeckListItemButton";
-import { DeckCardStyle } from "@/components/model/deck/DeckListItem/useDeckListItemStyle";
+import { DeckItemBase } from "@/components/model/deck/DeckItem/DeckItemBase";
+import { DeckItemButton } from "@/components/model/deck/DeckItem/DeckItemButton";
+import { DeckItemStyle } from "@/components/model/deck/DeckItem/useDeckItemStyle";
 import { useTagDrop } from "@/components/model/tag/useTagDnD";
 import { useAppRouter } from "@/hooks/useAppRouter";
 import { DeckWithoutCards } from "@/models";
@@ -8,15 +8,15 @@ import { Route, routes } from "@/routes";
 import React from "react";
 import { MdOutlineDelete, MdOutlineModeEditOutline } from "react-icons/md";
 
-export type MyDeckListItemProps = {
-  cardStyle: DeckCardStyle;
+export type MyDeckItemProps = {
+  cardStyle: DeckItemStyle;
   deck: DeckWithoutCards;
   returnRoutes: Route;
   onDeleteDeck: (id: string) => Promise<void>;
   onTagDeck?: (deckId: string, tagId: string) => void;
 };
 
-export const MyDeckListItem: React.FC<MyDeckListItemProps> = ({
+export const MyDeckItem: React.FC<MyDeckItemProps> = ({
   cardStyle,
   deck,
   onDeleteDeck,
@@ -52,7 +52,7 @@ export const MyDeckListItem: React.FC<MyDeckListItemProps> = ({
   };
 
   return (
-    <DeckListItemBase
+    <DeckItemBase
       ref={dropRef}
       opacity={hovered ? 0.5 : 1}
       deck={deck}
@@ -60,21 +60,21 @@ export const MyDeckListItem: React.FC<MyDeckListItemProps> = ({
       onPlayDeck={handlePlayDeck}
       menuButtons={
         <>
-          <DeckListItemButton
+          <DeckItemButton
             label="削除"
             aria-label="delete deck"
             onClick={handleDelete}
           >
             <MdOutlineDelete size="80%" />
-          </DeckListItemButton>
-          <DeckListItemButton
+          </DeckItemButton>
+          <DeckItemButton
             ml={2}
             label="編集"
             aria-label="update deck"
             onClick={handleUpdateDeck}
           >
             <MdOutlineModeEditOutline size="80%" />
-          </DeckListItemButton>
+          </DeckItemButton>
         </>
       }
     />

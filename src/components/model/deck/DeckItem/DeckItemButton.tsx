@@ -4,8 +4,8 @@ import { forwardRef } from "react";
 
 type Props = ButtonProps & { label: string };
 
-export const DeckListItemButton = forwardRef<HTMLButtonElement, Props>(
-  function DeckListItemButton({ children, label, onClick, ...styles }, ref) {
+export const DeckItemButton = forwardRef<HTMLButtonElement, Props>(
+  function DeckItemButton({ children, label, onClick, ...styles }, ref) {
     return (
       <Tooltip label={label}>
         <Button
