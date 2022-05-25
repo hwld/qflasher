@@ -1,8 +1,10 @@
 import { MyDeckItem } from "@/components/model/deck/DeckItem/MyDeckItem";
 import { useDeckItemStyle } from "@/components/model/deck/DeckItem/useDeckItemStyle";
+import { NoDeckItem } from "@/components/model/deck/NoDeckItem";
 import { DeckWithoutCards } from "@/models";
 import { routes } from "@/routes";
 import { Grid, List } from "@chakra-ui/react";
+import { useMemo } from "react";
 
 type MyDeckListProps = {
   decks: DeckWithoutCards[];
@@ -17,6 +19,25 @@ export const MyDeckList: React.VFC<MyDeckListProps> = ({
 }) => {
   const deckCardStyle = useDeckItemStyle();
 
+  const content = useMemo(() => {
+    if (decks.length === 0) {
+      return <NoDeckItem />;
+    }
+
+    return decks.map((deck) => {
+      return (
+        <MyDeckItem
+          cardStyle={deckCardStyle}
+          key={deck.id}
+          deck={deck}
+          returnRoutes={routes.myDecksPage}
+          onDeleteDeck={onDeleteDeck}
+          onTagDeck={onTagDeck}
+        />
+      );
+    });
+  }, [deckCardStyle, decks, onDeleteDeck, onTagDeck]);
+
   return (
     <Grid
       as={List}
@@ -25,18 +46,7 @@ export const MyDeckList: React.VFC<MyDeckListProps> = ({
       w="100%"
       justifyContent="flex-start"
     >
-      {decks.map((deck) => {
-        return (
-          <MyDeckItem
-            cardStyle={deckCardStyle}
-            key={deck.id}
-            deck={deck}
-            returnRoutes={routes.myDecksPage}
-            onDeleteDeck={onDeleteDeck}
-            onTagDeck={onTagDeck}
-          />
-        );
-      })}
+      {content}
     </Grid>
   );
 };
