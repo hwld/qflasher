@@ -118,7 +118,13 @@ export const TagDataItem: React.FC<TagDataProps> = ({
           >
             {tag.name}
           </Text>
-          <Flex flexShrink={0} display="none" _groupHover={{ display: "flex" }}>
+          <Flex
+            flexShrink={0}
+            opacity="0"
+            _groupHover={{ opacity: 1 }}
+            transitionDelay="100ms"
+            transitionDuration="150ms"
+          >
             <Button
               rounded="sm"
               boxSize="30px"

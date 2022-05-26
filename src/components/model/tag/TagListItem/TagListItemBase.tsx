@@ -20,14 +20,17 @@ export const TagListItemBase = forwardRef<
       <ListItem
         rounded="md"
         aria-selected={selected}
-        _selected={{ bgColor: "whiteAlpha.400" }}
+        _selected={{ bgColor: "whiteAlpha.300" }}
+        transitionDuration="250ms"
       >
         <Flex
           rounded="md"
           p={1}
           align="center"
-          _hover={{ bgColor: "whiteAlpha.300" }}
+          _hover={{ bgColor: "whiteAlpha.200" }}
+          transitionDuration="250ms"
           // 子要素がクリックされたときにactiveが適用されないようにする
+          // 例えば更新・削除ボタンなど
           sx={{
             "&:active:not(:focus-within)": { bgColor: "whiteAlpha.200" },
           }}
