@@ -1,4 +1,4 @@
-import { TagsSideView } from "@/components/model/tag/TagsSideView";
+import { TagsSideView } from "@/components/model/tag/TagsSideView/TagsSideView";
 import { SideMenuName } from "@/components/pages/MyDeckListPage/MyDeckListPage";
 import { SideMenu } from "@/components/ui/SideMenu/SideMenu";
 import { useSideMenu } from "@/context/SideMenuContext";

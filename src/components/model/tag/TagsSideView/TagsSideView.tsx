@@ -1,21 +1,12 @@
 import { TagList } from "@/components/model/tag/TagList";
 import { useTagListItems } from "@/components/model/tag/TagListItem/useTagListItems";
+import { ShowAllTagsSwitch } from "@/components/model/tag/TagsSideView/ShowAllTagsSwitch";
+import { TagsSideViewHeader } from "@/components/model/tag/TagsSideView/TagSideViewHeader";
 import { useTagOperation } from "@/components/model/tag/useTagOperation";
 import { useAppOperation } from "@/hooks/useAppOperation";
 import { Tag } from "@/models";
-import {
-  Box,
-  Button,
-  Divider,
-  Flex,
-  FormLabel,
-  Grid,
-  Switch,
-  Text,
-  Tooltip,
-} from "@chakra-ui/react";
+import { Divider, Flex, Grid, Text } from "@chakra-ui/react";
 import React from "react";
-import { RiAddFill } from "react-icons/ri";
 
 export type TagsSideViewProps = {
   userId: string;
@@ -35,17 +26,11 @@ export const TagsSideView: React.FC<TagsSideViewProps> = ({
   const appUpdateTag = useAppOperation(updateTag);
   const appDeleteTag = useAppOperation(deleteTag);
 
-  const isAllSelected = selectedTagId === undefined;
-
   const { tagListItems, addTagCreator, addTagData, deleteTagCreator } =
     useTagListItems(tags, appAddTag);
 
   const handleClickShowAll = () => {
     onSelectTagId(undefined);
-  };
-
-  const handleClickAdd = () => {
-    addTagCreator();
   };
 
   const handleDeleteTag = async (id: string) => {
@@ -57,51 +42,14 @@ export const TagsSideView: React.FC<TagsSideViewProps> = ({
 
   return (
     <Grid h="100%" templateRows="auto auto auto 1fr">
-      <Flex bgColor="gray.500" h="30px" alignItems="center">
-        <Box flexGrow={1} />
-        <Tooltip label="タグの追加">
-          <Button
-            boxSize="25px"
-            variant={"outline"}
-            borderColor="orange.300"
-            color={"orange.300"}
-            mr={1}
-            minW="none"
-            p={0}
-            rounded={"sm"}
-            onClick={handleClickAdd}
-          >
-            <RiAddFill size="90%" />
-          </Button>
-        </Tooltip>
-      </Flex>
+      <TagsSideViewHeader onClickAddTag={addTagCreator} />
 
-      <Flex
-        align="center"
-        bgColor="whiteAlpha.200"
-        color="gray.100"
+      <ShowAllTagsSwitch
         mt={3}
         mx={3}
-        p={2}
-        rounded="md"
-        onClick={handleClickShowAll}
-      >
-        <Switch
-          colorScheme={"green"}
-          id="all-decks"
-          isChecked={isAllSelected}
-        />
-        <FormLabel
-          color={isAllSelected ? "gray.50" : "gray.300"}
-          htmlFor="all-decks"
-          userSelect={"none"}
-          m={0}
-          ml={1}
-          fontWeight={"bold"}
-        >
-          すべてのデッキを表示する
-        </FormLabel>
-      </Flex>
+        selectedTagId={selectedTagId}
+        onClickShowAll={handleClickShowAll}
+      />
       <Flex my={2} alignItems={"center"}>
         <Text
           ml={2}
