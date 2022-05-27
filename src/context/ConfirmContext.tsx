@@ -70,6 +70,9 @@ export const ConfirmProvider: React.FC = ({ children }) => {
         isOpen={isOpen}
         onClose={handleClose}
         isCentered
+        // Escでcloseしたときにはfocusを戻したいが、そういうpropsはなさそう？
+        // onEscで自分で処理するしかないのかな？
+        returnFocusOnClose={false}
       >
         <AlertDialogOverlay
           onClick={stopPropagation}

@@ -42,7 +42,14 @@ export const UserMenu: React.FC<Props> = ({ user, ...styles }) => {
   };
 
   return (
-    <Menu>
+    <Menu
+      // https://github.com/chakra-ui/chakra-ui/issues/5792
+      onClose={() => {
+        window.setTimeout(() => {
+          (document.activeElement as HTMLElement).blur();
+        }, 0);
+      }}
+    >
       <Tooltip label="アカウント" placement="bottom-end">
         <UserMenuButton user={user} aria-label="user" {...styles} />
       </Tooltip>
