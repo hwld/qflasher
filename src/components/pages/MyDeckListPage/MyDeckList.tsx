@@ -5,7 +5,7 @@ import { DeckWithoutCards } from "@/models";
 import { routes } from "@/routes";
 import { Grid, List } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 type MyDeckListProps = {
   decks: DeckWithoutCards[];
@@ -19,10 +19,33 @@ export const MyDeckList: React.VFC<MyDeckListProps> = ({
   onTagDeck,
 }) => {
   const deckCardStyle = useDeckItemStyle();
+  const [animating, setAnimating] = useState(false);
+
+  const handleDeleteDeck = useCallback(
+    async (id: string) => {
+      setAnimating(true);
+      onDeleteDeck(id);
+    },
+    [onDeleteDeck]
+  );
+  const handleExitComplete = useCallback(() => {
+    setAnimating(false);
+  }, []);
 
   const content = useMemo(() => {
-    if (decks.length === 0) {
-      return <NoDeckItem />;
+    // framer-motionのAnimatePresenceのonExitCompleteが発火されたあとに
+    // 再レンダリングが発生することを期待している。
+    //
+    if (decks.length === 0 && animating === false) {
+      return (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
+        >
+          <NoDeckItem />
+        </motion.div>
+      );
     }
 
     return decks.map((deck) => {
@@ -37,13 +60,13 @@ export const MyDeckList: React.VFC<MyDeckListProps> = ({
             cardStyle={deckCardStyle}
             deck={deck}
             returnRoutes={routes.myDecksPage}
-            onDeleteDeck={onDeleteDeck}
+            onDeleteDeck={handleDeleteDeck}
             onTagDeck={onTagDeck}
           />
         </motion.div>
       );
     });
-  }, [deckCardStyle, decks, onDeleteDeck, onTagDeck]);
+  }, [animating, deckCardStyle, decks, handleDeleteDeck, onTagDeck]);
 
   return (
     <Grid
@@ -53,7 +76,9 @@ export const MyDeckList: React.VFC<MyDeckListProps> = ({
       w="100%"
       justifyContent="flex-start"
     >
-      <AnimatePresence>{content}</AnimatePresence>
+      <AnimatePresence onExitComplete={handleExitComplete}>
+        {content}
+      </AnimatePresence>
     </Grid>
   );
 };
