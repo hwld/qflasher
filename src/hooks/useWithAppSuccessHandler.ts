@@ -22,6 +22,8 @@ export const useWithAppSuccessHandler = <A extends unknown[], R>(
         toast({
           description: message,
           status: isWarning(result.data) ? "warning" : "success",
+          duration: 2000,
+          isClosable: true,
         });
       }
       return result;
