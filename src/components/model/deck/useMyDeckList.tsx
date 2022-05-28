@@ -13,23 +13,26 @@ import {
 import { useCallback, useLayoutEffect, useMemo, useState } from "react";
 
 export const useMyDeckList = (userId: string, tagId: string | undefined) => {
-  const decksQuery = useMemo(() => {
-    let query = firestoreQuery(
-      collection(db, `users/${userId}/decks`).withConverter(deckConverter),
-      orderBy("createdAt", "desc")
+  const decksQueryBase = useMemo(() => {
+    return firestoreQuery(
+      collection(db, `users/${userId}/decks`).withConverter(deckConverter)
     );
+  }, [userId]);
+
+  const decksQuery = useMemo(() => {
+    let query = firestoreQuery(decksQueryBase, orderBy("createdAt", "desc"));
     if (tagId) {
       query = firestoreQuery(query, where("tagIds", "array-contains", tagId));
     }
     return query;
-  }, [tagId, userId]);
+  }, [decksQueryBase, tagId]);
 
   const {
     readMore: readMoreDecks,
     isInitialLoading,
     isLoading,
     isError,
-    ...decksResult
+    data: deckList,
   } = useInfiniteCollection({
     query: decksQuery,
     count: 30,
@@ -37,11 +40,14 @@ export const useMyDeckList = (userId: string, tagId: string | undefined) => {
 
   // 最後のデッキのid
   // これ以上読み込めるかの判定に使用する
+  const [loadingLastDeckId, setLoadingLastDeckId] = useState(false);
   const [lastDeckId, setLastDeckId] = useState<string | undefined>(undefined);
   useLayoutEffect(() => {
-    (async () => {
+    const update = async () => {
+      setLoadingLastDeckId(true);
+
       let query = firestoreQuery(
-        collection(db, `users/${userId}/decks`).withConverter(deckConverter),
+        decksQueryBase,
         orderBy("createdAt", "asc"),
         limit(1)
       );
@@ -50,10 +56,15 @@ export const useMyDeckList = (userId: string, tagId: string | undefined) => {
       }
       const snap = await getDocs(query);
       setLastDeckId(snap.docs[0]?.data().id);
-    })();
 
-    // decksのdataが変更されたときに確認し直す
-  }, [userId, decksResult, tagId]);
+      setLoadingLastDeckId(false);
+    };
+
+    update();
+
+    // 最後のデータが削除されたときに、lastDeckIdを更新したいので、
+    // deckList.lengthを依存リストに追加する
+  }, [userId, tagId, decksQueryBase, deckList.length]);
 
   // useLayoutEffectを使用することで、同期的に再レンダリングを行い、tagIdが変更された直後の描画をスキップする。
   // そのため、initialLoadingがfalseでcanReadMoreがtrueの状態が画面に反映されることがない。
@@ -67,7 +78,7 @@ export const useMyDeckList = (userId: string, tagId: string | undefined) => {
   }, [tagId]);
 
   const data = useMemo((): DeckWithoutCards[] => {
-    return decksResult.data.map((deck): DeckWithoutCards => {
+    return deckList.map((deck): DeckWithoutCards => {
       return {
         id: deck.id,
         name: deck.name,
@@ -77,15 +88,19 @@ export const useMyDeckList = (userId: string, tagId: string | undefined) => {
         tagIds: deck.tagIds,
       };
     });
-  }, [decksResult.data]);
+  }, [deckList]);
 
   const canReadMore = useMemo(() => {
+    if (loadingLastDeckId === true) {
+      return false;
+    }
+
     if (lastDeckId === undefined) {
       return false;
     }
 
     return data.find((deck) => deck.id === lastDeckId) === undefined;
-  }, [data, lastDeckId]);
+  }, [data, lastDeckId, loadingLastDeckId]);
 
   const readMore = useCallback(() => {
     if (canReadMore) {
