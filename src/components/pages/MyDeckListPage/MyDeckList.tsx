@@ -50,12 +50,7 @@ export const MyDeckList: React.VFC<MyDeckListProps> = ({
 
     return decks.map((deck) => {
       return (
-        <motion.div
-          layout
-          key={deck.id}
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
+        <motion.div layout key={deck.id}>
           <MyDeckItem
             cardStyle={deckCardStyle}
             deck={deck}
