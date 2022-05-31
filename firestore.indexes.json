@@ -56,6 +56,20 @@
         },
         {
           "fieldPath": "createdAt",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "decks",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "tagIds",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "createdAt",
           "order": "DESCENDING"
         }
       ]
@@ -69,7 +83,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "userId",
+          "fieldPath": "uid",
           "order": "ASCENDING"
         }
       ]
@@ -83,7 +97,7 @@
           "arrayConfig": "CONTAINS"
         },
         {
-          "fieldPath": "userId",
+          "fieldPath": "uid",
           "order": "ASCENDING"
         }
       ]
@@ -92,7 +106,7 @@
   "fieldOverrides": [
     {
       "collectionGroup": "private",
-      "fieldPath": "userId",
+      "fieldPath": "uid",
       "indexes": [
         {
           "order": "ASCENDING",
