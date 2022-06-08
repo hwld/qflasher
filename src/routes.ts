@@ -39,7 +39,9 @@ const RouteMap = {
   },
   createDeckPage: {
     path: "/decks/create/",
-    query: t.type({}),
+    query: t.type({
+      tagId: t.union([t.string, t.undefined]),
+    }),
   },
   editDeckPage: {
     path: "/decks/edit/",

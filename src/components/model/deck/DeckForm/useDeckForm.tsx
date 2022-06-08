@@ -6,6 +6,7 @@ import { v4 as uuid } from "uuid";
 
 export type DeckFormFields = {
   name: string;
+  // TODO: ?
   cards: (Omit<DeckCard, "id"> & { cardId: string })[] | undefined;
   tags: Tag[];
   published: boolean;
@@ -13,7 +14,7 @@ export type DeckFormFields = {
 
 export const useDeckForm = (defaultDeck: Deck, allTags: Tag[]) => {
   const defaultFields: DeckFormFields = {
-    ...defaultDeck,
+    name: defaultDeck.name,
     cards: defaultDeck.cards.map((c) => ({ ...c, cardId: c.id })),
     tags: defaultDeck.tagIds.map((id) => {
       const tag = allTags.find((tag) => tag.id === id);
@@ -22,6 +23,7 @@ export const useDeckForm = (defaultDeck: Deck, allTags: Tag[]) => {
       }
       return tag;
     }),
+    published: defaultDeck.published,
   };
 
   const {

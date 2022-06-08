@@ -4,7 +4,7 @@ import { useDeckForm } from "@/components/model/deck/DeckForm/useDeckForm";
 import { DeckCardEditor } from "@/components/model/deckCard/DeckCardEditor/DeckCardEditor";
 import { TagSelectProps, TagsSelect } from "@/components/model/tag/TagsSelect";
 import { useDebounce } from "@/hooks/useDebounce";
-import { Deck, DeckCard, Tag } from "@/models";
+import { createDefaultDeck, Deck, DeckCard, Tag } from "@/models";
 import { isIME } from "@/utils/isIME";
 import { Box, Text } from "@chakra-ui/layout";
 import { Button, Checkbox, Icon, useToast } from "@chakra-ui/react";
@@ -27,15 +27,7 @@ export type DeckFormProps = {
 export const DeckForm: React.FC<DeckFormProps> = ({
   userId,
   tags,
-  defaultDeck = {
-    id: "",
-    name: "",
-    userId: "",
-    cards: [],
-    tagIds: [],
-    cardLength: 0,
-    published: false,
-  },
+  defaultDeck = createDefaultDeck(),
   formId,
   onSubmit,
   onAddTag,

@@ -10,7 +10,7 @@ import {
   Wrap,
 } from "@chakra-ui/react";
 
-type Props = { header: string; description: string } & FlexProps;
+type Props = { header?: string; description?: string } & FlexProps;
 export const ErrorMessageBox: React.FC<Props> = ({
   header = "エラー",
   description = "エラーが発生しました。",

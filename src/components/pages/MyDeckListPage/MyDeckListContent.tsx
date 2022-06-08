@@ -33,7 +33,10 @@ export const MyDeckListContent: React.FC<Props> = ({
   }, [allTags, selectedTagId]);
 
   const handleAddDeck = () => {
-    router.push({ path: routes.createDeckPage });
+    router.push({
+      path: routes.createDeckPage,
+      query: { tagId: selectedTagId },
+    });
   };
 
   return (
