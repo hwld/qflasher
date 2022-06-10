@@ -9,7 +9,7 @@ import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { Fab } from "@/components/ui/Fab";
 import { useAppOperation } from "@/hooks/useAppOperation";
 import { useAppRouter } from "@/hooks/useAppRouter";
-import { createDefaultDeck, Deck, Tag } from "@/models";
+import { createDefaultDeck, Tag } from "@/models";
 import { routes } from "@/routes";
 import { isErr, isLoading } from "@/utils/result";
 import { Box } from "@chakra-ui/react";
@@ -40,11 +40,6 @@ export const DeckCreationContent: React.VFC<Props> = ({ userId, allTags }) => {
   } else if (isErr(queryResult)) {
     return <ErrorMessageBox mx="auto" mt={10} />;
   }
-
-  const defaultDeck: Deck = {
-    ...createDefaultDeck(),
-    tagIds: queryResult.data.tagId ? [queryResult.data.tagId] : [],
-  };
 
   return (
     <Box>

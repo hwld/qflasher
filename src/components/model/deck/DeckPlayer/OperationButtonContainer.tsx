@@ -1,12 +1,6 @@
-import { As, Box, ButtonProps, HStack } from "@chakra-ui/react";
+import { Box, ButtonProps, HStack } from "@chakra-ui/react";
 import { ReactNode } from "react";
 
-type OperationButton = {
-  label: string;
-  icon: As;
-  onClick: ButtonProps["onClick"];
-  colorScheme: ButtonProps["colorScheme"];
-};
 type Props = {
   buttonSize: ButtonProps["size"];
   left: ReactNode;

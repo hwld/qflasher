@@ -53,7 +53,7 @@ export const useDeckForm = (defaultDeck: Deck, allTags: Tag[]) => {
     (callback: (deck: Omit<Deck, "id" | "userId">) => void) => {
       return innerHandleSubmit((fields) => {
         let cards: DeckCard[] =
-          fields.cards?.map(({ cardId, question, answer }, i) => ({
+          fields.cards?.map(({ cardId, question, answer }) => ({
             id: cardId,
             question,
             answer,

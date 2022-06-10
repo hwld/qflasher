@@ -9,7 +9,7 @@ export const AppLogo: React.VFC<{
   width?: Width | BreakpointWidth;
 }> = ({ width = "100%" }) => {
   const appLogoWidth = useAppLogoWidth(width);
-  const [ids] = useState([...new Array(7)].map((_) => uuid()));
+  const [ids] = useState([...new Array(7)].map(() => uuid()));
 
   return (
     <svg

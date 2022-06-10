@@ -25,7 +25,7 @@ const Play: NextPageWithLayout = () => {
   } else if (isErr(queryResult)) {
     return <Redirect href={routes.rootPage} />;
   } else {
-    const { id, redirectTo, ...settings } = queryResult.data;
+    const { id, ...settings } = queryResult.data;
     return (
       <DeckPlayerPage
         deckId={id}

@@ -16,11 +16,7 @@ import React from "react";
 
 type Props = { afterSignIn?: () => void } & BoxProps;
 
-export const SignInForm: React.FC<Props> = ({
-  children,
-  afterSignIn,
-  ...styles
-}) => {
+export const SignInForm: React.FC<Props> = ({ afterSignIn, ...styles }) => {
   const { signInWithGoogle, signInAnonymous } = useAuthState();
   const logoWidth = useBreakpointValue({ base: "70%", md: "80%" });
 
