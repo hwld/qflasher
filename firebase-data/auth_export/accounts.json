@@ -1,0 +1,25 @@
+{
+  "kind": "identitytoolkit#DownloadAccountResponse",
+  "users": [
+    {
+      "localId": "CdqxtqkNd5YrxQKVodOVrr7y4IOB",
+      "createdAt": "1654822308049",
+      "lastLoginAt": "1654822308049",
+      "displayName": "Taro Test",
+      "screenName": "test_taro",
+      "email": "orange.mountain.979@example.com",
+      "emailVerified": true,
+      "providerUserInfo": [
+        {
+          "providerId": "google.com",
+          "rawId": "2395973456333195879401129037948653579087",
+          "federatedId": "2395973456333195879401129037948653579087",
+          "displayName": "Taro Test",
+          "email": "orange.mountain.979@example.com",
+          "screenName": "test_taro"
+        }
+      ],
+      "lastRefreshAt": "2022-06-10T00:51:48.049Z"
+    }
+  ]
+}
