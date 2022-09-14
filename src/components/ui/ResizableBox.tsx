@@ -1,7 +1,6 @@
 import { Box, Flex, FlexProps } from "@chakra-ui/layout";
 import { useMergeRefs } from "@chakra-ui/react";
-import { MouseEventHandler } from "hoist-non-react-statics/node_modules/@types/react";
-import React, { useEffect, useRef } from "react";
+import React, { MouseEventHandler, useEffect, useRef } from "react";
 
 type Props = {
   initialWidth?: number;
