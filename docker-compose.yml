@@ -1,0 +1,9 @@
+services:
+  web:
+    container_name: qflasher-web
+    build: ./apache
+    ports:
+      - "80:80"
+    volumes:
+      - ./out:/var/www/html/
+    tty: true
